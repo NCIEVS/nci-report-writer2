@@ -23,8 +23,8 @@ SPARQL_ENDPOINT_TYPE = "Fuseki"
 SPARQL_ENDPOINT_FUSEKI = "http://localhost:3030/ncit2/query"
 SPARQL_ENDPOINT_STARDOG = "http://localhost:5820/ncit2/query"
 SPARQL_ENDPOINT_HEADER = { 'Accept': 'application/sparql-results+json'}
-SPARQL_ENDPOINT_USER = "admin"
-SPARQL_ENDPOINT_PASSWORD = "admin"
+SPARQL_ENDPOINT_USER = "REPLACE"
+SPARQL_ENDPOINT_PASSWORD = "REPLACE"
 
 prefix = '''
 PREFIX :<http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#>
