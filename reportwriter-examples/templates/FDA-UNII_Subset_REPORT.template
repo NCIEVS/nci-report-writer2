@@ -1,0 +1,33 @@
+name: FDA-UNII Subset REPORT 
+type: Association
+rootConceptCode: C63923
+association: Concept_In_Subset
+level: 1
+sortColumn: 2
+columns:
+  - columnNumber: 1
+    label: FDA UNII Code (use for SPL)
+    display: property
+    propertyType: property
+    property: P319
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 2
+    label: FDA Preferred Term
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: FDA
+    group: PT
+    subsource:
+
+  - columnNumber: 3
+    label: NCI Concept Code
+    display: code
+    propertyType: code
+    property: NHC0
+    source: 
+    group: 
+    subsource:

@@ -1,0 +1,132 @@
+name: NICHD Pediatric Nephrology Terminology
+type: Association
+rootConceptCode: C123272
+association: Concept_In_Subset
+level: 1
+sortColumn: 2
+columns:
+  - columnNumber: 1
+    label: NCIt Code
+    display: code
+    propertyType: code
+    property: NHC0
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 2
+    label: NCIt PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCI
+    group: PT
+    subsource:
+
+  - columnNumber: 3
+    label: Subset PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NICHD
+    group: PT
+    subsource:
+
+  - columnNumber: 4
+    label: Subset SY 
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NICHD
+    group: SY
+    subsource:
+
+  - columnNumber: 5
+    label: NCIt Definition
+    display: property
+    propertyType: DEFINITION
+    property: P97
+    source: NCI
+    group:
+    subsource:
+
+  - columnNumber: 6
+    label: Subset Definition
+    display: property
+    propertyType: ALT_DEFINITION
+    property: P325
+    source: NICHD
+    group:
+    subsource:
+
+  - columnNumber: 7
+    label: NCIt Code of First Parent
+    display: code
+    propertyType: 1st NICHD Parent Code
+    property: code
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 8
+    label: First Parent
+    display: property
+    propertyType: 1st NICHD Parent Property
+    property: P90
+    source: NICHD
+    group: PT
+    subsource:
+
+  - columnNumber: 9
+    label: NCIt Code of Second Parent
+    display: code
+    propertyType: 2nd NICHD Parent Code
+    property: code
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 10
+    label: Second Parent
+    display: property
+    propertyType: 2nd NICHD Parent Property
+    property: P90
+    source: NICHD
+    group: PT
+    subsource:
+
+  - columnNumber: 11
+    label: NCIt Code of Subset
+    display: code
+    propertyType: Associated Concept Code
+    property: NHC0
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 12
+    label: PT of NICHD Subset
+    display: property
+    propertyType: Associated Concept Property
+    property: P90
+    source: NICHD
+    group: PT
+    subsource:
+
+  - columnNumber: 13
+    label: Subset Antiquated PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NICHD
+    group: AQ
+    subsource:
+
+  - columnNumber: 14
+    label: Subset Antiquated SY
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NICHD
+    group: AQS
+    subsource:  

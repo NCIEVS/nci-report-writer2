@@ -1,0 +1,142 @@
+name: ConceptList
+type: ConceptList
+rootConceptCode:
+association:
+level: 1
+sortColumn: 2
+columns:
+  - columnNumber: 1
+    label: NCIt Code
+    display: code
+    propertyType: code
+    property: NHC0
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 2
+    label: NCIt PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCI
+    group: PT
+    subsource:
+
+  - columnNumber: 3
+    label: NCIt SY 
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCI
+    group: SY
+    subsource:
+
+  - columnNumber: 4
+    label: NICHD PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NICHD
+    group: PT
+    subsource:
+
+  - columnNumber: 5
+    label: NICHD SY 
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NICHD
+    group: SY
+    subsource:
+
+  - columnNumber: 6
+    label: Neoplastic Status
+    display: property
+    propertyType: property
+    property: P363
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 7
+    label: Semantic Type
+    display: property
+    propertyType: property
+    property: P106
+    source:
+    group:
+    subsource:
+
+
+  - columnNumber: 8
+    label: NCIt Definition
+    display: property
+    propertyType: DEFINITION
+    property: P97
+    source: NCI
+    group:
+    subsource:
+
+  - columnNumber: 9
+    label: NICHD Definition
+    display: property
+    propertyType: ALT_DEFINITION
+    property: P325
+    source: NICHD
+    group:
+    subsource:
+
+  - columnNumber: 10
+    label: NCIt Code of First Parent
+    display: code
+    propertyType: 1st NICHD Parent Code
+    property: code
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 11
+    label: NCIt Code of Second Parent
+    display: code
+    propertyType: 2nd NICHD Parent Code
+    property: code
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 12
+    label: First Parent
+    display: property
+    propertyType: 1st NICHD Parent Property
+    property: P90
+    source: NICHD
+    group: PT
+    subsource:
+
+  - columnNumber: 13
+    label: Second Parent
+    display: property
+    propertyType: 2nd NICHD Parent Property
+    property: P90
+    source: NICHD
+    group: PT
+    subsource:
+
+  - columnNumber: 14
+    label: Subset Antiquated PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCI
+    group: AQ
+    subsource:
+
+  - columnNumber: 15
+    label: Subset Antiquated SY
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NICHD
+    group: AQS
+    subsource:  

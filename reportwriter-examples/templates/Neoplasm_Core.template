@@ -1,0 +1,51 @@
+name: Neoplasm Core
+type: Association
+rootConceptCode: C126659
+association: Concept_In_Subset
+level: 1
+sortColumn: 2
+columns:
+  - columnNumber: 1
+    label: Code
+    display: code
+    propertyType: code
+    property: NHC0
+    source: 
+    group: 
+    subsource:
+
+  - columnNumber: 2
+    label: Preferred Term
+    display: property
+    propertyType: property
+    property: P108
+    source: 
+    group: 
+    subsource:
+
+  - columnNumber: 3
+    label: Synonyms
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCI
+    group: SY
+    subsource:
+
+  - columnNumber: 4
+    label: Definition
+    display: property
+    propertyType: DEFINITION
+    property: P97
+    source: NCI
+    group: 
+    subsource:
+
+  - columnNumber: 5
+    label: Neoplastic Status
+    display: property
+    propertyType: property
+    property: P363
+    source:
+    group:
+    subsource:

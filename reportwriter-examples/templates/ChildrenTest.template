@@ -1,0 +1,70 @@
+name: ChildrenTest
+type: Association
+rootConceptCode: C3510
+association: Subclass
+level: 1
+sortColumn: 2
+columns:
+  - columnNumber: 1
+    label: NCIt Code
+    display: code
+    propertyType: code
+    property: NHC0
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 2
+    label: NCIt PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCI
+    group: PT
+    subsource:
+
+  - columnNumber: 3
+    label: Subset PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NICHD
+    group: PT
+    subsource:
+
+  - columnNumber: 4
+    label: Subset SY 
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NICHD
+    group: SY
+    subsource:
+
+  - columnNumber: 5
+    label: NCIt Definition
+    display: property
+    propertyType: DEFINITION
+    property: P97
+    source: NCI
+    group:
+    subsource:
+
+  - columnNumber: 6
+    label: Subset Definition
+    display: property
+    propertyType: ALT_DEFINITION
+    property: P325
+    source: CDISC
+    group:
+    subsource:
+    
+  - columnNumber: 7
+    label: NCIt Code of Subset 
+    display: code
+    propertyType: Associated Concept Code
+    property: NHC0
+    source: 
+    group:
+    subsource:
+    

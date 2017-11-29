@@ -1,0 +1,51 @@
+name: NCIt Antineoplastic Agent Terminology
+type: Association
+rootConceptCode: C128784
+association: Concept_In_Subset
+level: 1
+sortColumn: 2
+columns:
+  - columnNumber: 1
+    label: Code
+    display: code
+    propertyType: code
+    property: NHC0
+    source: 
+    group: 
+    subsource:
+
+  - columnNumber: 2
+    label: NCIt Preferred Name
+    display: property
+    propertyType: property
+    property: P108
+    source: 
+    group: 
+    subsource:
+
+  - columnNumber: 3
+    label: Synonyms
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: 
+    group: 
+    subsource:
+
+  - columnNumber: 4
+    label: Definition
+    display: property
+    propertyType: DEFINITION
+    property: P97
+    source: NCI
+    group: 
+    subsource:
+
+  - columnNumber: 5
+    label: Semantic Type
+    display: property
+    propertyType: property
+    property: P106
+    source: 
+    group: 
+    subsource:

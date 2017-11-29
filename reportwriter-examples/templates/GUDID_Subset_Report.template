@@ -1,0 +1,78 @@
+name: GUDID Subset Report
+type: Association
+rootConceptCode: C106039
+association: Concept_In_Subset
+level: 1
+sortColumn: 5
+columns:
+  - columnNumber: 1
+    label: Source
+    display: property
+    propertyType: property
+    property: P322
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 2
+    label: NCIT Subset Code
+    display: code
+    propertyType: Associated Concept Code
+    property: NHC0
+    source: 
+    group: 
+    subsource:   
+
+  - columnNumber: 3
+    label: FDA Subset Name
+    display: property
+    propertyType: Associated Concept Property
+    property: P108
+    source:
+    group:
+    subsource:       
+    
+  - columnNumber: 4
+    label: NCIt Concept Code
+    display: code
+    propertyType: code
+    property: NHC0
+    source: 
+    group: 
+    subsource:   
+    
+  - columnNumber: 5
+    label: FDA Source PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: FDA
+    group: PT
+    subsource: CDRH-GUDID
+
+  - columnNumber: 6
+    label: FDA Source Synonyms(s)
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: FDA
+    group: SY
+    subsource: CDRH-GUDID
+    
+  - columnNumber: 7
+    label: FDA Source Definition
+    display: property
+    propertyType: ALT_DEFINITION
+    property: P325
+    source: FDA
+    group: CDRH-GUDID
+    subsource:
+    
+  - columnNumber: 8
+    label: NCIt Definition
+    display: property
+    propertyType: DEFINITION
+    property: P97
+    source: NCI
+    group: 
+    subsource:

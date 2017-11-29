@@ -1,0 +1,69 @@
+name: FDA County REPORT
+type: Association
+rootConceptCode: C111076
+association: Concept_In_Subset
+level: 1
+sortColumn: 3
+columns:
+  - columnNumber: 1
+    label: Source
+    display: property
+    propertyType: property
+    property: P322
+    source:
+    group:
+    subsource:
+
+  - columnNumber: 2
+    label: NCIt Code
+    display: code
+    propertyType: code
+    property: NHC0
+    source: 
+    group: 
+    subsource:
+    
+  - columnNumber: 3
+    label: NCI PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCI
+    group: PT
+    subsource:
+
+  - columnNumber: 4
+    label: NCI SY 
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCI
+    group: SY 
+    subsource:
+
+  - columnNumber: 5
+    label: FDA PT
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: FDA
+    group: PT
+    subsource:
+
+  - columnNumber: 6
+    label: Subset Code
+    display: code
+    propertyType: Associated Concept Code
+    property: NHC0
+    source: 
+    group: 
+    subsource:   
+
+  - columnNumber: 7
+    label: Subset
+    display: property
+    propertyType: Associated Concept Property
+    property: P90
+    source: NCI
+    group: PT
+    subsource:   

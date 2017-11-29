@@ -1,0 +1,69 @@
+name: NCPDP Report
+type: Association
+rootConceptCode: C89415
+association: Concept_In_Subset
+level: 1
+sortColumn: 4
+columns:
+  - columnNumber: 1
+    label: NCIt Subset Code
+    display: code
+    propertyType: Associated Concept Code
+    property: NHC0
+    source: 
+    group: 
+    subsource:
+
+  - columnNumber: 2
+    label: NCPDP Subset Preferred Term
+    display: property
+    propertyType: Associated Concept Property
+    property: P90
+    source: NCPDP
+    group: PT
+    subsource:
+
+  - columnNumber: 3
+    label: NCIt Code
+    display: code
+    propertyType: code
+    property: NHC0
+    source: 
+    group: 
+    subsource:
+
+  - columnNumber: 4
+    label: NCPDP Preferred Term
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCPDP
+    group: PT
+    subsource:
+
+  - columnNumber: 5
+    label: NCPDP Synonym
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCPDP
+    group: SY 
+    subsource:
+
+  - columnNumber: 6
+    label: NCIt Preferred Term
+    display: property
+    propertyType: FULL_SYN
+    property: P90
+    source: NCI
+    group: PT
+    subsource:
+
+  - columnNumber: 7
+    label: NCI Definition
+    display: property
+    propertyType: DEFINITION
+    property: P97
+    source: NCI
+    group:
+    subsource:
