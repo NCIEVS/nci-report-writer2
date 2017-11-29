@@ -1,5 +1,0 @@
-ReportWriter
-***********************************************************
-
-.. automodule:: reportWriter
-   :members:
