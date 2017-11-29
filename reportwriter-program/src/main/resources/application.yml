@@ -1,0 +1,43 @@
+#
+# Spring Properties
+#
+spring:
+    #
+    # Application Properties
+    #
+    application:
+        name: reportwriter-program
+
+    #
+    # Just an non-web application
+    #
+    main:
+        web-environment: false
+        banner-mode: "off"
+
+
+# Logging Properties
+#
+logging:
+    file: ${LOG_FILE:rw_report.log}
+    level:
+        org.springframework: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK:ERROR}
+        gov.nih.nci.evs.rw: ${LOGGING_LEVEL_GOV_NIH_NCI_EVS_RW:INFO}
+    pattern:
+      file: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+      console: ""
+
+nci:
+  evs:
+    stardog:
+      url: ${STARDOG_URL:REPLACE_WITH_URL}
+      queryUrl: ${STARDOG_QUERY_URL:REPLACE_WITH_QUERY_URL}
+      username: ${STARDOG_USERNAME:REPLACE_WITH_USERNAME}
+      password: ${STARDOG_PASSWORD:REPLACE_WITH_PASSWORD}     
+      readTimeout: ${STARDOG_READ_TIMEOUT:10000}
+      connectTimeout: ${STARDOG_CONNECT_TIMEOUT:10000}
+      graphName: ${STARDOG_GRAPH_NAME:REPLACE_WITH_GRAPH_NAME}     
+      
+    rw:
+      templateDirectory: ${RW_TEMPLATE_DIRECTORY}
+      outputDirectory: ${RW_OUTPUT_DIRECTORY}
