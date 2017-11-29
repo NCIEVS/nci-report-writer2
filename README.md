@@ -1,10 +1,20 @@
-# nci-report-writer-sparql
+# nci-report-writer2
 SPARQL-based Report Writer query and reporting tool.
 
 # Overview
 The ReportWriter SPARQL application is a prototype for creating reports
-using a SPARQL endpoint. This version uses Python 3 and was tested against
-an Apache Jena - Fuseki triple store.
+using a SPARQL endpoint. This version was written in Java and was tested
+against a Stardog triple store.
+
+The application has 2 parts:
+
+1. reportwriter-program: This is a Java application that can be run
+from the command line to produce a report based on a report template.
+
+2. reportwriter-web: This is a Web application that can be used to build
+new report templates, run existing reports, and view completed reports.
+The web application will call the reportwriter-program to generate the
+reports.
 
 # Getting Started
 Once you have cloned this code, it is recommended to create an output and
