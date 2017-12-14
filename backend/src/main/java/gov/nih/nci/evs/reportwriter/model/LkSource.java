@@ -41,6 +41,7 @@ public class LkSource implements Serializable {
 	}
 
 
+	/*
 	//bi-directional many-to-one association to ReportTemplateColumn
 	@OneToMany(mappedBy="lkSource")
 	public List<ReportTemplateColumn> getReportTemplateColumns() {
@@ -64,5 +65,6 @@ public class LkSource implements Serializable {
 
 		return reportTemplateColumn;
 	}
+	*/
 
 }

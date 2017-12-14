@@ -41,6 +41,7 @@ public class LkReportTemplateType implements Serializable {
 	}
 
 
+	/*
 	//bi-directional many-to-one association to ReportTemplate
 	@OneToMany(mappedBy="lkReportTemplateType")
 	public List<ReportTemplate> getReportTemplates() {
@@ -64,5 +65,6 @@ public class LkReportTemplateType implements Serializable {
 
 		return reportTemplate;
 	}
+	*/
 
 }

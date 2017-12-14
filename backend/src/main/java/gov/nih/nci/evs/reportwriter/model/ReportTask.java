@@ -19,7 +19,7 @@ public class ReportTask implements Serializable {
 	private Date dateCreated;
 	private Date dateStarted;
 	private int reportTemplateId;
-	private LkReportStatus lkReportStatus;
+	private String status;
 
 	public ReportTask() {
 	}
@@ -78,15 +78,13 @@ public class ReportTask implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to LkReportStatus
-	@ManyToOne
-	@JoinColumn(name="status")
-	public LkReportStatus getLkReportStatus() {
-		return this.lkReportStatus;
+	@Column(name="status")
+	public String getStatus() {
+		return this.status;
 	}
 
-	public void setLkReportStatus(LkReportStatus lkReportStatus) {
-		this.lkReportStatus = lkReportStatus;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

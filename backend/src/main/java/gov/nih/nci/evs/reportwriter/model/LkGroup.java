@@ -41,6 +41,7 @@ public class LkGroup implements Serializable {
 	}
 
 
+	/*
 	//bi-directional many-to-one association to ReportTemplateColumn
 	@OneToMany(mappedBy="lkGroup")
 	public List<ReportTemplateColumn> getReportTemplateColumns() {
@@ -64,5 +65,6 @@ public class LkGroup implements Serializable {
 
 		return reportTemplateColumn;
 	}
+	*/
 
 }

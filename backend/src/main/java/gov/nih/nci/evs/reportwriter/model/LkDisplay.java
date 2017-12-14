@@ -41,6 +41,7 @@ public class LkDisplay implements Serializable {
 	}
 
 
+	/*
 	//bi-directional many-to-one association to ReportTemplateColumn
 	@OneToMany(mappedBy="lkDisplay")
 	public List<ReportTemplateColumn> getReportTemplateColumns() {
@@ -64,5 +65,6 @@ public class LkDisplay implements Serializable {
 
 		return reportTemplateColumn;
 	}
+	*/
 
 }

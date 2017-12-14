@@ -17,12 +17,12 @@ public class ReportTemplateColumn implements Serializable {
 	private int columnNumber;
 	private String label;
 	private ReportTemplate reportTemplate;
-	private LkDisplay lkDisplay;
-	private LkPropertyType lkPropertyType;
-	private LkProperty lkProperty;
-	private LkSource lkSource;
-	private LkGroup lkGroup;
-	private LkSubsource lkSubsource;
+	private String display;
+	private String propertyType;
+	private String property;
+	private String source;
+	private String group;
+	private String subsource;
 
 	public ReportTemplateColumn() {
 	}
@@ -69,75 +69,63 @@ public class ReportTemplateColumn implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to LkDisplay
-	@ManyToOne
-	@JoinColumn(name="display")
-	public LkDisplay getLkDisplay() {
-		return this.lkDisplay;
+	@Column(name="display")
+	public String getDisplay() {
+		return this.display;
 	}
 
-	public void setLkDisplay(LkDisplay lkDisplay) {
-		this.lkDisplay = lkDisplay;
-	}
-
-
-	//bi-directional many-to-one association to LkPropertyType
-	@ManyToOne
-	@JoinColumn(name="property_type")
-	public LkPropertyType getLkPropertyType() {
-		return this.lkPropertyType;
-	}
-
-	public void setLkPropertyType(LkPropertyType lkPropertyType) {
-		this.lkPropertyType = lkPropertyType;
+	public void setDisplay(String display) {
+		this.display = display;
 	}
 
 
-	//bi-directional many-to-one association to LkProperty
-	@ManyToOne
-	@JoinColumn(name="property")
-	public LkProperty getLkProperty() {
-		return this.lkProperty;
+	@Column(name="property_type")
+	public String getPropertyType() {
+		return this.propertyType;
 	}
 
-	public void setLkProperty(LkProperty lkProperty) {
-		this.lkProperty = lkProperty;
-	}
-
-
-	//bi-directional many-to-one association to LkSource
-	@ManyToOne
-	@JoinColumn(name="source")
-	public LkSource getLkSource() {
-		return this.lkSource;
-	}
-
-	public void setLkSource(LkSource lkSource) {
-		this.lkSource = lkSource;
+	public void setPropertyType(String lkPropertyType) {
+		this.propertyType = propertyType;
 	}
 
 
-	//bi-directional many-to-one association to LkGroup
-	@ManyToOne
-	@JoinColumn(name="source_group")
-	public LkGroup getLkGroup() {
-		return this.lkGroup;
+	@Column(name="property")
+	public String getProperty() {
+		return this.property;
 	}
 
-	public void setLkGroup(LkGroup lkGroup) {
-		this.lkGroup = lkGroup;
+	public void setProperty(String property) {
+		this.property = property;
 	}
 
 
-	//bi-directional many-to-one association to LkSubsource
-	@ManyToOne
-	@JoinColumn(name="subsource")
-	public LkSubsource getLkSubsource() {
-		return this.lkSubsource;
+	@Column(name="source")
+	public String getSource() {
+		return this.source;
 	}
 
-	public void setLkSubsource(LkSubsource lkSubsource) {
-		this.lkSubsource = lkSubsource;
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+
+	@Column(name="source_group")
+	public String getGroup() {
+		return this.group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+
+	@Column(name="subsource")
+	public String getSubsource() {
+		return this.subsource;
+	}
+
+	public void setSubsource(String subsource) {
+		this.subsource = subsource;
 	}
 
 }

@@ -19,9 +19,9 @@ public class ReportTemplate implements Serializable {
 	private String reportName;
 	private String rootConceptCode;
 	private int sortColumn;
-	private LkReportTemplateStatus lkReportTemplateStatus;
-	private LkReportTemplateType lkReportTemplateType;
-	private LkAssociation lkAssociation;
+	private String status;
+	private String type;
+	private String association;
 	private List<ReportTemplateColumn> reportTemplateColumns;
 	private List<ReportTemplateConceptList> reportTemplateConceptLists;
 
@@ -78,39 +78,33 @@ public class ReportTemplate implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to LkReportTemplateStatus
-	@ManyToOne
-	@JoinColumn(name="status")
-	public LkReportTemplateStatus getLkReportTemplateStatus() {
-		return this.lkReportTemplateStatus;
+	@Column(name="status")
+	public String getStatus() {
+		return this.status;
 	}
 
-	public void setLkReportTemplateStatus(LkReportTemplateStatus lkReportTemplateStatus) {
-		this.lkReportTemplateStatus = lkReportTemplateStatus;
-	}
-
-
-	//bi-directional many-to-one association to LkReportTemplateType
-	@ManyToOne
-	@JoinColumn(name="type")
-	public LkReportTemplateType getLkReportTemplateType() {
-		return this.lkReportTemplateType;
-	}
-
-	public void setLkReportTemplateType(LkReportTemplateType lkReportTemplateType) {
-		this.lkReportTemplateType = lkReportTemplateType;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 
-	//bi-directional many-to-one association to LkAssociation
-	@ManyToOne
-	@JoinColumn(name="association")
-	public LkAssociation getLkAssociation() {
-		return this.lkAssociation;
+	@Column(name="type")
+	public String getType() {
+		return this.type;
 	}
 
-	public void setLkAssociation(LkAssociation lkAssociation) {
-		this.lkAssociation = lkAssociation;
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+	@Column(name="association")
+	public String getAssociation() {
+		return this.association;
+	}
+
+	public void setAssociation(String association) {
+		this.association = association;
 	}
 
 

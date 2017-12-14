@@ -41,6 +41,7 @@ public class LkReportStatus implements Serializable {
 	}
 
 
+	/*
 	//bi-directional many-to-one association to ReportTask
 	@OneToMany(mappedBy="lkReportStatus")
 	public List<ReportTask> getReportTasks() {
@@ -64,5 +65,6 @@ public class LkReportStatus implements Serializable {
 
 		return reportTask;
 	}
+	*/
 
 }
