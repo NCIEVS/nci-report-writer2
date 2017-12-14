@@ -1,0 +1,21 @@
+CDRH~@~CDRH~@@~
+CDRH-GUIDID~@~CDRH~@@~
+CTRP~@~CDRH~@@~
+Dosage Form (C-DRG-00201)~@~CDRH~@@~
+HL7 CDA~@~CDRH~@@~
+ICSR~@~CDRH~@@~
+ICSR-CVM~@~CDRH~@@~
+Marketing Category (C-DRG-0935)~@~CDRH~@@~
+Package Type (C-DRG-00907)~@~CDRH~@@~
+Plant Part (C-DRG-00924)~@~CDRH~@@~
+Potency (C-DRG-00501)~@~CDRH~@@~
+QM~@~CDRH~@@~
+RPS~@~CDRH~@@~
+Route of Administration (C-DRG-00301)~@~CDRH~@@~
+SDC~@~CDRH~@@~
+SPL~@~CDRH~@@~
+Stability~@~CDRH~@@~
+TCGA~@~CDRH~@@~
+caDSR~@~CDRH~@@~
+eCTD~@~CDRH~@@~
+eManu~@~CDRH~@@~

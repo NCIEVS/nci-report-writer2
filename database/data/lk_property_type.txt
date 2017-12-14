@@ -1,0 +1,15 @@
+code~@~code~@@~
+property~@~property~@@~
+FULL_SYN~@~FULL_SYN~@@~
+DEFINITION~@~DEFINITION~@@~
+ALT_DEFINITION~@~ALT_DEFINITION~@@~
+Associated Concept Code~@~Associated Concept Code~@@~
+Associated Concept Property~@~Associated Concept Property~@@~
+1st NICHD Parent Code~@~1st NICHD Parent Code~@@~
+2nd NICHD Parent Code~@~2nd NICHD Parent Code~@@~
+1st NICHD Parent Property~@~1st NICHD Parent Property~@@~
+2nd NICHD Parent Property~@~2nd NICHD Parent Property~@@~
+1st CDRH Parent Code~@~1st CDRH Parent Code~@@~
+2nd CDRH Parent Code~@~2nd CDRH Parent Code~@@~
+1st CDRH Parent Property~@~1st CDRH Parent Property~@@~
+2nd CDRH Parent Property~@~2nd CDRH Parent Property~@@~

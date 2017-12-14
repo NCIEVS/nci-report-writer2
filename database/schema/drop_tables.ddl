@@ -1,0 +1,14 @@
+DROP TABLE IF EXISTS report_template_column;
+DROP TABLE IF EXISTS report_template_concept_list;
+DROP TABLE IF EXISTS report_task;
+DROP TABLE IF EXISTS report_template;
+DROP TABLE IF EXISTS lk_association;
+DROP TABLE IF EXISTS lk_display;
+DROP TABLE IF EXISTS lk_group;
+DROP TABLE IF EXISTS lk_property;
+DROP TABLE IF EXISTS lk_property_type;
+DROP TABLE IF EXISTS lk_report_status;
+DROP TABLE IF EXISTS lk_report_template_status;
+DROP TABLE IF EXISTS lk_report_template_type;
+DROP TABLE IF EXISTS lk_source;
+DROP TABLE IF EXISTS lk_subsource;

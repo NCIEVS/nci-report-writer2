@@ -1,0 +1,8 @@
+LOAD DATA LOCAL INFILE "../data/lk_association.txt"
+    into table lk_association
+    fields terminated by '~@~'
+    lines terminated by '~@@~\n'
+    (
+        name,
+        description
+    );

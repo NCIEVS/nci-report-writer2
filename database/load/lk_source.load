@@ -1,0 +1,8 @@
+LOAD DATA LOCAL INFILE "../data/lk_source.txt"
+    into table lk_source
+    fields terminated by '~@~'
+    lines terminated by '~@@~\n'
+    (
+        name,
+        description
+    );

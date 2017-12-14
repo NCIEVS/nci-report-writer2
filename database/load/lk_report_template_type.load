@@ -1,0 +1,8 @@
+LOAD DATA LOCAL INFILE "../data/lk_report_template_type.txt"
+    into table lk_report_template_type
+    fields terminated by '~@~'
+    lines terminated by '~@@~\n'
+    (
+        name,
+        description
+    );
