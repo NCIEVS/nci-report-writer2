@@ -1,0 +1,72 @@
+#
+# Spring Properties
+#
+spring:
+    #
+    # Application Properties
+    #
+    application:
+        name: reportwriter-web 
+    #
+    # Data Source Properties
+    #
+    datasource:
+        driverClassName: com.mysql.jdbc.Driver
+        url: ${RW_API_DATASOURCE_URL:REPLACE_WITH_URL}
+        username: ${RW_API_DATASOURCE_USERNAME:REPLACE_WITH_USERNAME}
+        password: ${RW_API_DATASOURCE_PASSWORD:REPLACE_WITH_PASSWORD}
+        tomcat:
+            initialSize: 10
+            maxActive: 10
+            maxIdle: 10
+            validationQuery: SELECT 1 FROM DUAL
+            testOnBorrow: true
+            testWhileIdle: true
+            timeBetweenEvictionRunsMillis: 10000
+            minEvictableIdleTimeMillis: 60000
+    data:
+        rest:
+          basePath: ${RW_API_BASE_PATH:/}
+          defaultMediaType: application/json;charset=UTF-8
+    #
+    # JSON Formatting Properties
+    #
+    jackson:
+        serialization:
+            INDENT_OUTPUT: true
+    #
+    # JPA Properties
+    #
+    jpa:
+        show-sql: ${RW_API_JPA_SHOW_SQL:false}
+        hibernate:
+            use-new-id-generator-mappings: true
+#
+# Server Properties
+#
+server:
+    port: ${RW_API_SERVER_PORT:8080}
+
+#
+# Management Properties
+#
+management:
+    contextPath: /admin
+
+#
+# Endpoint Properties
+#
+endpoints:
+    mappings:
+        enabled: true
+
+#
+# Logging Properties
+#
+logging:
+    level:
+        org.springframework: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK:WARN}
+        org.springframework.boot: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT:WARN}
+        org.springframework.data.jpa: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_JPA:WARN}
+        org.springframework.data.rest: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_REST:WARN}
+        gov.nih.nci.evs.rw: ${LOGGING_LEVEL_GOV_EVS_RW:INFO}
