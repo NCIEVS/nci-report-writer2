@@ -51,7 +51,7 @@ CREATE TABLE report_task
 
 CREATE TABLE lk_report_status
 (
-  name  VARCHAR(20) NOT NULL,
+  name  VARCHAR(40) NOT NULL,
   description VARCHAR(200),
   PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -59,7 +59,7 @@ CREATE TABLE lk_report_status
 
 CREATE TABLE lk_report_template_status
 (
-  name  VARCHAR(20) NOT NULL,
+  name  VARCHAR(40) NOT NULL,
   description VARCHAR(200),
   PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -67,7 +67,7 @@ CREATE TABLE lk_report_template_status
 
 CREATE TABLE lk_report_template_type
 (
-  name  VARCHAR(20) NOT NULL,
+  name  VARCHAR(40) NOT NULL,
   description VARCHAR(200),
   PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -75,7 +75,7 @@ CREATE TABLE lk_report_template_type
 
 CREATE TABLE lk_association
 (
-  name  VARCHAR(20) NOT NULL,
+  name  VARCHAR(40) NOT NULL,
   description VARCHAR(200),
   PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -83,7 +83,7 @@ CREATE TABLE lk_association
 
 CREATE TABLE lk_display
 (
-  name  VARCHAR(20) NOT NULL,
+  name  VARCHAR(40) NOT NULL,
   description VARCHAR(200),
   PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -91,7 +91,7 @@ CREATE TABLE lk_display
 
 CREATE TABLE lk_property_type
 (
-  name  VARCHAR(20) NOT NULL,
+  name  VARCHAR(40) NOT NULL,
   description VARCHAR(200),
   PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -99,7 +99,7 @@ CREATE TABLE lk_property_type
 
 CREATE TABLE lk_source
 (
-  name  VARCHAR(20) NOT NULL,
+  name  VARCHAR(40) NOT NULL,
   description VARCHAR(200),
   PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -107,7 +107,7 @@ CREATE TABLE lk_source
 
 CREATE TABLE lk_group
 (
-  name  VARCHAR(20) NOT NULL,
+  name  VARCHAR(40) NOT NULL,
   description VARCHAR(200),
   PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -115,7 +115,7 @@ CREATE TABLE lk_group
 
 CREATE TABLE lk_subsource
 (
-  name  VARCHAR(20) NOT NULL,
+  name  VARCHAR(40) NOT NULL,
   description VARCHAR(200),
   PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
