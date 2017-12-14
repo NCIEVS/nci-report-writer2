@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name="lk_display")
 @NamedQuery(name="LkDisplay.findAll", query="SELECT l FROM LkDisplay l")
-public class LkDisplay implements Serializable {
+public class LkDisplay implements LkGeneric, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;

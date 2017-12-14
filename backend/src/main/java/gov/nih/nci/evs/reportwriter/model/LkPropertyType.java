@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name="lk_property_type")
 @NamedQuery(name="LkPropertyType.findAll", query="SELECT l FROM LkPropertyType l")
-public class LkPropertyType implements Serializable {
+public class LkPropertyType implements LkGeneric, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;

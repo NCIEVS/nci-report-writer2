@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name="lk_group")
 @NamedQuery(name="LkGroup.findAll", query="SELECT l FROM LkGroup l")
-public class LkGroup implements Serializable {
+public class LkGroup implements LkGeneric, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;

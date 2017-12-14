@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name="lk_report_template_status")
 @NamedQuery(name="LkReportTemplateStatus.findAll", query="SELECT l FROM LkReportTemplateStatus l")
-public class LkReportTemplateStatus implements Serializable {
+public class LkReportTemplateStatus implements LkGeneric, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;

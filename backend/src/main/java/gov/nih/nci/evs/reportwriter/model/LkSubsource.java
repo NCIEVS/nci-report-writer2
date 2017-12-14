@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name="lk_subsource")
 @NamedQuery(name="LkSubsource.findAll", query="SELECT l FROM LkSubsource l")
-public class LkSubsource implements Serializable {
+public class LkSubsource implements LkGeneric, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;

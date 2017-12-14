@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name="lk_association")
 @NamedQuery(name="LkAssociation.findAll", query="SELECT l FROM LkAssociation l")
-public class LkAssociation implements Serializable {
+public class LkAssociation implements LkGeneric, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;
