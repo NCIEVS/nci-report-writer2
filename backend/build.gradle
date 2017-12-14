@@ -21,7 +21,7 @@ ext {
      * Software versions
      */
     mysqlConnectorVersion = "5.1.37"
-    hibernateVersion = "5.2.11.Final"
+  
 
 }
 
@@ -29,7 +29,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'eclipse'
 apply plugin: 'java'
 apply plugin: 'maven'
-apply plugin: 'war'
+
 
 group = "gov.nih.nci.evs.rw"
 version = "1.0.0.RELEASE"
@@ -50,30 +50,22 @@ repositories {
 }
 
 dependencies {
-    compile ('org.springframework.boot:spring-boot-starter'){   
-     exclude group: 'org.hibernate', module: 'hibernate-core' 
-    }
-    compile 'org.springframework.boot:spring-boot-configuration-processor'
-    compile ('org.springframework.boot:spring-boot-starter-data-jpa'){   
-     exclude group: 'org.hibernate', module: 'hibernate-core' 
-    }   
-    compile ('org.springframework.boot:spring-boot-starter-data-rest'){   
-     exclude group: 'org.hibernate', module: 'hibernate-core' 
-    }
+    compile ('org.springframework.boot:spring-boot-starter')
+    
+    compile ('org.springframework.boot:spring-boot-starter-data-rest')
+    compile ('org.springframework.boot:spring-boot-starter-data-jpa')
     compile 'org.springframework.boot:spring-boot-actuator'
     compile 'org.springframework.boot:spring-boot-devtools'
-    compile "org.hibernate:hibernate-core:$hibernateVersion"
-
+   
     compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
  
-    compile ("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
-    compile ("com.fasterxml.jackson.dataformat:jackson-dataformat-csv")
-    compile ("com.opencsv:opencsv:3.8")
+  
+ 
 
     /*
      * Test Dependencies
      */
-    testCompile 'org.springframework.security:spring-security-test'
+   
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
