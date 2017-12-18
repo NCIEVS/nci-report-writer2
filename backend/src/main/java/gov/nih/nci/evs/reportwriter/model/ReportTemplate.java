@@ -14,11 +14,11 @@ import java.util.List;
 @NamedQuery(name="ReportTemplate.findAll", query="SELECT r FROM ReportTemplate r")
 public class ReportTemplate implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private int id;
-	private int level;
+	private Integer id;
+	private Integer level;
 	private String reportName;
 	private String rootConceptCode;
-	private int sortColumn;
+	private Integer sortColumn;
 	private String status;
 	private String type;
 	private String association;
@@ -29,21 +29,23 @@ public class ReportTemplate implements Serializable {
 	}
 
 
-	@Id
-	public int getId() {
+	@Id	
+	@Column(name="id")	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-
-	public int getLevel() {
+	@Column(name="level")
+	public Integer getLevel() {
 		return this.level;
 	}
 
-	public void setLevel(int level) {
+	public void setLevel(Integer level) {
 		this.level = level;
 	}
 
@@ -69,11 +71,11 @@ public class ReportTemplate implements Serializable {
 
 
 	@Column(name="sort_column")
-	public int getSortColumn() {
+	public Integer getSortColumn() {
 		return this.sortColumn;
 	}
 
-	public void setSortColumn(int sortColumn) {
+	public void setSortColumn(Integer sortColumn) {
 		this.sortColumn = sortColumn;
 	}
 
@@ -109,7 +111,7 @@ public class ReportTemplate implements Serializable {
 
 
 	//bi-directional many-to-one association to ReportTemplateColumn
-	@OneToMany(mappedBy="reportTemplate")
+	@OneToMany(mappedBy="reportTemplate",fetch = FetchType.EAGER)
 	public List<ReportTemplateColumn> getReportTemplateColumns() {
 		return this.reportTemplateColumns;
 	}

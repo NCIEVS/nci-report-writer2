@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import gov.nih.nci.evs.reportwriter.model.ReportTemplateColumn;
 
 
-public interface ReportTemplateColumnRepository extends CrudRepository<ReportTemplateColumn, String>{
+public interface ReportTemplateColumnRepository extends CrudRepository<ReportTemplateColumn, Integer>{
 
 }

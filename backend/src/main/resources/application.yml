@@ -6,15 +6,15 @@ spring:
     # Application Properties
     #
     application:
-        name: reportwriter-web 
+        name: reportwriter-api 
     #
     # Data Source Properties
     #
     datasource:
         driverClassName: com.mysql.jdbc.Driver
-        url: ${RW_API_DATASOURCE_URL:REPLACE_WITH_URL}
-        username: ${RW_API_DATASOURCE_USERNAME:REPLACE_WITH_USERNAME}
-        password: ${RW_API_DATASOURCE_PASSWORD:REPLACE_WITH_PASSWORD}
+        url: ${RW_API_DATASOURCE_URL:jdbc:mysql://localhost/rw}
+        username: ${RW_API_DATASOURCE_USERNAME:root}
+        password: ${RW_API_DATASOURCE_PASSWORD:root}
         tomcat:
             initialSize: 10
             maxActive: 10
@@ -65,8 +65,8 @@ endpoints:
 #
 logging:
     level:
-        org.springframework: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK:WARN}
+        org.springframework: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK:INFO}
         org.springframework.boot: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT:WARN}
         org.springframework.data.jpa: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_JPA:WARN}
         org.springframework.data.rest: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_REST:WARN}
-        gov.nih.nci.evs.rw: ${LOGGING_LEVEL_GOV_EVS_RW:INFO}
+        gov.nih.nci.evs.reportwriter: ${LOGGING_LEVEL_GOV_EVS_RW:INFO}

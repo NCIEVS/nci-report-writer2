@@ -13,8 +13,8 @@ import javax.persistence.*;
 @NamedQuery(name="ReportTemplateColumn.findAll", query="SELECT r FROM ReportTemplateColumn r")
 public class ReportTemplateColumn implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private int id;
-	private int columnNumber;
+	private Integer id;
+	private Integer columnNumber;
 	private String label;
 	private ReportTemplate reportTemplate;
 	private String display;
@@ -29,25 +29,27 @@ public class ReportTemplateColumn implements Serializable {
 
 
 	@Id
-	public int getId() {
+	@Column(name="id")	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
 
 	@Column(name="column_number")
-	public int getColumnNumber() {
+	public Integer getColumnNumber() {
 		return this.columnNumber;
 	}
 
-	public void setColumnNumber(int columnNumber) {
+	public void setColumnNumber(Integer columnNumber) {
 		this.columnNumber = columnNumber;
 	}
 
-
+	@Column(name="label")
 	public String getLabel() {
 		return this.label;
 	}
@@ -84,7 +86,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.propertyType;
 	}
 
-	public void setPropertyType(String lkPropertyType) {
+	public void setPropertyType(String propertyType) {
 		this.propertyType = propertyType;
 	}
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import gov.nih.nci.evs.reportwriter.model.LkGeneric;
 import gov.nih.nci.evs.reportwriter.model.LkProperty;
 import gov.nih.nci.evs.reportwriter.model.LookUp;
+import gov.nih.nci.evs.reportwriter.model.ReportTemplate;
+import gov.nih.nci.evs.reportwriter.model.ReportTemplateColumn;
 import gov.nih.nci.evs.reportwriter.service.LkAssociationService;
 import gov.nih.nci.evs.reportwriter.service.LkDisplayService;
 import gov.nih.nci.evs.reportwriter.service.LkGroupService;
@@ -22,10 +25,18 @@ import gov.nih.nci.evs.reportwriter.service.LkReportTemplateStatusService;
 import gov.nih.nci.evs.reportwriter.service.LkReportTemplateTypeService;
 import gov.nih.nci.evs.reportwriter.service.LkSourceService;
 import gov.nih.nci.evs.reportwriter.service.LkSubsourceService;
+import gov.nih.nci.evs.reportwriter.service.ReportTemplateService;
+import gov.nih.nci.evs.reportwriter.support.ReportTemplateUI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
+@RequestMapping("/reportwriter")
 public class HomeController {
+	
+	
+	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
 	@Autowired  LkAssociationService lkAssociationService;
 	@Autowired  LkDisplayService lkDisplayService;
@@ -37,6 +48,8 @@ public class HomeController {
 	@Autowired  LkReportTemplateTypeService lkReportTemplateTypeService;
 	@Autowired  LkSourceService lkSourceService;
 	@Autowired  LkSubsourceService lkSubsourceService;
+	
+	@Autowired  ReportTemplateService reportTemplateService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody String home() {
@@ -117,6 +130,29 @@ public class HomeController {
 		}
 		return lookUps;
 		
+	}
+	
+	
+	//Creating a new Template	
+	@RequestMapping(method = RequestMethod.POST, value = "/createTemplate", consumes = "application/json", produces = "application/json")
+	public @ResponseBody ReportTemplate createTemplate(@RequestBody final ReportTemplate reportTemplate) {
+
+		log.info(reportTemplate.getReportName());
+		log.info(reportTemplate.getStatus());
+		
+		
+     		
+	   
+		ReportTemplate reportTemplateRet = reportTemplateService.save(reportTemplate);
+		
+		ReportTemplate retrow =  reportTemplateService.findOne(reportTemplateRet.getId());
+		
+		List<ReportTemplateColumn> rets = retrow.getReportTemplateColumns();
+		
+		log.info("**size**" + rets);
+		
+		return retrow;
+
 	}
 
 }
