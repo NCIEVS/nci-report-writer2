@@ -16,7 +16,7 @@ public class ReportTemplateUI {
 	private String status;
 	private String type;
 	private String association;
-	private List<ReportTemplateColumn> reportTemplateColumns;
+	private List<ReportTemplateColumn> columns;
 	
 
 	public String getType() {
@@ -67,11 +67,11 @@ public class ReportTemplateUI {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<ReportTemplateColumn> getReportTemplateColumns() {
-		return reportTemplateColumns;
+	public List<ReportTemplateColumn> getColumns() {
+		return columns;
 	}
-	public void setReportTemplateColumns(List<ReportTemplateColumn> reportTemplateColumns) {
-		this.reportTemplateColumns = reportTemplateColumns;
+	public void setColumns(List<ReportTemplateColumn> columns) {
+		this.columns = columns;
 	}
 	
 	

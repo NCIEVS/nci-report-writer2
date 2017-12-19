@@ -22,7 +22,7 @@ public class ReportTemplate implements Serializable {
 	private String status;
 	private String type;
 	private String association;
-	private List<ReportTemplateColumn> reportTemplateColumns;
+	private List<ReportTemplateColumn> columns;
 	private List<ReportTemplateConceptList> reportTemplateConceptLists;
 
 	public ReportTemplate() {
@@ -112,27 +112,15 @@ public class ReportTemplate implements Serializable {
 
 	//bi-directional many-to-one association to ReportTemplateColumn
 	@OneToMany(mappedBy="reportTemplate",fetch = FetchType.EAGER)
-	public List<ReportTemplateColumn> getReportTemplateColumns() {
-		return this.reportTemplateColumns;
+	public List<ReportTemplateColumn> getColumns() {
+		return this.columns;
 	}
 
-	public void setReportTemplateColumns(List<ReportTemplateColumn> reportTemplateColumns) {
-		this.reportTemplateColumns = reportTemplateColumns;
+	public void setColumns(List<ReportTemplateColumn> columns) {
+		this.columns = columns;
 	}
 
-	public ReportTemplateColumn addReportTemplateColumn(ReportTemplateColumn reportTemplateColumn) {
-		getReportTemplateColumns().add(reportTemplateColumn);
-		reportTemplateColumn.setReportTemplate(this);
-
-		return reportTemplateColumn;
-	}
-
-	public ReportTemplateColumn removeReportTemplateColumn(ReportTemplateColumn reportTemplateColumn) {
-		getReportTemplateColumns().remove(reportTemplateColumn);
-		reportTemplateColumn.setReportTemplate(null);
-
-		return reportTemplateColumn;
-	}
+	
 
 
 	//bi-directional many-to-one association to ReportTemplateConceptList

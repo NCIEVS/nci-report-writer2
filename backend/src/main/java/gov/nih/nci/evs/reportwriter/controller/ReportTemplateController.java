@@ -150,7 +150,7 @@ public class ReportTemplateController {
 		List<ReportTemplateColumn> reportTemplateColumns =  reportTemplateColumnService.getReportColumnsByReportTemplateID(reportTemplateRet.getId());
 		
 				
-		reportTemplateRet.setReportTemplateColumns(reportTemplateColumns);
+		reportTemplateRet.setColumns(reportTemplateColumns);
 		return reportTemplateRet;
 
 	}

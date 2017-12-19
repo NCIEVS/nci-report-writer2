@@ -40,8 +40,8 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 	@Transactional
 	public ReportTemplateUI save(ReportTemplate reportTemplate) {
 		
-		List<ReportTemplateColumn> reportTemplateColumns = reportTemplate.getReportTemplateColumns();		
-		reportTemplate.setReportTemplateColumns(null);
+		List<ReportTemplateColumn> reportTemplateColumns = reportTemplate.getColumns();		
+		reportTemplate.setColumns(null);
 		
 		//save the tempalte
 		ReportTemplate reportTemplateRet =reportTemplateRepository.save(reportTemplate);
