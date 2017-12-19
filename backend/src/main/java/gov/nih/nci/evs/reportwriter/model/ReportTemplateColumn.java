@@ -3,6 +3,8 @@ package gov.nih.nci.evs.reportwriter.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the report_template_column database table.
@@ -63,6 +65,7 @@ public class ReportTemplateColumn implements Serializable {
 
 
 	//bi-directional many-to-one association to ReportTemplate
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="report_template_id")
 	public ReportTemplate getReportTemplate() {

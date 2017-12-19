@@ -11,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gov.nih.nci.evs.reportwriter.controller.HomeController;
+import gov.nih.nci.evs.reportwriter.controller.ReportTemplateController;
 import gov.nih.nci.evs.reportwriter.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.model.ReportTemplateColumn;
 import gov.nih.nci.evs.reportwriter.repository.ReportTemplateColumnRepository;
 import gov.nih.nci.evs.reportwriter.repository.ReportTemplateRepository;
+import gov.nih.nci.evs.reportwriter.support.ReportTemplateUI;
 
 @Service
 public class ReportTemplateServiceImpl implements ReportTemplateService {
@@ -37,7 +38,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 	
 	
 	@Transactional
-	public ReportTemplate save(ReportTemplate reportTemplate) {
+	public ReportTemplateUI save(ReportTemplate reportTemplate) {
 		
 		List<ReportTemplateColumn> reportTemplateColumns = reportTemplate.getReportTemplateColumns();		
 		reportTemplate.setReportTemplateColumns(null);
@@ -62,10 +63,19 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 			
 		}
 		
+		ReportTemplateUI reportTemplateUI = new ReportTemplateUI();
 		
-	
-	
-		return reportTemplateRet;
+		
+		reportTemplateUI.setId(reportTemplateRet.getId());
+		reportTemplateUI.setLevel(reportTemplateRet.getLevel());
+		reportTemplateUI.setName(reportTemplateRet.getName());
+		reportTemplateUI.setRootConceptCode(reportTemplateRet.getRootConceptCode());
+		reportTemplateUI.setType(reportTemplateRet.getType());
+		reportTemplateUI.setAssociation(reportTemplateRet.getAssociation());
+		reportTemplateUI.setStatus(reportTemplateRet.getStatus());
+		reportTemplateUI.setSortColumn(reportTemplateRet.getSortColumn());
+		
+		return reportTemplateUI;
 		
 	}
 	

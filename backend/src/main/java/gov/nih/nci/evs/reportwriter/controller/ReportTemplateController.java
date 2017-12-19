@@ -34,10 +34,10 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/reportwriter")
-public class HomeController {
+public class ReportTemplateController {
 	
 	
-	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger log = LoggerFactory.getLogger(ReportTemplateController.class);
 
 	@Autowired  LkAssociationService lkAssociationService;
 	@Autowired  LkDisplayService lkDisplayService;
@@ -137,7 +137,7 @@ public class HomeController {
 	
 	//Creating a new Template	
 	@RequestMapping(method = RequestMethod.POST, value = "/createTemplate", consumes = "application/json", produces = "application/json")
-	public @ResponseBody ReportTemplate createTemplate(@RequestBody final ReportTemplate reportTemplate) {
+	public @ResponseBody ReportTemplateUI createTemplate(@RequestBody final ReportTemplate reportTemplate) {
 
 		log.info(reportTemplate.getName());
 		log.info(reportTemplate.getStatus());
@@ -145,17 +145,12 @@ public class HomeController {
 		
      		
 	   
-		ReportTemplate reportTemplateRet = reportTemplateService.save(reportTemplate);
+		ReportTemplateUI reportTemplateRet = reportTemplateService.save(reportTemplate);
 		
 		List<ReportTemplateColumn> reportTemplateColumns =  reportTemplateColumnService.getReportColumnsByReportTemplateID(reportTemplateRet.getId());
 		
-		
-		if (reportTemplateColumns != null)
-			log.info("reportTemplateColumns size " +	reportTemplateColumns.size());
-		else 
-			log.info("reportTemplateColumns size null");
-		
-		//reportTemplateRet.setReportTemplateColumns(reportTemplateColumns);
+				
+		reportTemplateRet.setReportTemplateColumns(reportTemplateColumns);
 		return reportTemplateRet;
 
 	}

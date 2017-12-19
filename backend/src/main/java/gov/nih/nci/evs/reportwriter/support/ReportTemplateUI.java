@@ -1,21 +1,24 @@
 package gov.nih.nci.evs.reportwriter.support;
 
+import java.util.List;
+
+import gov.nih.nci.evs.reportwriter.model.ReportTemplateColumn;
+import gov.nih.nci.evs.reportwriter.model.ReportTemplateConceptList;
+
 public class ReportTemplateUI {
 	
-	private String reportName;
+	
+	private Integer id;
+	private Integer level;
+	private String name;
+	private String rootConceptCode;
+	private Integer sortColumn;
+	private String status;
 	private String type;
 	private String association;
-	private String rootConceptCode;
-	private String level;
-	private String status;
-	private Integer sortColumn;
+	private List<ReportTemplateColumn> reportTemplateColumns;
 	
-	public String getReportName() {
-		return reportName;
-	}
-	public void setReportName(String reportName) {
-		this.reportName = reportName;
-	}
+
 	public String getType() {
 		return type;
 	}
@@ -34,10 +37,10 @@ public class ReportTemplateUI {
 	public void setRootConceptCode(String rootConceptCode) {
 		this.rootConceptCode = rootConceptCode;
 	}
-	public String getLevel() {
+	public Integer getLevel() {
 		return level;
 	}
-	public void setLevel(String level) {
+	public void setLevel(Integer level) {
 		this.level = level;
 	}
 	public String getStatus() {
@@ -51,6 +54,24 @@ public class ReportTemplateUI {
 	}
 	public void setSortColumn(Integer sortColumn) {
 		this.sortColumn = sortColumn;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public List<ReportTemplateColumn> getReportTemplateColumns() {
+		return reportTemplateColumns;
+	}
+	public void setReportTemplateColumns(List<ReportTemplateColumn> reportTemplateColumns) {
+		this.reportTemplateColumns = reportTemplateColumns;
 	}
 	
 	
