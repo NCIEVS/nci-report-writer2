@@ -111,13 +111,16 @@ public class ReportTemplate implements Serializable {
 
 
 	//bi-directional many-to-one association to ReportTemplateColumn
-	@OneToMany(mappedBy="reportTemplate",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="reportTemplate",fetch = FetchType.EAGER, cascade = { CascadeType.ALL },orphanRemoval=true)
 	public List<ReportTemplateColumn> getColumns() {
 		return this.columns;
 	}
 
-	public void setColumns(List<ReportTemplateColumn> columns) {
+	public void setColumns(List<ReportTemplateColumn> columns) {		
 		this.columns = columns;
+		
+		
+		
 	}
 
 	

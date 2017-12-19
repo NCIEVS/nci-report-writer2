@@ -137,7 +137,7 @@ public class ReportTemplateController {
 	
 	//Creating a new Template	
 	@RequestMapping(method = RequestMethod.POST, value = "/createTemplate", consumes = "application/json", produces = "application/json")
-	public @ResponseBody ReportTemplateUI createTemplate(@RequestBody final ReportTemplate reportTemplate) {
+	public @ResponseBody ReportTemplateUI createTemplate(@RequestBody final ReportTemplateUI reportTemplate) {
 
 		log.info(reportTemplate.getName());
 		log.info(reportTemplate.getStatus());
@@ -145,13 +145,31 @@ public class ReportTemplateController {
 		
      		
 	   
-		ReportTemplateUI reportTemplateRet = reportTemplateService.save(reportTemplate);
+		ReportTemplateUI reportTemplateRet = reportTemplateService.create(reportTemplate);
 		
 		List<ReportTemplateColumn> reportTemplateColumns =  reportTemplateColumnService.getReportColumnsByReportTemplateID(reportTemplateRet.getId());
 		
 				
 		reportTemplateRet.setColumns(reportTemplateColumns);
 		return reportTemplateRet;
+
+	}
+	
+	//Creating a new Template	
+	@RequestMapping(method = RequestMethod.POST, value = "/saveTemplate", consumes = "application/json", produces = "application/json")
+	public @ResponseBody ReportTemplateUI saveTemplate(@RequestBody final ReportTemplateUI reportTemplate) {
+
+			
+			log.info("Id **- " + reportTemplate.getId());
+			log.info(reportTemplate.getName());
+			log.info(reportTemplate.getStatus());
+	     		
+			ReportTemplateUI reportTemplateRet = reportTemplateService.save(reportTemplate);
+			
+			List<ReportTemplateColumn> reportTemplateColumns =  reportTemplateColumnService.getReportColumnsByReportTemplateID(reportTemplateRet.getId());
+			reportTemplateRet.setColumns(reportTemplateColumns);
+			
+			return reportTemplateRet;
 
 	}
 

@@ -38,16 +38,28 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 	
 	
 	@Transactional
-	public ReportTemplateUI save(ReportTemplate reportTemplate) {
+	public ReportTemplateUI create(ReportTemplateUI reportTemplate) {
 		
 		List<ReportTemplateColumn> reportTemplateColumns = reportTemplate.getColumns();		
 		reportTemplate.setColumns(null);
 		
+		
+		ReportTemplate reportTemplatedb = new ReportTemplate();
+		
+		
+		reportTemplatedb.setLevel(reportTemplate.getLevel());
+		reportTemplatedb.setName(reportTemplate.getName());
+		reportTemplatedb.setRootConceptCode(reportTemplate.getRootConceptCode());
+		reportTemplatedb.setType(reportTemplate.getType());
+		reportTemplatedb.setAssociation(reportTemplate.getAssociation());
+		reportTemplatedb.setStatus(reportTemplate.getStatus());
+		reportTemplatedb.setSortColumn(reportTemplate.getSortColumn());
+		
 		//save the tempalte
-		ReportTemplate reportTemplateRet =reportTemplateRepository.save(reportTemplate);
+		ReportTemplate reportTemplateRet =reportTemplateRepository.save(reportTemplatedb);
 		
 		log.info("id" + reportTemplateRet.getId());
-		
+		reportTemplate.setId(reportTemplateRet.getId());
 		
 		
 		reportTemplateRet = reportTemplateRepository.findOne(reportTemplateRet.getId());
@@ -63,19 +75,49 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 			
 		}
 		
-		ReportTemplateUI reportTemplateUI = new ReportTemplateUI();
+	
 		
 		
-		reportTemplateUI.setId(reportTemplateRet.getId());
-		reportTemplateUI.setLevel(reportTemplateRet.getLevel());
-		reportTemplateUI.setName(reportTemplateRet.getName());
-		reportTemplateUI.setRootConceptCode(reportTemplateRet.getRootConceptCode());
-		reportTemplateUI.setType(reportTemplateRet.getType());
-		reportTemplateUI.setAssociation(reportTemplateRet.getAssociation());
-		reportTemplateUI.setStatus(reportTemplateRet.getStatus());
-		reportTemplateUI.setSortColumn(reportTemplateRet.getSortColumn());
 		
-		return reportTemplateUI;
+		
+		return reportTemplate;
+		
+	}
+	
+	@Transactional
+	public ReportTemplateUI save(ReportTemplateUI reportTemplate) {
+		
+		List<ReportTemplateColumn> reportTemplateColumns = reportTemplate.getColumns();		
+		
+		
+		//save the template	
+		log.info("id**-" + reportTemplate.getId());
+		
+		ReportTemplate reportTemplatedb = reportTemplateRepository.findOne(reportTemplate.getId());		
+		reportTemplatedb.setLevel(reportTemplate.getLevel());
+		reportTemplatedb.setName(reportTemplate.getName());
+		reportTemplatedb.setRootConceptCode(reportTemplate.getRootConceptCode());
+		reportTemplatedb.setType(reportTemplate.getType());
+		reportTemplatedb.setAssociation(reportTemplate.getAssociation());
+		reportTemplatedb.setStatus(reportTemplate.getStatus());
+		reportTemplatedb.setSortColumn(reportTemplate.getSortColumn());
+		reportTemplatedb.getColumns().clear();
+		reportTemplateRepository.save(reportTemplatedb);
+		
+		ReportTemplate reportTemplateRet = reportTemplateRepository.findOne(reportTemplate.getId());
+		
+		for (ReportTemplateColumn reportTemplateColumn : reportTemplateColumns) {			
+			reportTemplateColumn.setReportTemplate(reportTemplateRet);
+			ReportTemplateColumn reportTemplateColumnRet = reportTemplateColumnRepository.save(reportTemplateColumn);
+
+			log.info("reportTemplateColumnRet " + reportTemplateColumnRet.getId() + " - "
+					+ reportTemplateColumnRet.getLabel());
+
+		}
+		
+		
+		
+		return reportTemplate;
 		
 	}
 	

@@ -11,6 +11,8 @@ public interface ReportTemplateService {
 	
 	public ReportTemplate findOne(Integer id);
 	
-	public ReportTemplateUI save(ReportTemplate reportTemplate);
+	public ReportTemplateUI create(ReportTemplateUI reportTemplate);
+	
+	public ReportTemplateUI save(ReportTemplateUI reportTemplate);
 
 }
