@@ -16,7 +16,7 @@ public class ReportTemplate implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private Integer level;
-	private String reportName;
+	private String name;
 	private String rootConceptCode;
 	private Integer sortColumn;
 	private String status;
@@ -50,13 +50,13 @@ public class ReportTemplate implements Serializable {
 	}
 
 
-	@Column(name="report_name")
-	public String getReportName() {
-		return this.reportName;
+	@Column(name="name")
+	public String getName() {
+		return this.name;
 	}
 
-	public void setReportName(String reportName) {
-		this.reportName = reportName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 

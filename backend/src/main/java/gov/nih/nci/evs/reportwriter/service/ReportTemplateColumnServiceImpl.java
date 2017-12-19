@@ -18,4 +18,11 @@ public class ReportTemplateColumnServiceImpl implements ReportTemplateColumnServ
 		return (List) reportTemplateColumnRepository.findAll();
 	}
 
+	
+	
+	public List<ReportTemplateColumn> getReportColumnsByReportTemplateID(Integer reportTemplateId){
+		
+		
+		return reportTemplateColumnRepository.getReportColumnsByReportTemplateID(reportTemplateId);
+	}
 }

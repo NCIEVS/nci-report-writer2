@@ -10,7 +10,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="report_template_column")
-@NamedQuery(name="ReportTemplateColumn.findAll", query="SELECT r FROM ReportTemplateColumn r")
+@NamedQueries({   
+    @NamedQuery(name = "ReportTemplateColumn.getReportColumnsByReportTemplateID", 
+    		query="SELECT u FROM ReportTemplateColumn u where u.reportTemplate.id = :reportTemplateId)")
+})
 public class ReportTemplateColumn implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
@@ -60,7 +63,7 @@ public class ReportTemplateColumn implements Serializable {
 
 
 	//bi-directional many-to-one association to ReportTemplate
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="report_template_id")
 	public ReportTemplate getReportTemplate() {
 		return this.reportTemplate;

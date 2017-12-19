@@ -25,6 +25,7 @@ import gov.nih.nci.evs.reportwriter.service.LkReportTemplateStatusService;
 import gov.nih.nci.evs.reportwriter.service.LkReportTemplateTypeService;
 import gov.nih.nci.evs.reportwriter.service.LkSourceService;
 import gov.nih.nci.evs.reportwriter.service.LkSubsourceService;
+import gov.nih.nci.evs.reportwriter.service.ReportTemplateColumnService;
 import gov.nih.nci.evs.reportwriter.service.ReportTemplateService;
 import gov.nih.nci.evs.reportwriter.support.ReportTemplateUI;
 
@@ -50,6 +51,7 @@ public class HomeController {
 	@Autowired  LkSubsourceService lkSubsourceService;
 	
 	@Autowired  ReportTemplateService reportTemplateService;
+	@Autowired  ReportTemplateColumnService reportTemplateColumnService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody String home() {
@@ -137,7 +139,7 @@ public class HomeController {
 	@RequestMapping(method = RequestMethod.POST, value = "/createTemplate", consumes = "application/json", produces = "application/json")
 	public @ResponseBody ReportTemplate createTemplate(@RequestBody final ReportTemplate reportTemplate) {
 
-		log.info(reportTemplate.getReportName());
+		log.info(reportTemplate.getName());
 		log.info(reportTemplate.getStatus());
 		
 		
@@ -145,13 +147,16 @@ public class HomeController {
 	   
 		ReportTemplate reportTemplateRet = reportTemplateService.save(reportTemplate);
 		
-		ReportTemplate retrow =  reportTemplateService.findOne(reportTemplateRet.getId());
+		List<ReportTemplateColumn> reportTemplateColumns =  reportTemplateColumnService.getReportColumnsByReportTemplateID(reportTemplateRet.getId());
 		
-		List<ReportTemplateColumn> rets = retrow.getReportTemplateColumns();
 		
-		log.info("**size**" + rets);
+		if (reportTemplateColumns != null)
+			log.info("reportTemplateColumns size " +	reportTemplateColumns.size());
+		else 
+			log.info("reportTemplateColumns size null");
 		
-		return retrow;
+		//reportTemplateRet.setReportTemplateColumns(reportTemplateColumns);
+		return reportTemplateRet;
 
 	}
 

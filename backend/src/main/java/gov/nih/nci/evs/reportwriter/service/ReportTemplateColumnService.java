@@ -6,5 +6,8 @@ import gov.nih.nci.evs.reportwriter.model.ReportTemplateColumn;
 
 public interface ReportTemplateColumnService {
 	public List <ReportTemplateColumn> findAll();
+	
+	
+	public List<ReportTemplateColumn> getReportColumnsByReportTemplateID(Integer reportTemplateId);
 
 }

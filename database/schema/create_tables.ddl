@@ -3,7 +3,7 @@ CREATE TABLE report_template
   id                 INT NOT NULL AUTO_INCREMENT,
   association        VARCHAR(255) NOT NULL,
   level              INT,
-  report_name        VARCHAR(255) NOT NULL,
+  name        VARCHAR(255) NOT NULL,
   root_concept_code  VARCHAR(255) NOT NULL,
   sort_column        INT,
   status             VARCHAR(20) NOT NULL,
