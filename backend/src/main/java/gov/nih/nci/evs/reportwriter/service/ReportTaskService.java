@@ -8,5 +8,7 @@ import gov.nih.nci.evs.reportwriter.support.ReportTaskUI;
 public interface ReportTaskService {
 	
 	public List <ReportTaskUI> getAllTasksExceptDeleted();
+	
+	public List <ReportTaskUI>  getAllDeletedTasks();
 
 }

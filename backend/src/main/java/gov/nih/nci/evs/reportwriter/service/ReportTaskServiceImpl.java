@@ -52,5 +52,36 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		return reportTaskUIs;
 		
 	}
+	
+		public List<ReportTaskUI> getAllDeletedTasks() {
+		
+		List<ReportTask> reportTasks = (List<ReportTask>)reportTaskRepository.findByStatus("Deleted");
+		
+		List<ReportTaskUI> reportTaskUIs = new ArrayList<ReportTaskUI>();
+		
+		for (ReportTask reportTask :reportTasks) {
+			log.info("id - " + reportTask.getId());
+			log.info(reportTask.getReportTemplate().getName());
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
+			//if (!reportTask.getStatus().equalsIgnoreCase("Deleted")) {
+				ReportTaskUI reportTaskUI = new ReportTaskUI();
+				reportTaskUI.setId(reportTask.getId());
+				reportTaskUI.setStatus(reportTask.getStatus());
+				reportTaskUI.setReportTemplateName(reportTask.getReportTemplate().getName());
+				reportTaskUI.setReportTemplateId(reportTask.getReportTemplate().getId());
+				String txtDateCreated = reportTask.getDateCreated().format(formatter);
+				reportTaskUI.setDateCreated(txtDateCreated);
+				String txtDateStarted = reportTask.getDateStarted().format(formatter);
+				reportTaskUI.setDateStarted(txtDateStarted);
+				String txtDateCompleted = reportTask.getDateCompleted().format(formatter);
+				reportTaskUI.setDateCompleted(txtDateCompleted);
+				
+				reportTaskUIs.add(reportTaskUI);
+			//}
+			
+		}
+		return reportTaskUIs;
+		
+	}
 
 }

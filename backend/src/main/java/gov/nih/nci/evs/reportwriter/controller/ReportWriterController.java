@@ -201,5 +201,12 @@ public class ReportWriterController {
 
 				return reportTaskUIs;
 		}
+		
+		@RequestMapping(value = "/reporttasksdeleted", method = RequestMethod.GET, produces = "application/json")
+		public @ResponseBody List<ReportTaskUI> reporttasksdeleted() {
+			List<ReportTaskUI> reportTaskUIs = reportTaskService.getAllDeletedTasks();
+
+			return reportTaskUIs;
+		}
 
 }
