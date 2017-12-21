@@ -3,6 +3,10 @@ ALTER TABLE report_task ADD CONSTRAINT fk_report_task_1
     FOREIGN KEY (status)
     REFERENCES lk_report_status(name);
 
+ALTER TABLE report_task ADD CONSTRAINT fk_report_task_2
+    FOREIGN KEY (report_template_id)
+    REFERENCES report_template(id);
+
 system echo 'Adding Foreign Keys to report_template_concept_list'
 ALTER TABLE report_template_concept_list ADD CONSTRAINT fk_report_template_concept_list_1
     FOREIGN KEY (report_template_id)
