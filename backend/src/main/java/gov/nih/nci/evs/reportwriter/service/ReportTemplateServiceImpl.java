@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gov.nih.nci.evs.reportwriter.controller.ReportTemplateController;
+import gov.nih.nci.evs.reportwriter.controller.ReportWriterController;
 import gov.nih.nci.evs.reportwriter.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.model.ReportTemplateColumn;
 import gov.nih.nci.evs.reportwriter.repository.ReportTemplateColumnRepository;

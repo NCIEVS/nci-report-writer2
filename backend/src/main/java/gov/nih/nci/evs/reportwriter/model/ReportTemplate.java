@@ -2,16 +2,18 @@ package gov.nih.nci.evs.reportwriter.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.List;
 
 /**
  * The persistent class for the report_template database table.
  * 
  */
 @Entity
-@Table(name="report_template")
-@NamedQuery(name="ReportTemplate.findAll", query="SELECT r FROM ReportTemplate r")
+@Table(name = "report_template")
+@NamedQuery(name = "ReportTemplate.findAll", query = "SELECT r FROM ReportTemplate r")
 public class ReportTemplate implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
@@ -24,13 +26,13 @@ public class ReportTemplate implements Serializable {
 	private String association;
 	private List<ReportTemplateColumn> columns;
 	private List<ReportTemplateConceptList> reportTemplateConceptLists;
+	private List<ReportTask> tasks;
 
 	public ReportTemplate() {
 	}
 
-
-	@Id	
-	@Column(name="id")	
+	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Integer getId() {
 		return this.id;
@@ -40,7 +42,7 @@ public class ReportTemplate implements Serializable {
 		this.id = id;
 	}
 
-	@Column(name="level")
+	@Column(name = "level")
 	public Integer getLevel() {
 		return this.level;
 	}
@@ -49,8 +51,7 @@ public class ReportTemplate implements Serializable {
 		this.level = level;
 	}
 
-
-	@Column(name="name")
+	@Column(name = "name")
 	public String getName() {
 		return this.name;
 	}
@@ -59,8 +60,7 @@ public class ReportTemplate implements Serializable {
 		this.name = name;
 	}
 
-
-	@Column(name="root_concept_code")
+	@Column(name = "root_concept_code")
 	public String getRootConceptCode() {
 		return this.rootConceptCode;
 	}
@@ -69,8 +69,7 @@ public class ReportTemplate implements Serializable {
 		this.rootConceptCode = rootConceptCode;
 	}
 
-
-	@Column(name="sort_column")
+	@Column(name = "sort_column")
 	public Integer getSortColumn() {
 		return this.sortColumn;
 	}
@@ -79,8 +78,7 @@ public class ReportTemplate implements Serializable {
 		this.sortColumn = sortColumn;
 	}
 
-
-	@Column(name="status")
+	@Column(name = "status")
 	public String getStatus() {
 		return this.status;
 	}
@@ -89,8 +87,7 @@ public class ReportTemplate implements Serializable {
 		this.status = status;
 	}
 
-
-	@Column(name="type")
+	@Column(name = "type")
 	public String getType() {
 		return this.type;
 	}
@@ -99,8 +96,7 @@ public class ReportTemplate implements Serializable {
 		this.type = type;
 	}
 
-
-	@Column(name="association")
+	@Column(name = "association")
 	public String getAssociation() {
 		return this.association;
 	}
@@ -109,25 +105,34 @@ public class ReportTemplate implements Serializable {
 		this.association = association;
 	}
 
+	// bi-directional many-to-one association to ReportTemplateColumn
 
-	//bi-directional many-to-one association to ReportTemplateColumn
-	@OneToMany(mappedBy="reportTemplate",fetch = FetchType.EAGER, cascade = { CascadeType.ALL },orphanRemoval=true)
+	@OneToMany(mappedBy = "reportTemplate", fetch = FetchType.EAGER, cascade = {
+			CascadeType.ALL }, orphanRemoval = true)
 	public List<ReportTemplateColumn> getColumns() {
 		return this.columns;
 	}
 
-	public void setColumns(List<ReportTemplateColumn> columns) {		
+	public void setColumns(List<ReportTemplateColumn> columns) {
 		this.columns = columns;
-		
-		
-		
+
 	}
 
-	
+	// bi-directional many-to-one association to ReportTask
+	@JsonIgnore
+	@OneToMany(mappedBy = "reportTemplate", fetch = FetchType.LAZY)
+	public List<ReportTask> getTasks() {
+		return this.tasks;
+	}
 
+	public void setTasks(List<ReportTask> tasks) {
+		this.tasks = tasks;
 
-	//bi-directional many-to-one association to ReportTemplateConceptList
-	@OneToMany(mappedBy="reportTemplate")
+	}
+
+	// bi-directional many-to-one association to ReportTemplateConceptList
+	@JsonIgnore
+	@OneToMany(mappedBy = "reportTemplate")
 	public List<ReportTemplateConceptList> getReportTemplateConceptLists() {
 		return this.reportTemplateConceptLists;
 	}
@@ -143,7 +148,8 @@ public class ReportTemplate implements Serializable {
 		return reportTemplateConceptList;
 	}
 
-	public ReportTemplateConceptList removeReportTemplateConceptList(ReportTemplateConceptList reportTemplateConceptList) {
+	public ReportTemplateConceptList removeReportTemplateConceptList(
+			ReportTemplateConceptList reportTemplateConceptList) {
 		getReportTemplateConceptLists().remove(reportTemplateConceptList);
 		reportTemplateConceptList.setReportTemplate(null);
 

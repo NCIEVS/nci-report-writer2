@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import gov.nih.nci.evs.reportwriter.model.LkGeneric;
 import gov.nih.nci.evs.reportwriter.model.LkProperty;
 import gov.nih.nci.evs.reportwriter.model.LookUp;
+import gov.nih.nci.evs.reportwriter.model.ReportTask;
 import gov.nih.nci.evs.reportwriter.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.model.ReportTemplateColumn;
 import gov.nih.nci.evs.reportwriter.service.LkAssociationService;
@@ -25,8 +27,10 @@ import gov.nih.nci.evs.reportwriter.service.LkReportTemplateStatusService;
 import gov.nih.nci.evs.reportwriter.service.LkReportTemplateTypeService;
 import gov.nih.nci.evs.reportwriter.service.LkSourceService;
 import gov.nih.nci.evs.reportwriter.service.LkSubsourceService;
+import gov.nih.nci.evs.reportwriter.service.ReportTaskService;
 import gov.nih.nci.evs.reportwriter.service.ReportTemplateColumnService;
 import gov.nih.nci.evs.reportwriter.service.ReportTemplateService;
+import gov.nih.nci.evs.reportwriter.support.ReportTaskUI;
 import gov.nih.nci.evs.reportwriter.support.ReportTemplateUI;
 
 import org.slf4j.Logger;
@@ -34,10 +38,10 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/reportwriter")
-public class ReportTemplateController {
+public class ReportWriterController {
 	
 	
-	private static final Logger log = LoggerFactory.getLogger(ReportTemplateController.class);
+	private static final Logger log = LoggerFactory.getLogger(ReportWriterController.class);
 
 	@Autowired  LkAssociationService lkAssociationService;
 	@Autowired  LkDisplayService lkDisplayService;
@@ -52,6 +56,8 @@ public class ReportTemplateController {
 	
 	@Autowired  ReportTemplateService reportTemplateService;
 	@Autowired  ReportTemplateColumnService reportTemplateColumnService;
+	
+	@Autowired ReportTaskService reportTaskService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody String home() {
@@ -172,5 +178,28 @@ public class ReportTemplateController {
 			return reportTemplateRet;
 
 	}
+	
+	// Get all Templates
+	@RequestMapping(value = "/reporttemplates", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<ReportTemplate> reporttemplates() {
+			List<ReportTemplate> reportTemplates = reportTemplateService.findAll();
+
+			return reportTemplates;
+	}
+	
+	// Get all Templates
+		@RequestMapping(value = "/reporttemplate/{reportTemplateId}", method = RequestMethod.GET, produces = "application/json")
+		public @ResponseBody ReportTemplate reporttemplates(@PathVariable Integer reportTemplateId) {
+				ReportTemplate reportTemplate= reportTemplateService.findOne(reportTemplateId);
+
+				return reportTemplate;
+		}
+		
+		@RequestMapping(value = "/reporttasks", method = RequestMethod.GET, produces = "application/json")
+		public @ResponseBody List<ReportTaskUI> reporttasks() {
+			List<ReportTaskUI> reportTaskUIs = reportTaskService.getAllTasksExceptDeleted();
+
+				return reportTaskUIs;
+		}
 
 }
