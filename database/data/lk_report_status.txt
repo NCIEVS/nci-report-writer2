@@ -1,4 +1,5 @@
 Completed~@~Completed~@@~
 Deleted~@~Deleted~@@~
+Failed~@~Failed~@@~
 Pending~@~Pending~@@~
 Started~@~Started~@@~
