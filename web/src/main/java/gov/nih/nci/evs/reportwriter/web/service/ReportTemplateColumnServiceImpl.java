@@ -23,6 +23,6 @@ public class ReportTemplateColumnServiceImpl implements ReportTemplateColumnServ
 	public List<ReportTemplateColumn> getReportColumnsByReportTemplateID(Integer reportTemplateId){
 		
 		
-		return reportTemplateColumnRepository.getReportColumnsByReportTemplateID(reportTemplateId);
+		return reportTemplateColumnRepository.getReportColumnsByReportTemplateId(reportTemplateId);
 	}
 }

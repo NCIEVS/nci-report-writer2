@@ -11,6 +11,6 @@ import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateColumn;
 public interface ReportTemplateColumnRepository extends CrudRepository<ReportTemplateColumn, Integer>{
 	
 	
-	List<ReportTemplateColumn> getReportColumnsByReportTemplateID(@Param("reportTemplateId") Integer reportTemplateId);
+	List<ReportTemplateColumn> getReportColumnsByReportTemplateId(@Param("reportTemplateId") Integer reportTemplateId);
 
 }

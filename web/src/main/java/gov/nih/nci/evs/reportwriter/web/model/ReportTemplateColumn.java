@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name="report_template_column")
 @NamedQueries({   
-    @NamedQuery(name = "ReportTemplateColumn.getReportColumnsByReportTemplateID", 
+    @NamedQuery(name = "ReportTemplateColumn.getReportColumnsByReportTemplateId", 
     		query="SELECT u FROM ReportTemplateColumn u where u.reportTemplate.id = :reportTemplateId)")
 })
 public class ReportTemplateColumn implements Serializable {
