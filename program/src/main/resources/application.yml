@@ -27,17 +27,19 @@ logging:
       file: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
       console: ""
 
-nci:
-  evs:
-    stardog:
-      url: ${STARDOG_URL:REPLACE_WITH_URL}
-      queryUrl: ${STARDOG_QUERY_URL:REPLACE_WITH_QUERY_URL}
-      username: ${STARDOG_USERNAME:REPLACE_WITH_USERNAME}
-      password: ${STARDOG_PASSWORD:REPLACE_WITH_PASSWORD}     
-      readTimeout: ${STARDOG_READ_TIMEOUT:10000}
-      connectTimeout: ${STARDOG_CONNECT_TIMEOUT:10000}
-      graphName: ${STARDOG_GRAPH_NAME:REPLACE_WITH_GRAPH_NAME}     
-      
-    rw:
-      templateDirectory: ${RW_TEMPLATE_DIRECTORY}
-      outputDirectory: ${RW_OUTPUT_DIRECTORY}
+gov:
+  nih:
+    nci:
+      evs:
+       reportwriter:
+         core:
+           templateDirectory: ${RW_TEMPLATE_DIRECTORY:/tmp/templates}
+           outputDirectory: ${RW_OUTPUT_DIRECTORY:/tmp/output}
+         stardog:
+           url: ${STARDOG_URL:http://localhost:5820/NCIT2}
+           queryUrl: ${STARDOG_QUERY_URL:http://localhost:5820/NCIT2/query}
+           username: ${STARDOG_USERNAME:ADMIN}
+           password: ${STARDOG_PASSWORD:ADMIN}     
+           readTimeout: ${STARDOG_READ_TIMEOUT:10000}
+           connectTimeout: ${STARDOG_CONNECT_TIMEOUT:10000}
+           graphName: ${STARDOG_GRAPH_NAME:http://NCI_T} 
