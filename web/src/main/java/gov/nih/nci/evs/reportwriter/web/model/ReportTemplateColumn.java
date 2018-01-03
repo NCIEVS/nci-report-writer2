@@ -3,6 +3,7 @@ package gov.nih.nci.evs.reportwriter.web.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
     @NamedQuery(name = "ReportTemplateColumn.getReportColumnsByReportTemplateId", 
     		query="SELECT u FROM ReportTemplateColumn u where u.reportTemplate.id = :reportTemplateId)")
 })
+@JsonFilter("yamlFilter")
 public class ReportTemplateColumn implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;

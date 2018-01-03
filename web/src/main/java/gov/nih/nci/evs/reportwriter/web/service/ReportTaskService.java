@@ -10,5 +10,7 @@ public interface ReportTaskService {
 	public List <ReportTaskUI> getAllTasksExceptDeleted();
 	
 	public List <ReportTaskUI>  getAllDeletedTasks();
+	
+	public void runReport(int id);
 
 }

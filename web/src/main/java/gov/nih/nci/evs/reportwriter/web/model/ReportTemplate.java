@@ -3,6 +3,7 @@ package gov.nih.nci.evs.reportwriter.web.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "report_template")
 @NamedQuery(name = "ReportTemplate.findAll", query = "SELECT r FROM ReportTemplate r")
+@JsonFilter("yamlFilter")
 public class ReportTemplate implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;

@@ -70,3 +70,19 @@ logging:
         org.springframework.data.jpa: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_JPA:WARN}
         org.springframework.data.rest: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_REST:WARN}
         gov.nih.nci.evs.reportwriter: ${LOGGING_LEVEL_GOV_EVS_RW:INFO}
+gov:
+  nih:
+    nci:
+      evs:
+       reportwriter:
+         core:
+           templateDirectory: ${RW_TEMPLATE_DIRECTORY:/tmp/templates}
+           outputDirectory: ${RW_OUTPUT_DIRECTORY:/tmp/output}
+         stardog:
+           url: ${STARDOG_URL:http://localhost:5820/NCIT2}
+           queryUrl: ${STARDOG_QUERY_URL:http://localhost:5820/NCIT2/query}
+           username: ${STARDOG_USERNAME:ADMIN}
+           password: ${STARDOG_PASSWORD:ADMIN}     
+           readTimeout: ${STARDOG_READ_TIMEOUT:10000}
+           connectTimeout: ${STARDOG_CONNECT_TIMEOUT:10000}
+           graphName: ${STARDOG_GRAPH_NAME:http://NCI_T} 

@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.reportwriter.web.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -208,5 +209,16 @@ public class ReportWriterController {
 
 			return reportTaskUIs;
 		}
+		
+		
+		@RequestMapping(value="/runReport/{id}", method = RequestMethod.GET)
+	    public @ResponseBody String runReport(@PathVariable Integer id) 
+	    		throws IOException { 
+
+	            log.info("ID: " + id);
+	            reportTaskService.runReport(id);
+	            log.info("Run Report Submitted");
+	            return "Success";
+	    }
 
 }
