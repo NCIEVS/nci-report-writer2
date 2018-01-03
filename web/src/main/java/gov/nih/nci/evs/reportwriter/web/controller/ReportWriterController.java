@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
 import gov.nih.nci.evs.reportwriter.web.model.LkGeneric;
 import gov.nih.nci.evs.reportwriter.web.model.LkProperty;
 import gov.nih.nci.evs.reportwriter.web.model.LookUp;
@@ -144,7 +148,7 @@ public class ReportWriterController {
 	
 	//Creating a new Template	
 	@RequestMapping(method = RequestMethod.POST, value = "/createTemplate", consumes = "application/json", produces = "application/json")
-	public @ResponseBody ReportTemplateUI createTemplate(@RequestBody final ReportTemplateUI reportTemplate) {
+	public @ResponseBody String createTemplate(@RequestBody final ReportTemplateUI reportTemplate) throws JsonProcessingException {
 
 		log.info(reportTemplate.getName());
 		log.info(reportTemplate.getStatus());
@@ -158,13 +162,21 @@ public class ReportWriterController {
 		
 				
 		reportTemplateRet.setColumns(reportTemplateColumns);
-		return reportTemplateRet;
+		
+		SimpleFilterProvider filter = new SimpleFilterProvider();
+		filter.setFailOnUnknownId(false);
+        ObjectMapper mapper = new ObjectMapper();
+        String reportTemplateRetStr = mapper.writer(filter).writeValueAsString(reportTemplateRet);
+        
+        log.info("test - " + reportTemplateRetStr);
+		
+		return reportTemplateRetStr;
 
 	}
 	
 	//Creating a new Template	
 	@RequestMapping(method = RequestMethod.POST, value = "/saveTemplate", consumes = "application/json", produces = "application/json")
-	public @ResponseBody ReportTemplateUI saveTemplate(@RequestBody final ReportTemplateUI reportTemplate) {
+	public @ResponseBody String saveTemplate(@RequestBody final ReportTemplateUI reportTemplate) throws JsonProcessingException {
 
 			
 			log.info("Id **- " + reportTemplate.getId());
@@ -176,24 +188,50 @@ public class ReportWriterController {
 			List<ReportTemplateColumn> reportTemplateColumns =  reportTemplateColumnService.getReportColumnsByReportTemplateID(reportTemplateRet.getId());
 			reportTemplateRet.setColumns(reportTemplateColumns);
 			
-			return reportTemplateRet;
+			SimpleFilterProvider filter = new SimpleFilterProvider();
+			filter.setFailOnUnknownId(false);
+	        ObjectMapper mapper = new ObjectMapper();
+	        String reportTemplateRetStr = mapper.writer(filter).writeValueAsString(reportTemplateRet);
+	        
+	        log.info("test - " + reportTemplateRetStr);
+			
+			return reportTemplateRetStr;
+			
+			//return reportTemplateRet;
 
 	}
 	
 	// Get all Templates
 	@RequestMapping(value = "/reporttemplates", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<ReportTemplate> reporttemplates() {
+	public @ResponseBody String reporttemplates() throws JsonProcessingException {
 			List<ReportTemplate> reportTemplates = reportTemplateService.findAll();
+			
+			SimpleFilterProvider filter = new SimpleFilterProvider();
+			filter.setFailOnUnknownId(false);
+	        ObjectMapper mapper = new ObjectMapper();
+	        String reportTemplatesStr = mapper.writer(filter).writeValueAsString(reportTemplates);
+	        
+	        log.info("test - " + reportTemplatesStr);
+			
+			return reportTemplatesStr;
 
-			return reportTemplates;
+			//return reportTemplates;
 	}
 	
 	// Get all Templates
 		@RequestMapping(value = "/reporttemplate/{reportTemplateId}", method = RequestMethod.GET, produces = "application/json")
-		public @ResponseBody ReportTemplate reporttemplates(@PathVariable Integer reportTemplateId) {
+		public @ResponseBody String reporttemplates(@PathVariable Integer reportTemplateId) throws JsonProcessingException {
 				ReportTemplate reportTemplate= reportTemplateService.findOne(reportTemplateId);
+				
+				SimpleFilterProvider filter = new SimpleFilterProvider();
+				filter.setFailOnUnknownId(false);
+		        ObjectMapper mapper = new ObjectMapper();
+		        String reportTemplateStr = mapper.writer(filter).writeValueAsString(reportTemplate);
+		        
+		        log.info("test - " + reportTemplateStr);
+				
 
-				return reportTemplate;
+				return reportTemplateStr;
 		}
 		
 		@RequestMapping(value = "/reporttasks", method = RequestMethod.GET, produces = "application/json")
