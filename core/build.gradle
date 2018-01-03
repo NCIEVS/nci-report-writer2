@@ -1,0 +1,120 @@
+buildscript {
+
+    repositories {
+        jcenter()
+        maven { url "http://repo.spring.io/release" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "http://repo.spring.io/snapshot" }
+        mavenCentral() 
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE"
+    }
+}
+
+/*
+ * Extra Properties
+ */
+ext {
+    /*
+     * Software versions
+     */
+    mysqlConnectorVersion = "5.1.37"
+  
+
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'java'
+apply plugin: 'maven'
+
+
+group = "gov.nih.nci.evs.reportwriter.core"
+version = "1.0.0.RELEASE"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+springBoot {
+    backupSource = false // do not backup original jar to *.original
+}
+
+bootRepackage {
+	enabled = false
+}
+
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven { url "http://repo.spring.io/release" }
+    maven { url "http://repo.spring.io/milestone" }
+    maven { url "http://repo.spring.io/snapshot" }
+}
+
+dependencies {
+    compile ('org.springframework.boot:spring-boot-starter')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile 'org.springframework.boot:spring-boot-actuator'
+    compile 'org.springframework.boot:spring-boot-devtools'
+
+    compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
+    compile "org.apache.poi:poi:3.17"
+    compile "org.apache.poi:poi-ooxml:3.17"
+   
+    compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
+
+    /*
+     * Test Dependencies
+     */
+   
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
+
+jar {
+    baseName = project.name
+    version =  project.version
+}
+
+test {
+    /*
+     * Configure gradle to show standard out and standard error
+     * of the test JVM(s) on the console
+     */
+    testLogging.showStandardStreams = true
+
+    /*
+     * Activate the 'test' profile
+     */
+    systemProperties 'spring.profiles.active': 'test'
+}
+
+task zipFile(type: Zip) {
+    def zipFileRootDirectory = "${project.name}-${project.version}"
+
+    from('src/main/bin') {
+        fileMode = 0755
+        into "$zipFileRootDirectory/bin"
+    }
+    from("$buildDir/libs") {
+        include '*.jar'
+        into "$zipFileRootDirectory/lib"
+    }
+    rename { String fileName ->
+        fileName.replace("-${project.version}", "")
+    }
+}
+
+task bootJar
+bootJar.dependsOn = [jar, bootRepackage]
+zipFile.dependsOn = [ bootJar ]
+build.dependsOn = [ test, bootJar, zipFile ]
+install.dependsOn = [ bootJar, zipFile ]
+
+/*
+ * Wrapper task
+ */
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.3.1'
+}
