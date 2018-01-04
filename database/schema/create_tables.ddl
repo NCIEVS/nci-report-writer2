@@ -3,11 +3,16 @@ CREATE TABLE report_template
   id                 INT NOT NULL AUTO_INCREMENT,
   association        VARCHAR(255) NOT NULL,
   level              INT,
-  name        VARCHAR(255) NOT NULL,
+  name               VARCHAR(255) NOT NULL,
   root_concept_code  VARCHAR(255) NOT NULL,
   sort_column        INT,
   status             VARCHAR(20) NOT NULL,
   type               VARCHAR(20) NOT NULL,
+  date_created       DATETIME NOT NULL,
+  date_last_updated  DATETIME NOT NULL,
+  created_by         VARCHAR(20) NOT NULL,
+  last_updated_by    VARCHAR(20) NOT NULL,
+
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ;
@@ -24,6 +29,10 @@ CREATE TABLE report_template_column
   source_group          VARCHAR(255),
   subsource             VARCHAR(255),
   report_template_id    INT NOT NULL,
+  date_created          DATETIME NOT NULL,
+  date_last_updated     DATETIME NOT NULL,
+  created_by            VARCHAR(20) NOT NULL,
+  last_updated_by       VARCHAR(20) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ;
@@ -33,6 +42,10 @@ CREATE TABLE report_template_concept_list
     id                   INT NOT NULL AUTO_INCREMENT,
     report_template_id   INT NOT NULL,
     concept_code         VARCHAR(20) NOT NULL,
+    date_created          DATETIME NOT NULL,
+    date_last_updated     DATETIME NOT NULL,
+    created_by            VARCHAR(20) NOT NULL,
+    last_updated_by       VARCHAR(20) NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ;
@@ -42,9 +55,12 @@ CREATE TABLE report_task
   id                    INT NOT NULL AUTO_INCREMENT,
   report_template_id    INT NOT NULL,
   status                VARCHAR(20),
-  date_created          DATETIME,
   date_started          DATETIME,
   date_completed        DATETIME,
+  date_created          DATETIME NOT NULL,
+  date_last_updated     DATETIME NOT NULL,
+  created_by            VARCHAR(20) NOT NULL,
+  last_updated_by       VARCHAR(20) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ;
