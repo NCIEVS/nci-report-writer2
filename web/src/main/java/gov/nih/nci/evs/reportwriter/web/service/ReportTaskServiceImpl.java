@@ -171,5 +171,11 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 
 	}
 	
+	public ReportTask findOne(Integer reportTaskId) {
+		
+		return reportTaskRepository.findOne(reportTaskId);
+		
+	}
+	
 
 }

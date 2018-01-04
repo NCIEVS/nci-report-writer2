@@ -168,7 +168,7 @@ public class ReportWriterController {
         ObjectMapper mapper = new ObjectMapper();
         String reportTemplateRetStr = mapper.writer(filter).writeValueAsString(reportTemplateRet);
         
-        log.info("test - " + reportTemplateRetStr);
+       // log.info("test - " + reportTemplateRetStr);
 		
 		return reportTemplateRetStr;
 
@@ -193,11 +193,11 @@ public class ReportWriterController {
 	        ObjectMapper mapper = new ObjectMapper();
 	        String reportTemplateRetStr = mapper.writer(filter).writeValueAsString(reportTemplateRet);
 	        
-	        log.info("test - " + reportTemplateRetStr);
+	        //log.info("test - " + reportTemplateRetStr);
 			
 			return reportTemplateRetStr;
 			
-			//return reportTemplateRet;
+			
 
 	}
 	
@@ -211,11 +211,11 @@ public class ReportWriterController {
 	        ObjectMapper mapper = new ObjectMapper();
 	        String reportTemplatesStr = mapper.writer(filter).writeValueAsString(reportTemplates);
 	        
-	        log.info("test - " + reportTemplatesStr);
+	        //log.info("test - " + reportTemplatesStr);
 			
 			return reportTemplatesStr;
 
-			//return reportTemplates;
+			
 	}
 	
 	// Get all Templates
@@ -228,7 +228,7 @@ public class ReportWriterController {
 		        ObjectMapper mapper = new ObjectMapper();
 		        String reportTemplateStr = mapper.writer(filter).writeValueAsString(reportTemplate);
 		        
-		        log.info("test - " + reportTemplateStr);
+		        //log.info("test - " + reportTemplateStr);
 				
 
 				return reportTemplateStr;
@@ -250,13 +250,14 @@ public class ReportWriterController {
 		
 		
 		@RequestMapping(value="/runReport/{id}", method = RequestMethod.GET)
-	    public @ResponseBody String runReport(@PathVariable Integer id) 
+	    public @ResponseBody ReportTask runReport(@PathVariable Integer id) 
 	    		throws IOException { 
 
 	            log.info("ID: " + id);
 	            reportTaskService.runReport(id);
 	            log.info("Run Report Submitted");
-	            return "Success";
+	            ReportTask task = reportTaskService.findOne(30);
+	            return task;
 	    }
 
 }

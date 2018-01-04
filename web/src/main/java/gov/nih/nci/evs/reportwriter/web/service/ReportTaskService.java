@@ -12,5 +12,7 @@ public interface ReportTaskService {
 	public List <ReportTaskUI>  getAllDeletedTasks();
 	
 	public void runReport(int id);
+	
+	public ReportTask findOne(Integer reportTaskId);
 
 }
