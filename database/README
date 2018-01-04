@@ -1,0 +1,22 @@
+To create and empty reportwriter database follow the steps below. For this
+example assume the database name is "rw".
+
+1) Drop existing database, log into mysql from the command line.
+
+   drop database rw;
+
+2) Create new database, log into mysql from the command line
+
+   create database rw character set utf8;
+
+3) Use mysql to load the schema definitions, the input file are in
+   the "schema" directory.
+
+   mysql -u root -pPASSWORD rw < create_tables.ddl
+   mysql -u root -pPASSWORD rw < create_indexes.ddl
+   mysql -u root -pPASSWORD rw < create_foreign_keys.ddl
+
+4) Load in the content for the lookup tables. The script is in the
+   "scripts" directory.
+
+   loadData.sh localhost root PASSWORD rw
