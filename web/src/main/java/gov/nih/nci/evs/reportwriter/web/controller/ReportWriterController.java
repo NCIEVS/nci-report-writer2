@@ -1,6 +1,7 @@
 package gov.nih.nci.evs.reportwriter.web.controller;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -252,12 +253,22 @@ public class ReportWriterController {
 		@RequestMapping(value="/runReport/{id}", method = RequestMethod.GET)
 	    public @ResponseBody ReportTask runReport(@PathVariable Integer id) 
 	    		throws IOException { 
+			
+			ReportTemplate reportTemplate = reportTemplateService.findOne(id);
+			List<ReportTemplateColumn> columns = reportTemplate.getColumns();
+			ReportTask reportTask = new ReportTask();
+			reportTask.setStatus("Pending");
+			reportTask.setReportTemplate(reportTemplate);
+			reportTask.setDateCreated(LocalDateTime.now());
+			reportTask.setDateLastUpdated(LocalDateTime.now());
+			reportTask.setCreatedBy("system");
+			reportTask.setLastUpdatedBy("system");
+			ReportTask reportTaskRet = reportTaskService.save(reportTask);
+			log.info("TaskId" + reportTask.getId());
+            reportTaskService.runReport(reportTaskRet);
+            log.info("Run Report Submitted");
 
-	            log.info("ID: " + id);
-	            reportTaskService.runReport(id);
-	            log.info("Run Report Submitted");
-	            ReportTask task = reportTaskService.findOne(30);
-	            return task;
+            return reportTaskRet;
 	    }
 
 }

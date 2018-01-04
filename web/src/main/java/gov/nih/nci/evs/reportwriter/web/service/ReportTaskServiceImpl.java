@@ -2,6 +2,10 @@ package gov.nih.nci.evs.reportwriter.web.service;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -121,48 +125,69 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 	}
 	
 	@Async
-	public void runReport(int id) {
-		ReportTemplate reportTemplate = reportTemplateService.findOne(id);
+	public void runReport(ReportTask reportTask) {
+		int report_template_id = reportTask.getReportTemplate().getId();
+		ReportTemplate reportTemplate = reportTemplateService.findOne(report_template_id);
 		List<ReportTemplateColumn> columns = reportTemplate.getColumns();
 		
-		String templateDirectory = coreProperties.getTemplateDirectory();
 		String outputDirectory = coreProperties.getOutputDirectory();
-
-		ReportTask reportTask = new ReportTask();
-		reportTask.setStatus("Pending");
-		//reportTask.setReportTemplateId(id);
-		reportTask.setReportTemplate(reportTemplate);
-		reportTask.setDateCreated(LocalDateTime.now());
-		save(reportTask);
 		String reportName = "Task-" + reportTask.getId();
+		
+		/*
+		 * When generating task output in the file system, we decided to use
+		 * the last digit in the task_id as the top level directory name. This
+		 * gives an even distribution for task folders across 10 top level folders,
+		 * reducing the number of task folders within one Linux directory.
+		 */
+		String lastDigit = Integer.toString(reportTask.getId());
+		lastDigit = lastDigit.substring(lastDigit.length() -1);
+		String outputDirectoryName = outputDirectory + "/" + lastDigit + "/" + reportName;
+		try { 
+			Path path = Paths.get(outputDirectoryName);
+			Files.createDirectory(path);
+		} catch (IOException ex) {
+			
+		}
 		String reportTemplateName = reportName + ".template";
-		String reportLogName = outputDirectory + "/" + reportName + ".log";
-		reportName = outputDirectory + "/" + reportName;
+		reportName = outputDirectoryName + "/" + reportName;
 
+		/*
+		 * These properties are not needed the ReportTemplate YAML file.
+		 * They will be filtered out when generating the file.
+		 */
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 		Set<String> ignoreProperties = new HashSet<String>();
 		ignoreProperties.add("reportTemplateConceptLists");
 		ignoreProperties.add("id");
 		ignoreProperties.add("status");
+		ignoreProperties.add("createdBy");
+		ignoreProperties.add("lastUpdatedBy");
+		ignoreProperties.add("dateCreated");
+		ignoreProperties.add("dateLastUpdated");
 		ignoreProperties.add("columns.id");
+		ignoreProperties.add("columns.createdBy");
+		ignoreProperties.add("columns.lastUpdatedBy");
+		ignoreProperties.add("columns.dateCreated");
+		ignoreProperties.add("columns.dateLastUpdated");
 
 		SimpleBeanPropertyFilter theFilter = SimpleBeanPropertyFilter.serializeAllExcept(ignoreProperties);
 		FilterProvider filters = new SimpleFilterProvider().addFilter("yamlFilter", theFilter);
 		try {
 			String str = mapper.writer(filters).writeValueAsString(reportTemplate);
-			String fileName = templateDirectory + "/" + reportTemplateName;
-			BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+			String templateFileName = outputDirectoryName + "/" + reportTemplateName;
+			BufferedWriter writer = new BufferedWriter(new FileWriter(templateFileName));
 			writer.write(str);
 			writer.close();
 
 			log.info("Running Report");
 			reportTask.setDateStarted(LocalDateTime.now());
+			reportTask.setDateLastUpdated(LocalDateTime.now());
 			reportTask.setStatus("Started");
 			save(reportTask);
-			log.info("RUNNING FROM PROGRAM");
-			//ReportWriter reportWriter = new ReportWriter();
-			reportWriter.runReport(fileName, reportName, "");
+			reportWriter.runReport(templateFileName, reportName, "");
 			reportTask.setDateCompleted(LocalDateTime.now());
+			reportTask.setDateLastUpdated(LocalDateTime.now());
+			reportTask.setStatus("Completed");
 			save(reportTask);
 			log.info("Report Completed");
 		} catch (Exception ex) {
@@ -176,6 +201,4 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		return reportTaskRepository.findOne(reportTaskId);
 		
 	}
-	
-
 }
