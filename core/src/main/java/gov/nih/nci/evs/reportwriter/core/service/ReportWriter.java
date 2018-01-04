@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -82,8 +83,11 @@ public class ReportWriter {
 	public String runReport(String templateFile, String outputFile, String conceptFile) {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         Template reportTemplate = null;
+        PrintWriter logFile = null;
         try {
             reportTemplate = mapper.readValue(new File(templateFile), Template.class);
+            String logOutputFile = outputFile + ".log";
+            logFile = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(logOutputFile)),StandardCharsets.UTF_8),true);
         } catch (Exception ex) {
         	System.err.println(ex);
         	return "failure";
@@ -95,6 +99,12 @@ public class ReportWriter {
         System.out.println("Template Information");
         System.out.println("********************");
         System.out.println(reportTemplate.toString());
+        logFile.println("Started: " + LocalDateTime.now());
+        logFile.println("********************************");
+        logFile.println("");
+        logFile.println("Template Information");
+        logFile.println("********************************");
+        logFile.println(reportTemplate.toString());
         
         String rootConceptCode = reportTemplate.getRootConceptCode();
         EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode);
@@ -110,16 +120,16 @@ public class ReportWriter {
         Report reportOutput = new Report();
         if (templateType.equals("Association")) {
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset")) {
-                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns());
-                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns());
+                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile);
+                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile);
         	} else if (reportTemplate.getAssociation().equals("Subclass")) {
-                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel);
+                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel,logFile);
         	} else {
         		System.err.println("Invalid Association Type: " + reportTemplate.getAssociation());
         		return "failure";
         	}
         } else if (templateType.equals("ConceptList")) {
-                rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile);
+                rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile);
         } else {
         	System.err.println("Invalid Template Type: " + templateType);
         	return "failure";
@@ -198,6 +208,11 @@ public class ReportWriter {
     		    pw.close();
     	    }
         } 
+		
+        logFile.println("");
+        logFile.println("********************************");
+        logFile.println("Completed: " + LocalDateTime.now());
+		logFile.close();
         
 		return "success";
 		
