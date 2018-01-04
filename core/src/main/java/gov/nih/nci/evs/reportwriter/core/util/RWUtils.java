@@ -2,6 +2,7 @@ package gov.nih.nci.evs.reportwriter.core.util;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,17 +44,19 @@ public class RWUtils {
 	 * @param conceptHash ConceptHash cache to improve performance.
 	 * @param templateColumns TemplateColumns contain template definitions for each column.
 	 */
-	public void processConceptInSubset(Report reportOutput, EvsConcept rootConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns ) {
+	public void processConceptInSubset(Report reportOutput, EvsConcept rootConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile ) {
 		
 		List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getEvsConceptInSubset(rootConcept.getCode());
 		log.info("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
 		System.out.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
+		logFile.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
 		int total = 0;
 		for (EvsConcept concept: associatedConcepts) {
 			total += 1;
 			if (total % 100 == 0) {
 				log.info("Number of associations processed: " + total);
 				System.out.println("Number of associations processed: " + total);
+				logFile.println("Number of associations processed: " + total);
 			}
 			if (conceptHash.containsKey(concept.getCode())) {
 				concept = conceptHash.get(concept.getCode());
@@ -76,10 +79,11 @@ public class RWUtils {
 	 * 
 	 * This methods supports recursion.
 	 */
-	public void processConceptSubclasses(Report reportOutput, EvsConcept parentConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns) {
+	public void processConceptSubclasses(Report reportOutput, EvsConcept parentConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, PrintWriter logFile) {
 		List <EvsConcept> subclasses = sparqlQueryManagerService.getEvsSubclasses(parentConcept.getCode());
 		log.info("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
 		System.out.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
+		logFile.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
 		for (EvsConcept subclass: subclasses) {
 			if (conceptHash.containsKey(subclass.getCode())) {
 				subclass = conceptHash.get(subclass.getCode());
@@ -88,8 +92,8 @@ public class RWUtils {
 				subclass.setAxioms(sparqlQueryManagerService.getEvsAxioms(subclass.getCode()));
 				conceptHash.put(subclass.getCode(), subclass);
 			}
-			processConceptInSubset(reportOutput,subclass,conceptHash,templateColumns);
-			processConceptSubclasses(reportOutput,subclass,conceptHash,templateColumns);
+			processConceptInSubset(reportOutput,subclass,conceptHash,templateColumns,logFile);
+			processConceptSubclasses(reportOutput,subclass,conceptHash,templateColumns,logFile);
 		}
 	}
 
@@ -107,11 +111,12 @@ public class RWUtils {
 	 * 
 	 * This methods supports recursion, but limited by the maxLevel parameters.
 	 */
-	public void processConceptSubclassesOnly(Report reportOutput,EvsConcept parentConcept,HashMap<String,EvsConcept> conceptHash,List <TemplateColumn> templateColumns, int currentLevel, int maxLevel) {
+	public void processConceptSubclassesOnly(Report reportOutput,EvsConcept parentConcept,HashMap<String,EvsConcept> conceptHash,List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile) {
 		if (currentLevel < maxLevel) {
 			List <EvsConcept> subclasses = sparqlQueryManagerService.getEvsSubclasses(parentConcept.getCode());
 			log.info("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
 			System.out.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
+			logFile.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
 			for (EvsConcept subclass: subclasses) {
 				log.debug(subclass.getCode());
 				if (conceptHash.containsKey(subclass.getCode())) {
@@ -122,7 +127,7 @@ public class RWUtils {
 					conceptHash.put(subclass.getCode(), subclass);
 				}
 				writeColumnData(reportOutput,parentConcept,subclass,conceptHash,templateColumns);
-				processConceptSubclassesOnly(reportOutput,subclass,conceptHash,templateColumns,currentLevel + 1,maxLevel);
+				processConceptSubclassesOnly(reportOutput,subclass,conceptHash,templateColumns,currentLevel + 1,maxLevel,logFile);
 			}
 		}
 		return;
@@ -139,7 +144,7 @@ public class RWUtils {
 	 * @param conceptFile File name of the input file.
 	 * 
 	 */
-	public void processConceptList(Report reportOutput, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, String conceptFile ) {
+	public void processConceptList(Report reportOutput, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, String conceptFile, PrintWriter logFile ) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(conceptFile));
 			String line;
