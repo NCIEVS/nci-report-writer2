@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.reportwriter.web.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import gov.nih.nci.evs.reportwriter.web.controller.ReportWriterController;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateColumn;
+import gov.nih.nci.evs.reportwriter.web.properties.WebProperties;
 import gov.nih.nci.evs.reportwriter.web.repository.ReportTemplateColumnRepository;
 import gov.nih.nci.evs.reportwriter.web.repository.ReportTemplateRepository;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTemplateUI;
@@ -27,6 +29,8 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 	@Autowired
 	ReportTemplateRepository reportTemplateRepository;
 	
+	@Autowired
+	WebProperties webProperties;
 
 	@Autowired
 	ReportTemplateColumnRepository reportTemplateColumnRepository;
@@ -54,6 +58,11 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 		reportTemplatedb.setAssociation(reportTemplate.getAssociation());
 		reportTemplatedb.setStatus(reportTemplate.getStatus());
 		reportTemplatedb.setSortColumn(reportTemplate.getSortColumn());
+		reportTemplatedb.setDateCreated(LocalDateTime.now());
+		reportTemplatedb.setDateLastUpdated(LocalDateTime.now());
+		reportTemplatedb.setCreatedBy("system");
+		reportTemplatedb.setLastUpdatedBy("system");
+		
 		
 		//save the tempalte
 		ReportTemplate reportTemplateRet =reportTemplateRepository.save(reportTemplatedb);
@@ -68,6 +77,11 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 			
 			
 			reportTemplateColumn.setReportTemplate(reportTemplateRet);
+			reportTemplateColumn.setDateCreated(LocalDateTime.now());
+			reportTemplateColumn.setDateLastUpdated(LocalDateTime.now());
+			reportTemplateColumn.setCreatedBy("system");
+			reportTemplateColumn.setLastUpdatedBy("system");
+			
 			ReportTemplateColumn reportTemplateColumnRet = reportTemplateColumnRepository.save(reportTemplateColumn);
 			
 			log.info("reportTemplateColumnRet " + reportTemplateColumnRet.getId() + " - " + reportTemplateColumnRet.getLabel());
@@ -100,7 +114,9 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 		reportTemplatedb.setType(reportTemplate.getType());
 		reportTemplatedb.setAssociation(reportTemplate.getAssociation());
 		reportTemplatedb.setStatus(reportTemplate.getStatus());
-		reportTemplatedb.setSortColumn(reportTemplate.getSortColumn());
+		reportTemplatedb.setSortColumn(reportTemplate.getSortColumn());		
+		reportTemplatedb.setDateLastUpdated(LocalDateTime.now());		
+		reportTemplatedb.setLastUpdatedBy("system");
 		reportTemplatedb.getColumns().clear();
 		reportTemplateRepository.save(reportTemplatedb);
 		
@@ -108,6 +124,8 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 		
 		for (ReportTemplateColumn reportTemplateColumn : reportTemplateColumns) {			
 			reportTemplateColumn.setReportTemplate(reportTemplateRet);
+			reportTemplateColumn.setDateLastUpdated(LocalDateTime.now());			
+			reportTemplateColumn.setLastUpdatedBy("system");
 			ReportTemplateColumn reportTemplateColumnRet = reportTemplateColumnRepository.save(reportTemplateColumn);
 
 			log.info("reportTemplateColumnRet " + reportTemplateColumnRet.getId() + " - "

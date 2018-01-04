@@ -68,14 +68,21 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			//if (!reportTask.getStatus().equalsIgnoreCase("Deleted")) {
 				ReportTaskUI reportTaskUI = new ReportTaskUI();
 				reportTaskUI.setId(reportTask.getId());
+				//log.info(reportTask.getId() + " -  " + reportTask.getStatus());
 				reportTaskUI.setStatus(reportTask.getStatus());
 				reportTaskUI.setReportTemplateName(reportTask.getReportTemplate().getName());
 				reportTaskUI.setReportTemplateId(reportTask.getReportTemplate().getId());
 				String txtDateCreated = reportTask.getDateCreated().format(formatter);
 				reportTaskUI.setDateCreated(txtDateCreated);
-				String txtDateStarted = reportTask.getDateStarted().format(formatter);
+				String txtDateStarted = "";
+				if (reportTask.getDateStarted() != null) {
+				 txtDateStarted = reportTask.getDateStarted().format(formatter);
+				}
 				reportTaskUI.setDateStarted(txtDateStarted);
-				String txtDateCompleted = reportTask.getDateCompleted().format(formatter);
+				String txtDateCompleted = "";
+				if (reportTask.getDateCompleted() != null) {
+				 txtDateCompleted = reportTask.getDateCompleted().format(formatter);
+				}
 				reportTaskUI.setDateCompleted(txtDateCompleted);
 				
 				reportTaskUIs.add(reportTaskUI);
