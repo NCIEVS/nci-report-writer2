@@ -184,10 +184,14 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			reportTask.setDateLastUpdated(LocalDateTime.now());
 			reportTask.setStatus("Started");
 			save(reportTask);
-			reportWriter.runReport(templateFileName, reportName, "");
+			String status = reportWriter.runReport(templateFileName, reportName, "");
 			reportTask.setDateCompleted(LocalDateTime.now());
 			reportTask.setDateLastUpdated(LocalDateTime.now());
-			reportTask.setStatus("Completed");
+			if (status.equals("success")) {
+				reportTask.setStatus("Completed");
+			} else {
+				reportTask.setStatus("Failed");
+			}
 			save(reportTask);
 			log.info("Report Completed");
 		} catch (Exception ex) {
