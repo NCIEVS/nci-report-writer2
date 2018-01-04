@@ -1,6 +1,8 @@
 package gov.nih.nci.evs.reportwriter.web.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 
 
@@ -16,6 +18,10 @@ public class ReportTemplateConceptList implements Serializable {
 	private int id;
 	private String conceptCode;
 	private ReportTemplate reportTemplate;
+	private LocalDateTime dateCreated;
+	private LocalDateTime dateLastUpdated;
+	private String createdBy;
+	private String lastUpdatedBy;	
 
 	public ReportTemplateConceptList() {
 	}
@@ -50,6 +56,30 @@ public class ReportTemplateConceptList implements Serializable {
 
 	public void setReportTemplate(ReportTemplate reportTemplate) {
 		this.reportTemplate = reportTemplate;
+	}
+	
+	public LocalDateTime getDateLastUpdated() {
+		return dateLastUpdated;
+	}
+
+	public void setDateLastUpdated(LocalDateTime dateLastUpdated) {
+		this.dateLastUpdated = dateLastUpdated;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdatedBy(String lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
 }

@@ -1,6 +1,8 @@
 package gov.nih.nci.evs.reportwriter.web.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
@@ -29,6 +31,10 @@ public class ReportTemplate implements Serializable {
 	private List<ReportTemplateColumn> columns;
 	private List<ReportTemplateConceptList> reportTemplateConceptLists;
 	private List<ReportTask> tasks;
+	private LocalDateTime dateCreated;
+	private LocalDateTime dateLastUpdated;
+	private String createdBy;
+	private String lastUpdatedBy;
 
 	public ReportTemplate() {
 	}
@@ -156,6 +162,40 @@ public class ReportTemplate implements Serializable {
 		reportTemplateConceptList.setReportTemplate(null);
 
 		return reportTemplateConceptList;
+	}
+
+
+	public LocalDateTime getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(LocalDateTime dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+
+	public LocalDateTime getDateLastUpdated() {
+		return dateLastUpdated;
+	}
+
+	public void setDateLastUpdated(LocalDateTime dateLastUpdated) {
+		this.dateLastUpdated = dateLastUpdated;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdatedBy(String lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
 }

@@ -25,6 +25,9 @@ public class ReportTask implements Serializable {
 	private LocalDateTime dateCompleted;
 	private LocalDateTime dateCreated;
 	private LocalDateTime dateStarted;
+	private LocalDateTime dateLastUpdated;
+	private String createdBy;
+	private String lastUpdatedBy;
 	private ReportTemplate reportTemplate;
 	private String status;
 
@@ -72,6 +75,16 @@ public class ReportTask implements Serializable {
 		this.dateStarted = dateStarted;
 	}
 
+	@Column(name = "date_last_updated")
+	public LocalDateTime getDateLastUpdated() {
+		return this.dateLastUpdated;
+	}
+
+	public void setDateLastUpdated(LocalDateTime dateLastUpdated) {
+		this.dateLastUpdated = dateLastUpdated;
+	}
+
+
 	/*
 	 * @Column(name="report_template_id") public int getReportTemplateId() { return
 	 * this.reportTemplateId; }
@@ -79,6 +92,22 @@ public class ReportTask implements Serializable {
 	 * public void setReportTemplateId(int reportTemplateId) { this.reportTemplateId
 	 * = reportTemplateId; }
 	 */
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdatedBy(String lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
+	}
 
 	// bi-directional many-to-one associion to ReportTemplate
 	@JsonIgnore
