@@ -37,6 +37,7 @@ import gov.nih.nci.evs.reportwriter.core.service.ReportWriter;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTask;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateColumn;
+import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateConceptList;
 import gov.nih.nci.evs.reportwriter.web.repository.ReportTaskRepository;
 import gov.nih.nci.evs.reportwriter.web.support.FileUI;
 import gov.nih.nci.evs.reportwriter.web.support.ReportData;
@@ -54,6 +55,9 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 
 	@Autowired
 	ReportTemplateService reportTemplateService;
+
+	@Autowired
+	ReportTemplateConceptListService reportTemplateConceptListService;
 
 	@Autowired
 	CoreProperties coreProperties;
@@ -142,8 +146,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 
 	@Async
 	public void runReport(ReportTask reportTask) {
-		int report_template_id = reportTask.getReportTemplate().getId();
-		ReportTemplate reportTemplate = reportTemplateService.findOne(report_template_id);
+		int reportTemplateId = reportTask.getReportTemplate().getId();
+		ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateId);
 		List<ReportTemplateColumn> columns = reportTemplate.getColumns();
 
 		String outputDirectory = coreProperties.getOutputDirectory();
@@ -194,13 +198,23 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(templateFileName));
 			writer.write(str);
 			writer.close();
+			
+			String conceptListFileName = "";
+			if (reportTemplate.getType().equals("ConceptList")) {
+				conceptListFileName = outputDirectoryName + "/ConceptList.txt";
+				BufferedWriter conceptListWriter = new BufferedWriter(new FileWriter(conceptListFileName));
+				for (ReportTemplateConceptList concept: reportTemplateConceptListService.getReportTemplateConceptListsByReportTemplateID(reportTemplateId)) {
+					conceptListWriter.write(concept.getConceptCode() + "\n");
+				}
+				conceptListWriter.close();
+			}
 
 			log.info("Running Report");
 			reportTask.setDateStarted(LocalDateTime.now());
 			reportTask.setDateLastUpdated(LocalDateTime.now());
 			reportTask.setStatus("Started");
 			save(reportTask);
-			String status = reportWriter.runReport(templateFileName, reportName, "");
+			String status = reportWriter.runReport(templateFileName, reportName, conceptListFileName);
 			reportTask.setDateCompleted(LocalDateTime.now());
 			reportTask.setDateLastUpdated(LocalDateTime.now());
 			if (status.equals("success")) {

@@ -6,5 +6,7 @@ import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateConceptList;
 
 public interface ReportTemplateConceptListService {
 	public List <ReportTemplateConceptList> findAll();
+	
+	public List<ReportTemplateConceptList> getReportTemplateConceptListsByReportTemplateID(Integer reportTemplateId);
 
 }
