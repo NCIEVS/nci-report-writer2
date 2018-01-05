@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+
+a:link {
+    color: blue;
+}
+
+
+/* visited link */
+
+a:visited {
+    color: blue;
+}
+
+
+/* mouse over link */
+
+a:hover {
+    color: blue;
+}
+
+
+/* selected link */
+
+a:active {
+    color: blue;
+}

@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <span> Report Writer Templates</span>
+        </div>
+
+        <div class="panel-body">
+            <br>
+            <div *ngIf="taskRun">
+                <p>
+                    <ngb-alert [type]="'success'" *ngIf="!staticAlertClosed" (close)="staticAlertClosed = true">
+                        {{displayMessage}}.
+                        <div>
+                            <a href="/reportTask" class="alert-link">Click here to go the All Report Tasks Page</a>.
+                        </div>
+                    </ngb-alert>
+                </p>
+            </div>
+            <br>
+            <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+            </div>
+            <p-dataTable [value]="templates" (onPage)="onPageChange($event)" [responsive]="true" [rows]="5" [paginator]="true" [alwaysShowPaginator]="true" [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[5,10,20]">
+                <p-column field="id" styleClass="col-button" header="Action">
+                    <ng-template let-templateRow="rowData" pTemplate="body">
+                        <button type="button" pButton [routerLink]="['/createTemplate', templateRow.id]" icon="fa-pencil-square-o"></button>
+                        <button type="button" pButton [routerLink]="['/reportTemplateView', templateRow.id]" icon="fa-eye"></button>
+                        <button type="button" pButton (click)="runTemplate(templateRow)" label="Run"></button>
+                    </ng-template>
+                </p-column>
+                <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+                <p-column field="status" header="Status" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+                <p-footer>{{pageinationcount}}</p-footer>
+            </p-dataTable>
+
+        </div>
+    </div>
+</div>

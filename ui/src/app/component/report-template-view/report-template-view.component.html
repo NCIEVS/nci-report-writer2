@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading" *ngIf="templateFetched">
+            <span> Report Template Details for Template - {{template.name}}</span>
+        </div>
+        <div class="panel-body" *ngIf="templateFetched">
+            <br>
+            <div class="ui-g">
+                <div class="ui-g-2">Name</div>
+                <div class="ui-g-4">{{template.name}}</div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-2">Type</div>
+                <div class="ui-g-4">{{template.type}}</div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-2">Association Name</div>
+                <div class="ui-g-4">{{template.association}}</div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-2">Root Concept Code</div>
+                <div class="ui-g-4">{{template.rootConceptCode}}</div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-2">Level</div>
+                <div class="ui-g-4">{{template.level}}</div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-2">Sort Column</div>
+                <div class="ui-g-4">{{template.sortColumn}}</div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-2">Status</div>
+                <div class="ui-g-4">{{template.status}}</div>
+            </div>
+            <br>
+            <p-dataTable [value]="templateRows" [responsive]="true" [rows]="20" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]">
+                <p-column field="label" header="Label"></p-column>
+                <p-column field="display" header="Display"></p-column>
+                <p-column field="propertyType" header="Property Type"></p-column>
+                <p-column field="property" header="Property Target"></p-column>
+                <p-column field="source" header="Source"></p-column>
+                <p-column field="group" header="Group"></p-column>
+                <p-column field="subsource" header="Subsource"></p-column>
+            </p-dataTable>
+        </div>
+
+    </div>
+</div>

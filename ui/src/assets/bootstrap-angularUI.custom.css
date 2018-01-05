@@ -1,0 +1,85 @@
+.panel-heading {
+    padding: 6px 10px;
+    background-color: #fff !important;
+    color: #337ab7 !important;
+    font-size: 20px !important;
+    padding: 0px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #ccc !important;
+}
+
+.expandable-panel>a>.panel-heading:before {
+    font-family: 'Glyphicons Halflings';
+    content: "\e082";
+    float: right;
+    color: #337ab7;
+}
+
+.expandable-panel>a:hover,
+.expandable-panel>a:focus,
+.expandable-panel>a:active {
+    text-decoration: none !important;
+}
+
+.expandable-panel .panel-heading {
+    background: linear-gradient(#ffffff, #f3f3f3) !important;
+    /* Standard syntax */
+}
+
+.expandable-panel .panel-body {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.expandable-panel .panel-heading:hover {
+    color: #CC541F !important;
+}
+
+a.collapsed>.panel-heading:before {
+    content: "\e081";
+}
+
+div.panel-heading:hover::before {
+    color: #CC541F !important;
+}
+
+.expandable-panel.panel-heading a {
+    border: none;
+}
+
+.panel-heading {
+    font-weight: bold;
+}
+
+.panel-heading .panel-heading {
+    font-weight: normal;
+}
+
+.label-default {
+    background-color: #fff;
+    color: #000;
+}
+
+.panel-footer {
+    background-color: #fff;
+    border-top: 0px;
+}
+
+.panel-primary>.panel-heading a {
+    color: #337ab7;
+}
+
+.panel-primary {
+    border-color: #337ab7;
+    border: 0px solid #337ab7;
+}
+
+.alert {
+    padding-top: 5px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    display: inline-block;
+    margin-top: 3px;
+    margin-bottom: 0px;
+}

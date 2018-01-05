@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <span> Report Writer Tasks</span>
+        </div>
+
+        <div class="panel-body">
+            <br>
+            <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+            </div>
+
+            <p-dataTable (onPage)="onPageChange($event)" reorderableColumns="true" sortField="id" sortOrder="-1" [value]="tasks" [responsive]="true" [rows]="5" [paginator]="true" [alwaysShowPaginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb"
+                #dt>
+                <p-column field="id" [sortable]="true" [style]="{'width':'6%'}" header="Task Id" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"> </p-column>
+                <p-column field="reportTemplateName" [sortable]="true" header="Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"> </p-column>
+                <p-column field="status" [sortable]="true" [style]="{'width':'15%'}" header="Status" [filter]="true" filterMatchMode="equals">
+                    <ng-template pTemplate="filter" let-col>
+                        <p-dropdown [options]="taskStatuses" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                    </ng-template>
+                </p-column>
+                <p-column field="dateCreated" [sortable]="true" header="Date Created" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+                <p-column field="dateStarted" [sortable]="true" header="Date Started" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+                <p-column field="dateCompleted" [sortable]="true" header="Date Completed" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+                <p-column field="id" styleClass="col-header" header="Action">
+                    <ng-template let-templateTask="rowData" pTemplate="body">
+                        <!--<button type="button" *ngIf="templateTask.status == 'Completed'" pButton [routerLink]="['/createTemplate', templateTask.id]" icon="fa-file-text-o"></button>-->
+                        <a href="{{reportXLS}}/{{templateTask.id}}" *ngIf="templateTask.status == 'Completed'">xls</a>
+                        <a href="{{reportTxt}}/{{templateTask.id}}" *ngIf="templateTask.status == 'Completed'">txt</a>
+                        <a href="{{reportTemplate}}/{{templateTask.id}}" *ngIf="templateTask.status == 'Completed'">template</a><br>
+                        <!-- <button type="button" *ngIf="templateTask.status == 'Completed'" pButton (click)="getXLSReport(templateTask)" icon="fa fa-file-excel-o"></button>-->
+
+                        <button type="button" *ngIf="templateTask.status == 'Completed'" pButton [routerLink]="['/reportTaskOutput', templateTask.id]" icon="fa-eye"></button>
+                        <button type="button" *ngIf="templateTask.status == 'Completed'" pButton (click)="deleteReportTask(templateTask)" icon="fa fa-trash-o"></button>
+
+
+                    </ng-template>
+                </p-column>
+
+                <p-footer>{{pageinationcount}}</p-footer>
+            </p-dataTable>
+
+
+        </div>
+    </div>
+</div>

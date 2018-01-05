@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <span> Report Writer Tasks</span>
+        </div>
+
+        <div class="panel-body">
+            <br>
+            <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+            </div>
+
+            <p-dataTable (onPage)="onPageChange($event)" resizableColumns="true" columnResizeMode="expand" reorderableColumns="true" [value]="reportData" [responsive]="true" [rows]="10" [paginator]="true" [alwaysShowPaginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]"
+                [globalFilter]="gb" #dt>
+
+                <!-- <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="true" [filter]="true" filterPlaceholder="" filterMatchMode="contains"></p-column>-->
+
+                <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="true" [filter]="true" filterMatchMode="contains">
+                    <ng-template let-rowData="rowData" pTemplate="body">
+                        <div title="{{rowData[col.field]}}" style="overflow:hidden;width:100%">{{rowData[col.field]}}</div>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+
+
+        </div>
+    </div>
+</div>

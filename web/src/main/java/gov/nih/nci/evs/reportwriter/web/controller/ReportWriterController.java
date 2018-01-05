@@ -139,7 +139,7 @@ public class ReportWriterController {
 		List <LookUp> lookUps = new ArrayList <LookUp> ();
 		for (LkProperty lookUp: lks) {
 			String label = "(" + lookUp.getCode() + ") " + lookUp.getLabel();
-			lookUps.add(new LookUp(label,label));
+			lookUps.add(new LookUp(label,lookUp.getCode()));
 		}
 		return lookUps;
 	}
