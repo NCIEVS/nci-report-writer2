@@ -144,6 +144,7 @@ public class ReportTemplateColumn implements Serializable {
 		this.subsource = subsource;
 	}
 
+	@JsonIgnore
 	public LocalDateTime getDateCreated() {
 		return dateCreated;
 	}
@@ -152,7 +153,7 @@ public class ReportTemplateColumn implements Serializable {
 		this.dateCreated = dateCreated;
 	}
 
-
+	@JsonIgnore
 	public LocalDateTime getDateLastUpdated() {
 		return dateLastUpdated;
 	}
@@ -161,6 +162,7 @@ public class ReportTemplateColumn implements Serializable {
 		this.dateLastUpdated = dateLastUpdated;
 	}
 
+	@JsonIgnore
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -169,7 +171,7 @@ public class ReportTemplateColumn implements Serializable {
 		this.createdBy = createdBy;
 	}
 
-	
+	@JsonIgnore
 	public String getLastUpdatedBy() {
 		return lastUpdatedBy;
 	}

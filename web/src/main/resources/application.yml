@@ -81,8 +81,12 @@ gov:
          stardog:
            url: ${STARDOG_URL:http://localhost:5820/NCIT2}
            queryUrl: ${STARDOG_QUERY_URL:http://localhost:5820/NCIT2/query}
-           username: ${STARDOG_USERNAME:ADMIN}
-           password: ${STARDOG_PASSWORD:ADMIN}     
+           username: ${STARDOG_USERNAME:admin}
+           password: ${STARDOG_PASSWORD:admin}     
            readTimeout: ${STARDOG_READ_TIMEOUT:10000}
            connectTimeout: ${STARDOG_CONNECT_TIMEOUT:10000}
            graphName: ${STARDOG_GRAPH_NAME:http://NCI_T} 
+         web:
+           defaultUsername: ${RW_DEFAULT_USERNAME:system}
+           
+             

@@ -1,9 +1,13 @@
 package gov.nih.nci.evs.reportwriter.web.controller;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,8 +41,11 @@ import gov.nih.nci.evs.reportwriter.web.service.LkSubsourceService;
 import gov.nih.nci.evs.reportwriter.web.service.ReportTaskService;
 import gov.nih.nci.evs.reportwriter.web.service.ReportTemplateColumnService;
 import gov.nih.nci.evs.reportwriter.web.service.ReportTemplateService;
+import gov.nih.nci.evs.reportwriter.web.support.FileUI;
+import gov.nih.nci.evs.reportwriter.web.support.ReportTaskOutput;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTaskUI;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTemplateUI;
+import gov.nih.nci.evs.reportwriter.web.util.MediaTypes;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +139,7 @@ public class ReportWriterController {
 		List <LookUp> lookUps = new ArrayList <LookUp> ();
 		for (LkProperty lookUp: lks) {
 			String label = "(" + lookUp.getCode() + ") " + lookUp.getLabel();
-			lookUps.add(new LookUp(label,lookUp.getCode()));
+			lookUps.add(new LookUp(label,label));
 		}
 		return lookUps;
 	}
@@ -249,6 +257,61 @@ public class ReportWriterController {
 			return reportTaskUIs;
 		}
 		
+		@RequestMapping(value="/deleteReportTask/{id}", method = RequestMethod.GET)
+		  public @ResponseBody ReportTask deleteReportTask(@PathVariable Integer id) 
+		    		throws IOException {
+		    
+			ReportTask reportTask = reportTaskService.deleteReportTask(id);
+			return reportTask;
+			
+		}
+		
+		@RequestMapping(value = "/getXLSReport/{id}", method = RequestMethod.GET)
+		public ModelAndView getXLSReport(@PathVariable("id") String id,
+				HttpServletResponse response) throws Exception {
+			log.debug("In here getDetailedReport");
+			
+			FileUI fileUI = reportTaskService.getDetailedReportTask(id,"xls");
+
+			getFile(fileUI, response);
+		
+			return null;
+		}
+		
+		@RequestMapping(value = "/getTxtReport/{id}", method = RequestMethod.GET)
+		public ModelAndView getTxtReport(@PathVariable("id") String id,
+				HttpServletResponse response) throws Exception {
+			log.debug("In here getTxtReport");
+			
+			FileUI fileUI = reportTaskService.getDetailedReportTask(id,"txt");
+
+			getFile(fileUI, response);
+		
+			return null;
+		}
+		
+
+		@RequestMapping(value = "/getTemplateReport/{id}", method = RequestMethod.GET)
+		public ModelAndView getTemplateReport(@PathVariable("id") String id,
+				HttpServletResponse response) throws Exception {
+			log.debug("In here getTxtReport");
+			
+			FileUI fileUI = reportTaskService.getDetailedReportTask(id,"template");
+
+			getFile(fileUI, response);
+		
+			return null;
+		}
+		
+		@RequestMapping(value="/getReportTaskData/{id}", method = RequestMethod.GET)
+	    public @ResponseBody ReportTaskOutput getReportTaskData(@PathVariable String id) 
+	    		throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException { 
+			
+			ReportTaskOutput reportTaskOutput = reportTaskService.getReportTaskData(id);
+			
+			return reportTaskOutput;
+			
+		}
 		
 		@RequestMapping(value="/runReport/{id}", method = RequestMethod.GET)
 	    public @ResponseBody ReportTask runReport(@PathVariable Integer id) 
@@ -270,5 +333,45 @@ public class ReportWriterController {
 
             return reportTaskRet;
 	    }
+		
+		protected void getFile(FileUI file, HttpServletResponse response) throws Exception {
+
+			OutputStream out = response.getOutputStream();
+			String fileName = file.getFileName();
+			//
+			// set to correct media-type
+			//
+			response.setContentType(MediaTypes.getMediaType(fileName));
+
+			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+			// Tell browser to validate cache
+			response.addHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+			response.setHeader("Cache-Control", "max-age=0");
+			// Using public somehow cures IE's inability to save attachment
+			// (and doesn't seem to hurt other browsers)
+			response.setHeader("Pragma", "public");
+			try {
+				byte[] buf = new byte[16 * 1024]; // 16k buffer
+				int nRead = 0;
+				while ((nRead = file.getRawFileStream().read(buf)) != -1) {
+					out.write(buf, 0, nRead);
+				}
+				out.flush();
+			} finally {
+				//
+				// MUST ALWAYS CLOSE OPEN FILE HANDLES
+				//
+				if (out != null) {
+					out.close();
+				}
+				//
+				// MUST ALWAYS CLOSE OPEN FILE HANDLES
+				//
+				if (file.getRawFileStream() != null) {
+					file.getRawFileStream().close();
+				}
+			}
+		}
 
 }

@@ -1,8 +1,13 @@
 package gov.nih.nci.evs.reportwriter.web.service;
 
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,16 +38,20 @@ import gov.nih.nci.evs.reportwriter.web.model.ReportTask;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateColumn;
 import gov.nih.nci.evs.reportwriter.web.repository.ReportTaskRepository;
+import gov.nih.nci.evs.reportwriter.web.support.FileUI;
+import gov.nih.nci.evs.reportwriter.web.support.ReportData;
+import gov.nih.nci.evs.reportwriter.web.support.ReportTaskOutput;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTaskUI;
+import gov.nih.nci.evs.reportwriter.web.support.TableHeader;
 
 @Service
 public class ReportTaskServiceImpl implements ReportTaskService {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(ReportTaskServiceImpl.class);
-	
+
 	@Autowired
 	ReportTaskRepository reportTaskRepository;
-	
+
 	@Autowired
 	ReportTemplateService reportTemplateService;
 
@@ -54,113 +63,113 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 
 	@Autowired
 	ReportWriter reportWriter;
-	
+
 	public List<ReportTaskUI> getAllTasksExceptDeleted() {
-		
-		List<ReportTask> reportTasks = (List<ReportTask>)reportTaskRepository.findByStatusNot("Deleted");
-		
+
+		List<ReportTask> reportTasks = (List<ReportTask>) reportTaskRepository.findByStatusNot("Deleted");
+
 		List<ReportTaskUI> reportTaskUIs = new ArrayList<ReportTaskUI>();
-		
-		for (ReportTask reportTask :reportTasks) {
+
+		for (ReportTask reportTask : reportTasks) {
 			log.info("id - " + reportTask.getId());
 			log.info(reportTask.getReportTemplate().getName());
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
-			//if (!reportTask.getStatus().equalsIgnoreCase("Deleted")) {
-				ReportTaskUI reportTaskUI = new ReportTaskUI();
-				reportTaskUI.setId(reportTask.getId());
-				//log.info(reportTask.getId() + " -  " + reportTask.getStatus());
-				reportTaskUI.setStatus(reportTask.getStatus());
-				reportTaskUI.setReportTemplateName(reportTask.getReportTemplate().getName());
-				reportTaskUI.setReportTemplateId(reportTask.getReportTemplate().getId());
-				String txtDateCreated = reportTask.getDateCreated().format(formatter);
-				reportTaskUI.setDateCreated(txtDateCreated);
-				String txtDateStarted = "";
-				if (reportTask.getDateStarted() != null) {
-				 txtDateStarted = reportTask.getDateStarted().format(formatter);
-				}
-				reportTaskUI.setDateStarted(txtDateStarted);
-				String txtDateCompleted = "";
-				if (reportTask.getDateCompleted() != null) {
-				 txtDateCompleted = reportTask.getDateCompleted().format(formatter);
-				}
-				reportTaskUI.setDateCompleted(txtDateCompleted);
-				
-				reportTaskUIs.add(reportTaskUI);
-			//}
-			
+			// if (!reportTask.getStatus().equalsIgnoreCase("Deleted")) {
+			ReportTaskUI reportTaskUI = new ReportTaskUI();
+			reportTaskUI.setId(reportTask.getId());
+			// log.info(reportTask.getId() + " - " + reportTask.getStatus());
+			reportTaskUI.setStatus(reportTask.getStatus());
+			reportTaskUI.setReportTemplateName(reportTask.getReportTemplate().getName());
+			reportTaskUI.setReportTemplateId(reportTask.getReportTemplate().getId());
+			String txtDateCreated = reportTask.getDateCreated().format(formatter);
+			reportTaskUI.setDateCreated(txtDateCreated);
+			String txtDateStarted = "";
+			if (reportTask.getDateStarted() != null) {
+				txtDateStarted = reportTask.getDateStarted().format(formatter);
+			}
+			reportTaskUI.setDateStarted(txtDateStarted);
+			String txtDateCompleted = "";
+			if (reportTask.getDateCompleted() != null) {
+				txtDateCompleted = reportTask.getDateCompleted().format(formatter);
+			}
+			reportTaskUI.setDateCompleted(txtDateCompleted);
+
+			reportTaskUIs.add(reportTaskUI);
+			// }
+
 		}
 		return reportTaskUIs;
-		
+
 	}
-	
-		public List<ReportTaskUI> getAllDeletedTasks() {
-		
-		List<ReportTask> reportTasks = (List<ReportTask>)reportTaskRepository.findByStatus("Deleted");
-		
+
+	public List<ReportTaskUI> getAllDeletedTasks() {
+
+		List<ReportTask> reportTasks = (List<ReportTask>) reportTaskRepository.findByStatus("Deleted");
+
 		List<ReportTaskUI> reportTaskUIs = new ArrayList<ReportTaskUI>();
-		
-		for (ReportTask reportTask :reportTasks) {
+
+		for (ReportTask reportTask : reportTasks) {
 			log.info("id - " + reportTask.getId());
 			log.info(reportTask.getReportTemplate().getName());
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
-			//if (!reportTask.getStatus().equalsIgnoreCase("Deleted")) {
-				ReportTaskUI reportTaskUI = new ReportTaskUI();
-				reportTaskUI.setId(reportTask.getId());
-				reportTaskUI.setStatus(reportTask.getStatus());
-				reportTaskUI.setReportTemplateName(reportTask.getReportTemplate().getName());
-				reportTaskUI.setReportTemplateId(reportTask.getReportTemplate().getId());
-				String txtDateCreated = reportTask.getDateCreated().format(formatter);
-				reportTaskUI.setDateCreated(txtDateCreated);
-				String txtDateStarted = reportTask.getDateStarted().format(formatter);
-				reportTaskUI.setDateStarted(txtDateStarted);
-				String txtDateCompleted = reportTask.getDateCompleted().format(formatter);
-				reportTaskUI.setDateCompleted(txtDateCompleted);
-				
-				reportTaskUIs.add(reportTaskUI);
-			//}
-			
+			// if (!reportTask.getStatus().equalsIgnoreCase("Deleted")) {
+			ReportTaskUI reportTaskUI = new ReportTaskUI();
+			reportTaskUI.setId(reportTask.getId());
+			reportTaskUI.setStatus(reportTask.getStatus());
+			reportTaskUI.setReportTemplateName(reportTask.getReportTemplate().getName());
+			reportTaskUI.setReportTemplateId(reportTask.getReportTemplate().getId());
+			String txtDateCreated = reportTask.getDateCreated().format(formatter);
+			reportTaskUI.setDateCreated(txtDateCreated);
+			String txtDateStarted = reportTask.getDateStarted().format(formatter);
+			reportTaskUI.setDateStarted(txtDateStarted);
+			String txtDateCompleted = reportTask.getDateCompleted().format(formatter);
+			reportTaskUI.setDateCompleted(txtDateCompleted);
+
+			reportTaskUIs.add(reportTaskUI);
+			// }
+
 		}
 		return reportTaskUIs;
-		
+
 	}
-		
+
 	@Transactional
 	public ReportTask save(ReportTask reportTask) {
 		ReportTask reportTaskRet = reportTaskRepository.save(reportTask);
 		log.info("id" + reportTask.getId());
 		return reportTaskRet;
 	}
-	
+
 	@Async
 	public void runReport(ReportTask reportTask) {
 		int report_template_id = reportTask.getReportTemplate().getId();
 		ReportTemplate reportTemplate = reportTemplateService.findOne(report_template_id);
 		List<ReportTemplateColumn> columns = reportTemplate.getColumns();
-		
+
 		String outputDirectory = coreProperties.getOutputDirectory();
 		String reportName = "Task-" + reportTask.getId();
-		
+
 		/*
-		 * When generating task output in the file system, we decided to use
-		 * the last digit in the task_id as the top level directory name. This
-		 * gives an even distribution for task folders across 10 top level folders,
-		 * reducing the number of task folders within one Linux directory.
+		 * When generating task output in the file system, we decided to use the last
+		 * digit in the task_id as the top level directory name. This gives an even
+		 * distribution for task folders across 10 top level folders, reducing the
+		 * number of task folders within one Linux directory.
 		 */
 		String lastDigit = Integer.toString(reportTask.getId());
-		lastDigit = lastDigit.substring(lastDigit.length() -1);
+		lastDigit = lastDigit.substring(lastDigit.length() - 1);
 		String outputDirectoryName = outputDirectory + "/" + lastDigit + "/" + reportName;
-		try { 
+		try {
 			Path path = Paths.get(outputDirectoryName);
 			Files.createDirectory(path);
 		} catch (IOException ex) {
-			
+
 		}
 		String reportTemplateName = reportName + ".template";
 		reportName = outputDirectoryName + "/" + reportName;
 
 		/*
-		 * These properties are not needed the ReportTemplate YAML file.
-		 * They will be filtered out when generating the file.
+		 * These properties are not needed the ReportTemplate YAML file. They will be
+		 * filtered out when generating the file.
 		 */
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 		Set<String> ignoreProperties = new HashSet<String>();
@@ -206,10 +215,93 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		}
 
 	}
-	
+
 	public ReportTask findOne(Integer reportTaskId) {
-		
+
 		return reportTaskRepository.findOne(reportTaskId);
-		
+
+	}
+
+	@Transactional
+	public ReportTask deleteReportTask(Integer reportTaskId) {
+		ReportTask reportTask = reportTaskRepository.findOne(reportTaskId);
+		reportTask.setStatus("Deleted");
+		return reportTaskRepository.save(reportTask);
+
+	}
+
+	public FileUI getDetailedReportTask(String id, String fileType) throws FileNotFoundException {
+		FileUI fileUI = new FileUI();
+
+		String outputDirectory = coreProperties.getOutputDirectory();
+		log.info("outputDirectory - " + outputDirectory);
+		String lastDigitofId = id.substring(id.length() - 1);
+		log.info("lastDigitofId - " + lastDigitofId);
+		String filePath = outputDirectory + "/" + lastDigitofId + "/Task-" + id + "/Task-" + id + "." + fileType;
+		log.info("filePath - " + filePath);
+		fileUI.setFilePath(filePath);
+		String fileName = "Task-" + id + "." + fileType;
+		log.info("fileName - " + fileName);
+		fileUI.setFileName(fileName);
+		InputStream is = new FileInputStream(filePath);
+		fileUI.setRawFileStream(is);
+		return fileUI;
+
+	}
+
+	public ReportTaskOutput getReportTaskData(String id) throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		ReportTaskOutput reportTaskOutput = new ReportTaskOutput();
+		String outputDirectory = coreProperties.getOutputDirectory();
+		log.info("outputDirectory - " + outputDirectory);
+		String lastDigitofId = id.substring(id.length() - 1);
+		log.info("lastDigitofId - " + lastDigitofId);
+		String filePath = outputDirectory + "/" + lastDigitofId + "/Task-" + id + "/Task-" + id + ".txt";
+		log.info("filePath - " + filePath);
+		ArrayList<String> list = new ArrayList<String>();
+
+		Files.lines(Paths.get(filePath)).forEach(line -> {
+			log.info(line);
+			list.add(line);
+		});
+
+		int count = 0;
+		ArrayList<TableHeader> header = new ArrayList<TableHeader>();
+		ArrayList<ReportData> data = new ArrayList<ReportData>();
+		 int headerLength = 0; 
+		for (String st : list) {
+			String[] datacolumn = st.split("\\t");
+           
+			if (count == 0) {
+				String fieldname = "column";
+				headerLength = datacolumn.length;
+				for (int index = 0; index < datacolumn.length; index++) {
+					TableHeader tableHeader = new TableHeader();
+					String value = datacolumn[index];
+					tableHeader.setHeader(value);
+					tableHeader.setField(fieldname + (index + 1));
+					header.add(tableHeader);
+				}
+				
+			} else {
+				String fieldname = "Column";
+				ReportData reportData = new ReportData();
+				for (int index = 0; index < headerLength; index++) {
+					
+					int columnIndex = index + 1;
+					Method setColumnMethod = ReportData.class.getMethod("set" + fieldname + columnIndex, String.class);
+					if (index < datacolumn.length) {
+						setColumnMethod.invoke(reportData, datacolumn[index]);
+					} else {
+						setColumnMethod.invoke(reportData, "");
+						
+					}
+				}
+				data.add(reportData);
+			}
+			++count;
+		}
+		reportTaskOutput.setHeader(header);
+		reportTaskOutput.setData(data);
+		return reportTaskOutput;
 	}
 }

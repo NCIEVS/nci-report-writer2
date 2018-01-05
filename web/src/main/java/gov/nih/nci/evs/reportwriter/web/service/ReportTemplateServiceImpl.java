@@ -1,5 +1,8 @@
 package gov.nih.nci.evs.reportwriter.web.service;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateColumn;
 import gov.nih.nci.evs.reportwriter.web.properties.WebProperties;
 import gov.nih.nci.evs.reportwriter.web.repository.ReportTemplateColumnRepository;
 import gov.nih.nci.evs.reportwriter.web.repository.ReportTemplateRepository;
+import gov.nih.nci.evs.reportwriter.web.support.FileUI;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTemplateUI;
 
 @Service
@@ -124,6 +128,8 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 		
 		for (ReportTemplateColumn reportTemplateColumn : reportTemplateColumns) {			
 			reportTemplateColumn.setReportTemplate(reportTemplateRet);
+			reportTemplateColumn.setCreatedBy("system");
+			reportTemplateColumn.setDateCreated(LocalDateTime.now());
 			reportTemplateColumn.setDateLastUpdated(LocalDateTime.now());			
 			reportTemplateColumn.setLastUpdatedBy("system");
 			ReportTemplateColumn reportTemplateColumnRet = reportTemplateColumnRepository.save(reportTemplateColumn);
@@ -144,5 +150,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 		return reportTemplateRepository.findOne(id);
 		
 	}
+	
+	
 
 }
