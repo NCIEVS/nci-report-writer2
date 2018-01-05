@@ -19,13 +19,13 @@ export RW_OUTPUT_DIRECTORY="../output"
 
 # Run Association Report
 if [ "$#" -eq 2 ]; then
-    java -Xms2g -Xmx2G -jar reportwriter-program-0.0.1-SNAPSHOT.jar --templateFile $1 --outputFile $2
+    java -Xms2g -Xmx2G -jar reportwriter-program-1.0.0-RELEASE.jar --templateFile $1 --outputFile $2
     exit
 fi
 
 # Run ConceptList Report
 if [ "$#" -eq 3 ]; then
-    java -Xms2g -Xmx2G -jar reportwriter-program-0.0.1-SNAPSHOT.jar --templateFile $1 --outputFile $2 --conceptFile $3
+    java -Xms2g -Xmx2G -jar reportwriter-program-1.0.0-RELEASE.jar --templateFile $1 --outputFile $2 --conceptFile $3
     exit
 fi
 
