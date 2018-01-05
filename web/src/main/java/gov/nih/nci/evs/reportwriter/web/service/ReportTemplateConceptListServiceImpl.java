@@ -17,5 +17,11 @@ public class ReportTemplateConceptListServiceImpl implements ReportTemplateConce
 		
 		return (List) reportTemplateConceptListRepository.findAll();
 	}
+	
+	public List<ReportTemplateConceptList> getReportTemplateConceptListsByReportTemplateID(Integer reportTemplateId){
+		
+		
+		return reportTemplateConceptListRepository.getReportTemplateConceptListsByReportTemplateId(reportTemplateId);
+	}
 
 }
