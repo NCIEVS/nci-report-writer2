@@ -26,7 +26,7 @@ spring:
             minEvictableIdleTimeMillis: 60000
     data:
         rest:
-          basePath: ${RW_API_BASE_PATH:/}
+          basePath: ${RW_API_BASE_PATH:/reportwriter/api}
           defaultMediaType: application/json;charset=UTF-8
     #
     # JSON Formatting Properties

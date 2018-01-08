@@ -253,6 +253,12 @@ export class CreateTemplateComponent implements OnInit {
     for (let templateRow of this.templateRows) {
       templateRow.columnNumber = count;
       templateRow.id = null;
+      if (templateRow.source == 'None')
+      templateRow.source = null;
+      if (templateRow.group == 'None')
+      templateRow.group = null;
+      if (templateRow.subsource == 'None')
+      templateRow.subsource = null;
       count++;
     }
     this.template.columns = this.templateRows;
