@@ -1,85 +1,77 @@
-<div class="container">
-    <div class="panel panel-primary">
-        <div class="panel-heading">
+    <div class="container">
+        <div class="page-header">
             <span> {{title}}</span>
         </div>
 
-        <div class="panel-body">
-            <br>
-            <form #templateForm="ngForm" (ngSubmit)="onSubmitTemplate('Template')">
+            <form class="form-horizontal" #templateForm="ngForm" (ngSubmit)="onSubmitTemplate('Template')">
 
-                <div class="form-group row">
-                    <label for="name" class="col-2 col-form-label">Name:</label>
-                    <div class="col-10">
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Name <span class="required-field">*</span></label>
+                    <div class="col-sm-10">
                         <input class="form-control" type="text" value="Name" [(ngModel)]="template.name" id="name" name="name" required #name="ngModel">
-                        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-                            Name is required
+                        <div [hidden]="name.valid || name.pristine">
+                            <span class="form-error-message">Name is required</span>
                         </div>
                     </div>
                 </div>
 
-
-                <div class="form-group row">
-                    <label for="type" class="col-2 col-form-label">Type:</label>
-                    <div class="col-10">
-
-                        <p-dropdown [options]="types" [(ngModel)]="template.type" id="type" name="type" #type="ngModel" placeholder="Select a type" required></p-dropdown>
-                        <div [hidden]="type.valid || type.pristine" class="alert alert-danger">
-                            Type is required
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="association" class="col-2 col-form-label">Association Name:</label>
-                    <div class="col-10">
-
-                        <p-dropdown [style]="{'width':'270px'}" [options]="associations" [(ngModel)]="template.association" id="association" name="association" placeholder="Select a value" #association="ngModel" required></p-dropdown>
-                        <div [hidden]="association.valid || association.pristine" class="alert alert-danger">
-                            Association Name is required
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="rootConceptCode" class="col-2 col-form-label">Root Concept Code:</label>
-                    <div class="col-10">
+                <div class="form-group">
+                    <label for="rootConceptCode" class="col-sm-2 control-label">Root Concept Code <span class="required-field">*</span></label>
+                    <div class="col-sm-10">
                         <input class="form-control" type="text" value="Root Concept Code" [(ngModel)]="template.rootConceptCode" id="rootConceptCode" name="rootConceptCode" #rootConceptCode="ngModel" required>
-                        <div [hidden]="rootConceptCode.valid || rootConceptCode.pristine" class="alert alert-danger">
-                            Root Concept Code is required
+                        <div [hidden]="rootConceptCode.valid || rootConceptCode.pristine">
+                            <span class="form-error-message">Root Concept Code is required</span>
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label for="level" class="col-2 col-form-label">Level:</label>
-                    <div class="col-10">
+
+                <div class="form-group">
+                    <label for="type" class="col-sm-2 control-label">Type <span class="required-field">*</span></label>
+                    <div class="col-sm-4">
+
+                        <p-dropdown [style]="{'width':'100%'}" [options]="types" [(ngModel)]="template.type" id="type" name="type" #type="ngModel" placeholder="Select a type" required></p-dropdown>
+                        <div [hidden]="type.valid || type.pristine">
+                            <span class="form-error-message">Type is required</span>
+                        </div>
+                    </div>
+
+                    <label for="association" class="col-sm-2 control-label">Association Name <span class="required-field">*</span></label>
+                    <div class="col-sm-4">
+
+                        <p-dropdown [style]="{'width':'100%'}" [options]="associations" [(ngModel)]="template.association" id="association" name="association" placeholder="Select a value" #association="ngModel" required></p-dropdown>
+                        <div [hidden]="association.valid || association.pristine">
+                            <span class="form-error-message">Association Name is required</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="level" class="col-sm-2 control-label">Level <span class="required-field">*</span></label>
+                    <div class="col-sm-4">
                         <input class="form-control" type="number" value="Level" id="level" name="level" [(ngModel)]="template.level" #level="ngModel" required>
-                        <div [hidden]="level.valid || level.pristine" class="alert alert-danger">
-                            Level is required
+                        <div [hidden]="level.valid || level.pristine">
+                            <span class="form-error-message">Level is required</span>
                         </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label for="sortColumn" class="col-2 col-form-label">Sort Column:</label>
-                    <div class="col-10">
+
+                    <label for="sortColumn" class="col-sm-2 control-label">Sort Column <span class="required-field">*</span></label>
+                    <div class="col-sm-4">
                         <input class="form-control" type="number" value="Sort Column" [(ngModel)]="template.sortColumn" id="sortColumn" name="sortColumn" required #sortColumn="ngModel">
-                        <div [hidden]="sortColumn.valid || sortColumn.pristine" class="alert alert-danger">
-                            Sort Column is required
+                        <div [hidden]="sortColumn.valid || sortColumn.pristine">
+                            <span class="form-error-message">Sort Column is required</span>
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label for="status" class="col-2 col-form-label">Status:</label>
-                    <div class="col-10">
+                <div class="form-group">
+                    <label for="status" class="col-sm-2 control-label">Status <span class="required-field">*</span></label>
+                    <div class="col-sm-4">
 
-                        <p-dropdown [options]="statuses" placeholder="Select a status" [(ngModel)]="template.status" id="status" #status="ngModel" name="status" required></p-dropdown>
-                        <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
-                            Status is required
+                        <p-dropdown [style]="{'width':'100%'}" [options]="statuses" placeholder="Select a status" [(ngModel)]="template.status" id="status" #status="ngModel" name="status" required></p-dropdown>
+                        <div [hidden]="status.valid || status.pristine">
+                            <span class="form-error-message">Status is required</span>
                         </div>
                     </div>
                 </div>
-
-
-
 
                 <button type="button" (click)="showAddRow()" pButton icon="fa-external-link-square" label="Add Row"></button>
                 <br>
@@ -131,9 +123,9 @@
                 </p-dataTable>
                 <br>
                 <br>
-                <div class="form-group row">
+                <div class="form-group">
 
-                    <div class="col-10">
+                    <div class="col-sm-10">
                         <button type="submit" pButton [disabled]="!templateForm.form.valid" label="{{templateButtonName}}"></button>
                         <button type="button" pButton label="Clear Form" *ngIf="!templateCreated" (click)="clearTemplateRows();templateForm.reset()"></button>
                         <button type="button" pButton label="Cancel" [routerLink]="['/home']"></button>
@@ -142,7 +134,7 @@
 
 
                 </div>
-                <div class="form-group row" *ngIf="templateCreated">
+                <div class="form-group" *ngIf="templateCreated">
                     <p>
                         <ngb-alert [dismissible]="false" [type]="'success'" *ngIf="!staticAlertClosed" (close)="staticAlertClosed = true">
                             {{displayMessage}}
@@ -151,113 +143,112 @@
                 </div>
 
             </form>
-        </div>
-    </div>
 </div>
 
 
 <p-dialog header="Add Template Row" [(visible)]="displayAddRow" [width]="850">
-    <div class="container">
-        <form #templateRowForm="ngForm" (ngSubmit)="onSubmitAddRow();templateRowForm.reset()">
-            <div class="form-group row">
-                <label for="label" class="col-3 col-form-label">Label:</label>
-                <div class="col-6">
+    <div class="">
+        <form class="form-horizontal" #templateRowForm="ngForm" (ngSubmit)="onSubmitAddRow();templateRowForm.reset()">
+            
+            <div class="form-group">
+                <label for="label" class="col-sm-3 control-label">Label <span class="required-field">*</span></label>
+                <div class="col-sm-8">
                     <input class="form-control" type="text" value="Label" [(ngModel)]="templateRowUI.label" id="label" name="label" required #label="ngModel">
-                    <div [hidden]="label.valid || label.pristine" class="alert alert-danger">
-                        Label is required
+                    <div [hidden]="label.valid || label.pristine">
+                        <span class="form-error-message">Label is required</span>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="type" class="col-3 col-form-label">Display:</label>
-                <div class="col-6">
+            <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">Display <span class="required-field">*</span></label>
+                <div class="col-sm-8">
 
                     <p-dropdown appendTo="body" [style]="{'width':'250px'}" [options]="displays" [(ngModel)]="templateRowUI.display" id="display" name="display" #display="ngModel" placeholder="Select a display" required></p-dropdown>
-                    <div [hidden]="display.valid || display.pristine" class="alert alert-danger">
-                        Display is required
+                    <div [hidden]="display.valid || display.pristine">
+                        <span class="form-error-message">Display is required</span>
                     </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="type" class="col-3 col-form-label">Property Type:</label>
-                <div class="col-6">
+            <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">Property Type <span class="required-field">*</span></label>
+                <div class="col-sm-8">
 
                     <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="propertyTypes" [(ngModel)]="templateRowUI.propertyType" id="propertyType" name="propertyType" #propertyType="ngModel" placeholder="Select a Property Type" required></p-dropdown>
-                    <div [hidden]="propertyType.valid || propertyType.pristine" class="alert alert-danger">
-                        Property Type is required
+                    <div [hidden]="propertyType.valid || propertyType.pristine">
+                        <span class="form-error-message">Property Type is required</span>
                     </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="type" class="col-3 col-form-label">Property Target:</label>
-                <div class="col-6">
+            <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">Property Target <span class="required-field">*</span></label>
+                <div class="col-sm-8">
 
                     <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="propertyTargets" [(ngModel)]="templateRowUI.property" id="propertyTarget" name="propertyTarget" #propertyTarget="ngModel" placeholder="Select a Property Target" required></p-dropdown>
-                    <div [hidden]="propertyTarget.valid || propertyTarget.pristine" class="alert alert-danger">
-                        Property Target is required
+                    <div [hidden]="propertyTarget.valid || propertyTarget.pristine">
+                        <span class="form-error-message">Property Target is required</span>
                     </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="type" class="col-3 col-form-label">Source:</label>
-                <div class="col-6">
+            <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">Source:</label>
+                <div class="col-sm-8">
 
                     <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="sources" [(ngModel)]="templateRowUI.source" id="source" name="source" placeholder="Select a Source"></p-dropdown>
 
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="type" class="col-3 col-form-label">Group:</label>
-                <div class="col-6">
+            <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">Group:</label>
+                <div class="col-sm-8">
 
                     <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="groups" [(ngModel)]="templateRowUI.group" id="group" name="group" placeholder="Select a Group"></p-dropdown>
 
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="type" class="col-3 col-form-label">Subsource:</label>
-                <div class="col-6">
+            <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">Subsource:</label>
+                <div class="col-sm-8">
 
                     <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="subsources" [(ngModel)]="templateRowUI.subsource" id="subsource" name="subsource" placeholder="Select a Subsource"></p-dropdown>
 
                 </div>
             </div>
-            <!--  <div class="form-group row">
-                <label for="type" class="col-3 col-form-label">Source:</label>
-                <div class="col-6">
+            <!--  <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">Source:</label>
+                <div class="col-sm-8">
 
                     <p-dropdown appendTo="body" [style]="{'width':'250px'}" [options]="sources" [(ngModel)]="templateRowUI.source" id="source" name="source" #source="ngModel" placeholder="Select a Source" required></p-dropdown>
-                    <div [hidden]="source.valid || source.pristine" class="alert alert-danger">
+                    <div [hidden]="source.valid || source.pristine" class="alert form-error-message">
                         Source is required
                     </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="type" class="col-3 col-form-label">Group:</label>
-                <div class="col-6">
+            <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">Group:</label>
+                <div class="col-sm-8">
 
                     <p-dropdown appendTo="body" [style]="{'width':'250px'}" [options]="groups" [(ngModel)]="templateRowUI.group" id="group" name="group" #group="ngModel" placeholder="Select a Group" required></p-dropdown>
-                    <div [hidden]="group.valid || group.pristine" class="alert alert-danger">
+                    <div [hidden]="group.valid || group.pristine" class="alert form-error-message">
                         Group is required
                     </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="type" class="col-3 col-form-label">Subsource:</label>
-                <div class="col-6">
+            <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">Subsource:</label>
+                <div class="col-sm-8">
 
                     <p-dropdown appendTo="body" [style]="{'width':'250px'}" [options]="subsources" [(ngModel)]="templateRowUI.subsource" id="subsource" name="subsource" #subsource="ngModel" placeholder="Select a Subsource" required></p-dropdown>
-                    <div [hidden]="subsource.valid || subsource.pristine" class="alert alert-danger">
+                    <div [hidden]="subsource.valid || subsource.pristine" class="alert form-error-message">
                         Subsource is required
                     </div>
                 </div>
             </div>-->
-            <div class="form-group row">
-                <label for="submit" class="col-3 col-form-label"></label>
-                <div class="col-6">
-                    <button type="submit" class="btn btn-success" pButton [disabled]="!templateRowForm.form.valid" label="Save"></button>
-                    <button type="button" (click)="cancelAddRow();templateRowForm.reset()">Cancel</button>
+            <div class="form-group">
+                <label for="submit" class="col-sm-3 control-label"></label>
+                <div class="col-sm-8">
+                    <button type="submit" pButton [disabled]="!templateRowForm.form.valid" label="Save"></button>
+                    <button type="button" pButton (click)="cancelAddRow();templateRowForm.reset()" label="Cancel"></button>
                 </div>
             </div>
         </form>

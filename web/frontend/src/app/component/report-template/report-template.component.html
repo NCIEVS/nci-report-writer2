@@ -1,11 +1,8 @@
 <div class="container">
-    <div class="panel panel-primary">
-        <div class="panel-heading">
+        <div class="page-header">
             <span> Report Writer Templates</span>
         </div>
 
-        <div class="panel-body">
-            <br>
             <div *ngIf="taskRun">
                 <p>
                     <ngb-alert [type]="'success'" *ngIf="!staticAlertClosed" (close)="staticAlertClosed = true">
@@ -17,9 +14,17 @@
                 </p>
             </div>
             <br>
-            <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
-                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+
+            <div class="ui-widget-header row">
+                <div class="col-sm-6">
+                    <div class="input-group ">
+                        <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                        <input #gb type="text" pInputText size="50" placeholder="Global Filter" class="form-control" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col-sm-6 ">
+                    <div class="pull-right paginationCount">{{pageinationcount}}</div>
+                </div>   
             </div>
             <p-dataTable [value]="templates" (onPage)="onPageChange($event)" [responsive]="true" [rows]="5" [paginator]="true" [alwaysShowPaginator]="true" [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[5,10,20]">
                 <p-column field="id" styleClass="col-button" header="Action">
@@ -31,9 +36,5 @@
                 </p-column>
                 <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
                 <p-column field="status" header="Status" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
-                <p-footer>{{pageinationcount}}</p-footer>
             </p-dataTable>
-
-        </div>
-    </div>
 </div>

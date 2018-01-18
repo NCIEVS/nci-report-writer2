@@ -1,0 +1,37 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid ecoSystemHeader">
+  
+      <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-target-menu-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+          </button>
+      </div>
+  
+      <div class="collapse navbar-collapse navbar-site-main" id="navbar-target-menu-collapse">
+          <ul class="nav navbar-nav navbar-left">
+              <li routerLinkActive="active" class="menu-immport-org">
+                  <a href="#" routerLink="/home">
+                      <img class="main-site-logo" src="assets/images/header/immport-private-data-icon.png"/>
+                      <span class="title-menu">NCI Report Writer</span>
+                      <span class="sr-only">(current)</span>
+                  </a>
+              </li>
+          </ul>
+           <ul class="nav navbar-nav navbar-left">
+              <li class="dropdown">
+                  <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Template<span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                      <li><a href="#" routerLink="/createTemplate/0">Create Template</a></li>
+                      <li><a href="#" routerLink="/reportTemplate">View All Templates</a></li>
+                  </ul>
+              </li>
+          </ul>
+          <ul class="nav navbar-nav">
+              <li><a routerLink="/reportTask">All Report Tasks</a></li>
+          </ul>
+      </div>
+    </div>
+</nav>

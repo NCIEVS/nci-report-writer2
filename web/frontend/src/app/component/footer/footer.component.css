@@ -1,0 +1,29 @@
+.row-footer {
+    padding-top: 10px;
+    border-top: solid 1px #e2e2e2;
+    color: #999;
+    font-size: 0.9em;
+    padding-left: 20px;
+    margin-top: 50px;
+}
+
+.row-footer a {
+    color: #999;
+}
+
+.row-footer .block-header {
+    padding-bottom: 8px;
+}
+
+.row-footer .block-body {
+    padding-left: 20px;
+}
+
+.socialmedia-block-inner ul {
+    padding-left: 5px;
+    list-style-type: none;
+}
+
+.socialmedia-link {
+    height: 22px;
+}

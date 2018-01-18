@@ -40,8 +40,8 @@ export class AllReportTaskStatusComponent implements OnInit {
     this.lookupNone.value = null;
     this.getReportTasks();
     this.getTaskStatuses();
-    this.detailedReportPath = 'http://' + this.document.location.hostname + ":" + this.document.location.port+ "/reportwriter/";
-    //this.detailedReportPath = "http://localhost:8080/reportwriter/";
+    //this.detailedReportPath = 'http://' + this.document.location.hostname + ":" + this.document.location.port+ "/reportwriter/";
+    this.detailedReportPath = "http://localhost:8080/reportwriter/";
     this.reportXLS = this.detailedReportPath + "getXLSReport";
     this.reportTxt = this.detailedReportPath + "getTxtReport";
     this.reportTemplate = this.detailedReportPath + "getTemplateReport";

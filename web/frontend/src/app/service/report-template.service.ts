@@ -5,8 +5,6 @@ import { of } from 'rxjs/observable/of';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { catchError, map, tap } from 'rxjs/operators';
-
-
 import {Template} from './../model/template';
 
 const httpOptions = {
@@ -18,17 +16,14 @@ export class ReportTemplateService {
 
   constructor( private http: HttpClient) { }
 
-
     /** POST: add a new template to the server */
     addReportTemplate (template: Template): Observable<Template> {
       console.log("addReportTemplate ----- " + JSON.stringify(template));
-      return this.http.post<Template>("/reportwriter/createTemplate", template, httpOptions).pipe(
-        tap((template: Template) => console.log("Template added")),
-        catchError(this.handleError<Template>('addReportTemplate'))
+      return this.http.post<Template>("/reportwriter/createTemplate", template, httpOptions)
+      .pipe(tap((template: Template) => console.log("Template Created")),
+            catchError(this.handleError<Template>('addReportTemplate'))
       );
     }
-
-
 
     /** POST: save changes to the template to the server */
     saveReportTemplate (template: Template): Observable<Template> {
@@ -47,8 +42,6 @@ export class ReportTemplateService {
 
     }
 
-    
-
     getReportTemplates(): Observable<Template[]> {    
       //return of(this.statuses);
      
@@ -58,7 +51,6 @@ export class ReportTemplateService {
   
     }
 
-
     getReportTemplate(reportTemplateId): Observable<Template> {    
       //return of(this.statuses);
      
@@ -67,7 +59,6 @@ export class ReportTemplateService {
       );
   
     }
-
 
      /**
  * Handle Http operation that failed.
@@ -80,8 +71,6 @@ private handleError<T> (operation = 'operation', result?: T) {
  
     // TODO: send the error to remote logging infrastructure
     console.error(error); // log to console instead
- 
-   
  
     // Let the app keep running by returning an empty result.
     return of(result as T);

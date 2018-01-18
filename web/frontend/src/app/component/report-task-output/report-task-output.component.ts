@@ -21,18 +21,11 @@ export class ReportTaskOutputComponent implements OnInit {
 
   ngOnInit() {
     this.getReportTaskOutput();
-    
-
   }
-
 
   getReportTaskOutput(): void {
     this.reportTaskService.getReportTaskData(this.taskId).
     subscribe(reportTaskOutput => {this.reportTaskOutput = reportTaskOutput;  
-      console.log("templateRowUI - " + JSON.stringify(this.reportTaskOutput));
       this.cols= this.reportTaskOutput.header;this.reportData = this.reportTaskOutput.data});
   }
-
- 
-
 }

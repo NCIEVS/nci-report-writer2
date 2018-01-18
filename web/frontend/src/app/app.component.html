@@ -5,8 +5,11 @@
     </nav>
     <router-outlet></router-outlet>
 </div>-->
-<div class="container" style="padding-top:5pt;">
-    <p-menubar [model]="items"></p-menubar>
+<angular-loader></angular-loader>
+<nci-header></nci-header>
+<div class="container" style="padding-top:15px;">
+    <!-- <p-menubar [model]="items"></p-menubar> -->
     <br>
     <router-outlet></router-outlet>
+    <nci-footer></nci-footer>
 </div>

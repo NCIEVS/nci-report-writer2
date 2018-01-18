@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-
-import {MenuItem} from '../../node_modules/primeng/components/common/api';
+import { MenuItem } from '../../node_modules/primeng/components/common/api';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +7,9 @@ import {MenuItem} from '../../node_modules/primeng/components/common/api';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  constructor() {}
+  
   title = 'app';
-
   items: MenuItem[];
   
       ngOnInit() {

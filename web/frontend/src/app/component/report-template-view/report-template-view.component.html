@@ -1,9 +1,8 @@
 <div class="container">
-    <div class="panel panel-primary">
-        <div class="panel-heading" *ngIf="templateFetched">
+        <div class="page-header" *ngIf="templateFetched">
             <span> Report Template Details for Template - {{template.name}}</span>
         </div>
-        <div class="panel-body" *ngIf="templateFetched">
+        <div *ngIf="templateFetched">
             <br>
             <div class="ui-g">
                 <div class="ui-g-2">Name</div>
@@ -44,6 +43,4 @@
                 <p-column field="subsource" header="Subsource"></p-column>
             </p-dataTable>
         </div>
-
-    </div>
 </div>
