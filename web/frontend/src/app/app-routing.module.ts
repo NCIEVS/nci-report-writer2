@@ -11,6 +11,7 @@ import {ReportwriterHomeComponent}       from './component/reportwriter-home/rep
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'createTemplate/:id',  component: CreateTemplateComponent }, 
+  { path: 'createTemplate',  component: CreateTemplateComponent }, 
   { path: 'reportTemplate',     component: ReportTemplateComponent },
   { path: 'reportTemplateView/:id',     component: ReportTemplateViewComponent },
   { path: 'reportTask',     component: AllReportTaskStatusComponent },

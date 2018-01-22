@@ -143,6 +143,8 @@ export class CreateTemplateComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("In ngInit***")
+
     this.lookupNone = new Lookup();
     this.lookupNone.label = "None";
     this.lookupNone.value = "None";
@@ -274,7 +276,7 @@ export class CreateTemplateComponent implements OnInit {
         console.log("after onSubmitTemplate addReportTemplate----- " + JSON.stringify(this.templateRows));
         this.templateCreated = true;
         this.templateButtonName = "Save Changes";
-        this.displayMessage = " Template has been created. Click on Cancel to exit.";
+        this.displayMessage = " Template has been created. You can continue to edit the template or click on Cancel to exit.";
         setTimeout(() => { this.staticAlertClosed = true; console.log("setting staticAlertClosed to true") }, 8000);
       });
 

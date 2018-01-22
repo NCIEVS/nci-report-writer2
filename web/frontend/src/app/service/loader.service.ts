@@ -38,12 +38,12 @@ export class LoaderService {
 
     showLoader() {
         this.loaderSubject.next(true);
-        console.log("show loader");
+        //console.log("show loader");
     }
 
     hideLoader() {
         this.loaderSubject.next(false);
-        console.log("hide loader");
+       // console.log("hide loader");
     }
 
     getLoaderSubject(): Observable<any> {
