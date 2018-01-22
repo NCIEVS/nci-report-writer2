@@ -1,40 +1,44 @@
 <div class="container">
-        <div class="page-header">
-            <span> Report Writer Templates</span>
-        </div>
+    <div class="page-header">
+        <span> Report Writer Templates</span>
+    </div>
 
-            <div *ngIf="taskRun">
-                <p>
-                    <ngb-alert [type]="'success'" *ngIf="!staticAlertClosed" (close)="staticAlertClosed = true">
-                        {{displayMessage}}.
-                        <div>
-                            <a href="/reportTask" class="alert-link">Click here to go the All Report Tasks Page</a>.
-                        </div>
-                    </ngb-alert>
-                </p>
-            </div>
-            <br>
-
-            <div class="ui-widget-header row">
-                <div class="col-sm-6">
-                    <div class="input-group ">
-                        <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                        <input #gb type="text" pInputText size="50" placeholder="Global Filter" class="form-control" aria-describedby="basic-addon1">
-                    </div>
+    <div *ngIf="taskRun">
+        <p>
+            <ngb-alert [type]="'success'" *ngIf="!staticAlertClosed" (close)="staticAlertClosed = true">
+                {{displayMessage}}.
+                <div>
+                    <a href="/reportTask" class="alert-link">Click here to go the All Report Tasks Page</a>.
                 </div>
-                <div class="col-sm-6 ">
-                    <div class="pull-right paginationCount">{{pageinationcount}}</div>
-                </div>   
+            </ngb-alert>
+        </p>
+    </div>
+    <br>
+
+    <div class="ui-widget-header row">
+        <div class="col-sm-6">
+            <div class="input-group ">
+                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                <input #gb type="text" pInputText size="50" placeholder="Global Filter" class="form-control" aria-describedby="basic-addon1">
             </div>
-            <p-dataTable [value]="templates" (onPage)="onPageChange($event)" [responsive]="true" [rows]="5" [paginator]="true" [alwaysShowPaginator]="true" [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[5,10,20]">
-                <p-column field="id" styleClass="col-button" header="Action">
-                    <ng-template let-templateRow="rowData" pTemplate="body">
-                        <button type="button" pButton [routerLink]="['/createTemplate', templateRow.id]" icon="fa-pencil-square-o"></button>
-                        <button type="button" pButton [routerLink]="['/reportTemplateView', templateRow.id]" icon="fa-eye"></button>
-                        <button type="button" pButton (click)="runTemplate(templateRow)" label="Run"></button>
-                    </ng-template>
-                </p-column>
-                <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
-                <p-column field="status" header="Status" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
-            </p-dataTable>
+        </div>
+        <div class="col-sm-6 ">
+            <div class="pull-right paginationCount">{{pageinationcount}}</div>
+        </div>
+    </div>
+    <p-dataTable [value]="templates" (onPage)="onPageChange($event)" [responsive]="true" [rows]="5" [paginator]="true" [alwaysShowPaginator]="true" [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[5,10,20]">
+        <p-column field="id" styleClass="col-button" header="Action">
+            <ng-template let-templateRow="rowData" pTemplate="body">
+                <button type="button" pButton [routerLink]="['/createTemplate', templateRow.id]" icon="fa-pencil-square-o"></button>
+                <button type="button" pButton [routerLink]="['/reportTemplateView', templateRow.id]" icon="fa-eye"></button>
+                <button type="button" *ngIf="templateRow.status == 'Active'" pButton (click)="runTemplate(templateRow)" label="Run"></button>
+            </ng-template>
+        </p-column>
+        <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+        <p-column field="status" header="Status" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+        <p-column field="dateCreated" header="Date Created" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+        <p-column field="dateLastUpdated" header="Date Last Updated" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains">
+
+        </p-column>
+    </p-dataTable>
 </div>

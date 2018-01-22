@@ -18,6 +18,8 @@ import {TooltipModule} from 'primeng/primeng';
 import {BlockUIModule} from 'primeng/primeng';
 import {ProgressBarModule} from 'primeng/primeng';
 import {ProgressSpinnerModule} from 'primeng/primeng';
+import {TableModule} from 'primeng/table';
+
 
 
 

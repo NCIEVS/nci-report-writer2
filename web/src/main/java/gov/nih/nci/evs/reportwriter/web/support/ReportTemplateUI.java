@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.reportwriter.web.support;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateColumn;
@@ -17,7 +18,9 @@ public class ReportTemplateUI {
 	private String type;
 	private String association;
 	private List<ReportTemplateColumn> columns;
-	
+	private String dateCreated;
+	private String dateLastUpdated;
+		
 
 	public String getType() {
 		return type;
@@ -72,6 +75,18 @@ public class ReportTemplateUI {
 	}
 	public void setColumns(List<ReportTemplateColumn> columns) {
 		this.columns = columns;
+	}
+	public String getDateCreated() {
+		return dateCreated;
+	}
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+	public String getDateLastUpdated() {
+		return dateLastUpdated;
+	}
+	public void setDateLastUpdated(String dateLastUpdated) {
+		this.dateLastUpdated = dateLastUpdated;
 	}
 	
 	

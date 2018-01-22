@@ -274,7 +274,7 @@ export class CreateTemplateComponent implements OnInit {
         console.log("after onSubmitTemplate addReportTemplate----- " + JSON.stringify(this.templateRows));
         this.templateCreated = true;
         this.templateButtonName = "Save Changes";
-        this.displayMessage = " Template has been created. Click on Cancel to exit. Click on Reset to create a new Template";
+        this.displayMessage = " Template has been created. Click on Cancel to exit.";
         setTimeout(() => { this.staticAlertClosed = true; console.log("setting staticAlertClosed to true") }, 8000);
       });
 

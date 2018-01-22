@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,9 +40,25 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 	@Autowired
 	ReportTemplateColumnRepository reportTemplateColumnRepository;
 	
-	public List <ReportTemplate> findAll() {
+	public List <ReportTemplateUI> findAll() {
 		
-		return (List) reportTemplateRepository.findAll();
+		List <ReportTemplate>  reportTemplates = (List <ReportTemplate>)reportTemplateRepository.findAll();
+		
+		List<ReportTemplateUI> reportTemplateUIs = new ArrayList<ReportTemplateUI>();
+		
+		for (ReportTemplate reportTemplate: reportTemplates) {
+			ReportTemplateUI reportTemplateUI = new ReportTemplateUI();
+			reportTemplateUI.setId(reportTemplate.getId());
+			reportTemplateUI.setName(reportTemplate.getName());
+			reportTemplateUI.setStatus(reportTemplate.getStatus());
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
+			String txtDateCreated = reportTemplate.getDateCreated().format(formatter);
+			reportTemplateUI.setDateCreated(txtDateCreated);
+			String txtDateUpdated = reportTemplate.getDateLastUpdated().format(formatter);
+			reportTemplateUI.setDateLastUpdated(txtDateUpdated);
+			reportTemplateUIs.add(reportTemplateUI);
+		}
+		return reportTemplateUIs;
 	}
 	
 	

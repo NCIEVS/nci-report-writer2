@@ -213,7 +213,7 @@ public class ReportWriterController {
 	// Get all Templates
 	@RequestMapping(value = "/reporttemplates", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String reporttemplates() throws JsonProcessingException {
-			List<ReportTemplate> reportTemplates = reportTemplateService.findAll();
+			List<ReportTemplateUI> reportTemplates = reportTemplateService.findAll();
 			
 			SimpleFilterProvider filter = new SimpleFilterProvider();
 			filter.setFailOnUnknownId(false);

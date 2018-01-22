@@ -164,7 +164,7 @@ public class ReportTemplate implements Serializable {
 		return reportTemplateConceptList;
 	}
 
-	@JsonIgnore
+	
 	public LocalDateTime getDateCreated() {
 		return dateCreated;
 	}
@@ -173,7 +173,7 @@ public class ReportTemplate implements Serializable {
 		this.dateCreated = dateCreated;
 	}
 
-	@JsonIgnore
+	
 	public LocalDateTime getDateLastUpdated() {
 		return dateLastUpdated;
 	}
