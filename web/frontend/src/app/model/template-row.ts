@@ -11,7 +11,7 @@ export class TemplateRow {
         public property?:string,
         public source?:string,
         public group?:string, 
-        public subsource?:string, 
+        public subsource?:string
       ) {  }
     
     }

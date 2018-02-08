@@ -237,7 +237,7 @@ public class ReportWriterController {
 		        ObjectMapper mapper = new ObjectMapper();
 		        String reportTemplateStr = mapper.writer(filter).writeValueAsString(reportTemplate);
 		        
-		        //log.info("test - " + reportTemplateStr);
+		        log.info("reportTemplateStr ---- " + reportTemplateStr);
 				
 
 				return reportTemplateStr;
