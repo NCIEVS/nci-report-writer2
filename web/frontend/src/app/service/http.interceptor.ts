@@ -4,6 +4,7 @@ import 'rxjs/Rx';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { LoaderService } from './loader.service';
+import { getBaseLocation } from './common-functions';
 
 @Injectable()
 export class HttpService implements HttpInterceptor {
@@ -11,6 +12,13 @@ export class HttpService implements HttpInterceptor {
     constructor (private loaderService: LoaderService) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+      const url = getBaseLocation();
+      console.log("url - " + url);
+      const url1 = "/ncireportwriter";
+      console.log("url1 - " + url1);
+      req = req.clone({
+        url: url + req.url
+      });
         // start our loader here
         this.loaderService.showLoader();
     

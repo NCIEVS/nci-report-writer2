@@ -4,6 +4,9 @@ import { ReportTaskService } from './../../service/report-task.service';
 import { Task } from '../../model/task';
 import { Lookup } from './../../model/lookup';
 import { DOCUMENT } from '@angular/platform-browser';
+import {ConfirmationService} from 'primeng/api';
+
+import { getBaseLocation } from './../../service/common-functions';
 
 
 
@@ -12,7 +15,7 @@ import { DOCUMENT } from '@angular/platform-browser';
   selector: 'app-all-report-task-status',
   templateUrl: './all-report-task-status.component.html',
   styleUrls: ['./all-report-task-status.component.css'],
-  
+  providers: [ConfirmationService]
   
 })
 export class AllReportTaskStatusComponent implements OnInit {
@@ -25,6 +28,8 @@ export class AllReportTaskStatusComponent implements OnInit {
   
   totalRecordsCount:number;
 
+  public getBaseLocation = getBaseLocation;
+
   pageinationcount:string;
 
   detailedReportPath:string;
@@ -32,7 +37,7 @@ export class AllReportTaskStatusComponent implements OnInit {
   reportTxt:string;
   reportTemplate:string;
 
-  constructor(private reportTaskService:ReportTaskService,@Inject(DOCUMENT) private document: any) { }
+  constructor(private confirmationService: ConfirmationService,private reportTaskService:ReportTaskService,@Inject(DOCUMENT) private document: any) { }
 
   ngOnInit() {
     this.lookupNone = new Lookup();
@@ -40,8 +45,8 @@ export class AllReportTaskStatusComponent implements OnInit {
     this.lookupNone.value = null;
     this.getReportTasks();
     this.getTaskStatuses();
-    //this.detailedReportPath = 'http://' + this.document.location.hostname + ":" + this.document.location.port+ "/reportwriter/";
-    this.detailedReportPath = "http://localhost:8080/reportwriter/";
+    this.detailedReportPath = 'http://' + this.document.location.hostname + ":" + this.document.location.port+ "/" + getBaseLocation() + "/reportwriter/";
+    //this.detailedReportPath = "http://localhost:8080/ncreportwriter/reportwriter";
     this.reportXLS = this.detailedReportPath + "getXLSReport";
     this.reportTxt = this.detailedReportPath + "getTxtReport";
     this.reportTemplate = this.detailedReportPath + "getTemplateReport";
@@ -71,8 +76,16 @@ export class AllReportTaskStatusComponent implements OnInit {
 
 
   deleteReportTask(templateTask):void{
-    this.reportTaskService.deleteReportTask(templateTask.id).
-    subscribe(task => {this.task = task; console.log("Task id -" + task.id + " status - " + task.status); this.getReportTasks()});
+
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to delete?',
+      accept: () => {
+        this.reportTaskService.deleteReportTask(templateTask.id).
+        subscribe(task => {this.task = task; console.log("Task id -" + task.id + " status - " + task.status); this.getReportTasks()});
+      }
+  });
+
+    
 
   }
 

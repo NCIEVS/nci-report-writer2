@@ -39,6 +39,7 @@ import { LoaderService } from './service/loader.service';
 import { HttpService } from './service/http.interceptor';
 
 
+
 import { HttpClientModule, HTTP_INTERCEPTORS}  from '@angular/common/http';
 
 import { AppRoutingModule }     from './app-routing.module';
@@ -50,6 +51,9 @@ import { ReportwriterHomeComponent } from './component/reportwriter-home/reportw
 import { HeaderComponent } from './component/header/header.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { LoaderComponent } from './component/loader/loader.component';
+
+import { APP_BASE_HREF } from '@angular/common';
+import { getBaseLocation } from './service/common-functions';
 
 @NgModule({
   declarations: [
@@ -94,7 +98,11 @@ import { LoaderComponent } from './component/loader/loader.component';
       provide: HTTP_INTERCEPTORS,
       useClass: HttpService,
       multi: true,
-    }],
+    },
+    {
+      provide: APP_BASE_HREF,
+      useFactory: getBaseLocation
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

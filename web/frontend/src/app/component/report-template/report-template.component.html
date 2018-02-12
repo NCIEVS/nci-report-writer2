@@ -8,7 +8,7 @@
             <ngb-alert [type]="'success'" *ngIf="!staticAlertClosed" (close)="staticAlertClosed = true">
                 {{displayMessage}}.
                 <div>
-                    <a href="/reportTask" class="alert-link">Click here to go the All Report Tasks Page</a>.
+                    <a href="#" routerLink="/reportTask" class="alert-link">Click here to go the All Report Tasks Page</a>.
                 </div>
             </ngb-alert>
         </p>

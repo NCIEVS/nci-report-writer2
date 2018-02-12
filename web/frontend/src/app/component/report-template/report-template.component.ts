@@ -2,6 +2,7 @@ import { Task } from './../../model/task';
 import { Template } from './../../model/template';
 import { Component, OnInit } from '@angular/core';
 import { ReportTemplateService } from './../../service/report-template.service';
+import { getBaseLocation } from './../../service/common-functions';
 
 @Component({
   selector: 'app-report-template',
@@ -19,11 +20,15 @@ export class ReportTemplateComponent implements OnInit {
   staticAlertClosed:boolean;
   displayMessage:string;
   taskRun:boolean;
-
+  public getBaseLocation = getBaseLocation;
+  basePath:string;
+  
   ngOnInit() {
     this.getReportTemplates();
     this.staticAlertClosed = true;
     this.taskRun = false;
+    this.basePath = "/" + getBaseLocation() + "/reportTask"; 
+    console.log("basePath - " +  this.basePath);
   }
 
 
