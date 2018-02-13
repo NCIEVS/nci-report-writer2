@@ -14,8 +14,8 @@ export class HttpService implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       const url = getBaseLocation();
       console.log("url - " + url);
-      const url1 = "/ncireportwriter";
-      console.log("url1 - " + url1);
+      //const url1 = "/ncireportwriter";
+      //console.log("url1 - " + url1);
       req = req.clone({
         url: url + req.url
       });

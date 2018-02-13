@@ -303,6 +303,18 @@ public class ReportWriterController {
 			return null;
 		}
 		
+		@RequestMapping(value = "/getLogReport/{id}", method = RequestMethod.GET)
+		public ModelAndView getLogReport(@PathVariable("id") String id,
+				HttpServletResponse response) throws Exception {
+			log.debug("In here getLogReport");
+			
+			FileUI fileUI = reportTaskService.getDetailedReportTask(id,"log");
+
+			getFile(fileUI, response);
+		
+			return null;
+		}
+		
 		@RequestMapping(value="/getReportTaskData/{id}", method = RequestMethod.GET)
 	    public @ResponseBody ReportTaskOutput getReportTaskData(@PathVariable String id) 
 	    		throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException { 

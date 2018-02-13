@@ -26,7 +26,7 @@
             <div class="pull-right paginationCount">{{pageinationcount}}</div>
         </div>
     </div>
-    <p-dataTable [value]="templates" (onPage)="onPageChange($event)" [responsive]="true" [rows]="5" [paginator]="true" [alwaysShowPaginator]="true" [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[5,10,20]">
+    <p-dataTable [value]="templates" (onPage)="onPageChange($event)" [responsive]="true" [rows]="20" [paginator]="true" [alwaysShowPaginator]="true" [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[10,20,50]">
         <p-column field="id" styleClass="col-button" header="Action">
             <ng-template let-templateRow="rowData" pTemplate="body">
                 <button type="button" pButton [routerLink]="['/createTemplate', templateRow.id]" icon="fa-pencil-square-o"></button>

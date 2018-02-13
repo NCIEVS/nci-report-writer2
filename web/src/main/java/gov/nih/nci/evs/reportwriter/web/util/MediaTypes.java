@@ -42,6 +42,7 @@ public class MediaTypes {
 		MEDIA_TYPES_MAP.put(".tiff", "image/tiff");
 		MEDIA_TYPES_MAP.put(".tsv", "text/tab-separated-values");
 		MEDIA_TYPES_MAP.put(".txt", "text/plain");
+		MEDIA_TYPES_MAP.put(".log", "text/plain");
 		MEDIA_TYPES_MAP.put(".template", "text/plain");
 		MEDIA_TYPES_MAP.put(".xls", "application/vnd.ms-excel");
 		MEDIA_TYPES_MAP

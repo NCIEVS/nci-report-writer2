@@ -36,7 +36,7 @@ export class ReportTemplateComponent implements OnInit {
     this.reportTemplateService.getReportTemplates().
     subscribe(templates => {this.templates = templates; console.log(JSON.stringify(this.templates));this.totalRecordsCount = this.templates.length;
       let currentpageCount = 0 + 1;
-      let currentPageRows = 0 + 5;
+      let currentPageRows = 0 + 20;
       if (currentPageRows > this.templates.length){
         currentPageRows = this.templates.length;
       }

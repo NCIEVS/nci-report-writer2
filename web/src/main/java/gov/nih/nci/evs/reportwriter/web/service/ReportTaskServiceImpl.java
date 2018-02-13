@@ -75,8 +75,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		List<ReportTaskUI> reportTaskUIs = new ArrayList<ReportTaskUI>();
 
 		for (ReportTask reportTask : reportTasks) {
-			log.info("id - " + reportTask.getId());
-			log.info(reportTask.getReportTemplate().getName());
+			log.debug("id - " + reportTask.getId());
+			log.debug(reportTask.getReportTemplate().getName());
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
 			// if (!reportTask.getStatus().equalsIgnoreCase("Deleted")) {
 			ReportTaskUI reportTaskUI = new ReportTaskUI();
@@ -274,7 +274,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		ArrayList<String> list = new ArrayList<String>();
 
 		Files.lines(Paths.get(filePath)).forEach(line -> {
-			log.info(line);
+			//log.debug(line);
 			list.add(line);
 		});
 

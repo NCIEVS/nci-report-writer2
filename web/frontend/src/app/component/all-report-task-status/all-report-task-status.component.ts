@@ -36,6 +36,7 @@ export class AllReportTaskStatusComponent implements OnInit {
   reportXLS:string;
   reportTxt:string;
   reportTemplate:string;
+  reportLog:string;
 
   constructor(private confirmationService: ConfirmationService,private reportTaskService:ReportTaskService,@Inject(DOCUMENT) private document: any) { }
 
@@ -50,6 +51,7 @@ export class AllReportTaskStatusComponent implements OnInit {
     this.reportXLS = this.detailedReportPath + "getXLSReport";
     this.reportTxt = this.detailedReportPath + "getTxtReport";
     this.reportTemplate = this.detailedReportPath + "getTemplateReport";
+    this.reportLog = this.detailedReportPath + "getLogReport";
  
     
   
@@ -64,7 +66,7 @@ export class AllReportTaskStatusComponent implements OnInit {
     this.reportTaskService.getReportTasks().
     subscribe(tasks => {this.tasks = tasks; this.totalRecordsCount = this.tasks.length;
       let currentpageCount = 0 + 1;
-      let currentPageRows = 0 + 5;
+      let currentPageRows = 0 + 10;
       if (currentPageRows > this.tasks.length){
         currentPageRows = this.tasks.length;
       }
