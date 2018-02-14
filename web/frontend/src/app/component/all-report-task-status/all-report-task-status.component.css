@@ -1,3 +1,9 @@
 .col-header {
     text-align: top;
 }
+
+.break-column {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    width: 100%;
+}

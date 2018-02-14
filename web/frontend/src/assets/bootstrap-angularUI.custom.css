@@ -24,11 +24,3 @@
     border-radius: 4px;
     display: inline-block;
 }
-
-
-.ui-datatable-data>tr>td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 150px;
-}
