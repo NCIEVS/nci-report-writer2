@@ -7,7 +7,11 @@ import { MenuItem } from '../../node_modules/primeng/components/common/api';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor() {}
+  constructor() {
+
+
+    localStorage.clear();
+  }
   
   title = 'app';
   items: MenuItem[];

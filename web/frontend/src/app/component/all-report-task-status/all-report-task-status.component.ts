@@ -7,7 +7,8 @@ import { DOCUMENT } from '@angular/platform-browser';
 import {ConfirmationService} from 'primeng/api';
 
 import { getBaseLocation } from './../../service/common-functions';
-
+import {ViewChild} from '@angular/core';
+import {DataTable} from 'primeng/datatable';
 
 
 
@@ -19,6 +20,8 @@ import { getBaseLocation } from './../../service/common-functions';
   
 })
 export class AllReportTaskStatusComponent implements OnInit {
+
+  @ViewChild('dtTask') dataTable: DataTable;
 
   tasks: Task[];
   taskStatuses: Lookup[];
@@ -37,8 +40,19 @@ export class AllReportTaskStatusComponent implements OnInit {
   reportTxt:string;
   reportTemplate:string;
   reportLog:string;
+  globalFilter:string;
 
   constructor(private confirmationService: ConfirmationService,private reportTaskService:ReportTaskService,@Inject(DOCUMENT) private document: any) { }
+
+  onFilter(e) {
+    //saving the filters
+    console.log(this.globalFilter);
+    if (!(this.globalFilter == null || this.globalFilter == undefined )){
+      localStorage.setItem("globalfilters-task", this.globalFilter);
+    }
+    console.log("filters - " +  JSON.stringify(this.dataTable.filters));
+    localStorage.setItem("filters-task", JSON.stringify(this.dataTable.filters));
+  }
 
   ngOnInit() {
     this.lookupNone = new Lookup();
@@ -53,7 +67,17 @@ export class AllReportTaskStatusComponent implements OnInit {
     this.reportTemplate = this.detailedReportPath + "getTemplateReport";
     this.reportLog = this.detailedReportPath + "getLogReport";
  
-    
+    //setting the filters
+    const filters = localStorage.getItem("filters-task");
+    if (filters) {
+      console.log("filters in init - " + JSON.parse(filters));
+      this.dataTable.filters = JSON.parse(filters);
+    }
+    const globalfilters = localStorage.getItem("globalfilters-task");
+    if (globalfilters != undefined || globalfilters != null) {
+      console.log("global filters in init - " + globalfilters);
+      this.globalFilter = globalfilters;
+    }
   
   }
 

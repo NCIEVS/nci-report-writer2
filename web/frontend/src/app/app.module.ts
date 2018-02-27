@@ -19,7 +19,7 @@ import {BlockUIModule} from 'primeng/primeng';
 import {ProgressBarModule} from 'primeng/primeng';
 import {ProgressSpinnerModule} from 'primeng/primeng';
 import {TableModule} from 'primeng/table';
-
+import {InputTextModule} from 'primeng/inputtext';
 
 
 
@@ -87,7 +87,8 @@ import { getBaseLocation } from './service/common-functions';
     TooltipModule,
     BlockUIModule,
     ProgressBarModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    InputTextModule
   ],
   providers: [LookupvaluesTemplateService,LookupvaluesTemplaterowService,ReportTemplateService,ReportTaskService,LoaderService,Location, 
     {

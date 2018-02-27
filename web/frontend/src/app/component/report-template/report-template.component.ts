@@ -4,12 +4,19 @@ import { Component, OnInit } from '@angular/core';
 import { ReportTemplateService } from './../../service/report-template.service';
 import { getBaseLocation } from './../../service/common-functions';
 
+import {ViewChild} from '@angular/core';
+import {DataTable} from 'primeng/datatable';
+import {InputText} from  'primeng/inputtext';
+
 @Component({
   selector: 'app-report-template',
   templateUrl: './report-template.component.html',
   styleUrls: ['./report-template.component.css']
 })
 export class ReportTemplateComponent implements OnInit {
+
+  @ViewChild('dtTemplate') dataTable: DataTable;
+ 
 
   constructor(private reportTemplateService:ReportTemplateService) { }
 
@@ -22,6 +29,17 @@ export class ReportTemplateComponent implements OnInit {
   taskRun:boolean;
   public getBaseLocation = getBaseLocation;
   basePath:string;
+  globalFilter:string;
+
+  onFilter(e) {
+    //saving the filters
+    console.log(this.globalFilter);
+    if (!(this.globalFilter == null || this.globalFilter == undefined )){
+      localStorage.setItem("globalfilters-template", this.globalFilter);
+    }
+    console.log("filters - " +  JSON.stringify(this.dataTable.filters));
+    localStorage.setItem("filters-template", JSON.stringify(this.dataTable.filters));
+  }
   
   ngOnInit() {
     this.getReportTemplates();
@@ -29,6 +47,20 @@ export class ReportTemplateComponent implements OnInit {
     this.taskRun = false;
     this.basePath = "/" + getBaseLocation() + "/reportTask"; 
     console.log("basePath - " +  this.basePath);
+
+    //setting the filters
+    const filters = localStorage.getItem("filters-template");
+    if (filters) {
+      console.log("filters-template in init - " + JSON.parse(filters));
+      this.dataTable.filters = JSON.parse(filters);
+    }
+    const globalfilters = localStorage.getItem("globalfilters-template");
+    if (globalfilters != undefined || globalfilters != null) {
+      console.log("globalfilters-template in init - " + globalfilters);
+      this.globalFilter = globalfilters;
+    }
+
+
   }
 
 
