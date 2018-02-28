@@ -257,6 +257,15 @@ public class ReportWriterController {
 			return reportTaskUIs;
 		}
 		
+		@RequestMapping(value="/reportNameByTaskId/{id}", method = RequestMethod.GET)
+		  public @ResponseBody ReportTemplateUI reportNameByTaskId(@PathVariable Integer id) 
+		    		throws IOException {
+		    log.info("getReportTask" +  id);
+		    ReportTemplateUI reportTemplateUI = reportTaskService.getReportNameByTaskId(id);		    
+			return reportTemplateUI;
+			
+		}
+		
 		@RequestMapping(value="/deleteReportTask/{id}", method = RequestMethod.GET)
 		  public @ResponseBody ReportTask deleteReportTask(@PathVariable Integer id) 
 		    		throws IOException {

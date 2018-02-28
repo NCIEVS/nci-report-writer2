@@ -43,6 +43,7 @@ import gov.nih.nci.evs.reportwriter.web.support.FileUI;
 import gov.nih.nci.evs.reportwriter.web.support.ReportData;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTaskOutput;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTaskUI;
+import gov.nih.nci.evs.reportwriter.web.support.ReportTemplateUI;
 import gov.nih.nci.evs.reportwriter.web.support.TableHeader;
 
 @Service
@@ -235,6 +236,19 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		return reportTaskRepository.findOne(reportTaskId);
 
 	}
+	
+	@Transactional
+	public ReportTemplateUI getReportNameByTaskId(Integer reportTaskId) {
+		
+		ReportTask reportTask = reportTaskRepository.findOne(reportTaskId);
+		ReportTemplate  reportTemplate = reportTask.getReportTemplate();
+		ReportTemplateUI reportTemplateUI = new ReportTemplateUI();
+		reportTemplateUI.setName(reportTemplate.getName());
+		return reportTemplateUI;
+		
+		
+		
+	}
 
 	@Transactional
 	public ReportTask deleteReportTask(Integer reportTaskId) {
@@ -254,7 +268,9 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		String filePath = outputDirectory + "/" + lastDigitofId + "/Task-" + id + "/Task-" + id + "." + fileType;
 		log.info("filePath - " + filePath);
 		fileUI.setFilePath(filePath);
-		String fileName = "Task-" + id + "." + fileType;
+		ReportTemplateUI reportTemplateUI = getReportNameByTaskId(Integer.valueOf(id));
+		String fileName = reportTemplateUI.getName() + "-Task-" + id + "." + fileType;
+		//String fileName = "Task-" + id + "." + fileType;
 		log.info("fileName - " + fileName);
 		fileUI.setFileName(fileName);
 		InputStream is = new FileInputStream(filePath);

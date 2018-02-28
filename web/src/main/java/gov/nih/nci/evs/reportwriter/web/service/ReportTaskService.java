@@ -10,12 +10,15 @@ import gov.nih.nci.evs.reportwriter.web.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.web.support.FileUI;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTaskOutput;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTaskUI;
+import gov.nih.nci.evs.reportwriter.web.support.ReportTemplateUI;
 
 public interface ReportTaskService {
 	
 	public List <ReportTaskUI> getAllTasksExceptDeleted();
 	
 	public List <ReportTaskUI>  getAllDeletedTasks();
+	
+	public ReportTemplateUI getReportNameByTaskId(Integer reportTaskId);
 	
 	public void runReport(ReportTask reportTask);
 	

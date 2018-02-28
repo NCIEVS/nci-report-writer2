@@ -9,6 +9,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import {Lookup} from './../model/lookup';
 
 import {Task} from './../model/task';
+import {Template} from './../model/template';
 
 @Injectable()
 export class ReportTaskService {
@@ -27,9 +28,18 @@ export class ReportTaskService {
 
   }
 
+  getReportNameByTaskId(taskId): Observable<Template> {    
+    //return of(this.statuses);
+    console.log("calling getReportTask - service method - " + taskId );
+    return this.http.get<Template>("/reportwriter/reportNameByTaskId/" + taskId).pipe(
+      catchError(this.handleError(' reporttask', null))
+    );
+
+  }
+
   deleteReportTask(taskId):Observable<Task>{
     return this.http.get<Task>("/reportwriter/deleteReportTask/" + taskId).pipe(
-      catchError(this.handleError(' reporttasks', null))
+      catchError(this.handleError(' deleteReportTask', null))
     );
   }
 

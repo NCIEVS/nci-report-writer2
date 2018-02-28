@@ -7,6 +7,7 @@ import { getBaseLocation } from './../../service/common-functions';
 import {ViewChild} from '@angular/core';
 import {DataTable} from 'primeng/datatable';
 import {InputText} from  'primeng/inputtext';
+import {ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-report-template',
@@ -16,6 +17,7 @@ import {InputText} from  'primeng/inputtext';
 export class ReportTemplateComponent implements OnInit {
 
   @ViewChild('dtTemplate') dataTable: DataTable;
+ 
  
 
   constructor(private reportTemplateService:ReportTemplateService) { }
@@ -102,6 +104,7 @@ runTemplate(templateRow){
     ". Please check the status of the report in the All Report Tasks page.";
     this.taskRun = true;
     this.staticAlertClosed = false;
+    window.scrollTo(0,0);
     setTimeout(() => {this.staticAlertClosed = true; console.log("setting staticAlertClosed to true") }, 50000);
   });
 
