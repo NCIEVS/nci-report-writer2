@@ -29,7 +29,7 @@ export class ReportTaskOutputComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getReportTaskOutput();
+    
   }
 
   getReportTaskOutput(): void {
@@ -51,6 +51,7 @@ export class ReportTaskOutputComponent implements OnInit {
     console.log("calling getReportTask" + taskId );
     this.reportTaskService.getReportNameByTaskId(taskId).
     subscribe(template => {this.template = template;this.reportName = template.name; 
+      this.getReportTaskOutput();
     });
   }
 }
