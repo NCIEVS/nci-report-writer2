@@ -16,10 +16,11 @@ export class ReportTaskOutputComponent implements OnInit {
   taskId:number;
   reportTaskOutput:ReportTaskOutput;
   cols: any[];
+  colsOrig:any[];
   reportData:ReportData[];
   template:Template;
   reportName:string;
-
+  pageinationcount:string;
 
   columnOptions: Lookup[];
 
@@ -35,16 +36,34 @@ export class ReportTaskOutputComponent implements OnInit {
   getReportTaskOutput(): void {
     this.reportTaskService.getReportTaskData(this.taskId).
     subscribe(reportTaskOutput => {this.reportTaskOutput = reportTaskOutput;  
-      this.cols= this.reportTaskOutput.header;this.reportData = this.reportTaskOutput.data
+      
+      this.cols= this.reportTaskOutput.header;this.colsOrig= this.reportTaskOutput.header;this.reportData = this.reportTaskOutput.data
     
       this.columnOptions = [];
       for(let i = 0; i < this.cols.length; i++) {
           this.columnOptions.push({label: this.cols[i].header, value: this.cols[i]});
       }
     
+      let currentpageCount = 0 + 1;
+      let currentPageRows = 0 + 20;
+      if (currentPageRows > this.reportData.length){
+        currentPageRows = this.reportData.length;
+      }
+      this.pageinationcount = 'Showing ' +  currentpageCount + ' to ' + currentPageRows + ' of ' + this.reportData.length;
+
     
     });
   }
+
+
+  onPageChange(e) {    
+    let currentpageCount = e.first + 1;
+    let currentPageRows = e.first + e.rows;
+    if (currentPageRows > this.reportData.length){
+      currentPageRows = this.reportData.length;
+    }
+    this.pageinationcount = 'Showing ' +  currentpageCount + ' to ' + currentPageRows + ' of ' + this.reportData.length;
+}
 
 
   getReportTask(taskId): void {
