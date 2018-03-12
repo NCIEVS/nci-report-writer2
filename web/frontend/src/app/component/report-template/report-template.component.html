@@ -6,7 +6,8 @@
     <div *ngIf="taskRun">
         <p>
             <ngb-alert [type]="'success'" *ngIf="!staticAlertClosed" (close)="staticAlertClosed = true">
-                {{displayMessage}}.
+                <div [innerHTML]="displayMessage"></div>
+
                 <div>
                     <a href="#" routerLink="/reportTask" class="alert-link">Click here to go the All Report Tasks Page</a>.
                 </div>
@@ -16,6 +17,7 @@
     <br>
 
     <div class="ui-widget-header row">
+
         <div class="col-sm-6">
             <div class="input-group ">
                 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
@@ -26,7 +28,14 @@
             <div class="pull-right paginationCount">{{pageinationcount}}</div>
         </div>
     </div>
-    <p-dataTable #dtTemplate [value]="templates" (onPage)="onPageChange($event)" [responsive]="true" (onFilter)="onFilter($event)" [rows]="20" [paginator]="true" [alwaysShowPaginator]="true" [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[10,20,50]">
+    <div class="ui-widget-header row">
+        <div class="col-sm-6">
+            <button type="button" (click)="runTemplates()" pButton label="Run Template/Templates"></button>
+        </div>
+    </div>
+    <p-dataTable #dtTemplate [value]="templates" [(selection)]="selectedTemplates" (onPage)="onPageChange($event)" [responsive]="true" [headerCheckboxToggleAllPages]="true" (onFilter)="onFilter($event)" [rows]="20" [paginator]="true" [alwaysShowPaginator]="true"
+        [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[10,20,50]">
+        <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
         <p-column field="id" styleClass="col-button" header="Action">
             <ng-template let-templateRow="rowData" pTemplate="body">
                 <button type="button" pButton [routerLink]="['/createTemplate', templateRow.id]" icon="fa-pencil-square-o"></button>

@@ -42,6 +42,16 @@ export class ReportTemplateService {
 
     }
 
+
+    runReportTemplates(templates: Template[]): Observable<Task[]>{
+      
+      return this.http.post<Task[]>("/reportwriter/runReportTemplates", templates, httpOptions)
+      .pipe(tap((tasks: Task[]) => console.log("runReportTemplates")),
+            catchError(this.handleError<Task[]>('runReportTemplates'))
+      );
+      
+    }
+
     cloneTemplate(template:Template):  Observable<Template>{
       console.log("cloneTemplate ----- " + JSON.stringify(template));
       return this.http.post<Template>("/reportwriter/cloneTemplate" ,template, httpOptions).pipe(

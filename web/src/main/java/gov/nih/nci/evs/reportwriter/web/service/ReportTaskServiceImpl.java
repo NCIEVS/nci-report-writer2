@@ -107,6 +107,19 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 
 	}
 
+	public ReportTask createReportTask(ReportTemplate reportTemplate) {
+	
+		ReportTask reportTask = new ReportTask();
+		reportTask.setStatus("Pending");
+		reportTask.setReportTemplate(reportTemplate);
+		reportTask.setDateCreated(LocalDateTime.now());
+		reportTask.setDateLastUpdated(LocalDateTime.now());
+		reportTask.setCreatedBy("system");
+		reportTask.setLastUpdatedBy("system");
+		ReportTask reportTaskRet = save(reportTask);
+		return reportTaskRet;
+	}
+	
 	public List<ReportTaskUI> getAllDeletedTasks() {
 
 		List<ReportTask> reportTasks = (List<ReportTask>) reportTaskRepository.findByStatus("Deleted");

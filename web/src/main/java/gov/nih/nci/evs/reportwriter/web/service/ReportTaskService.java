@@ -24,6 +24,8 @@ public interface ReportTaskService {
 	
 	public ReportTask save(ReportTask reportTask);
 	
+	public ReportTask createReportTask(ReportTemplate RreportTemplate);
+	
 	public ReportTask findOne(Integer reportTaskId);
 	
 	public ReportTask deleteReportTask(Integer reportTaskId);

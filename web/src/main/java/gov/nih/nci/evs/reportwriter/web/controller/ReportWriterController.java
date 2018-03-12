@@ -366,16 +366,8 @@ public class ReportWriterController {
 	    		throws IOException { 
 			
 			ReportTemplate reportTemplate = reportTemplateService.findOne(id);
-			List<ReportTemplateColumn> columns = reportTemplate.getColumns();
-			ReportTask reportTask = new ReportTask();
-			reportTask.setStatus("Pending");
-			reportTask.setReportTemplate(reportTemplate);
-			reportTask.setDateCreated(LocalDateTime.now());
-			reportTask.setDateLastUpdated(LocalDateTime.now());
-			reportTask.setCreatedBy("system");
-			reportTask.setLastUpdatedBy("system");
-			ReportTask reportTaskRet = reportTaskService.save(reportTask);
-			log.info("TaskId" + reportTask.getId());
+			ReportTask reportTaskRet = reportTaskService.createReportTask(reportTemplate);
+			log.info("TaskId" + reportTaskRet.getId());
             reportTaskService.runReport(reportTaskRet);
             log.info("Run Report Submitted");
 
@@ -420,6 +412,26 @@ public class ReportWriterController {
 					file.getRawFileStream().close();
 				}
 			}
+		}
+		
+		
+		@RequestMapping(method = RequestMethod.POST, value = "/runReportTemplates", consumes = "application/json", produces = "application/json")
+		public @ResponseBody ArrayList<ReportTaskUI> runReportTemplates(@RequestBody final ArrayList<ReportTemplateUI> reportTemplates) throws JsonProcessingException {
+			ArrayList<ReportTaskUI> reportTasks = new ArrayList<ReportTaskUI>();
+			for (ReportTemplateUI reportTemplateUI:reportTemplates) {				
+				log.info("task id - " + reportTemplateUI.getId() + " report name - " + reportTemplateUI.getName());
+				ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateUI.getId());
+				ReportTask reportTaskRet = reportTaskService.createReportTask(reportTemplate);
+				log.info("TaskId" + reportTaskRet.getId());
+				ReportTaskUI reportTaskUI = new ReportTaskUI();
+				reportTaskUI.setReportTemplateName(reportTemplateUI.getName());
+				reportTaskUI.setReportTemplateId(reportTaskRet.getId());				
+				reportTaskService.runReport(reportTaskRet);
+				log.info("Run Report Submitted");
+				reportTasks.add(reportTaskUI);
+				
+			}
+			return reportTasks;
 		}
 
 }

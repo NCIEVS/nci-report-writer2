@@ -23,9 +23,11 @@ export class ReportTemplateComponent implements OnInit {
   constructor(private reportTemplateService:ReportTemplateService) { }
 
   templates: Template[];
+  selectedTemplates: Template[];
   totalRecordsCount:number;
   pageinationcount:string;
   task:Task;
+  tasks:Task[];
   staticAlertClosed:boolean;
   displayMessage:string;
   taskRun:boolean;
@@ -66,6 +68,26 @@ export class ReportTemplateComponent implements OnInit {
   }
 
 
+  runTemplates(): void {
+
+    console.log("In runTemplates - " + JSON.stringify(this.selectedTemplates));
+    
+    this.reportTemplateService.runReportTemplates(this.selectedTemplates).
+    subscribe(tasks => {this.tasks = tasks;console.log(JSON.stringify(tasks));  
+      this.displayMessage = ""; 
+      for (let task of tasks) {
+        this.displayMessage = this.displayMessage + " A task with Id - " + task.reportTemplateId + " has been created for the template - " + task.reportTemplateName + ".<br>";
+      }
+     
+      this.displayMessage =  this.displayMessage + "Please check the status of the report in the All Report Tasks page.";
+      this.taskRun = true;
+      this.staticAlertClosed = false;
+      window.scrollTo(0,0);
+      setTimeout(() => {this.staticAlertClosed = true; console.log("setting staticAlertClosed to true") }, 50000);
+    });
+
+  }
+
   getReportTemplates(): void {
     this.reportTemplateService.getReportTemplates().
     subscribe(templates => {this.templates = templates; console.log(JSON.stringify(this.templates));this.totalRecordsCount = this.templates.length;
@@ -100,8 +122,8 @@ runTemplate(templateRow){
   
   this.reportTemplateService.runReportTemplate(templateRow.id).
   subscribe(task => {this.task = task;console.log(JSON.stringify(task));    
-    this.displayMessage = " A task with id - " + task.id + " has been created for the template " + templateRow.name + 
-    ". Please check the status of the report in the All Report Tasks page.";
+    this.displayMessage = " A task with Id - " + task.id + " has been created for the template " + templateRow.name + ". <br>"
+    "Please check the status of the report in the All Report Tasks page.";
     this.taskRun = true;
     this.staticAlertClosed = false;
     window.scrollTo(0,0);
