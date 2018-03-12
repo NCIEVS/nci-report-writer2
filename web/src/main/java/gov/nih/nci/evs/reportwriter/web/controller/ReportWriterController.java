@@ -210,6 +210,33 @@ public class ReportWriterController {
 
 	}
 	
+	//Creating a new Template	
+		@RequestMapping(method = RequestMethod.POST, value = "/cloneTemplate", consumes = "application/json", produces = "application/json")
+		public @ResponseBody String cloneTemplate(@RequestBody final ReportTemplateUI reportTemplate) throws JsonProcessingException {
+
+				
+				log.info("Id **- " + reportTemplate.getId());
+				log.info(reportTemplate.getName());
+				log.info(reportTemplate.getStatus());
+		     		
+				ReportTemplateUI reportTemplateRet = reportTemplateService.clone(reportTemplate);
+				
+				//List<ReportTemplateColumn> reportTemplateColumns =  reportTemplateColumnService.getReportColumnsByReportTemplateID(reportTemplateRet.getId());
+				// reportTemplateRet.setColumns(reportTemplateColumns);
+				
+				SimpleFilterProvider filter = new SimpleFilterProvider();
+				filter.setFailOnUnknownId(false);
+		        ObjectMapper mapper = new ObjectMapper();
+		        String reportTemplateRetStr = mapper.writer(filter).writeValueAsString(reportTemplateRet);
+		        
+		        //log.info("test - " + reportTemplateRetStr);
+				
+				return reportTemplateRetStr;
+				
+				
+
+		}
+	
 	// Get all Templates
 	@RequestMapping(value = "/reporttemplates", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String reporttemplates() throws JsonProcessingException {

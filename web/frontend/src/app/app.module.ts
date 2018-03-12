@@ -54,6 +54,7 @@ import { LoaderComponent } from './component/loader/loader.component';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { getBaseLocation } from './service/common-functions';
+import { CloneTemplateComponent } from './component/clone-template/clone-template.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { getBaseLocation } from './service/common-functions';
     ReportwriterHomeComponent,
     HeaderComponent,
     FooterComponent,
-    LoaderComponent
+    LoaderComponent,
+    CloneTemplateComponent
   ],
   imports: [
     BrowserModule,

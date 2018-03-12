@@ -7,6 +7,7 @@ import {ReportTemplateViewComponent}       from './component/report-template-vie
 import {AllReportTaskStatusComponent}       from './component/all-report-task-status/all-report-task-status.component';
 import {ReportTaskOutputComponent}       from './component/report-task-output/report-task-output.component';
 import {ReportwriterHomeComponent}       from './component/reportwriter-home/reportwriter-home.component';
+import {CloneTemplateComponent}       from './component/clone-template/clone-template.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -16,7 +17,9 @@ const routes: Routes = [
   { path: 'reportTemplateView/:id',     component: ReportTemplateViewComponent },
   { path: 'reportTask',     component: AllReportTaskStatusComponent },
   { path: 'reportTaskOutput/:id',     component: ReportTaskOutputComponent },
-  { path: 'home',     component: ReportwriterHomeComponent }
+  { path: 'home',     component: ReportwriterHomeComponent },
+  { path: 'cloneTemplate/:id',  component: CloneTemplateComponent },
+  { path: 'cloneTemplate',  component: CloneTemplateComponent },
   
 ];
  

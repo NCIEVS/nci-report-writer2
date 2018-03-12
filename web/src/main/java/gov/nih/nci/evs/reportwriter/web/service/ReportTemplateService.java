@@ -16,6 +16,8 @@ public interface ReportTemplateService {
 	public ReportTemplateUI create(ReportTemplateUI reportTemplate);
 	
 	public ReportTemplateUI save(ReportTemplateUI reportTemplate);
+	
+	public ReportTemplateUI clone(ReportTemplateUI reportTemplate);
 
 	
 	

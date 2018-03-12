@@ -37,6 +37,8 @@ export class CreateTemplateComponent implements OnInit {
 
   template = new Template();
 
+  clonetemplate : Template;
+
   templateRowUI = new TemplateRow();
   templateRowAdd = new TemplateRow();
 
@@ -45,6 +47,7 @@ export class CreateTemplateComponent implements OnInit {
   templateButtonName: string;
 
   templateRows: TemplateRow[];
+
 
   displayMessage: string;
 
@@ -58,6 +61,9 @@ export class CreateTemplateComponent implements OnInit {
   showAddRow() {
     this.displayAddRow = true;
   }
+
+ 
+
 
   deleteTemplateRow(templateRow) {
     console.log("In deleteTemplateRow - templateRow" + JSON.stringify(templateRow));

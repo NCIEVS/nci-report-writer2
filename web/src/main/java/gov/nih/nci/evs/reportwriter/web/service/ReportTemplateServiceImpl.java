@@ -163,6 +163,58 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 	}
 	
 	
+	
+	public ReportTemplateUI clone(ReportTemplateUI reportTemplate) {
+		ReportTemplate oldReportTemplate = reportTemplateRepository.findOne(reportTemplate.getId());
+		
+		List<ReportTemplateColumn> oldReportTemplateColumns = oldReportTemplate.getColumns();	
+		
+		
+		ReportTemplate newReportTemplate = new ReportTemplate();
+		newReportTemplate.setLevel(oldReportTemplate.getLevel());
+		newReportTemplate.setName(reportTemplate.getName());
+		newReportTemplate.setRootConceptCode(oldReportTemplate.getRootConceptCode());
+		newReportTemplate.setType(oldReportTemplate.getType());
+		newReportTemplate.setAssociation(oldReportTemplate.getAssociation());
+		newReportTemplate.setStatus(oldReportTemplate.getStatus());
+		newReportTemplate.setSortColumn(oldReportTemplate.getSortColumn());		
+		newReportTemplate.setCreatedBy("system");
+		newReportTemplate.setDateCreated(LocalDateTime.now());
+		newReportTemplate.setDateLastUpdated(LocalDateTime.now());		
+		newReportTemplate.setLastUpdatedBy("system");
+	
+		ReportTemplate newReportTemplateRet =  reportTemplateRepository.save(newReportTemplate);
+		
+		ReportTemplate newReportTemplatedb = reportTemplateRepository.findOne(newReportTemplateRet.getId());
+		
+				
+		for (ReportTemplateColumn oldReportTemplateColumn : oldReportTemplateColumns) {	
+			ReportTemplateColumn newReportTemplateColumn = new ReportTemplateColumn();
+			newReportTemplateColumn.setColumnNumber(oldReportTemplateColumn.getColumnNumber());
+			newReportTemplateColumn.setLabel(oldReportTemplateColumn.getLabel());
+			newReportTemplateColumn.setDisplay(oldReportTemplateColumn.getDisplay());
+			newReportTemplateColumn.setProperty(oldReportTemplateColumn.getProperty());
+			newReportTemplateColumn.setPropertyType(oldReportTemplateColumn.getPropertyType());
+			newReportTemplateColumn.setSource(oldReportTemplateColumn.getSource());
+			newReportTemplateColumn.setGroup(oldReportTemplateColumn.getGroup());
+			newReportTemplateColumn.setSubsource(oldReportTemplateColumn.getSubsource());	
+			newReportTemplateColumn.setReportTemplate(newReportTemplatedb);
+			newReportTemplateColumn.setCreatedBy("system");
+			newReportTemplateColumn.setDateCreated(LocalDateTime.now());
+			newReportTemplateColumn.setDateLastUpdated(LocalDateTime.now());			
+			newReportTemplateColumn.setLastUpdatedBy("system");
+		    reportTemplateColumnRepository.save(newReportTemplateColumn);
+
+			
+
+		}
+		
+		reportTemplate.setId(newReportTemplatedb.getId());
+		
+		return reportTemplate;
+	}
+	
+	
 	public ReportTemplate findOne(Integer id) {
 		return reportTemplateRepository.findOne(id);
 		

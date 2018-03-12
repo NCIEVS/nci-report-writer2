@@ -42,6 +42,14 @@ export class ReportTemplateService {
 
     }
 
+    cloneTemplate(template:Template):  Observable<Template>{
+      console.log("cloneTemplate ----- " + JSON.stringify(template));
+      return this.http.post<Template>("/reportwriter/cloneTemplate" ,template, httpOptions).pipe(
+        tap((template: Template) => console.log("New Template created")),
+        catchError(this.handleError<Template>('cloneTemplate'))
+      );
+    }
+
     getReportTemplates(): Observable<Template[]> {    
       //return of(this.statuses);
      
