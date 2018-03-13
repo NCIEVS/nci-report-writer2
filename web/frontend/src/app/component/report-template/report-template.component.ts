@@ -71,6 +71,11 @@ export class ReportTemplateComponent implements OnInit {
   runTemplates(): void {
 
     console.log("In runTemplates - " + JSON.stringify(this.selectedTemplates));
+
+    if ((this.selectedTemplates == undefined) || this.selectedTemplates.length < 1){
+      alert("Please select one or more templates to run");
+      return;
+    }
     
     this.reportTemplateService.runReportTemplates(this.selectedTemplates).
     subscribe(tasks => {this.tasks = tasks;console.log(JSON.stringify(tasks));  
