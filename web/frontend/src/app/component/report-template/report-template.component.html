@@ -43,9 +43,9 @@
                 <button type="button" *ngIf="templateRow.status == 'Active'" pButton (click)="runTemplate(templateRow)" label="Run"></button>
             </ng-template>
         </p-column>
-        <p-column field="id" header="Template Id" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+        <p-column field="id" [style]="{'width':'55px'}" header="Id" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
-        <p-column field="status" header="Status" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+        <p-column field="status" [style]="{'width':'100px'}" header="Status" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="dateCreated" header="Date Created" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="dateLastUpdated" header="Date Last Updated" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains">
 
