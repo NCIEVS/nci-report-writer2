@@ -33,8 +33,8 @@
             <button type="button" (click)="runTemplates()" pButton label="Run Template/Templates"></button>
         </div>
     </div>
-    <p-dataTable #dtTemplate [value]="templates" [(selection)]="selectedTemplates" (onPage)="onPageChange($event)" [responsive]="true" [headerCheckboxToggleAllPages]="true" (onFilter)="onFilter($event)" [rows]="20" [paginator]="true" [alwaysShowPaginator]="true"
-        [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[10,20,50]">
+    <p-dataTable #dtTemplate [value]="templates" [(selection)]="selectedTemplates" (onRowSelect)="onRowSelect($event)" (onPage)="onPageChange($event)" [responsive]="true" [headerCheckboxToggleAllPages]="true" (onFilter)="onFilter($event)" [rows]="20" [paginator]="true"
+        [alwaysShowPaginator]="true" [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[10,20,50]">
         <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
         <p-column field="id" styleClass="col-button" header="Action">
             <ng-template let-templateRow="rowData" pTemplate="body">
@@ -43,6 +43,7 @@
                 <button type="button" *ngIf="templateRow.status == 'Active'" pButton (click)="runTemplate(templateRow)" label="Run"></button>
             </ng-template>
         </p-column>
+        <p-column field="id" header="Template Id" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="status" header="Status" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="dateCreated" header="Date Created" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>

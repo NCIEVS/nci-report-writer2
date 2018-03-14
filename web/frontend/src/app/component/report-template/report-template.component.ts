@@ -8,6 +8,7 @@ import {ViewChild} from '@angular/core';
 import {DataTable} from 'primeng/datatable';
 import {InputText} from  'primeng/inputtext';
 import {ElementRef } from '@angular/core';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-report-template',
@@ -68,10 +69,25 @@ export class ReportTemplateComponent implements OnInit {
   }
 
 
+  onRowSelect(event) {
+    console.log(event.data.status);
+    if (event.data.status == "Deleted"){
+      alert("This template will not run since the status is Deleted.");
+      this.selectedTemplates = this.selectedTemplates.filter( function(templateIn) {
+        return templateIn.status != "Deleted";
+     });
+    }
+    
+  
+}
+
+
   runTemplates(): void {
 
     console.log("In runTemplates - " + JSON.stringify(this.selectedTemplates));
+  
 
+   
     if ((this.selectedTemplates == undefined) || this.selectedTemplates.length < 1){
       alert("Please select one or more templates to run");
       return;

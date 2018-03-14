@@ -42,7 +42,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 	
 	public List <ReportTemplateUI> findAll() {
 		
-		List <ReportTemplate>  reportTemplates = (List <ReportTemplate>)reportTemplateRepository.findAll();
+		List <ReportTemplate>  reportTemplates = (List <ReportTemplate>)reportTemplateRepository.findAllOrderByIdDesc();
 		
 		List<ReportTemplateUI> reportTemplateUIs = new ArrayList<ReportTemplateUI>();
 		

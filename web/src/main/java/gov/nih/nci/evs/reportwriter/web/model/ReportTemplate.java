@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "report_template")
-@NamedQuery(name = "ReportTemplate.findAll", query = "SELECT r FROM ReportTemplate r")
+@NamedQuery(name = "ReportTemplate.findAllOrderByIdDesc", query = "SELECT r FROM ReportTemplate r order by r.id desc")
 @JsonFilter("yamlFilter")
 public class ReportTemplate implements Serializable {
 	private static final long serialVersionUID = 1L;

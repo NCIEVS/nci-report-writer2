@@ -41,7 +41,7 @@ public class Application extends SpringBootServletInitializer {
     public Executor asyncExecutor() {
     	log.info("In asyncExecutor methid of SpringApplication****");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);
+        executor.setCorePoolSize(5);
         executor.setMaxPoolSize(5);
         executor.setQueueCapacity(100);
         executor.setThreadNamePrefix("ReportWriter-");
