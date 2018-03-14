@@ -74,10 +74,13 @@
         </div>
 
         <button type="button" (click)="showAddRow()" pButton icon="fa-external-link-square" label="Add Row"></button>
+        <button type="button" (click)="moveRowUp()" pButton icon="fa-arrow-up"></button>
+        <button type="button" (click)="moveRowDown()" pButton icon="fa-arrow-down"></button>
         <br>
         <br>
 
-        <p-dataTable [value]="templateRows" [editable]="true" expandableRows="true">
+        <p-dataTable [immutable]=false [value]="templateRows" [(selection)]="selectedTemplateRow" [editable]="true" expandableRows="true">
+            <p-column [style]="{'width':'38px'}" selectionMode="single"></p-column>
             <p-column styleClass="col-button" [style]="{'width':'50px'}">
                 <ng-template pTemplate="header">
                     <button type="button" pButton icon="fa fa-trash"></button>

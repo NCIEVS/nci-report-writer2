@@ -41,6 +41,7 @@ export class CreateTemplateComponent implements OnInit {
 
   templateRowUI = new TemplateRow();
   templateRowAdd = new TemplateRow();
+  selectedTemplateRow: TemplateRow;
 
 
   templateCreated: boolean;
@@ -62,8 +63,37 @@ export class CreateTemplateComponent implements OnInit {
     this.displayAddRow = true;
   }
 
- 
+arraymove(arr, fromIndex, toIndex) {
+    var element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+}
 
+
+ 
+  moveRowUp(){
+    console.log("selected row - " + JSON.stringify(this.selectedTemplateRow));
+    var fromIndex = this.templateRows.indexOf(this.selectedTemplateRow);
+    console.log("index - " + fromIndex);
+    if (fromIndex == 0){
+      return;
+    }
+    console.log("selected row - " + JSON.stringify(this.templateRows));
+    this.arraymove(this.templateRows,fromIndex,fromIndex-1);
+    console.log("selected row - " + JSON.stringify(this.templateRows));
+  }
+
+  moveRowDown(){
+    console.log("selected row - " + JSON.stringify(this.selectedTemplateRow));
+    var fromIndex = this.templateRows.indexOf(this.selectedTemplateRow);
+    console.log("index - " + fromIndex);
+    if (fromIndex == (this.templateRows.length -1)){
+      return;
+    }
+    console.log("selected row - " + JSON.stringify(this.templateRows));
+    this.arraymove(this.templateRows,fromIndex,fromIndex+1);
+    console.log("selected row - " + JSON.stringify(this.templateRows));
+  }
 
   deleteTemplateRow(templateRow) {
     console.log("In deleteTemplateRow - templateRow" + JSON.stringify(templateRow));
