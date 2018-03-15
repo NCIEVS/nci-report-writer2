@@ -294,6 +294,12 @@ arraymove(arr, fromIndex, toIndex) {
 
   onSubmitTemplate(value) {
     console.log("** - *** " + value)
+    if(this.templateRows != undefined ){
+      if (this.template.sortColumn > this.templateRows.length){
+        alert("Sort Column cannot be greater than the number of template rows. The changes made to the template will not be saved. Please correct the value and then click on Save Changes/Create Template.");
+        return;
+      }
+    }
 
     let count = 1;
     for (let templateRow of this.templateRows) {
