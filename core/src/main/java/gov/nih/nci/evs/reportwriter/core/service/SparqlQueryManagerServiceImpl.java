@@ -220,6 +220,10 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 				case "P384":
 					evsAxiom.setTermSource(value);
 					break;
+				case "xref-source":
+                    evsAxiom.setXrefSource(value);
+                    break;
+				
 				default:
 
 				}

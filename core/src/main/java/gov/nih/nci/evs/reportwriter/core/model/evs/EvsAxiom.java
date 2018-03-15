@@ -23,6 +23,7 @@ public class EvsAxiom {
 	String subsourceName;
 	String termGroup;
 	String termSource;
+	String xrefSource;
 
 	public String getAnnotatedProperty() {
 		return annotatedProperty;
@@ -144,5 +145,11 @@ public class EvsAxiom {
 	public void setTermSource(String termSource) {
 		this.termSource = termSource;
 	}
+    public String getXrefSource() {
+        return xrefSource;
+    }
+    public void setXrefSource(String xrefSource) {
+        this.xrefSource = xrefSource;
+    }
 }
 

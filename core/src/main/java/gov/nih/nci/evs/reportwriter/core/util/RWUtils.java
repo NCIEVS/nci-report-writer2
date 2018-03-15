@@ -198,6 +198,8 @@ public class RWUtils {
 				values = getDefinition(column,conceptAxioms);
 			} else if (propertyType.equals("ALT_DEFINITION")) {
 				values = getDefinition(column,conceptAxioms);
+            } else if (propertyType.equals("hasDbXref")) {
+                values = getDbXref(column,conceptAxioms);
 			} else if (propertyType.equals("Associated Concept Code")) {
 				values = EVSUtils.getProperty(property, parentConcept.getProperties());
 			} else if (propertyType.equals("Associated Concept Property")) {
@@ -468,6 +470,68 @@ public class RWUtils {
         }	
         */
 		
+		return values;
+	}
+	
+	/**
+	 * Find DbXref axioms that match the search criteria.
+	 * 
+	 * @param column Template column definiton.
+	 * @param axioms List of concept axioms
+	 * @return List of definitions that match the search criteria.
+	 */
+	public ArrayList <String> getDbXref(TemplateColumn column,List <EvsAxiom> axioms) {
+		ArrayList <String> values = new ArrayList<String>();
+		
+		List <EvsAxiom>axiomsCopy = new ArrayList<EvsAxiom>(axioms);
+		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>();
+		String property = column.getProperty();
+		String defSource = column.getSource();
+		String attr = column.getGroup();
+		String display = column.getDisplay();
+
+		
+		List <EvsAxiom>axioms1 = new ArrayList<EvsAxiom>();
+		if (property != null) {
+			for (EvsAxiom axiom: axiomsCopy) {
+			    if (property.equals(axiom.getAnnotatedProperty())) {
+			    	axioms1.add(axiom);
+			    }
+			}
+			axiomsKeep = new ArrayList<EvsAxiom>(axioms1);
+		}
+
+
+		List <EvsAxiom>axioms2 = new ArrayList<EvsAxiom>();
+		if (defSource != null) {
+			for (EvsAxiom axiom: axioms1) {
+			    if (defSource.equals(axiom.getXrefSource())) {
+			    	axioms2.add(axiom);
+			    }
+			}
+			axiomsKeep = new ArrayList<EvsAxiom>(axioms2);
+		}
+
+		List <EvsAxiom>axioms3 = new ArrayList<EvsAxiom>();
+		if (attr != null) {
+			for (EvsAxiom axiom: axioms2) {
+			    if (attr.equals(axiom.getAttr())) {
+			    	axioms3.add(axiom);
+			    }
+			}
+			axiomsKeep = new ArrayList<EvsAxiom>(axioms3);
+		}
+
+		for (EvsAxiom axiom: axiomsKeep) {
+			if (display.equals("property")) {
+				values.add(axiom.getAnnotatedTarget());
+			} else if (display.equals("subsource_code")) {
+				values.add(axiom.getSourceCode());
+			} else {
+			  // Don't do anything at this time	
+			}
+		}
+
 		return values;
 	}
 }
