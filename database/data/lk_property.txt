@@ -110,3 +110,4 @@ P95~@~Editor_Note~@@~
 P96~@~Gene_Encodes_Product~@@~
 P97~@~DEFINITION~@@~
 P98~@~DesignNote~@@~
+hasDbXref~@~hasDbXref~@@~

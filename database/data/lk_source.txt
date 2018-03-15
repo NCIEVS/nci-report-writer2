@@ -16,6 +16,7 @@ GAIA~@~GAIA~@@~
 GENC~@~GENC~@@~
 HL7~@~HL7~@@~
 ICH~@~ICH~@@~
+IMDRF~@~IMDRF~@@~
 JAX~@~JAX~@@~
 KEGG~@~KEGG~@@~
 NCI~@~NCI~@@~

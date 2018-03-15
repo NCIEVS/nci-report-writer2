@@ -13,3 +13,4 @@ Associated Concept Property~@~Associated Concept Property~@@~
 2nd CDRH Parent Code~@~2nd CDRH Parent Code~@@~
 1st CDRH Parent Property~@~1st CDRH Parent Property~@@~
 2nd CDRH Parent Property~@~2nd CDRH Parent Property~@@~
+hasDbXref~@~hasDbXref~@@~
