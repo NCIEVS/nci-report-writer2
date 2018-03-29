@@ -80,7 +80,21 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 			Bindings[] bindings = sparqlResult.getResults().getBindings();
 			for (Bindings b : bindings) {
 				EvsProperty evsProperty = new EvsProperty();
-				evsProperty.setCode(b.getPropertyCode().getValue());
+				/*
+				 * If the code does not exist, then the property is an external
+				 * property, so we need to handle as a special case.
+				 */
+				if (b.getPropertyCode() != null) {
+					evsProperty.setCode(b.getPropertyCode().getValue());
+				} else {
+					String property = b.getProperty().getValue();
+					String [] strs = property.split("#");
+					try {
+						evsProperty.setCode(strs[1]);
+			     	} catch (Exception ex) {
+			     		evsProperty.setCode("");
+			     	}
+				}			
 				evsProperty.setLabel(b.getPropertyLabel().getValue());
 				evsProperty.setValue(b.getPropertyValue().getValue());
 				evsProperties.add(evsProperty);

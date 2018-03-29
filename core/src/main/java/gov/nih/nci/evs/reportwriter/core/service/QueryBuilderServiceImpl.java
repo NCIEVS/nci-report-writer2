@@ -62,14 +62,14 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 	public String constructPropertyQuery(String conceptCode, String namedGraph) {
 
 		StringBuffer query = new StringBuffer();
-		query.append("SELECT ?propertyCode  ?propertyLabel ?propertyValue\n");
+		query.append("SELECT ?property ?propertyCode  ?propertyLabel ?propertyValue\n");
 		query.append("{ GRAPH <" + namedGraph + ">");
 		query.append("  { ?concept a owl:Class .\n");
 		query.append("    ?concept :NHC0 " + "\"" + conceptCode + "\" .\n");
 		query.append("    ?concept ?property ?propertyValue .");
 		query.append("    ?property a owl:AnnotationProperty .\n");
 		query.append("    ?property rdfs:label ?propertyLabel .\n");
-		query.append("    ?property :NHC0 ?propertyCode\n");
+		query.append("    OPTIONAL { ?property :NHC0 ?propertyCode }\n");
 		query.append("  }\n");
 		query.append("}\n");
 		return query.toString();

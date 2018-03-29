@@ -198,8 +198,11 @@ public class RWUtils {
 				values = getDefinition(column,conceptAxioms);
 			} else if (propertyType.equals("ALT_DEFINITION")) {
 				values = getDefinition(column,conceptAxioms);
+			/*
+			 * Not needed because hasDbXref is now a property only. Mar 29, 2018
             } else if (propertyType.equals("hasDbXref")) {
                 values = getDbXref(column,conceptAxioms);
+            */
 			} else if (propertyType.equals("Associated Concept Code")) {
 				values = EVSUtils.getProperty(property, parentConcept.getProperties());
 			} else if (propertyType.equals("Associated Concept Property")) {

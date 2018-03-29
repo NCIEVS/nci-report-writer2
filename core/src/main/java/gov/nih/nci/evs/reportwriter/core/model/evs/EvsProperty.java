@@ -23,4 +23,10 @@ public class EvsProperty {
 	public void setValue(String value) {
 		this.value = value;
 	}
+	
+	public String toString() {
+		return "Code: " + this.code + "\n" +
+	           " Label: " + this.label + "\n" +
+			   " Value: " + this.value;
+	}	
 }
