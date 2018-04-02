@@ -45,7 +45,18 @@
         </p-column>
         <p-column field="id" [style]="{'width':'55px'}" header="Id" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
-        <p-column field="status" [style]="{'width':'100px'}" header="Status" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+        <!-- <p-column field="status" header="Status" [filter]="true" [style]="{'width':'10%'}" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+         <p-column field="status" [style]="{'width':'100%'}" header="Status" [filter]="true" filterMatchMode="equals">
+            <ng-template pTemplate="filter" let-col>
+                <p-dropdown [options]="statuses" [style]="{'width':'100%'}" (onChange)="dtTemplate.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+            </ng-template>
+        </p-column>-->
+        <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [style]="{'width':'10%'}">
+            <ng-template pTemplate="filter" let-col>
+                <p-dropdown [options]="statuses" [(ngModel)]="selectedStatus" [style]="{'width':'100%'}" (onChange)="dtTemplate.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+            </ng-template>
+        </p-column>
+
         <p-column field="dateCreated" header="Date Created" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="dateLastUpdated" header="Date Last Updated" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains">
 

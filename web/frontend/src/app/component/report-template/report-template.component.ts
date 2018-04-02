@@ -3,12 +3,15 @@ import { Template } from './../../model/template';
 import { Component, OnInit } from '@angular/core';
 import { ReportTemplateService } from './../../service/report-template.service';
 import { getBaseLocation } from './../../service/common-functions';
+import { LookupvaluesTemplateService } from './../../service/lookupvalues-template.service';
 
 import {ViewChild} from '@angular/core';
 import {DataTable} from 'primeng/datatable';
 import {InputText} from  'primeng/inputtext';
 import {ElementRef } from '@angular/core';
 import { forEach } from '@angular/router/src/utils/collection';
+
+import { Lookup } from './../../model/lookup';
 
 @Component({
   selector: 'app-report-template',
@@ -21,7 +24,10 @@ export class ReportTemplateComponent implements OnInit {
  
  
 
-  constructor(private reportTemplateService:ReportTemplateService) { }
+  constructor(private reportTemplateService:ReportTemplateService, private lookupvaluesTemplateService: LookupvaluesTemplateService) { 
+
+    this.getStatuses();
+  }
 
   templates: Template[];
   selectedTemplates: Template[];
@@ -35,6 +41,9 @@ export class ReportTemplateComponent implements OnInit {
   public getBaseLocation = getBaseLocation;
   basePath:string;
   globalFilter:string;
+  statuses: Lookup[];
+  selectedStatus:string;
+  filterObject:any;
 
   onFilter(e) {
     //saving the filters
@@ -42,8 +51,10 @@ export class ReportTemplateComponent implements OnInit {
     if (!(this.globalFilter == null || this.globalFilter == undefined )){
       localStorage.setItem("globalfilters-template", this.globalFilter);
     }
-    console.log("filters - " +  JSON.stringify(this.dataTable.filters));
-    localStorage.setItem("filters-template", JSON.stringify(this.dataTable.filters));
+    if (this.dataTable != undefined){
+      console.log("filters - " +  JSON.stringify(this.dataTable.filters));
+      localStorage.setItem("filters-template", JSON.stringify(this.dataTable.filters));
+    }
   }
   
   ngOnInit() {
@@ -52,12 +63,33 @@ export class ReportTemplateComponent implements OnInit {
     this.taskRun = false;
     this.basePath = "/" + getBaseLocation() + "/reportTask"; 
     console.log("basePath - " +  this.basePath);
+     
+  
 
     //setting the filters
     const filters = localStorage.getItem("filters-template");
     if (filters) {
       console.log("filters-template in init - " + JSON.parse(filters));
-      this.dataTable.filters = JSON.parse(filters);
+      this.filterObject = JSON.parse(filters);
+
+      if (this.filterObject.status == undefined ||  this.filterObject.status == null){
+        this.filterObject.status = {};
+        this.filterObject.status.value = "Active";
+        this.filterObject.status.matchMode = "equals";
+        this.selectedStatus = "Active";
+      }else{
+        this.selectedStatus =  this.filterObject.status.value;
+      }
+      
+      this.dataTable.filters =  this.filterObject;
+    } else{
+      this.filterObject = {};
+      this.filterObject.status = {};
+      this.filterObject.status.value = "Active";
+      this.selectedStatus = "Active";
+      this.filterObject.status.matchMode = "equals";
+      this.dataTable.filters =  this.filterObject;
+
     }
     const globalfilters = localStorage.getItem("globalfilters-template");
     if (globalfilters != undefined || globalfilters != null) {
@@ -65,6 +97,7 @@ export class ReportTemplateComponent implements OnInit {
       this.globalFilter = globalfilters;
     }
 
+    
 
   }
 
@@ -153,5 +186,8 @@ runTemplate(templateRow){
 
 }
 
+getStatuses(): void {
+  this.lookupvaluesTemplateService.getStatuses().subscribe(statuses => this.statuses = statuses);
+}
 
 }
