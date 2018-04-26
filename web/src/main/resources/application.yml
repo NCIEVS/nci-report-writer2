@@ -70,7 +70,7 @@ logging:
         org.springframework.boot: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT:WARN}
         org.springframework.data.jpa: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_JPA:WARN}
         org.springframework.data.rest: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_REST:WARN}
-        gov.nih.nci.evs.reportwriter: ${LOGGING_LEVEL_GOV_EVS_RW:INFO}
+        gov.nih.nci.evs.reportwriter: ${LOGGING_LEVEL_GOV_NIH_NCI_EVS_RW:INFO}
 gov:
   nih:
     nci:
