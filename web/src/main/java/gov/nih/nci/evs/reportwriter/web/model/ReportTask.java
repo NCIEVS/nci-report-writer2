@@ -30,6 +30,7 @@ public class ReportTask implements Serializable {
 	private String lastUpdatedBy;
 	private ReportTemplate reportTemplate;
 	private String status;
+	private String version;
 
 	public ReportTask() {
 	}
@@ -129,5 +130,14 @@ public class ReportTask implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+	
 
 }

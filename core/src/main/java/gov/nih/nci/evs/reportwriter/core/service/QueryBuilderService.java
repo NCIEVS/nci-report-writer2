@@ -16,4 +16,5 @@ public interface QueryBuilderService {
 
 	public String constructConceptInSubsetQuery(String conceptCode, String namedGraph);
 
+	public String constructVersionInfoQuery(String namedGraph);
 }

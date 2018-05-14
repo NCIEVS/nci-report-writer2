@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.core.properties.CoreProperties;
 import gov.nih.nci.evs.reportwriter.core.properties.StardogProperties;
 import gov.nih.nci.evs.reportwriter.core.service.ReportWriter;
@@ -98,7 +99,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 				txtDateCompleted = reportTask.getDateCompleted().format(formatter);
 			}
 			reportTaskUI.setDateCompleted(txtDateCompleted);
-
+			reportTaskUI.setVersion(reportTask.getVersion());
 			reportTaskUIs.add(reportTaskUI);
 			// }
 
@@ -108,7 +109,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 	}
 
 	public ReportTask createReportTask(ReportTemplate reportTemplate) {
-	
+		
+		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo();
 		ReportTask reportTask = new ReportTask();
 		reportTask.setStatus("Pending");
 		reportTask.setReportTemplate(reportTemplate);
@@ -117,6 +119,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		reportTask.setCreatedBy("system");
 		reportTask.setLastUpdatedBy("system");
 		ReportTask reportTaskRet = save(reportTask);
+		reportTask.setVersion(evsVersionInfo.getVersion());
 		return reportTaskRet;
 	}
 	
@@ -142,6 +145,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			reportTaskUI.setDateStarted(txtDateStarted);
 			String txtDateCompleted = reportTask.getDateCompleted().format(formatter);
 			reportTaskUI.setDateCompleted(txtDateCompleted);
+			reportTaskUI.setVersion(reportTask.getVersion());
 
 			reportTaskUIs.add(reportTaskUI);
 			// }

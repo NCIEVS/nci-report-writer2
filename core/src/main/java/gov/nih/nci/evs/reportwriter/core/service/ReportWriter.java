@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.core.model.report.Report;
 import gov.nih.nci.evs.reportwriter.core.model.report.ReportColumn;
 import gov.nih.nci.evs.reportwriter.core.model.report.ReportRow;
@@ -104,6 +105,8 @@ public class ReportWriter {
         logFile.println("");
         logFile.println("Template Information");
         logFile.println("********************************");
+        EvsVersionInfo evsVersionInfo = getEvsVersionInfo();
+        logFile.println("Version: " + evsVersionInfo.getVersion());       
         logFile.println(reportTemplate.toString());
         
         String rootConceptCode = reportTemplate.getRootConceptCode();
@@ -156,8 +159,15 @@ public class ReportWriter {
         
 		try {
 			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(outputFileText)),StandardCharsets.UTF_8),true);
+			
+			// Added May 10, 2018  to output the OWL version information
+		   	Row excelRow = sheet.createRow(rowIndex++);
+         	Cell versionCell = excelRow.createCell(0);
+	        versionCell.setCellValue("Version: " + evsVersionInfo.getVersion());
+	        versionCell.setCellStyle(headerStyle);
+	        
 			ArrayList <String> columnHeadings = new ArrayList <String>();
-	       	Row excelRow = sheet.createRow(rowIndex++);
+	       	excelRow = sheet.createRow(rowIndex++);
 	       	int cellIndex = 0;
         	for (TemplateColumn templateColumn: reportTemplate.getColumns()) {
 		       	columnHeadings.add(templateColumn.getLabel());
@@ -165,6 +175,7 @@ public class ReportWriter {
 		        cell.setCellValue(templateColumn.getLabel());
 		        cell.setCellStyle(headerStyle);
         	}
+            pw.write("Version: " + evsVersionInfo.getVersion() + "\n");
             pw.write(String.join("\t",columnHeadings) + "\n");
             
             /*
@@ -232,6 +243,10 @@ public class ReportWriter {
 	        style.setBorderTop(thin);
 	        style.setTopBorderColor(black);
 	        return style;
-	    }
+    }
+	
+	public EvsVersionInfo getEvsVersionInfo() {
+		return sparqlQueryManagerService.getEvsVersionInfo();
+	}	
 	
 }

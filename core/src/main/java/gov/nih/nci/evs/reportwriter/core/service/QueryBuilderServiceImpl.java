@@ -27,7 +27,8 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 				"PREFIX owl:<http://www.w3.org/2002/07/owl#>",
 				"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
 				"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
-				"PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>");
+				"PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>",
+				"PREFIX dc:<http://purl.org/dc/elements/1.1/>");
 
 		return prefix;
 	}
@@ -204,6 +205,29 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		query.append("  }\n");
 		query.append("}\n");
 		query.append("ORDER BY ?conceptLabel\n");
+
+		return query.toString();
+	}
+	
+	/**
+	 * Return the SPARQL VersionInfo Query
+	 * 
+	 * @param namedGraph Named graph.
+	 * @return SPARQL Version Info query
+	 */
+	public String constructVersionInfoQuery(String namedGraph) {
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT ?version ?date ?comment\n");
+		query.append("{ GRAPH <" + namedGraph + ">");
+		query.append("	{\n");
+        query.append("    ?o a owl:Ontology .\n");
+		query.append("    ?o owl:versionInfo ?version .\n");
+        query.append("    ?o dc:date ?date .\n");
+        query.append("    ?o rdfs:comment ?comment\n");
+		query.append("  }\n");
+		query.append("}\n");
+		
+		System.out.println(query.toString());
 
 		return query.toString();
 	}

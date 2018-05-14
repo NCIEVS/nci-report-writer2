@@ -16,6 +16,11 @@ public class Bindings {
 	private Property superclass;
 	private Property superclassCode;
 	private Property superclassLabel;
+	
+	// Support for Version Info
+	private Property version;
+	private Property date;
+	private Property comment;
 
 	public Property getConceptCode() {
 		return conceptCode;
@@ -145,6 +150,30 @@ public class Bindings {
 
 	public void setSuperclassLabel(Property superclassLabel) {
 		this.superclassLabel = superclassLabel;
+	}
+	
+	public Property getVersion() {
+		return version;
+	}
+
+	public void setVersion(Property version) {
+		this.version = version;
+	}
+
+	public Property getDate() {
+		return date;
+	}
+
+	public void setDate(Property date) {
+		this.date = date;
+	}
+
+	public Property getComment() {
+		return comment;
+	}
+
+	public void setComment(Property comment) {
+		this.comment = comment;
 	}
 
 	@Override

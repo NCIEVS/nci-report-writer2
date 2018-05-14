@@ -13,12 +13,14 @@ public class ReportTaskUI {
 	private String reportTemplateName;
 	private Integer reportTemplateId;
 	private String status;
+	private String version;
 	
 	public ReportTaskUI() {
 		
 	}
 	
-	public ReportTaskUI(Integer id,String dateCompleted,String dateCreated,String dateStarted,String reportTemplateName,Integer reportTemplateId,String status) {
+	public ReportTaskUI(Integer id,String dateCompleted,String dateCreated,String dateStarted,
+			String reportTemplateName,Integer reportTemplateId, String status, String vesion) {
 		this.id = id;
 		this.dateCompleted = dateCompleted;
 		this.dateCreated = dateCreated;
@@ -26,6 +28,7 @@ public class ReportTaskUI {
 		this.reportTemplateName = reportTemplateName;
 		this.reportTemplateId = reportTemplateId;
 		this.status = status;
+		this.version = version;
 		
 	}
 	
@@ -72,5 +75,12 @@ public class ReportTaskUI {
 		this.status = status;
 	}
 	
+	public String getVersion() {
+		return version;
+	}
 
+	public void setVersion(String version) {
+		this.version = version;
+	}
+	
 }

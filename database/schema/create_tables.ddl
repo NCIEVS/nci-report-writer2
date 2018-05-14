@@ -61,6 +61,7 @@ CREATE TABLE report_task
   date_last_updated     DATETIME NOT NULL,
   created_by            VARCHAR(20) NOT NULL,
   last_updated_by       VARCHAR(20) NOT NULL,
+  version               VARCHAR(20) NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ;

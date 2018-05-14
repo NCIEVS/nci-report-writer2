@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAxiom;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsProperty;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Bindings;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Sparql;
 import gov.nih.nci.evs.reportwriter.core.properties.StardogProperties;
@@ -395,5 +396,35 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		evsConcept.setSemanticTypes(EVSUtils.getSemanticType(properties));
 		
 		return evsConcept;
+	}
+	
+	/**
+	 * Return the EvsVersion Information
+	 * 
+	 * @return EvsVersionInfo instance.
+	 */
+	public EvsVersionInfo getEvsVersionInfo() {
+
+		String queryPrefix = queryBuilderService.contructPrefix();
+		String namedGraph = getNamedGraph();
+		String query = queryBuilderService.constructVersionInfoQuery(namedGraph);
+		String res = restUtils.runSPARQL(queryPrefix + query);
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		EvsVersionInfo evsVersionInfo = new EvsVersionInfo();
+		try {
+			Sparql sparqlResult = mapper.readValue(res, Sparql.class);
+			Bindings[] bindings = sparqlResult.getResults().getBindings();
+			for (Bindings b : bindings) {
+				evsVersionInfo.setVersion(b.getVersion().getValue());
+				evsVersionInfo.setDate(b.getDate().getValue());
+				evsVersionInfo.setComment(b.getComment().getValue());
+			}
+		} catch (Exception ex) {
+			System.out.println("Bad News Exception");
+			System.out.println(ex);
+		}
+		return evsVersionInfo;
 	}
 }

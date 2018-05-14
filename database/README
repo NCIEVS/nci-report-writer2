@@ -20,3 +20,8 @@ example assume the database name is "rw".
    "scripts" directory.
 
    loadData.sh localhost root PASSWORD rw
+
+For May 14 changes, added column to the report_task table:
+
+  ALTER TABLE report_task
+  ADD column version VARCHAR(20) AFTER last_updated_by;
