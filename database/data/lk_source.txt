@@ -29,3 +29,10 @@ RENI~@~RENI~@@~
 SEER~@~SEER~@@~
 UCUM~@~UCUM~@@~
 ZFin~@~ZFin~@@~
+CDISC-GLOSS~@~CDISC-GLOSS~@@~
+CTCAE 3.0~@~CTCAE 3.0~@@~
+CTCAE 5.0~@~CTCAE 5.0~@@~
+CTRP~@~CTRP~@@~
+EDQM-HC~@~EDQM-HC~@@~
+HGNC~@~HGNC~@@~
+PI-RADS~@~PI-RADS~@@~

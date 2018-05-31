@@ -25,3 +25,14 @@ For May 14 changes, added column to the report_task table:
 
   ALTER TABLE report_task
   ADD column version VARCHAR(20) AFTER last_updated_by;
+
+For May 31 - 2018 - Added rows to lk_source
+
+insert into lk_source(name,description) values ("CDISC-GLOSS","CDISC-GLOSS");
+insert into lk_source(name,description) values ("CTCAE 3.0","CTCAE 3.0");
+insert into lk_source(name,description) values ("CTCAE 5.0","CTCAE 5.0");
+insert into lk_source(name,description) values ("CTRP","CTRP");
+insert into lk_source(name,description) values ("EDQM-HC","EDQM-HC");
+insert into lk_source(name,description) values ("HGNC","HGNC");
+insert into lk_source(name,description) values ("PI-RADS","PI-RADS");
+
