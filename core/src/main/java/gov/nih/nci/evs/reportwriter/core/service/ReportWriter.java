@@ -175,7 +175,7 @@ public class ReportWriter {
 		        cell.setCellValue(templateColumn.getLabel());
 		        cell.setCellStyle(headerStyle);
         	}
-            pw.write("Version: " + evsVersionInfo.getVersion() + "\n");
+            //pw.write("Version: " + evsVersionInfo.getVersion() + "\n");
             pw.write(String.join("\t",columnHeadings) + "\n");
             
             /*
