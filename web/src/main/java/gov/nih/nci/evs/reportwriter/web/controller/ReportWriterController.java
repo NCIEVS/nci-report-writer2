@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -136,9 +137,10 @@ public class ReportWriterController {
 	@RequestMapping(value="/lkproperty",method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List <LookUp> findAllLkProperties() {
 		List <LkProperty> lks =  lkPropertyService.findAll();	
+		lks.sort(Comparator.comparing(LkProperty::getLabel));
 		List <LookUp> lookUps = new ArrayList <LookUp> ();
 		for (LkProperty lookUp: lks) {
-			String label = "(" + lookUp.getCode() + ") " + lookUp.getLabel();
+			String label = lookUp.getLabel() + "(" + lookUp.getCode() + ") ";
 			lookUps.add(new LookUp(label,lookUp.getCode()));
 		}
 		return lookUps;
