@@ -137,7 +137,16 @@ public class ReportWriterController {
 	@RequestMapping(value="/lkproperty",method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List <LookUp> findAllLkProperties() {
 		List <LkProperty> lks =  lkPropertyService.findAll();	
-		lks.sort(Comparator.comparing(LkProperty::getLabel));
+		
+		
+		lks.sort(new Comparator<LkProperty>() {
+		    @Override
+		    public int compare(LkProperty m1, LkProperty m2) {
+		      return m1.getLabel().compareToIgnoreCase(m2.getLabel());
+		     }
+		});
+		
+		
 		List <LookUp> lookUps = new ArrayList <LookUp> ();
 		for (LkProperty lookUp: lks) {
 			String label = lookUp.getLabel() + "(" + lookUp.getCode() + ") ";
