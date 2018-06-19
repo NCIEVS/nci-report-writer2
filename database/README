@@ -36,3 +36,10 @@ insert into lk_source(name,description) values ("EDQM-HC","EDQM-HC");
 insert into lk_source(name,description) values ("HGNC","HGNC");
 insert into lk_source(name,description) values ("PI-RADS","PI-RADS");
 
+
+For June 19 - 2018 - Added rows to lk_source
+insert into lk_source(name,description) values ("SPL","SPL");
+
+
+For June 19 - 2018 - Added rows to lk_subsource
+insert into lk_source(name,description) values ("UNII","CDRH");
