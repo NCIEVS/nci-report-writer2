@@ -42,4 +42,4 @@ insert into lk_source(name,description) values ("SPL","SPL");
 
 
 For June 19 - 2018 - Added rows to lk_subsource
-insert into lk_source(name,description) values ("UNII","CDRH");
+insert into lk_subsource(name,description) values ("UNII","CDRH");
