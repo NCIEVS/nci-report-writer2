@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -81,7 +82,7 @@ public class ReportWriter {
      * into the ReportTemplate class.
      * 
      */
-	public String runReport(String templateFile, String outputFile, String conceptFile) {
+	public String runReport(String templateFile, String outputFile, String conceptFile, String namedGraph) {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         Template reportTemplate = null;
         PrintWriter logFile = null;
@@ -105,12 +106,12 @@ public class ReportWriter {
         logFile.println("");
         logFile.println("Template Information");
         logFile.println("********************************");
-        EvsVersionInfo evsVersionInfo = getEvsVersionInfo();
+        EvsVersionInfo evsVersionInfo = getEvsVersionInfo(namedGraph);
         logFile.println("Version: " + evsVersionInfo.getVersion());       
         logFile.println(reportTemplate.toString());
         
         String rootConceptCode = reportTemplate.getRootConceptCode();
-        EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode);
+        EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph);
 
         // The conceptHash is used to improve performance, especially in the cases for reports that
         // are looking for parents concepts.  By first looking in the hash for the concept, time
@@ -123,16 +124,16 @@ public class ReportWriter {
         Report reportOutput = new Report();
         if (templateType.equals("Association")) {
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset")) {
-                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile);
-                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile);
+                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile,namedGraph);
+                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile,namedGraph);
         	} else if (reportTemplate.getAssociation().equals("Subclass")) {
-                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel,logFile);
+                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel,logFile,namedGraph);
         	} else {
         		System.err.println("Invalid Association Type: " + reportTemplate.getAssociation());
         		return "failure";
         	}
         } else if (templateType.equals("ConceptList")) {
-                rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile);
+                rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph);
         } else {
         	System.err.println("Invalid Template Type: " + templateType);
         	return "failure";
@@ -245,8 +246,12 @@ public class ReportWriter {
 	        return style;
     }
 	
-	public EvsVersionInfo getEvsVersionInfo() {
-		return sparqlQueryManagerService.getEvsVersionInfo();
+	public EvsVersionInfo getEvsVersionInfo(String namedGraph) {
+		return sparqlQueryManagerService.getEvsVersionInfo(namedGraph);
 	}	
+	
+	public List <String> getNamedGraphs() {
+		return sparqlQueryManagerService.getNamedGraphs();
+	}
 	
 }

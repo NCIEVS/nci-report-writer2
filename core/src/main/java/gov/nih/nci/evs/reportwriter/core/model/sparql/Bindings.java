@@ -16,6 +16,7 @@ public class Bindings {
 	private Property superclass;
 	private Property superclassCode;
 	private Property superclassLabel;
+	private Property namedGraph;
 	
 	// Support for Version Info
 	private Property version;
@@ -174,6 +175,14 @@ public class Bindings {
 
 	public void setComment(Property comment) {
 		this.comment = comment;
+	}
+	
+	public Property getNamedGraph() {
+		return namedGraph;
+	}
+
+	public void setNamedGraph(Property namedGraph) {
+		this.namedGraph = namedGraph;
 	}
 
 	@Override

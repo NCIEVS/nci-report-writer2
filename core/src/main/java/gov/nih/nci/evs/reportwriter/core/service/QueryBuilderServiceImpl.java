@@ -232,4 +232,20 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		return query.toString();
 	}
 	
+	/**
+	 * Return the SPARQL NamedGraph Query
+	 * 
+	 * @return SPARQL NamedGraph query
+	 */
+	public String constructNamedGraphQuery() {
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT distinct ?namedGraph {\n");
+		query.append("  { ?s ?p ?o }\n");
+		query.append("UNION\n");
+		query.append("  { graph ?namedGraph {?s ?p ?o}}\n");
+		query.append("}\n");
+		
+		System.out.println(query.toString());
+		return query.toString();
+	}
 }
