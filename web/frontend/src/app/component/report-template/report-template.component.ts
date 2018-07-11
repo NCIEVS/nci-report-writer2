@@ -51,7 +51,7 @@ export class ReportTemplateComponent implements OnInit {
   selectedGraphName: string = null;
   displayGraphName: boolean = false;
   isSingleTemplateRun: boolean = true;
-  runReportTemplateInfo:RunReportTemplateInfo = null;
+  runReportTemplateInfo: RunReportTemplateInfo = null;
 
   onFilter(e) {
     //saving the filters
@@ -124,24 +124,13 @@ export class ReportTemplateComponent implements OnInit {
     }
   }
 
-  runTemplates(): void {
-    console.log("In runTemplates - " + JSON.stringify(this.selectedTemplates));
-    if (
-      this.selectedTemplates == undefined ||
-      this.selectedTemplates.length < 1
-    ) {
-      alert("Please select one or more templates to run");
-      return;
-    }   
-    this.isSingleTemplateRun = false;
-    this.displayGraphName = true;
+  
+  executeMultipleTemplates() {
+    this.runReportTemplateInfo = new RunReportTemplateInfo(
+      this.selectedGraphName,
+      this.selectedTemplates
+    );
   }
-
-  executeMultipleTemplates(){
-    this.runReportTemplateInfo = new RunReportTemplateInfo(this.selectedGraphName,this.selectedTemplates);
-  }
-
- 
 
   getReportTemplates(): void {
     this.reportTemplateService.getReportTemplates().subscribe(templates => {
@@ -189,7 +178,20 @@ export class ReportTemplateComponent implements OnInit {
     this.displayGraphName = true;
   }
 
-  
+  runTemplates(): void {
+   
+    console.log("In runTemplates - " + JSON.stringify(this.selectedTemplates));
+    if (
+      this.selectedTemplates == undefined ||
+      this.selectedTemplates.length < 1
+    ) {
+      alert("Please select one or more templates to run");
+      return;
+    }
+    this.isSingleTemplateRun = false;
+    this.displayGraphName = true;
+  }
+
 
   getStatuses(): void {
     this.lookupvaluesTemplateService
@@ -199,79 +201,69 @@ export class ReportTemplateComponent implements OnInit {
 
   onSubmitGraphName() {
     this.displayGraphName = false;
-    console.log("onSubmitGraphName - " + JSON.stringify(this.selectedGraphName));
+    console.log(
+      "onSubmitGraphName - " + JSON.stringify(this.selectedGraphName)
+    );
     if (this.isSingleTemplateRun) {
       this.executeSelectedTemplate();
     } else {
       this.executeSelectedTemplates();
     }
-  
   }
 
   executeSelectedTemplate() {
-    console.log ("In executeSelectedTemplate - " + JSON.stringify(this.selectedTemplate));
+    console.log(
+      "In executeSelectedTemplate - " + JSON.stringify(this.selectedTemplate)
+    );
     this.selectedTemplates = [];
     this.selectedTemplates.push(this.selectedTemplate);
-    this.runReportTemplateInfo = new RunReportTemplateInfo(this.selectedGraphName,this.selectedTemplates);
-    this.reportTemplateService
-      .runReportTemplates(this.runReportTemplateInfo)
-      .subscribe(tasks => {
-        this.tasks = tasks;
-        console.log(JSON.stringify(tasks));
-        this.displayMessage = "";
-        for (let task of tasks) {
-          this.displayMessage =
-            this.displayMessage +
-            " A task with Id - " +
-            task.reportTemplateId +
-            " has been created for the template - " +
-            task.reportTemplateName +
-            ".<br>";
-        }
-
-        this.displayMessage =
-          this.displayMessage +
-          "Please check the status of the report in the All Report Tasks page.";
-        this.taskRun = true;
-        this.staticAlertClosed = false;
-        window.scrollTo(0, 0);
-        setTimeout(() => {
-          this.staticAlertClosed = true;
-          console.log("setting staticAlertClosed to true");
-        }, 50000);
-      });
+    this.runReportTemplateInfo = new RunReportTemplateInfo(
+      this.selectedGraphName,
+      this.selectedTemplates
+    );
+    this.runReportTemplates();
+   
   }
 
+
   executeSelectedTemplates() {
-    
-        this.reportTemplateService
-          .runReportTemplates(this.runReportTemplateInfo)
-          .subscribe(tasks => {
-            this.tasks = tasks;
-            console.log(JSON.stringify(tasks));
-            this.displayMessage = "";
-            for (let task of tasks) {
-              this.displayMessage =
-                this.displayMessage +
-                " A task with Id - " +
-                task.reportTemplateId +
-                " has been created for the template - " +
-                task.reportTemplateName +
-                ".<br>";
-            }
-    
-            this.displayMessage =
-              this.displayMessage +
-              "Please check the status of the report in the All Report Tasks page.";
-            this.taskRun = true;
-            this.staticAlertClosed = false;
-            window.scrollTo(0, 0);
-            setTimeout(() => {
-              this.staticAlertClosed = true;
-              console.log("setting staticAlertClosed to true");
-            }, 50000);
-          });
+    this.runReportTemplateInfo = new RunReportTemplateInfo(
+      this.selectedGraphName,
+      this.selectedTemplates
+    );
+    this.runReportTemplates();
+  }
+
+  runReportTemplates(){
+    this.reportTemplateService
+    .runReportTemplates(this.runReportTemplateInfo)
+    .subscribe(tasks => {
+      this.tasks = tasks;
+      console.log(JSON.stringify(tasks));
+      this.displayMessage = "";
+      for (let task of tasks) {
+        this.displayMessage =
+          this.displayMessage +
+          " A task with Id - " +
+          task.reportTemplateId +
+          " has been created for the template - " +
+          task.reportTemplateName +
+          ".<br>";
       }
+
+      this.displayMessage =
+        this.displayMessage +
+        "Please check the status of the report in the All Report Tasks page.";
+      this.taskRun = true;
+      this.staticAlertClosed = false;
+      window.scrollTo(0, 0);
+      setTimeout(() => {
+        this.staticAlertClosed = true;
+        console.log("setting staticAlertClosed to true");
+      }, 50000);
+    });
+
+  }
 
   cancelSelectGraphName() {
     this.displayGraphName = false;
