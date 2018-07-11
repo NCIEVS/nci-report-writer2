@@ -470,12 +470,12 @@ public class ReportWriterController {
 		for (ReportTemplateUI reportTemplateUI : reportTemplates) {
 			log.info("template id - " + reportTemplateUI.getId() + " report name - " + reportTemplateUI.getName());
 			ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateUI.getId());
-			ReportTask reportTaskRet = reportTaskService.createReportTask(reportTemplate);
+			ReportTask reportTaskRet = reportTaskService.createReportTask(reportTemplate, runReportTemplateInfo.getGraphName());
 			log.info("TaskId" + reportTaskRet.getId());
 			ReportTaskUI reportTaskUI = new ReportTaskUI();
 			reportTaskUI.setReportTemplateName(reportTemplateUI.getName());
 			reportTaskUI.setReportTemplateId(reportTaskRet.getId());
-			reportTaskService.runReport(reportTaskRet);
+			reportTaskService.runReport(reportTaskRet, runReportTemplateInfo.getGraphName());
 			log.info("Run Report Submitted");
 			reportTasks.add(reportTaskUI);
 

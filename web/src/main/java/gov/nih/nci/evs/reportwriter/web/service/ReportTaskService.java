@@ -20,11 +20,11 @@ public interface ReportTaskService {
 	
 	public ReportTemplateUI getReportNameByTaskId(Integer reportTaskId);
 	
-	public void runReport(ReportTask reportTask);
+	public void runReport(ReportTask reportTask, String namedGraph);
 	
 	public ReportTask save(ReportTask reportTask);
 	
-	public ReportTask createReportTask(ReportTemplate RreportTemplate);
+	public ReportTask createReportTask(ReportTemplate RreportTemplate, String namedGraph);
 	
 	public ReportTask findOne(Integer reportTaskId);
 	
