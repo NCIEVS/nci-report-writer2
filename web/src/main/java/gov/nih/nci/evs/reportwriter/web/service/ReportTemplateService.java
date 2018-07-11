@@ -9,6 +9,8 @@ import gov.nih.nci.evs.reportwriter.web.support.ReportTemplateUI;
 
 public interface ReportTemplateService {
 	
+	
+	
 	public List <ReportTemplateUI> findAll();
 	
 	public ReportTemplate findOne(Integer id);

@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { catchError, map, tap } from 'rxjs/operators';
 import {Template} from './../model/template';
+import {RunReportTemplateInfo} from './../model/runReportTemplateInfo';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -34,7 +35,7 @@ export class ReportTemplateService {
       );
     }
 
-    runReportTemplate(templateId:number): Observable<Task>{
+   /* runReportTemplate(templateId:number): Observable<Task>{
 
       return this.http.get<Task>("/reportwriter/runReport/" + templateId).pipe(
         catchError(this.handleError('runReportTemplate', null))
@@ -48,6 +49,15 @@ export class ReportTemplateService {
       return this.http.post<Task[]>("/reportwriter/runReportTemplates", templates, httpOptions)
       .pipe(tap((tasks: Task[]) => console.log("runReportTemplates")),
             catchError(this.handleError<Task[]>('runReportTemplates'))
+      );
+      
+    }*/
+
+    runReportTemplates(runReportTemplateInfo: RunReportTemplateInfo): Observable<Task[]>{
+      
+      return this.http.post<Task[]>("/reportwriter/runReportTemplates", runReportTemplateInfo, httpOptions)
+      .pipe(tap((tasks: Task[]) => console.log("runAllReportTemplates")),
+            catchError(this.handleError<Task[]>('runAllReportTemplates'))
       );
       
     }
