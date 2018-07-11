@@ -60,10 +60,18 @@ public class ReportWriterProgramApplication {
 				.type(String.class)
 				.desc("Concept List File Name")
 				.build();
+		Option namedGraphOption = Option.builder("g")
+				.longOpt("namedGraph")
+				.numberOfArgs(1)
+				.required(false)
+				.type(String.class)
+				.desc("Named Graph")
+				.build();
 		Options options = new Options();
 		options.addOption(templateOption);
 		options.addOption(outputOption);
 		options.addOption(conceptOption);
+		options.addOption(namedGraphOption);
 		CommandLineParser parser = new DefaultParser();
 
 		try {
@@ -71,7 +79,8 @@ public class ReportWriterProgramApplication {
 			String templateFileName = (String) cmdLine.getParsedOptionValue("templateFile"); 
 			String outputFileName = (String) cmdLine.getParsedOptionValue("outputFile"); 
 			String conceptFileName = (String) cmdLine.getParsedOptionValue("conceptFile"); 
-			app.start(templateFileName,outputFileName,conceptFileName);
+			String namedGraph = (String) cmdLine.getParsedOptionValue("namedGraph"); 
+			app.start(templateFileName,outputFileName,conceptFileName,namedGraph);
 		} catch (ParseException ex) {
 			System.err.println("Parsing the command line options failed");
 			System.err.println("Reason: " + ex.getMessage());
@@ -86,7 +95,7 @@ public class ReportWriterProgramApplication {
 	 * @param outputFileName Name of the output file
 	 * @param conceptFileName Name of the file containing concept codes (optional)
 	 */
-	private void start(String templateFileName, String outputFileName, String conceptFileName) {
+	private void start(String templateFileName, String outputFileName, String conceptFileName, String namedGraph) {
    		String templateFile = coreProperties.getTemplateDirectory() + "/" + templateFileName;
    		String outputFile = coreProperties.getOutputDirectory() + "/" + outputFileName;
         log.info("Starting ReportWriter");
@@ -96,7 +105,7 @@ public class ReportWriterProgramApplication {
         System.out.println("Template File: " + templateFile);
         System.out.println("Output File: " + outputFile);
         long startTime = System.currentTimeMillis();
-        String result = reportWriter.runReport(templateFile,outputFile,conceptFileName);
+        String result = reportWriter.runReport(templateFile,outputFile,conceptFileName,namedGraph);
         if (result.equals("success")) {
         		long endTime   = System.currentTimeMillis();
             long totalTime = endTime - startTime;
