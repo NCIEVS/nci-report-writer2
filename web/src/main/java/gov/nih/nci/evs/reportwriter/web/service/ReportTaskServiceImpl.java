@@ -100,6 +100,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			}
 			reportTaskUI.setDateCompleted(txtDateCompleted);
 			reportTaskUI.setVersion(reportTask.getVersion());
+			reportTaskUI.setGraphName(reportTask.getGraphName());
 			reportTaskUIs.add(reportTaskUI);
 			// }
 
@@ -118,8 +119,10 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		reportTask.setDateLastUpdated(LocalDateTime.now());
 		reportTask.setCreatedBy("system");
 		reportTask.setLastUpdatedBy("system");
-		ReportTask reportTaskRet = save(reportTask);
 		reportTask.setVersion(evsVersionInfo.getVersion());
+		reportTask.setGraphName(namedGraph);
+		ReportTask reportTaskRet = save(reportTask);
+		
 		return reportTaskRet;
 	}
 	
@@ -146,7 +149,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			String txtDateCompleted = reportTask.getDateCompleted().format(formatter);
 			reportTaskUI.setDateCompleted(txtDateCompleted);
 			reportTaskUI.setVersion(reportTask.getVersion());
-
+			reportTaskUI.setGraphName(reportTask.getGraphName());
 			reportTaskUIs.add(reportTaskUI);
 			// }
 
@@ -163,7 +166,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 	}
 
 	@Async
-	public void runReport(ReportTask reportTask, String namedGraph) {
+	public void runReport(ReportTask reportTask) {
+		String namedGraph = reportTask.getGraphName();
 		System.out.println("NAMED GRAPH: " + namedGraph);
 		List <String> namedGraphs = reportWriter.getNamedGraphs();
 		for (String g: namedGraphs) {

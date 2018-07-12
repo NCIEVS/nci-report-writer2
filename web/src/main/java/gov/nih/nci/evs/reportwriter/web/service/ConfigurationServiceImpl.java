@@ -25,11 +25,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 		List<LookUp> lookUps = new ArrayList<LookUp>();
 		List<String> graphNamesStr = reportWriter.getNamedGraphs();
-		// code needs to be replaced
-		// List<String> graphNamesStr = new ArrayList <String> ();
-		// graphNamesStr.add("http://NCI_T");
-		// graphNamesStr.add("http://NCI_T2");
-
+		
 		for (String graphName : graphNamesStr) {
 			lookUps.add(new LookUp(graphName, graphName));
 		}

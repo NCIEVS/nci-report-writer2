@@ -20,7 +20,7 @@ public interface ReportTaskService {
 	
 	public ReportTemplateUI getReportNameByTaskId(Integer reportTaskId);
 	
-	public void runReport(ReportTask reportTask, String namedGraph);
+	public void runReport(ReportTask reportTask);
 	
 	public ReportTask save(ReportTask reportTask);
 	

@@ -14,6 +14,7 @@ public class ReportTaskUI {
 	private Integer reportTemplateId;
 	private String status;
 	private String version;
+	private String graphName;
 	
 	public ReportTaskUI() {
 		
@@ -83,4 +84,11 @@ public class ReportTaskUI {
 		this.version = version;
 	}
 	
+	public String getGraphName() {
+		return graphName;
+	}
+
+	public void setGraphName(String graphName) {
+		this.graphName = graphName;
+	}
 }

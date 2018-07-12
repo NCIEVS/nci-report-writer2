@@ -43,3 +43,8 @@ insert into lk_source(name,description) values ("SPL","SPL");
 
 For June 19 - 2018 - Added rows to lk_subsource
 insert into lk_subsource(name,description) values ("UNII","CDRH");
+
+For July 11th 2018 changes, added column to the report_task table:
+
+  ALTER TABLE report_task
+  ADD column graph_name VARCHAR(2000);

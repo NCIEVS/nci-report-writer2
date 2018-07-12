@@ -31,6 +31,7 @@ public class ReportTask implements Serializable {
 	private ReportTemplate reportTemplate;
 	private String status;
 	private String version;
+	private String graphName;
 
 	public ReportTask() {
 	}
@@ -139,5 +140,13 @@ public class ReportTask implements Serializable {
 		this.version = version;
 	}
 	
+	@Column(name = "graph_name")
+	public String getGraphName() {
+		return graphName;
+	}
+
+	public void setGraphName(String graphName) {
+		this.graphName = graphName;
+	}
 
 }

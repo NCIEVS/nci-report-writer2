@@ -422,44 +422,7 @@ public class ReportWriterController {
 		}
 	}
 
-	// @RequestMapping(value="/runReport/{id}", method = RequestMethod.GET)
-	// public @ResponseBody ReportTask runReport(@PathVariable Integer id)
-	// throws IOException {
-	//
-	// ReportTemplate reportTemplate = reportTemplateService.findOne(id);
-	// ReportTask reportTaskRet =
-	// reportTaskService.createReportTask(reportTemplate);
-	// log.info("TaskId" + reportTaskRet.getId());
-	// reportTaskService.runReport(reportTaskRet);
-	// log.info("Run Report Submitted");
-	//
-	// return reportTaskRet;
-	// }
-
-	// @RequestMapping(method = RequestMethod.POST, value = "/runReportTemplates",
-	// consumes = "application/json", produces = "application/json")
-	// public @ResponseBody ArrayList<ReportTaskUI> runReportTemplates(@RequestBody
-	// final ArrayList<ReportTemplateUI> reportTemplates) throws
-	// JsonProcessingException {
-	// ArrayList<ReportTaskUI> reportTasks = new ArrayList<ReportTaskUI>();
-	// for (ReportTemplateUI reportTemplateUI:reportTemplates) {
-	// log.info("task id - " + reportTemplateUI.getId() + " report name - " +
-	// reportTemplateUI.getName());
-	// ReportTemplate reportTemplate =
-	// reportTemplateService.findOne(reportTemplateUI.getId());
-	// ReportTask reportTaskRet =
-	// reportTaskService.createReportTask(reportTemplate);
-	// log.info("TaskId" + reportTaskRet.getId());
-	// ReportTaskUI reportTaskUI = new ReportTaskUI();
-	// reportTaskUI.setReportTemplateName(reportTemplateUI.getName());
-	// reportTaskUI.setReportTemplateId(reportTaskRet.getId());
-	// reportTaskService.runReport(reportTaskRet);
-	// log.info("Run Report Submitted");
-	// reportTasks.add(reportTaskUI);
-	//
-	// }
-	// return reportTasks;
-	// }
+	
 
 	@RequestMapping(method = RequestMethod.POST, value = "/runReportTemplates", consumes = "application/json", produces = "application/json")
 	public @ResponseBody ArrayList<ReportTaskUI> runReportTemplates(
@@ -475,7 +438,7 @@ public class ReportWriterController {
 			ReportTaskUI reportTaskUI = new ReportTaskUI();
 			reportTaskUI.setReportTemplateName(reportTemplateUI.getName());
 			reportTaskUI.setReportTemplateId(reportTaskRet.getId());
-			reportTaskService.runReport(reportTaskRet, runReportTemplateInfo.getGraphName());
+			reportTaskService.runReport(reportTaskRet);
 			log.info("Run Report Submitted");
 			reportTasks.add(reportTaskUI);
 

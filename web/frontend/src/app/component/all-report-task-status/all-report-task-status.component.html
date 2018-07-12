@@ -33,6 +33,7 @@
         <p-column field="dateStarted" [sortable]="true" header="Date Started" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="dateCompleted" [sortable]="true" header="Date Completed" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="version" [sortable]="true" header="Version" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+        <p-column field="graphName" [sortable]="true" header="Graph Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="id" styleClass="col-header" header="Action" [style]="{'width':'10%'}">
             <ng-template let-templateTask="rowData" pTemplate="body">
                 <!--<button type="button" *ngIf="templateTask.status == 'Completed'" pButton [routerLink]="['/createTemplate', templateTask.id]" icon="fa-file-text-o"></button>-->
