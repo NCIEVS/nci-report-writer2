@@ -168,12 +168,6 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 	@Async
 	public void runReport(ReportTask reportTask) {
 		String namedGraph = reportTask.getGraphName();
-		System.out.println("NAMED GRAPH: " + namedGraph);
-		List <String> namedGraphs = reportWriter.getNamedGraphs();
-		for (String g: namedGraphs) {
-			System.out.println("Graph: " + g);
-		}
-		
 		int reportTemplateId = reportTask.getReportTemplate().getId();
 		ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateId);
 		List<ReportTemplateColumn> columns = reportTemplate.getColumns();

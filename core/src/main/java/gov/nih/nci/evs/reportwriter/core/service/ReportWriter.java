@@ -166,6 +166,9 @@ public class ReportWriter {
          	Cell versionCell = excelRow.createCell(0);
 	        versionCell.setCellValue("Version: " + evsVersionInfo.getVersion());
 	        versionCell.setCellStyle(headerStyle);
+         	Cell graphCell = excelRow.createCell(1);
+	        graphCell.setCellValue("NamedGraph: " + namedGraph);
+	        graphCell.setCellStyle(headerStyle);
 	        
 			ArrayList <String> columnHeadings = new ArrayList <String>();
 	       	excelRow = sheet.createRow(rowIndex++);
