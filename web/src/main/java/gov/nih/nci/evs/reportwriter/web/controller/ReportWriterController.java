@@ -297,7 +297,7 @@ public class ReportWriterController {
 
 	@RequestMapping(value = "/configuration", method = RequestMethod.GET)
 	public @ResponseBody ConfigurationProperties getGraphNames() throws IOException {
-
+        log.debug("In getGraphNames");
 		ConfigurationProperties configurationProperties = configurationService.getConfigurationProperties();
 		return configurationProperties;
 

@@ -72,6 +72,7 @@ export class ReportTemplateComponent implements OnInit {
     this.getReportTemplates();
 
     this.graphNames = ConfigurationService.graphNames;
+    console.log("In ReportTemplateComponent - ngOnInit - " + JSON.stringify(this.graphNames));
 
     this.staticAlertClosed = true;
     this.taskRun = false;

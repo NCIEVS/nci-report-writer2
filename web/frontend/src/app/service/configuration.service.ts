@@ -31,7 +31,7 @@ export class ConfigurationService {
           this.http.get(url).toPromise()
           .then (response => {
             ConfigurationService.graphNames = response['graphNames'];
-            
+            console.log("graph names - " + JSON.stringify(ConfigurationService.graphNames));
             resolve(true);
           }).catch (error => {
             Observable.throw(error);

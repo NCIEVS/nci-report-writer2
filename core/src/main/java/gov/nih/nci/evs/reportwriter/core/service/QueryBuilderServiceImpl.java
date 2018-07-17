@@ -240,8 +240,8 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 	public String constructNamedGraphQuery() {
 		StringBuffer query = new StringBuffer();
 		query.append("SELECT distinct ?namedGraph {\n");
-		query.append("  { ?s ?p ?o }\n");
-		query.append("UNION\n");
+		//query.append("  { ?s ?p ?o }\n");
+		//query.append("UNION\n");
 		query.append("  { graph ?namedGraph {?s ?p ?o}}\n");
 		query.append("}\n");
 		
