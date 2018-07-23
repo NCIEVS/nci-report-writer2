@@ -8,7 +8,7 @@ public class StardogProperties {
 	/** The logger. */
     private static final Logger log = LoggerFactory.getLogger(StardogProperties.class);
 
-    private String url;
+
     private String username;
     private String password;
     private String monthlyQueryUrl;
@@ -17,14 +17,6 @@ public class StardogProperties {
     private int connectTimeout;
     private String monthlyGraphName;
     private String weeklyGraphName;
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
 
 	public String getUsername() {
 		return username;
