@@ -47,9 +47,9 @@ export class ReportTemplateComponent implements OnInit {
   statuses: Lookup[];
   selectedStatus: string;
   filterObject: any;
-  graphNames: Lookup[] = null;
-  selectedGraphName: string = null;
-  displayGraphName: boolean = false;
+  databaseTypes: Lookup[] = null;
+  selectedDatabasetype: string = null;
+  displayDatabaseType: boolean = false;
   isSingleTemplateRun: boolean = true;
   runReportTemplateInfo: RunReportTemplateInfo = null;
 
@@ -71,8 +71,9 @@ export class ReportTemplateComponent implements OnInit {
   ngOnInit() {
     this.getReportTemplates();
 
-    this.graphNames = ConfigurationService.graphNames;
-    console.log("In ReportTemplateComponent - ngOnInit - " + JSON.stringify(this.graphNames));
+    this.databaseTypes = [{"label":"monthly","value":"monthly"},{"label":"weekly","value":"weekly"}];
+    
+    console.log("In ReportTemplateComponent - ngOnInit - " + JSON.stringify(this.databaseTypes));
 
     this.staticAlertClosed = true;
     this.taskRun = false;
@@ -128,7 +129,7 @@ export class ReportTemplateComponent implements OnInit {
   
   executeMultipleTemplates() {
     this.runReportTemplateInfo = new RunReportTemplateInfo(
-      this.selectedGraphName,
+      this.selectedDatabasetype,
       this.selectedTemplates
     );
   }
@@ -176,7 +177,7 @@ export class ReportTemplateComponent implements OnInit {
     console.log("In runTemplate - " + JSON.stringify(templateRow));
     this.selectedTemplate = templateRow;
     this.isSingleTemplateRun = true;
-    this.displayGraphName = true;
+    this.displayDatabaseType = true;
   }
 
   runTemplates(): void {
@@ -190,7 +191,7 @@ export class ReportTemplateComponent implements OnInit {
       return;
     }
     this.isSingleTemplateRun = false;
-    this.displayGraphName = true;
+    this.displayDatabaseType = true;
   }
 
 
@@ -200,10 +201,10 @@ export class ReportTemplateComponent implements OnInit {
       .subscribe(statuses => (this.statuses = statuses));
   }
 
-  onSubmitGraphName() {
-    this.displayGraphName = false;
+  onSubmitDatabaseType() {
+    this.displayDatabaseType = false;
     console.log(
-      "onSubmitGraphName - " + JSON.stringify(this.selectedGraphName)
+      "onSubmitDatabaseType - " + JSON.stringify(this.selectedDatabasetype)
     );
     if (this.isSingleTemplateRun) {
       this.executeSelectedTemplate();
@@ -219,7 +220,7 @@ export class ReportTemplateComponent implements OnInit {
     this.selectedTemplates = [];
     this.selectedTemplates.push(this.selectedTemplate);
     this.runReportTemplateInfo = new RunReportTemplateInfo(
-      this.selectedGraphName,
+      this.selectedDatabasetype,
       this.selectedTemplates
     );
     this.runReportTemplates();
@@ -229,7 +230,7 @@ export class ReportTemplateComponent implements OnInit {
 
   executeSelectedTemplates() {
     this.runReportTemplateInfo = new RunReportTemplateInfo(
-      this.selectedGraphName,
+      this.selectedDatabasetype,
       this.selectedTemplates
     );
     this.runReportTemplates();
@@ -266,7 +267,7 @@ export class ReportTemplateComponent implements OnInit {
 
   }
 
-  cancelSelectGraphName() {
-    this.displayGraphName = false;
+  cancelSelectDatabaseType() {
+    this.displayDatabaseType = false;
   }
 }

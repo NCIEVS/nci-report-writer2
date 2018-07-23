@@ -11,8 +11,9 @@ export class Task {
         public dateCompleted?:string,
         public dateCreated?:string,
         public dateStarted?:number,
-        public graphName?:string 
-       
+        public graphName?:string, 
+        public databaseUrl?:string,
+        public databaseType?:string
        
       ) {  }
     

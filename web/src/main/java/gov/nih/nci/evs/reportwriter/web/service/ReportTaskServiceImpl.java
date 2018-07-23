@@ -121,6 +121,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			namedGraph = stardogProperties.getWeeklyGraphName();
 			databaseUrl = stardogProperties.getWeeklyQueryUrl();
 		}
+		log.debug("namedGraph - " + namedGraph);
+		log.debug("databaseUrl - " + databaseUrl);
 		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl,namedGraph);
 		ReportTask reportTask = new ReportTask();
 		reportTask.setStatus("Pending");

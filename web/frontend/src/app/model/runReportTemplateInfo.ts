@@ -4,7 +4,7 @@ import { Template } from './template';
 export class RunReportTemplateInfo {
     
       constructor(  
-        public graphName?:string,    
+        public datbaseType?:string,    
         public reportTemplates?:Template[]       
       ) {  }
     

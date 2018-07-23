@@ -64,25 +64,25 @@
     </p-dataTable>
 </div>
 
-<p-dialog header="Select Database Graph Name" [(visible)]="displayGraphName" [width]="850">
+<p-dialog header="Select Database Type" [(visible)]="displayDatabaseType" [width]="850">
     <div class="">
-        <form class="form-horizontal" #graphNameForm="ngForm" (ngSubmit)="onSubmitGraphName();graphNameForm.reset()">
+        <form class="form-horizontal" #databaseTypeForm="ngForm" (ngSubmit)="onSubmitDatabaseType();databaseTypeForm.reset()">
 
             <div class="form-group">
-                <label for="type" class="col-sm-3 control-label">Graph Name<span class="required-field">*</span></label>
+                <label for="type" class="col-sm-3 control-label">Database Type<span class="required-field">*</span></label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="graphNames" [(ngModel)]="selectedGraphName" id="graphName" name="graphName" #graphName="ngModel" placeholder="Select a Graph Name" required></p-dropdown>
-                    <div [hidden]="graphName.valid || graphName.pristine">
-                        <span class="form-error-message">Graph Name is required</span>
+                    <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="databaseTypes" [(ngModel)]="selectedDatabasetype" id="databaseType" name="databaseType" #databaseType="ngModel" placeholder="Select a Database Type" required></p-dropdown>
+                    <div [hidden]="databaseType.valid || databaseType.pristine">
+                        <span class="form-error-message">Database Type is required</span>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="submit" class="col-sm-3 control-label"></label>
                 <div class="col-sm-8">
-                    <button type="submit" pButton [disabled]="!graphNameForm.form.valid" label="Run"></button>
-                    <button type="button" pButton (click)="cancelSelectGraphName();graphNameForm.reset()" label="Cancel"></button>
+                    <button type="submit" pButton [disabled]="!databaseTypeForm.form.valid" label="Run"></button>
+                    <button type="button" pButton (click)="cancelSelectDatabaseType();databaseTypeForm.reset()" label="Cancel"></button>
                 </div>
             </div>
         </form>

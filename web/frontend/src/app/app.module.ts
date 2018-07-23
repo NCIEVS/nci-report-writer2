@@ -108,7 +108,7 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
       useClass: HttpService,
       multi: true
     },
-    {
+  /*  {
       provide: APP_INITIALIZER,
       useFactory: (configService: ConfigurationService) =>
         function() {
@@ -116,7 +116,7 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
         },
       deps: [ConfigurationService],
       multi: true
-    },
+    },*/
     {
       provide: APP_BASE_HREF,
       useFactory: getBaseLocation
