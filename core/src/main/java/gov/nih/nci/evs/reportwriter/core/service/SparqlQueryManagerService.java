@@ -9,23 +9,23 @@ import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 
 public interface SparqlQueryManagerService {
 
-	public String getEvsConceptLabel(String conceptCode, String namedGraph);
+	public String getEvsConceptLabel(String conceptCode, String namedGraph, String restURL);
 	
-	public List <EvsProperty> getEvsProperties(String conceptCode, String namedGraph);
+	public List <EvsProperty> getEvsProperties(String conceptCode, String namedGraph, String restURL);
 	
-	public List<EvsAxiom> getEvsAxioms(String conceptCode, String namedGraph);
+	public List<EvsAxiom> getEvsAxioms(String conceptCode, String namedGraph, String restURL);
 	
-	public List<EvsConcept> getEvsSubclasses(String conceptCode, String namedGraph);
+	public List<EvsConcept> getEvsSubclasses(String conceptCode, String namedGraph, String resutURL);
 	
-	public List<EvsConcept> getEvsSuperclasses(String conceptCode, String namedGraph);
+	public List<EvsConcept> getEvsSuperclasses(String conceptCode, String namedGraph, String restURL);
 	
-	public EvsConcept getEvsConceptDetail(String conceptCode, String namedGraph);
+	public EvsConcept getEvsConceptDetail(String conceptCode, String namedGraph, String restURL);
 
-	public EvsConcept getEvsConceptDetailShort(String conceptCode, String namedGraph);
+	public EvsConcept getEvsConceptDetailShort(String conceptCode, String namedGraph, String restURL);
 
-	public List <EvsConcept> getEvsConceptInSubset(String conceptCode, String namedGraph);
+	public List <EvsConcept> getEvsConceptInSubset(String conceptCode, String namedGraph, String restURL);
 	
-	public EvsVersionInfo getEvsVersionInfo(String namedGraph);
+	public EvsVersionInfo getEvsVersionInfo(String namedGraph, String restURL);
 	
-	public List <String> getNamedGraphs();
+	public List <String> getNamedGraphs(String restURL);
 }

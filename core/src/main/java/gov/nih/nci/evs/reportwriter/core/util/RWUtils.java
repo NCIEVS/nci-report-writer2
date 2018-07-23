@@ -44,9 +44,9 @@ public class RWUtils {
 	 * @param conceptHash ConceptHash cache to improve performance.
 	 * @param templateColumns TemplateColumns contain template definitions for each column.
 	 */
-	public void processConceptInSubset(Report reportOutput, EvsConcept rootConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph ) {
+	public void processConceptInSubset(Report reportOutput, EvsConcept rootConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph, String restURL) {
 		
-		List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getEvsConceptInSubset(rootConcept.getCode(), namedGraph);
+		List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getEvsConceptInSubset(rootConcept.getCode(), namedGraph, restURL);
 		log.info("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
 		System.out.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
 		logFile.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
@@ -61,11 +61,11 @@ public class RWUtils {
 			if (conceptHash.containsKey(concept.getCode())) {
 				concept = conceptHash.get(concept.getCode());
 			} else {
-				concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(), namedGraph));
-				concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph));
+				concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(), namedGraph, restURL));
+				concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
 				conceptHash.put(concept.getCode(), concept);
 			}
-			writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph);
+			writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
 		}
 	}
 	
@@ -79,8 +79,8 @@ public class RWUtils {
 	 * 
 	 * This methods supports recursion.
 	 */
-	public void processConceptSubclasses(Report reportOutput, EvsConcept parentConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, PrintWriter logFile, String namedGraph) {
-		List <EvsConcept> subclasses = sparqlQueryManagerService.getEvsSubclasses(parentConcept.getCode(), namedGraph);
+	public void processConceptSubclasses(Report reportOutput, EvsConcept parentConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, PrintWriter logFile, String namedGraph, String restURL) {
+		List <EvsConcept> subclasses = sparqlQueryManagerService.getEvsSubclasses(parentConcept.getCode(), namedGraph, restURL);
 		log.info("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
 		System.out.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
 		logFile.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
@@ -88,12 +88,12 @@ public class RWUtils {
 			if (conceptHash.containsKey(subclass.getCode())) {
 				subclass = conceptHash.get(subclass.getCode());
 			} else {
-				subclass.setProperties(sparqlQueryManagerService.getEvsProperties(subclass.getCode(), namedGraph));
-				subclass.setAxioms(sparqlQueryManagerService.getEvsAxioms(subclass.getCode(), namedGraph));
+				subclass.setProperties(sparqlQueryManagerService.getEvsProperties(subclass.getCode(), namedGraph, restURL));
+				subclass.setAxioms(sparqlQueryManagerService.getEvsAxioms(subclass.getCode(), namedGraph, restURL));
 				conceptHash.put(subclass.getCode(), subclass);
 			}
-			processConceptInSubset(reportOutput,subclass,conceptHash,templateColumns,logFile, namedGraph);
-			processConceptSubclasses(reportOutput,subclass,conceptHash,templateColumns,logFile, namedGraph);
+			processConceptInSubset(reportOutput,subclass,conceptHash,templateColumns,logFile, namedGraph, restURL);
+			processConceptSubclasses(reportOutput,subclass,conceptHash,templateColumns,logFile, namedGraph, restURL);
 		}
 	}
 
@@ -111,9 +111,9 @@ public class RWUtils {
 	 * 
 	 * This methods supports recursion, but limited by the maxLevel parameters.
 	 */
-	public void processConceptSubclassesOnly(Report reportOutput,EvsConcept parentConcept,HashMap<String,EvsConcept> conceptHash,List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile, String namedGraph) {
+	public void processConceptSubclassesOnly(Report reportOutput,EvsConcept parentConcept,HashMap<String,EvsConcept> conceptHash,List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile, String namedGraph, String restURL) {
 		if (currentLevel < maxLevel) {
-			List <EvsConcept> subclasses = sparqlQueryManagerService.getEvsSubclasses(parentConcept.getCode(), namedGraph);
+			List <EvsConcept> subclasses = sparqlQueryManagerService.getEvsSubclasses(parentConcept.getCode(), namedGraph, restURL);
 			log.info("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
 			System.out.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
 			logFile.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
@@ -122,12 +122,12 @@ public class RWUtils {
 				if (conceptHash.containsKey(subclass.getCode())) {
 					subclass = conceptHash.get(subclass.getCode());
 				} else {
-					subclass.setProperties(sparqlQueryManagerService.getEvsProperties(subclass.getCode(), namedGraph));
-					subclass.setAxioms(sparqlQueryManagerService.getEvsAxioms(subclass.getCode(), namedGraph));
+					subclass.setProperties(sparqlQueryManagerService.getEvsProperties(subclass.getCode(), namedGraph, restURL));
+					subclass.setAxioms(sparqlQueryManagerService.getEvsAxioms(subclass.getCode(), namedGraph, restURL));
 					conceptHash.put(subclass.getCode(), subclass);
 				}
-				writeColumnData(reportOutput,parentConcept,subclass,conceptHash,templateColumns,namedGraph);
-				processConceptSubclassesOnly(reportOutput,subclass,conceptHash,templateColumns,currentLevel + 1,maxLevel,logFile, namedGraph);
+				writeColumnData(reportOutput,parentConcept,subclass,conceptHash,templateColumns,namedGraph,restURL);
+				processConceptSubclassesOnly(reportOutput,subclass,conceptHash,templateColumns,currentLevel + 1,maxLevel,logFile, namedGraph, restURL);
 			}
 		}
 		return;
@@ -144,16 +144,16 @@ public class RWUtils {
 	 * @param conceptFile File name of the input file.
 	 * 
 	 */
-	public void processConceptList(Report reportOutput, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, String conceptFile, PrintWriter logFile, String namedGraph ) {
+	public void processConceptList(Report reportOutput, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, String conceptFile, PrintWriter logFile, String namedGraph, String restURL ) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(conceptFile));
 			String line;
 			int total = 0;
 			while ((line = br.readLine()) != null) {
-		        EvsConcept concept = sparqlQueryManagerService.getEvsConceptDetailShort(line,namedGraph);	
-				concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(),namedGraph));
-				concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(),namedGraph));
-				writeColumnData(reportOutput,concept,concept,conceptHash,templateColumns,namedGraph);
+		        EvsConcept concept = sparqlQueryManagerService.getEvsConceptDetailShort(line,namedGraph,restURL);	
+				concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(),namedGraph,restURL));
+				concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(),namedGraph,restURL));
+				writeColumnData(reportOutput,concept,concept,conceptHash,templateColumns,namedGraph,restURL);
 				
 				total += 1;
 				if (total % 100 == 0) {
@@ -176,7 +176,7 @@ public class RWUtils {
 	 * @param conceptHash ConceptHash cache to improve performance.
 	 * @param templateColumns TemplateColumns contain template definitions for each column.
 	 */
-	public void writeColumnData(Report reportOutput, EvsConcept parentConcept, EvsConcept concept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, String namedGraph) {
+	public void writeColumnData(Report reportOutput, EvsConcept parentConcept, EvsConcept concept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, String namedGraph, String restURL) {
 		ReportRow reportRow = new ReportRow();
 		for (TemplateColumn column: templateColumns) {
 			String propertyType = column.getPropertyType();
@@ -232,9 +232,9 @@ public class RWUtils {
 					if (conceptHash.containsKey(code)) {
 						nichdParentConcept = conceptHash.get(code);
 					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph);	
-			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph));	
+			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);	
+			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));	
 			            conceptHash.put(code, nichdParentConcept);
 					}
 
@@ -253,9 +253,9 @@ public class RWUtils {
 					if (conceptHash.containsKey(code)) {
 						nichdParentConcept = conceptHash.get(code);
 					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph);	
-			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph));	
+			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);	
+			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));	
 			            conceptHash.put(code, nichdParentConcept);
 					}
 
@@ -286,9 +286,9 @@ public class RWUtils {
 					if (conceptHash.containsKey(code)) {
 						nichdParentConcept = conceptHash.get(code);
 					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph);	
-			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph));	
+			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);	
+			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));	
 			            conceptHash.put(code, nichdParentConcept);
 					}
 					
@@ -308,9 +308,9 @@ public class RWUtils {
 					if (conceptHash.containsKey(code)) {
 						nichdParentConcept = conceptHash.get(code);
 					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph);	
-			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph));	
+			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);	
+			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));	
 			            conceptHash.put(code, nichdParentConcept);
 					}
 					
