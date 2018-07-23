@@ -169,6 +169,9 @@ public class ReportWriter {
          	Cell graphCell = excelRow.createCell(1);
 	        graphCell.setCellValue("NamedGraph: " + namedGraph);
 	        graphCell.setCellStyle(headerStyle);
+	        Cell databaseCell = excelRow.createCell(2);
+	        databaseCell.setCellValue("REST URL: " + restURL);
+	        databaseCell.setCellStyle(headerStyle);
 	        
 			ArrayList <String> columnHeadings = new ArrayList <String>();
 	       	excelRow = sheet.createRow(rowIndex++);
