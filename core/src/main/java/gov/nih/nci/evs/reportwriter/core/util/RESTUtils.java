@@ -21,8 +21,8 @@ import org.springframework.web.client.RestTemplate;
  */
 public class RESTUtils {
 
-	private static final Logger log = LoggerFactory.getLogger(RESTUtils.class);private String restURL;
-
+	private static final Logger log = LoggerFactory.getLogger(RESTUtils.class);
+	
 	private String username;
 	private String password;
 	private int readTimeout;
@@ -30,13 +30,14 @@ public class RESTUtils {
 
 	public RESTUtils () {}
 
-	public RESTUtils(String restURL,String username, String password,int readTimeout, int connectTimeout) {
-		this.restURL = restURL;
+	public RESTUtils(String username, String password,int readTimeout, int connectTimeout) {
 		this.username = username;
 		this.password = password;
 		this.readTimeout= readTimeout;
 		this.connectTimeout = connectTimeout;
 	}
+
+
 
 	/**
 	 * 
@@ -45,7 +46,7 @@ public class RESTUtils {
 	 * @param query SPARQL query.
 	 * @return SPARQL results.
 	 */
-	public String runSPARQL(String query) {
+	public String runSPARQL(String query, String restURL) {
 		RestTemplate restTemplate = new RestTemplateBuilder().
 				rootUri(restURL).
 				basicAuthorization(username,password).

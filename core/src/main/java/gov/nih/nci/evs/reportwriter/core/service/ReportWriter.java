@@ -82,7 +82,7 @@ public class ReportWriter {
      * into the ReportTemplate class.
      * 
      */
-	public String runReport(String templateFile, String outputFile, String conceptFile, String databaseUrl,String namedGraph) {
+	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL,String namedGraph) {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         Template reportTemplate = null;
         PrintWriter logFile = null;
@@ -106,12 +106,12 @@ public class ReportWriter {
         logFile.println("");
         logFile.println("Template Information");
         logFile.println("********************************");
-        EvsVersionInfo evsVersionInfo = getEvsVersionInfo(databaseUrl,namedGraph);
+        EvsVersionInfo evsVersionInfo = getEvsVersionInfo(restURL, namedGraph);
         logFile.println("Version: " + evsVersionInfo.getVersion());       
         logFile.println(reportTemplate.toString());
         
         String rootConceptCode = reportTemplate.getRootConceptCode();
-        EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph);
+        EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
 
         // The conceptHash is used to improve performance, especially in the cases for reports that
         // are looking for parents concepts.  By first looking in the hash for the concept, time
@@ -124,16 +124,16 @@ public class ReportWriter {
         Report reportOutput = new Report();
         if (templateType.equals("Association")) {
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset")) {
-                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile,namedGraph);
-                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile,namedGraph);
+                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile,namedGraph,restURL);
+                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile,namedGraph,restURL);
         	} else if (reportTemplate.getAssociation().equals("Subclass")) {
-                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel,logFile,namedGraph);
+                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel,logFile,namedGraph,restURL);
         	} else {
         		System.err.println("Invalid Association Type: " + reportTemplate.getAssociation());
         		return "failure";
         	}
         } else if (templateType.equals("ConceptList")) {
-                rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph);
+                rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph,restURL);
         } else {
         	System.err.println("Invalid Template Type: " + templateType);
         	return "failure";
@@ -249,12 +249,12 @@ public class ReportWriter {
 	        return style;
     }
 	
-	public EvsVersionInfo getEvsVersionInfo(String databaseUrl,String namedGraph) {
-		return sparqlQueryManagerService.getEvsVersionInfo(namedGraph);
+	public EvsVersionInfo getEvsVersionInfo(String restURL,String namedGraph) {
+		return sparqlQueryManagerService.getEvsVersionInfo(namedGraph,restURL);
 	}	
 	
-	public List <String> getNamedGraphs() {
-		return sparqlQueryManagerService.getNamedGraphs();
+	public List <String> getNamedGraphs(String restURL) {
+		return sparqlQueryManagerService.getNamedGraphs(restURL);
 	}
 	
 }

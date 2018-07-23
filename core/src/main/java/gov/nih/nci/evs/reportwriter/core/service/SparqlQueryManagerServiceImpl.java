@@ -47,7 +47,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * Construct a RESTUtils class based on environment variables
 	 */
 	public void postInit() {
-		restUtils = new RESTUtils(stardogProperties.getWeeklyQueryUrl(), stardogProperties.getUsername(),
+		restUtils = new RESTUtils(stardogProperties.getUsername(),
 				stardogProperties.getPassword(),stardogProperties.getReadTimeout(),stardogProperties.getConnectTimeout());
 	}
 	
@@ -56,10 +56,10 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * 
 	 * @return List namedGraphs
 	 */
-	public List <String> getNamedGraphs() {
+	public List <String> getNamedGraphs(String restURL) {
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.constructNamedGraphQuery();
-		String res = restUtils.runSPARQL(queryPrefix + query);
+		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -83,11 +83,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * @param conceptCode Concept code.
 	 * @return List of EVSProperty instances.
 	 */
-	public List<EvsProperty> getEvsProperties(String conceptCode, String namedGraph) {
+	public List<EvsProperty> getEvsProperties(String conceptCode, String namedGraph, String restURL) {
 
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.constructPropertyQuery(conceptCode,namedGraph);
-		String res = restUtils.runSPARQL(queryPrefix + query);
+		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
         ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -129,11 +129,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * @param conceptCode Concept code.
 	 * @return Concept label
 	 */
-	public String getEvsConceptLabel(String conceptCode, String namedGraph) {
+	public String getEvsConceptLabel(String conceptCode, String namedGraph, String restURL) {
 
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.constructConceptQuery(conceptCode,namedGraph);
-		String res = restUtils.runSPARQL(queryPrefix + query);
+		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -157,11 +157,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * @param conceptCode Concept code.
 	 * @return List of EVSAxiom instances.
 	 */
-	public List<EvsAxiom> getEvsAxioms(String conceptCode, String namedGraph) {
+	public List<EvsAxiom> getEvsAxioms(String conceptCode, String namedGraph, String restURL) {
 
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.constructAxiomQuery(conceptCode,namedGraph);
-		String res = restUtils.runSPARQL(queryPrefix + query);
+		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -272,11 +272,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * @param conceptCode Concept code.
 	 * @return List of EvsConcept instances.
 	 */
-	public List<EvsConcept> getEvsSubclasses(String conceptCode, String namedGraph) {
+	public List<EvsConcept> getEvsSubclasses(String conceptCode, String namedGraph, String restURL) {
 
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.constructSubclassQuery(conceptCode,namedGraph);
-		String res = restUtils.runSPARQL(queryPrefix + query);
+		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 		//System.out.println(queryPrefix + "\n" + query);
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -304,11 +304,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * @param conceptCode Concept code.
 	 * @return List of EvsConcept instances.
 	 */
-	public List<EvsConcept> getEvsSuperclasses(String conceptCode, String namedGraph) {
+	public List<EvsConcept> getEvsSuperclasses(String conceptCode, String namedGraph, String restURL) {
 
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.constructSuperclassQuery(conceptCode,namedGraph);
-		String res = restUtils.runSPARQL(queryPrefix + query);
+		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -335,11 +335,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * @param conceptCode Concept code.
 	 * @return List of EvsConcept instances.
 	 */
-	public List <EvsConcept> getEvsConceptInSubset(String conceptCode, String namedGraph) {
+	public List <EvsConcept> getEvsConceptInSubset(String conceptCode, String namedGraph, String restURL) {
 
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.constructConceptInSubsetQuery(conceptCode,namedGraph);
-		String res = restUtils.runSPARQL(queryPrefix + query);
+		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -366,18 +366,18 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * @param conceptCode Concept code.
 	 * @return EvsConcept instance.
 	 */
-	public EvsConcept getEvsConceptDetail(String conceptCode, String namedGraph) {
+	public EvsConcept getEvsConceptDetail(String conceptCode, String namedGraph, String restURL) {
 		EvsConcept evsConcept = new EvsConcept();
-		List <EvsProperty> properties = getEvsProperties(conceptCode, namedGraph);
-		List <EvsAxiom> axioms = getEvsAxioms(conceptCode, namedGraph);
+		List <EvsProperty> properties = getEvsProperties(conceptCode, namedGraph, restURL);
+		List <EvsAxiom> axioms = getEvsAxioms(conceptCode, namedGraph, restURL);
 		evsConcept.setCode(EVSUtils.getConceptCode(properties));
 		evsConcept.setDefinition(EVSUtils.getDefinition(properties));
 		evsConcept.setPreferredName(EVSUtils.getPreferredName(properties));
 		evsConcept.setDisplayName(EVSUtils.getDisplayName(properties));
 		evsConcept.setNeoplasticStatus(EVSUtils.getNeoplasticStatus(properties));
 		evsConcept.setSemanticTypes(EVSUtils.getSemanticType(properties));
-		List <EvsConcept> subclasses = getEvsSubclasses(conceptCode, namedGraph);
-		List <EvsConcept> superclasses = getEvsSuperclasses(conceptCode, namedGraph);
+		List <EvsConcept> subclasses = getEvsSubclasses(conceptCode, namedGraph, restURL);
+		List <EvsConcept> superclasses = getEvsSuperclasses(conceptCode, namedGraph, restURL);
 		evsConcept.setSubclasses(subclasses);
 		evsConcept.setSuperclasses(superclasses);
 		evsConcept.setSynonyms(EVSUtils.getFullSynonym(axioms));
@@ -391,13 +391,13 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * @param conceptCode Concept code.
 	 * @return EvsConcept instance.
 	 */
-	public EvsConcept getEvsConceptDetailShort(String conceptCode, String namedGraph) {
+	public EvsConcept getEvsConceptDetailShort(String conceptCode, String namedGraph, String restURL) {
 		EvsConcept evsConcept = new EvsConcept();
-		List <EvsProperty> properties = getEvsProperties(conceptCode, namedGraph);
+		List <EvsProperty> properties = getEvsProperties(conceptCode, namedGraph, restURL);
 		evsConcept.setProperties(properties);
-		List <EvsAxiom> axioms = getEvsAxioms(conceptCode, namedGraph);
+		List <EvsAxiom> axioms = getEvsAxioms(conceptCode, namedGraph, restURL);
 		evsConcept.setAxioms(axioms);
-		String conceptLabel = getEvsConceptLabel(conceptCode, namedGraph);
+		String conceptLabel = getEvsConceptLabel(conceptCode, namedGraph, restURL);
 		evsConcept.setCode(EVSUtils.getConceptCode(properties));
 		evsConcept.setLabel(conceptLabel);
 		evsConcept.setDefinition(EVSUtils.getDefinition(properties));
@@ -414,11 +414,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * 
 	 * @return EvsVersionInfo instance.
 	 */
-	public EvsVersionInfo getEvsVersionInfo(String namedGraph) {
+	public EvsVersionInfo getEvsVersionInfo(String namedGraph, String restURL) {
 
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.constructVersionInfoQuery(namedGraph);
-		String res = restUtils.runSPARQL(queryPrefix + query);
+		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
