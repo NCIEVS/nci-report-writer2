@@ -11,10 +11,12 @@ public class StardogProperties {
     private String url;
     private String username;
     private String password;
-    private String queryUrl;
+    private String monthlyQueryUrl;
+    private String weeklyQueryUrl;
     private int readTimeout;
     private int connectTimeout;
-    private String graphName;
+    private String monthlyGraphName;
+    private String weeklyGraphName;
 
 	public String getUrl() {
 		return url;
@@ -40,13 +42,7 @@ public class StardogProperties {
 		this.password = password;
 	}
 
-	public String getQueryUrl() {
-		return queryUrl;
-	}
-
-	public void setQueryUrl(String queryUrl) {
-		this.queryUrl = queryUrl;
-	}
+	
 
 	public int getReadTimeout() {
 		return readTimeout;
@@ -64,11 +60,37 @@ public class StardogProperties {
 		this.connectTimeout = connectTimeout;
 	}
 
-	public String getGraphName() {
-		return graphName;
+	public String getMonthlyQueryUrl() {
+		return monthlyQueryUrl;
 	}
 
-	public void setGraphName(String graphName) {
-		this.graphName = graphName;
+	public void setMonthlyQueryUrl(String monthlyQueryUrl) {
+		this.monthlyQueryUrl = monthlyQueryUrl;
 	}
+
+	public String getMonthlyGraphName() {
+		return monthlyGraphName;
+	}
+
+	public void setMonthlyGraphName(String monthlyGraphName) {
+		this.monthlyGraphName = monthlyGraphName;
+	}
+
+	public String getWeeklyQueryUrl() {
+		return weeklyQueryUrl;
+	}
+
+	public void setWeeklyQueryUrl(String weeklyQueryUrl) {
+		this.weeklyQueryUrl = weeklyQueryUrl;
+	}
+
+	public String getWeeklyGraphName() {
+		return weeklyGraphName;
+	}
+
+	public void setWeeklyGraphName(String weeklyGraphName) {
+		this.weeklyGraphName = weeklyGraphName;
+	}
+
+	
 }

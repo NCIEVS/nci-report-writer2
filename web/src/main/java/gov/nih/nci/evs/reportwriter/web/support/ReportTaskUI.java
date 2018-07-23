@@ -15,13 +15,15 @@ public class ReportTaskUI {
 	private String status;
 	private String version;
 	private String graphName;
+	private String databaseUrl;
+	private String databaseType;
 	
 	public ReportTaskUI() {
 		
 	}
 	
 	public ReportTaskUI(Integer id,String dateCompleted,String dateCreated,String dateStarted,
-			String reportTemplateName,Integer reportTemplateId, String status, String vesion) {
+			String reportTemplateName,Integer reportTemplateId, String status, String version) {
 		this.id = id;
 		this.dateCompleted = dateCompleted;
 		this.dateCreated = dateCreated;
@@ -90,5 +92,21 @@ public class ReportTaskUI {
 
 	public void setGraphName(String graphName) {
 		this.graphName = graphName;
+	}
+
+	public String getDatabaseUrl() {
+		return databaseUrl;
+	}
+
+	public void setDatabaseUrl(String databaseUrl) {
+		this.databaseUrl = databaseUrl;
+	}
+
+	public String getDatabaseType() {
+		return databaseType;
+	}
+
+	public void setDatabaseType(String databaseType) {
+		this.databaseType = databaseType;
 	}
 }

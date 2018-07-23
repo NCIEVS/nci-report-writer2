@@ -24,7 +24,7 @@ public interface ReportTaskService {
 	
 	public ReportTask save(ReportTask reportTask);
 	
-	public ReportTask createReportTask(ReportTemplate RreportTemplate, String namedGraph);
+	public ReportTask createReportTask(ReportTemplate reportTemplate, String databaseType);
 	
 	public ReportTask findOne(Integer reportTaskId);
 	

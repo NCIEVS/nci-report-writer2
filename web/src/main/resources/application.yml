@@ -81,12 +81,14 @@ gov:
            outputDirectory: ${RW_OUTPUT_DIRECTORY:/tmp/output}
          stardog:
            url: ${STARDOG_URL:http://localhost:5820/NCIT2}
-           queryUrl: ${STARDOG_QUERY_URL:http://localhost:5820/NCIT2/query}
+           monthlyQueryUrl: ${STARDOG_QUERY_URL:http://localhost:5820/NCIT2/query}
+           monthlyGraphName: ${STARDOG_GRAPH_NAME:http://NCI_T}
+           weeklyQueryUrl: ${STARDOG_QUERY_URL:http://localhost:5820/NCIT2/query}
+           weeklyGraphName: ${STARDOG_GRAPH_NAME:http://NCI_T}
            username: ${STARDOG_USERNAME:admin}
            password: ${STARDOG_PASSWORD:admin}     
            readTimeout: ${STARDOG_READ_TIMEOUT:10000}
-           connectTimeout: ${STARDOG_CONNECT_TIMEOUT:10000}
-           graphName: ${STARDOG_GRAPH_NAME:http://NCI_T} 
+           connectTimeout: ${STARDOG_CONNECT_TIMEOUT:10000}            
          web:
            defaultUsername: ${RW_DEFAULT_USERNAME:system}
            

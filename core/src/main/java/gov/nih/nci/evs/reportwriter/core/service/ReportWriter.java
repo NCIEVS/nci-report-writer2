@@ -82,7 +82,7 @@ public class ReportWriter {
      * into the ReportTemplate class.
      * 
      */
-	public String runReport(String templateFile, String outputFile, String conceptFile, String namedGraph) {
+	public String runReport(String templateFile, String outputFile, String conceptFile, String databaseUrl,String namedGraph) {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         Template reportTemplate = null;
         PrintWriter logFile = null;
@@ -106,7 +106,7 @@ public class ReportWriter {
         logFile.println("");
         logFile.println("Template Information");
         logFile.println("********************************");
-        EvsVersionInfo evsVersionInfo = getEvsVersionInfo(namedGraph);
+        EvsVersionInfo evsVersionInfo = getEvsVersionInfo(databaseUrl,namedGraph);
         logFile.println("Version: " + evsVersionInfo.getVersion());       
         logFile.println(reportTemplate.toString());
         
@@ -249,7 +249,7 @@ public class ReportWriter {
 	        return style;
     }
 	
-	public EvsVersionInfo getEvsVersionInfo(String namedGraph) {
+	public EvsVersionInfo getEvsVersionInfo(String databaseUrl,String namedGraph) {
 		return sparqlQueryManagerService.getEvsVersionInfo(namedGraph);
 	}	
 	

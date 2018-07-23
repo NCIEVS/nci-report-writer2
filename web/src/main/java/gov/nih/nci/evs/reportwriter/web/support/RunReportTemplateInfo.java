@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class RunReportTemplateInfo {
 
-	private String graphName;
+	private String datbaseType;
 	private ArrayList<ReportTemplateUI> reportTemplates;
 
 	public ArrayList<ReportTemplateUI> getReportTemplates() {
@@ -15,12 +15,14 @@ public class RunReportTemplateInfo {
 		this.reportTemplates = reportTemplates;
 	}
 
-	public String getGraphName() {
-		return graphName;
+	public String getDatbaseType() {
+		return datbaseType;
 	}
 
-	public void setGraphName(String graphName) {
-		this.graphName = graphName;
+	public void setDatbaseType(String datbaseType) {
+		this.datbaseType = datbaseType;
 	}
+
+	
 
 }

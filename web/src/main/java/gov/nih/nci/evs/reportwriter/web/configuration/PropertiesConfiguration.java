@@ -29,7 +29,7 @@ public class PropertiesConfiguration {
 
 
     /*
-     * Stardog  Properties
+     * WebProperties  Properties
      */
     @Bean
     @ConfigurationProperties(prefix = "gov.nih.nci.evs.reportwriter.web", ignoreUnknownFields = false)

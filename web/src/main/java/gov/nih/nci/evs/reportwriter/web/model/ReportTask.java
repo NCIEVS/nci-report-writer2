@@ -32,6 +32,8 @@ public class ReportTask implements Serializable {
 	private String status;
 	private String version;
 	private String graphName;
+	private String databaseUrl;
+	private String databaseType;
 
 	public ReportTask() {
 	}
@@ -147,6 +149,24 @@ public class ReportTask implements Serializable {
 
 	public void setGraphName(String graphName) {
 		this.graphName = graphName;
+	}
+
+	@Column(name = "database_url")
+	public String getDatabaseUrl() {
+		return databaseUrl;
+	}
+
+	public void setDatabaseUrl(String databaseUrl) {
+		this.databaseUrl = databaseUrl;
+	}
+
+	@Column(name = "database_type")
+	public String getDatabaseType() {
+		return databaseType;
+	}
+
+	public void setDatabaseType(String databaseType) {
+		this.databaseType = databaseType;
 	}
 
 }

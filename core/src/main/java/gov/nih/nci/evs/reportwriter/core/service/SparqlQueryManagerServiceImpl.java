@@ -47,7 +47,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * Construct a RESTUtils class based on environment variables
 	 */
 	public void postInit() {
-		restUtils = new RESTUtils(stardogProperties.getQueryUrl(), stardogProperties.getUsername(),
+		restUtils = new RESTUtils(stardogProperties.getWeeklyQueryUrl(), stardogProperties.getUsername(),
 				stardogProperties.getPassword(),stardogProperties.getReadTimeout(),stardogProperties.getConnectTimeout());
 	}
 	

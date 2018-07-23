@@ -427,13 +427,13 @@ public class ReportWriterController {
 	@RequestMapping(method = RequestMethod.POST, value = "/runReportTemplates", consumes = "application/json", produces = "application/json")
 	public @ResponseBody ArrayList<ReportTaskUI> runReportTemplates(
 			@RequestBody final RunReportTemplateInfo runReportTemplateInfo) throws JsonProcessingException {
-		log.debug("Graph Name - " + runReportTemplateInfo.getGraphName());
+		log.debug("Database Type- " + runReportTemplateInfo.getDatbaseType());
 		List<ReportTemplateUI> reportTemplates = runReportTemplateInfo.getReportTemplates();
 		ArrayList<ReportTaskUI> reportTasks = new ArrayList<ReportTaskUI>();
 		for (ReportTemplateUI reportTemplateUI : reportTemplates) {
 			log.info("template id - " + reportTemplateUI.getId() + " report name - " + reportTemplateUI.getName());
 			ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateUI.getId());
-			ReportTask reportTaskRet = reportTaskService.createReportTask(reportTemplate, runReportTemplateInfo.getGraphName());
+			ReportTask reportTaskRet = reportTaskService.createReportTask(reportTemplate, runReportTemplateInfo.getDatbaseType());
 			log.info("TaskId" + reportTaskRet.getId());
 			ReportTaskUI reportTaskUI = new ReportTaskUI();
 			reportTaskUI.setReportTemplateName(reportTemplateUI.getName());

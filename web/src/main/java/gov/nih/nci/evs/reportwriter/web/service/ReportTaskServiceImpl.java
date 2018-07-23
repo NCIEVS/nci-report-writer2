@@ -101,6 +101,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			reportTaskUI.setDateCompleted(txtDateCompleted);
 			reportTaskUI.setVersion(reportTask.getVersion());
 			reportTaskUI.setGraphName(reportTask.getGraphName());
+			reportTaskUI.setDatabaseUrl(reportTask.getDatabaseUrl());
+			reportTaskUI.setDatabaseType(reportTask.getDatabaseType());
 			reportTaskUIs.add(reportTaskUI);
 			// }
 
@@ -109,9 +111,17 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 
 	}
 
-	public ReportTask createReportTask(ReportTemplate reportTemplate, String namedGraph) {
-		
-		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(namedGraph);
+	public ReportTask createReportTask(ReportTemplate reportTemplate, String databaseType) {
+		String namedGraph = "";
+		String databaseUrl = "";
+		if(databaseType.equalsIgnoreCase("monthly")) {
+			namedGraph = stardogProperties.getMonthlyGraphName();
+			databaseUrl = stardogProperties.getMonthlyQueryUrl();
+		} else {
+			namedGraph = stardogProperties.getWeeklyGraphName();
+			databaseUrl = stardogProperties.getWeeklyQueryUrl();
+		}
+		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl,namedGraph);
 		ReportTask reportTask = new ReportTask();
 		reportTask.setStatus("Pending");
 		reportTask.setReportTemplate(reportTemplate);
@@ -121,6 +131,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		reportTask.setLastUpdatedBy("system");
 		reportTask.setVersion(evsVersionInfo.getVersion());
 		reportTask.setGraphName(namedGraph);
+		reportTask.setDatabaseUrl(databaseUrl);
+		reportTask.setDatabaseType(databaseType);		
 		ReportTask reportTaskRet = save(reportTask);
 		
 		return reportTaskRet;
@@ -150,6 +162,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			reportTaskUI.setDateCompleted(txtDateCompleted);
 			reportTaskUI.setVersion(reportTask.getVersion());
 			reportTaskUI.setGraphName(reportTask.getGraphName());
+			reportTaskUI.setDatabaseUrl(reportTask.getDatabaseUrl());
+			reportTaskUI.setDatabaseType(reportTask.getDatabaseType());
 			reportTaskUIs.add(reportTaskUI);
 			// }
 
@@ -168,6 +182,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 	@Async
 	public void runReport(ReportTask reportTask) {
 		String namedGraph = reportTask.getGraphName();
+		String databaseUrl = reportTask.getDatabaseUrl();
 		int reportTemplateId = reportTask.getReportTemplate().getId();
 		ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateId);
 		List<ReportTemplateColumn> columns = reportTemplate.getColumns();
@@ -236,7 +251,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			reportTask.setDateLastUpdated(LocalDateTime.now());
 			reportTask.setStatus("Started");
 			save(reportTask);
-			String status = reportWriter.runReport(templateFileName, reportName, conceptListFileName, namedGraph);
+			String status = reportWriter.runReport(templateFileName, reportName, conceptListFileName,databaseUrl, namedGraph);
 			reportTask.setDateCompleted(LocalDateTime.now());
 			reportTask.setDateLastUpdated(LocalDateTime.now());
 			if (status.equals("success")) {
