@@ -14,7 +14,7 @@ import { forEach } from "@angular/router/src/utils/collection";
 import { Lookup } from "./../../model/lookup";
 import { RunReportTemplateInfo } from "./../../model/runReportTemplateInfo";
 
-import { ConfigurationService } from "./../../service/configuration.service";
+
 
 @Component({
   selector: "app-report-template",

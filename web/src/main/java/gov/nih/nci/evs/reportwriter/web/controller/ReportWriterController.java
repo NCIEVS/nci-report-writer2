@@ -29,7 +29,7 @@ import gov.nih.nci.evs.reportwriter.web.model.LookUp;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTask;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateColumn;
-import gov.nih.nci.evs.reportwriter.web.service.ConfigurationService;
+
 import gov.nih.nci.evs.reportwriter.web.service.LkAssociationService;
 import gov.nih.nci.evs.reportwriter.web.service.LkDisplayService;
 import gov.nih.nci.evs.reportwriter.web.service.LkGroupService;
@@ -43,7 +43,7 @@ import gov.nih.nci.evs.reportwriter.web.service.LkSubsourceService;
 import gov.nih.nci.evs.reportwriter.web.service.ReportTaskService;
 import gov.nih.nci.evs.reportwriter.web.service.ReportTemplateColumnService;
 import gov.nih.nci.evs.reportwriter.web.service.ReportTemplateService;
-import gov.nih.nci.evs.reportwriter.web.support.ConfigurationProperties;
+
 import gov.nih.nci.evs.reportwriter.web.support.FileUI;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTaskOutput;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTaskUI;
@@ -89,8 +89,7 @@ public class ReportWriterController {
 	@Autowired
 	ReportTaskService reportTaskService;
 
-	@Autowired
-	ConfigurationService configurationService;
+
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody String home() {
@@ -295,13 +294,7 @@ public class ReportWriterController {
 		return reportTaskUIs;
 	}
 
-	@RequestMapping(value = "/configuration", method = RequestMethod.GET)
-	public @ResponseBody ConfigurationProperties getGraphNames() throws IOException {
-        log.debug("In getGraphNames");
-		ConfigurationProperties configurationProperties = configurationService.getConfigurationProperties();
-		return configurationProperties;
-
-	}
+	
 
 	@RequestMapping(value = "/reporttasksdeleted", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<ReportTaskUI> reporttasksdeleted() {

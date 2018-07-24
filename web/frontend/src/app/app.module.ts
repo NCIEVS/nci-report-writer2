@@ -37,7 +37,7 @@ import { ReportTaskService } from "./service/report-task.service";
 
 import { LoaderService } from "./service/loader.service";
 import { HttpService } from "./service/http.interceptor";
-import { ConfigurationService } from "./service/configuration.service";
+
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
@@ -97,7 +97,6 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
     ReportTemplateService,
     ReportTaskService,
     LoaderService,
-    ConfigurationService,
     Location,
     {
       provide: LocationStrategy,
@@ -108,15 +107,6 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
       useClass: HttpService,
       multi: true
     },
-  /*  {
-      provide: APP_INITIALIZER,
-      useFactory: (configService: ConfigurationService) =>
-        function() {
-          return configService.loadConfiguration("/reportwriter/configuration");
-        },
-      deps: [ConfigurationService],
-      multi: true
-    },*/
     {
       provide: APP_BASE_HREF,
       useFactory: getBaseLocation
