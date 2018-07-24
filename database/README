@@ -49,6 +49,8 @@ For July 11th 2018 changes, added column to the report_task table:
   ALTER TABLE report_task
   ADD column graph_name VARCHAR(2000);
 
+For July 24th 2018 changes, added column to the report_task table:
+
   ALTER TABLE report_task
   ADD column database_url VARCHAR(2000);
 
