@@ -342,17 +342,17 @@ public class RWUtils {
 	public ArrayList <String> getFullSynonym(TemplateColumn column,List <EvsAxiom> axioms) {
 		ArrayList <String> values = new ArrayList<String>();
 		
-		List <EvsAxiom>axiomsCopy = new ArrayList<EvsAxiom>(axioms);
-		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>();
+		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>(axioms);
 		String property = column.getProperty();
 		String termSource = column.getSource();
 		String termGroup = column.getGroup();
 		String subsource = column.getSubsource();
+		String attr = column.getAttr();
 		String display = column.getDisplay();
 		
 		List <EvsAxiom>axioms1 = new ArrayList<EvsAxiom>();
 		if (property != null) {
-			for (EvsAxiom axiom: axiomsCopy) {
+			for (EvsAxiom axiom: axiomsKeep) {
 			    if (property.equals(axiom.getAnnotatedProperty())) {
 			    	axioms1.add(axiom);
 			    }
@@ -362,7 +362,7 @@ public class RWUtils {
 
 		List <EvsAxiom>axioms2 = new ArrayList<EvsAxiom>();
 		if (termSource != null) {
-			for (EvsAxiom axiom: axioms1) {
+			for (EvsAxiom axiom: axiomsKeep) {
 			    if (termSource.equals(axiom.getTermSource())) {
 			    	axioms2.add(axiom);
 			    }
@@ -372,7 +372,7 @@ public class RWUtils {
 
 		List <EvsAxiom>axioms3 = new ArrayList<EvsAxiom>();
 		if (termGroup != null) {
-			for (EvsAxiom axiom: axioms2) {
+			for (EvsAxiom axiom: axiomsKeep) {
 			    if (termGroup.equals(axiom.getTermGroup())) {
 			    	axioms3.add(axiom);
 			    }
@@ -382,7 +382,7 @@ public class RWUtils {
 
 		List <EvsAxiom>axioms4 = new ArrayList<EvsAxiom>();
 		if (subsource != null) {
-			for (EvsAxiom axiom: axioms3) {
+			for (EvsAxiom axiom: axiomsKeep) {
 			    if (subsource.equals(axiom.getSubsourceName())) {
 			    	axioms4.add(axiom);
 			    }
@@ -390,6 +390,16 @@ public class RWUtils {
 			axiomsKeep = new ArrayList<EvsAxiom>(axioms4);
 		}
 		
+		List <EvsAxiom>axioms5 = new ArrayList<EvsAxiom>();
+		if (attr != null) {
+			for (EvsAxiom axiom: axiomsKeep) {
+			    if (attr.equals(axiom.getAttr())) {
+			    	axioms5.add(axiom);
+			    }
+			}
+			axiomsKeep = new ArrayList<EvsAxiom>(axioms5);
+		}
+
 		for (EvsAxiom axiom: axiomsKeep) {
 			if (display.equals("property")) {
 				values.add(axiom.getAnnotatedTarget());
@@ -415,17 +425,27 @@ public class RWUtils {
 	public ArrayList <String> getDefinition(TemplateColumn column,List <EvsAxiom> axioms) {
 		ArrayList <String> values = new ArrayList<String>();
 		
-		List <EvsAxiom>axiomsCopy = new ArrayList<EvsAxiom>(axioms);
-		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>();
+		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>(axioms);
 		String property = column.getProperty();
 		String defSource = column.getSource();
-		String attr = column.getGroup();
 		String display = column.getDisplay();
-
+		
+		/*
+		 * This is a Hack, John C. August 31, 2018
+		 * Originaly the templates did not include the "attr" property as an option
+		 * So for definitions, this information was entered in the Group column.
+		 * For the Aug 31 changes, the "attr" column was added, so for now we will
+		 * keep backword compatibility by looking in both the "attr" and "group column,
+		 * in case "group" was used in existing templates.
+		 */
+		String attr = column.getAttr();
+		if (attr == null) {
+			attr = column.getGroup();
+		}
 		
 		List <EvsAxiom>axioms1 = new ArrayList<EvsAxiom>();
 		if (property != null) {
-			for (EvsAxiom axiom: axiomsCopy) {
+			for (EvsAxiom axiom: axiomsKeep) {
 			    if (property.equals(axiom.getAnnotatedProperty())) {
 			    	axioms1.add(axiom);
 			    }
@@ -433,10 +453,9 @@ public class RWUtils {
 			axiomsKeep = new ArrayList<EvsAxiom>(axioms1);
 		}
 
-
 		List <EvsAxiom>axioms2 = new ArrayList<EvsAxiom>();
 		if (defSource != null) {
-			for (EvsAxiom axiom: axioms1) {
+			for (EvsAxiom axiom: axiomsKeep) {
 			    if (defSource.equals(axiom.getDefSource())) {
 			    	axioms2.add(axiom);
 			    }
@@ -446,7 +465,7 @@ public class RWUtils {
 
 		List <EvsAxiom>axioms3 = new ArrayList<EvsAxiom>();
 		if (attr != null) {
-			for (EvsAxiom axiom: axioms2) {
+			for (EvsAxiom axiom: axiomsKeep) {
 			    if (attr.equals(axiom.getAttr())) {
 			    	axioms3.add(axiom);
 			    }
@@ -486,8 +505,7 @@ public class RWUtils {
 	public ArrayList <String> getDbXref(TemplateColumn column,List <EvsAxiom> axioms) {
 		ArrayList <String> values = new ArrayList<String>();
 		
-		List <EvsAxiom>axiomsCopy = new ArrayList<EvsAxiom>(axioms);
-		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>();
+		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>(axioms);
 		String property = column.getProperty();
 		String defSource = column.getSource();
 		String attr = column.getGroup();
@@ -496,7 +514,7 @@ public class RWUtils {
 		
 		List <EvsAxiom>axioms1 = new ArrayList<EvsAxiom>();
 		if (property != null) {
-			for (EvsAxiom axiom: axiomsCopy) {
+			for (EvsAxiom axiom: axiomsKeep) {
 			    if (property.equals(axiom.getAnnotatedProperty())) {
 			    	axioms1.add(axiom);
 			    }
@@ -507,7 +525,7 @@ public class RWUtils {
 
 		List <EvsAxiom>axioms2 = new ArrayList<EvsAxiom>();
 		if (defSource != null) {
-			for (EvsAxiom axiom: axioms1) {
+			for (EvsAxiom axiom: axiomsKeep) {
 			    if (defSource.equals(axiom.getXrefSource())) {
 			    	axioms2.add(axiom);
 			    }
@@ -517,7 +535,7 @@ public class RWUtils {
 
 		List <EvsAxiom>axioms3 = new ArrayList<EvsAxiom>();
 		if (attr != null) {
-			for (EvsAxiom axiom: axioms2) {
+			for (EvsAxiom axiom: axiomsKeep) {
 			    if (attr.equals(axiom.getAttr())) {
 			    	axioms3.add(axiom);
 			    }

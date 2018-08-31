@@ -56,3 +56,16 @@ For July 24th 2018 changes, added column to the report_task table:
 
  ALTER TABLE report_task
   ADD column database_type VARCHAR(200);
+
+For August 30th changes, added column to report_template_column,
+  created new table lk_attr
+  
+  ALTER TABLE report_template_column
+  ADD column attr VARCHAR(255); 
+
+insert into lk_attr(name,description) values("CDRH","CDRH");
+insert into lk_attr(name,description) values("CDRH_GUDID","CDRH_GUDID");
+insert into lk_attr(name,description) values("eCTD","eCTD");
+insert into lk_attr(name,description) values("eManu","eManu");
+insert into lk_attr(name,description) values("ICSR","ICSR");
+insert into lk_attr(name,description) values("Stability","Stability");

@@ -1,0 +1,8 @@
+LOAD DATA LOCAL INFILE "../data/lk_attr.txt"
+    into table lk_attr
+    fields terminated by '~@~'
+    lines terminated by '~@@~\n'
+    (
+        name,
+        description
+    );

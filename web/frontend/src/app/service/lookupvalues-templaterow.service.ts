@@ -70,6 +70,13 @@ export class LookupvaluesTemplaterowService {
     );
   }
 
+  getAttrs(): Observable<Lookup[]> {  
+    return this.http.get<Lookup[]>("/reportwriter/lkattr").pipe(
+      catchError(this.handleError('lkattr', []))
+    );
+  }
+
+
    /**
  * Handle Http operation that failed.
  * Let the app continue.

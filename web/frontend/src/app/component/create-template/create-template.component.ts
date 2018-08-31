@@ -30,6 +30,7 @@ export class CreateTemplateComponent implements OnInit {
   sources: Lookup[];
   groups: Lookup[];
   subsources: Lookup[];
+  attrs: Lookup[];
 
   selectedType: Lookup;
   selectedAssociation: Lookup;
@@ -142,6 +143,11 @@ arraymove(arr, fromIndex, toIndex) {
     } else {
       this.templateRowAdd.subsource = this.templateRowUI.subsource;
     }
+    if (this.templateRowUI.attr == undefined || this.templateRowUI.attr == null) {
+      this.templateRowAdd.attr = null;
+    } else {
+      this.templateRowAdd.attr = this.templateRowUI.attr;
+    }
 
     console.log("templateRowAdd - " + JSON.stringify(this.templateRowAdd));
 
@@ -199,13 +205,10 @@ arraymove(arr, fromIndex, toIndex) {
     this.getDisplays();
     this.getPropertyTypes();
     this.getPropertyTargets();
-
-   
-    
-
     this.getSources();
     this.getGroups();
     this.getSubsources();
+    this.getAttrs();
 
 
     //this.sources.push(this.lookupNone);
@@ -238,16 +241,11 @@ arraymove(arr, fromIndex, toIndex) {
       { field: 'property', header: 'Property', editable: true },
       { field: 'source', header: 'Source', editable: true },
       { field: 'group', header: 'Group', editable: true },
-      { field: 'subsource', header: 'Subsource', editable: true }
+      { field: 'subsource', header: 'Subsource', editable: true },
+      { field: 'attr', header: 'Attr', editable: true }
 
     ];
   }
-
-
-
-
-
-
 
   getTypes(): void {
     this.lookupvaluesTemplateService.getTypes().subscribe(types => this.types = types);
@@ -274,8 +272,6 @@ arraymove(arr, fromIndex, toIndex) {
     this.lookupvaluesTemplaterowService.getPropertyTargets().subscribe(propertyTargets => {this.propertyTargets = propertyTargets;});
   }
 
-
-
   getSources(): void {
     this.lookupvaluesTemplaterowService.getSources().subscribe(sources => { this.sources = sources; this.sources.push(this.lookupNone) });
   }
@@ -286,6 +282,10 @@ arraymove(arr, fromIndex, toIndex) {
 
   getSubsources(): void {
     this.lookupvaluesTemplaterowService.getSubsources().subscribe(subsources => { this.subsources = subsources; this.subsources.push(this.lookupNone) });
+  }
+
+  getAttrs(): void {
+    this.lookupvaluesTemplaterowService.getAttrs().subscribe(attrs => { this.attrs = attrs; this.attrs.push(this.lookupNone) });
   }
 
   clearTemplateRows() {
@@ -305,12 +305,18 @@ arraymove(arr, fromIndex, toIndex) {
     for (let templateRow of this.templateRows) {
       templateRow.columnNumber = count;
       templateRow.id = null;
-      if (templateRow.source == 'None')
-      templateRow.source = null;
-      if (templateRow.group == 'None')
-      templateRow.group = null;
-      if (templateRow.subsource == 'None')
-      templateRow.subsource = null;
+      if (templateRow.source == 'None') {
+        templateRow.source = null;
+      }
+      if (templateRow.group == 'None') {
+        templateRow.group = null;
+      }
+      if (templateRow.subsource == 'None') {
+        templateRow.subsource = null;
+      }
+      if (templateRow.attr == 'None') {
+        templateRow.attr = null;
+      }
       count++;
     }
     this.template.columns = this.templateRows;

@@ -28,6 +28,7 @@ CREATE TABLE report_template_column
   source                VARCHAR(255),
   source_group          VARCHAR(255),
   subsource             VARCHAR(255),
+  attr                  VARCHAR(255),
   report_template_id    INT NOT NULL,
   date_created          DATETIME NOT NULL,
   date_last_updated     DATETIME NOT NULL,
@@ -144,5 +145,13 @@ CREATE TABLE lk_property
   code  VARCHAR(20) NOT NULL,
   label VARCHAR(200),
   PRIMARY KEY (code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+;
+
+CREATE TABLE lk_attr
+(
+  name  VARCHAR(40) NOT NULL,
+  description VARCHAR(200),
+  PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ;

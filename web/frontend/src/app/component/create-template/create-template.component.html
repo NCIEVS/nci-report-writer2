@@ -123,6 +123,12 @@
                     <p-dropdown [filter]="true" [(ngModel)]="templateRow[col.field]" name="subsource" [ngModelOptions]="{standalone: true}" [options]="subsources" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
                 </ng-template>
             </p-column>
+
+            <p-column field="attr" header="Attr" [editable]="true">
+                <ng-template let-col let-templateRow="rowData" pTemplate="editor">
+                    <p-dropdown [filter]="true" [(ngModel)]="templateRow[col.field]" name="attr" [ngModelOptions]="{standalone: true}" [options]="attrs" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                </ng-template>
+            </p-column>
         </p-dataTable>
         <br>
         <br>
@@ -215,6 +221,14 @@
                 <div class="col-sm-8">
 
                     <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="subsources" [(ngModel)]="templateRowUI.subsource" id="subsource" name="subsource" placeholder="Select a Subsource"></p-dropdown>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">Attr:</label>
+                <div class="col-sm-8">
+
+                    <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="attrs" [(ngModel)]="templateRowUI.attr" id="attr" name="attr" placeholder="Select a Attr"></p-dropdown>
 
                 </div>
             </div>

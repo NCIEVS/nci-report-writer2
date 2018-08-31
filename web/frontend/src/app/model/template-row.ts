@@ -11,7 +11,8 @@ export class TemplateRow {
         public property?:string,
         public source?:string,
         public group?:string, 
-        public subsource?:string
+        public subsource?:string,
+        public attr?:string
       ) {  }
     
     }
@@ -30,6 +31,7 @@ export class TemplateRow {
           public source?:Lookup,
           public group?:Lookup, 
           public subsource?:Lookup, 
+          public attr?:Lookup
         ) {  }
       
       }

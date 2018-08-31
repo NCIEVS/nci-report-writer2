@@ -44,3 +44,6 @@ $CMD < ../load/lk_source.load
 
 echo "Loading lk_subsource"
 $CMD < ../load/lk_subsource.load
+
+echo "Loading lk_attr"
+$CMD < ../load/lk_attr.load

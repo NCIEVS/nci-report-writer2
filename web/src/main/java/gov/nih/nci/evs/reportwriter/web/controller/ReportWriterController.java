@@ -3,13 +3,14 @@ package gov.nih.nci.evs.reportwriter.web.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,8 +30,8 @@ import gov.nih.nci.evs.reportwriter.web.model.LookUp;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTask;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateColumn;
-
 import gov.nih.nci.evs.reportwriter.web.service.LkAssociationService;
+import gov.nih.nci.evs.reportwriter.web.service.LkAttrService;
 import gov.nih.nci.evs.reportwriter.web.service.LkDisplayService;
 import gov.nih.nci.evs.reportwriter.web.service.LkGroupService;
 import gov.nih.nci.evs.reportwriter.web.service.LkPropertyService;
@@ -43,16 +44,12 @@ import gov.nih.nci.evs.reportwriter.web.service.LkSubsourceService;
 import gov.nih.nci.evs.reportwriter.web.service.ReportTaskService;
 import gov.nih.nci.evs.reportwriter.web.service.ReportTemplateColumnService;
 import gov.nih.nci.evs.reportwriter.web.service.ReportTemplateService;
-
 import gov.nih.nci.evs.reportwriter.web.support.FileUI;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTaskOutput;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTaskUI;
 import gov.nih.nci.evs.reportwriter.web.support.ReportTemplateUI;
 import gov.nih.nci.evs.reportwriter.web.support.RunReportTemplateInfo;
 import gov.nih.nci.evs.reportwriter.web.util.MediaTypes;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/reportwriter")
@@ -80,6 +77,8 @@ public class ReportWriterController {
 	LkSourceService lkSourceService;
 	@Autowired
 	LkSubsourceService lkSubsourceService;
+	@Autowired
+	LkAttrService lkAttrService;
 
 	@Autowired
 	ReportTemplateService reportTemplateService;
@@ -143,6 +142,13 @@ public class ReportWriterController {
 		List lks = lkSourceService.findAll();
 		return convertToLookUp(lks);
 	}
+
+	@RequestMapping(value = "/lkattr", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<LookUp> findAllLkAttrs() {
+		List lks = lkAttrService.findAll();
+		return convertToLookUp(lks);
+	}
+
 
 	@RequestMapping(value = "/lksubsource", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<LookUp> findAllLkSubsources() {

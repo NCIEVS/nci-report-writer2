@@ -32,6 +32,7 @@ public class ReportTemplateColumn implements Serializable {
 	private String source;
 	private String group;
 	private String subsource;
+	private String attr;
 	private LocalDateTime dateCreated;
 	private LocalDateTime dateLastUpdated;
 	private String createdBy;
@@ -143,6 +144,16 @@ public class ReportTemplateColumn implements Serializable {
 	public void setSubsource(String subsource) {
 		this.subsource = subsource;
 	}
+
+	@Column(name="attr")
+	public String getAttr() {
+		return this.attr;
+	}
+
+	public void setAttr(String attr) {
+		this.attr = attr;
+	}
+
 
 	@JsonIgnore
 	public LocalDateTime getDateCreated() {

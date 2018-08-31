@@ -9,6 +9,7 @@ public class TemplateColumn {
 	private String source;
 	private String group;
 	private String subsource;
+    private String attr;
 
 	public Integer getColumnNumber() {
 		return columnNumber;
@@ -57,5 +58,11 @@ public class TemplateColumn {
 	}
 	public void setSubsource(String subsource) {
 		this.subsource = subsource;
+	}
+	public String getAttr() {
+		return attr;
+	}
+	public void setAttr(String attr) {
+		this.attr = attr;
 	}
 }

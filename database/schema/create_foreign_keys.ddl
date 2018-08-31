@@ -55,3 +55,7 @@ ALTER TABLE report_template_column ADD CONSTRAINT fk_report_template_column_6
 ALTER TABLE report_template_column ADD CONSTRAINT fk_report_template_column_7
     FOREIGN KEY (subsource)
     REFERENCES lk_subsource(name);
+
+ALTER TABLE report_template_column ADD CONSTRAINT fk_report_template_column_8
+    FOREIGN KEY (attr)
+    REFERENCES lk_attr(name);

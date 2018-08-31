@@ -12,3 +12,4 @@ DROP TABLE IF EXISTS lk_report_template_status;
 DROP TABLE IF EXISTS lk_report_template_type;
 DROP TABLE IF EXISTS lk_source;
 DROP TABLE IF EXISTS lk_subsource;
+DROP TABLE IF EXISTS lk_attr;
