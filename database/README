@@ -64,7 +64,7 @@ For August 30th changes, added column to report_template_column,
   ADD column attr VARCHAR(255); 
 
 insert into lk_attr(name,description) values("CDRH","CDRH");
-insert into lk_attr(name,description) values("CDRH_GUDID","CDRH_GUDID");
+insert into lk_attr(name,description) values("CDRH-GUDID","CDRH-GUDID");
 insert into lk_attr(name,description) values("eCTD","eCTD");
 insert into lk_attr(name,description) values("eManu","eManu");
 insert into lk_attr(name,description) values("ICSR","ICSR");
