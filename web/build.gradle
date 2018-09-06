@@ -35,7 +35,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'war'
 
 group = "gov.nih.nci.evs.reportwriter.web"
-version = "1.0.4-SNAPSHOT"
+version = "1.0.4.RELEASE"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -63,7 +63,7 @@ dependencies {
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
    
     compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.4-SNAPSHOT')
+    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.4.RELEASE')
 
     /*
      * Test Dependencies
