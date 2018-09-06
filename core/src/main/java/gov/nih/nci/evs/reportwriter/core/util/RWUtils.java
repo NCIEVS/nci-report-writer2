@@ -79,22 +79,25 @@ public class RWUtils {
 	 * 
 	 * This methods supports recursion.
 	 */
-	public void processConceptSubclasses(Report reportOutput, EvsConcept parentConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, PrintWriter logFile, String namedGraph, String restURL) {
-		List <EvsConcept> subclasses = sparqlQueryManagerService.getEvsSubclasses(parentConcept.getCode(), namedGraph, restURL);
-		log.info("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
-		System.out.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
-		logFile.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
-		for (EvsConcept subclass: subclasses) {
-			if (conceptHash.containsKey(subclass.getCode())) {
-				subclass = conceptHash.get(subclass.getCode());
-			} else {
-				subclass.setProperties(sparqlQueryManagerService.getEvsProperties(subclass.getCode(), namedGraph, restURL));
-				subclass.setAxioms(sparqlQueryManagerService.getEvsAxioms(subclass.getCode(), namedGraph, restURL));
-				conceptHash.put(subclass.getCode(), subclass);
-			}
-			processConceptInSubset(reportOutput,subclass,conceptHash,templateColumns,logFile, namedGraph, restURL);
-			processConceptSubclasses(reportOutput,subclass,conceptHash,templateColumns,logFile, namedGraph, restURL);
+	public void processConceptSubclasses(Report reportOutput, EvsConcept parentConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile, String namedGraph, String restURL) {
+		if (currentLevel < maxLevel) {
+		    List <EvsConcept> subclasses = sparqlQueryManagerService.getEvsSubclasses(parentConcept.getCode(), namedGraph, restURL);
+    		log.info("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
+	    	System.out.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
+    		logFile.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
+	    	for (EvsConcept subclass: subclasses) {
+		    	if (conceptHash.containsKey(subclass.getCode())) {
+			    	subclass = conceptHash.get(subclass.getCode());
+    			} else {
+	    			subclass.setProperties(sparqlQueryManagerService.getEvsProperties(subclass.getCode(), namedGraph, restURL));
+		    		subclass.setAxioms(sparqlQueryManagerService.getEvsAxioms(subclass.getCode(), namedGraph, restURL));
+			    	conceptHash.put(subclass.getCode(), subclass);
+    			}
+	    		processConceptInSubset(reportOutput,subclass,conceptHash,templateColumns,logFile, namedGraph, restURL);
+		    	processConceptSubclasses(reportOutput,subclass,conceptHash,templateColumns, currentLevel + 1, maxLevel, logFile, namedGraph, restURL);
+		    }
 		}
+		return;
 	}
 
 	/**

@@ -124,10 +124,10 @@ public class ReportWriter {
         Report reportOutput = new Report();
         if (templateType.equals("Association")) {
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset")) {
-                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile,namedGraph,restURL);
-                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(),logFile,namedGraph,restURL);
+                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
+                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
         	} else if (reportTemplate.getAssociation().equals("Subclass")) {
-                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel,logFile,namedGraph,restURL);
+                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
         	} else {
         		System.err.println("Invalid Association Type: " + reportTemplate.getAssociation());
         		return "failure";
