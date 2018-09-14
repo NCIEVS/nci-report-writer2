@@ -69,3 +69,6 @@ insert into lk_attr(name,description) values("eCTD","eCTD");
 insert into lk_attr(name,description) values("eManu","eManu");
 insert into lk_attr(name,description) values("ICSR","ICSR");
 insert into lk_attr(name,description) values("Stability","Stability");
+
+For Sept 14th changes, add INC as lk_source
+insert into lk_source(name,description) values ("INC","INC");

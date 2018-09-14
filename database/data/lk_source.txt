@@ -3,20 +3,26 @@ BRIDG~@~BRIDG~@@~
 CADSR~@~CADSR~@@~
 CDC~@~CDC~@@~
 CDISC~@~CDISC~@@~
+CDISC-GLOSS~@~CDISC-GLOSS~@@~
 CRCH~@~CRCH~@@~
 CTCAE~@~CTCAE~@@~
+CTCAE 3.0~@~CTCAE 3.0~@@~
+CTCAE 5.0~@~CTCAE 5.0~@@~
 CTEP~@~CTEP~@@~
 CTRM~@~CTRM~@@~
+CTRP~@~CTRP~@@~
 CareLex~@~CareLex~@@~
 DCP~@~DCP~@@~
 DICOM~@~DICOM~@@~
 DTP~@~DTP~@@~
+EDQM-HC~@~EDQM-HC~@@~
 FDA~@~FDA~@@~
 GAIA~@~GAIA~@@~
 GENC~@~GENC~@@~
+HGNC~@~HGNC~@@~
 HL7~@~HL7~@@~
 ICH~@~ICH~@@~
-IMDRF~@~IMDRF~@@~
+INC~@~INC~@@~
 JAX~@~JAX~@@~
 KEGG~@~KEGG~@@~
 NCI~@~NCI~@@~
@@ -24,16 +30,9 @@ NCI-GLOSS~@~NCI-GLOSS~@@~
 NCICB~@~NCICB~@@~
 NCPDP~@~NCPDP~@@~
 NICHD~@~NICHD~@@~
+PI-RADS~@~PI-RADS~@@~
 PID~@~PID~@@~
 RENI~@~RENI~@@~
 SEER~@~SEER~@@~
 UCUM~@~UCUM~@@~
 ZFin~@~ZFin~@@~
-CDISC-GLOSS~@~CDISC-GLOSS~@@~
-CTCAE 3.0~@~CTCAE 3.0~@@~
-CTCAE 5.0~@~CTCAE 5.0~@@~
-CTRP~@~CTRP~@@~
-EDQM-HC~@~EDQM-HC~@@~
-HGNC~@~HGNC~@@~
-PI-RADS~@~PI-RADS~@@~
-SPL~@~SPL~@@~
