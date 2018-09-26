@@ -18,7 +18,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = "gov.nih.nci.evs.reportwriter.program"
-version = '1.0.0-RELEASE'
+version = '1.0.4.RELEASE'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -44,7 +44,7 @@ dependencies {
 	compile "org.apache.poi:poi:3.17"
 	compile "org.apache.poi:poi-ooxml:3.17"
 	
-    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.0.RELEASE')	
+    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.4.RELEASE')	
 
     /*
      * Test Dependencies

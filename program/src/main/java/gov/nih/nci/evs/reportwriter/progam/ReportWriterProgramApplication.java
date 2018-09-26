@@ -89,7 +89,7 @@ public class ReportWriterProgramApplication {
 			String conceptFileName = (String) cmdLine.getParsedOptionValue("conceptFile"); 
 			String namedGraph = (String) cmdLine.getParsedOptionValue("namedGraph");
 			String restURL = (String) cmdLine.getParsedOptionValue("restURL");
-			app.start(templateFileName,outputFileName,conceptFileName,namedGraph,restURL);
+			app.start(templateFileName,outputFileName,conceptFileName,restURL, namedGraph);
 		} catch (ParseException ex) {
 			System.err.println("Parsing the command line options failed");
 			System.err.println("Reason: " + ex.getMessage());
@@ -104,7 +104,7 @@ public class ReportWriterProgramApplication {
 	 * @param outputFileName Name of the output file
 	 * @param conceptFileName Name of the file containing concept codes (optional)
 	 */
-	private void start(String templateFileName, String outputFileName, String conceptFileName, String namedGraph, String restURL) {
+	private void start(String templateFileName, String outputFileName, String conceptFileName, String restURL, String namedGraph) {
    		String templateFile = coreProperties.getTemplateDirectory() + "/" + templateFileName;
    		String outputFile = coreProperties.getOutputDirectory() + "/" + outputFileName;
         log.info("Starting ReportWriter");
@@ -114,7 +114,7 @@ public class ReportWriterProgramApplication {
         System.out.println("Template File: " + templateFile);
         System.out.println("Output File: " + outputFile);
         long startTime = System.currentTimeMillis();
-        String result = reportWriter.runReport(templateFile,outputFile,conceptFileName,namedGraph, restURL);
+        String result = reportWriter.runReport(templateFile,outputFile,conceptFileName, restURL, namedGraph);
         if (result.equals("success")) {
         		long endTime   = System.currentTimeMillis();
             long totalTime = endTime - startTime;
