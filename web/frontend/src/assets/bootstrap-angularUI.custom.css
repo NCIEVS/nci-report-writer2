@@ -24,3 +24,7 @@
     border-radius: 4px;
     display: inline-block;
 }
+
+.btn-space {
+    margin-right: 5px;
+}

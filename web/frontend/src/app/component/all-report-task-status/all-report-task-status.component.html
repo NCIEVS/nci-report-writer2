@@ -106,8 +106,8 @@
                     {{rowData[col.field]}}
                     </span>
                     <span *ngIf="idx == 8">
-                        <button type="button" *ngIf="rowData.status == 'Completed'" pButton [routerLink]="['/reportTaskOutput', rowData.id]" icon="fa-eye"></button>
-                        <button type="button" *ngIf="rowData.status == 'Completed'" pButton (click)="deleteReportTask(rowData)" icon="fa fa-trash-o"></button>
+                        <button type="button" class="ui-pbutton-link" *ngIf="rowData.status == 'Completed'" pButton [routerLink]="['/reportTaskOutput', rowData.id]" icon="fa-eye"></button>
+                        <button type="button" class="ui-pbutton-link" *ngIf="rowData.status == 'Completed'" pButton (click)="deleteReportTask(rowData)" icon="fa fa-trash-o"></button>
                    </span>
                     <span *ngIf="idx == 9">
                         <a class="ui-pbutton-link" href="{{reportXLS}}/{{rowData.id}}" *ngIf="rowData.status == 'Completed'"><i class="fa fa-download" aria-hidden="true"></i> .xls</a>  

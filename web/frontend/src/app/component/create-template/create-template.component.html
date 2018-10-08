@@ -73,9 +73,9 @@
             </div>
         </div>
 
-        <button type="button" (click)="showAddRow()" pButton icon="fa-external-link-square" label="Add Row"></button>
-        <button type="button" (click)="moveRowUp()" pButton icon="fa-arrow-up"></button>
-        <button type="button" (click)="moveRowDown()" pButton icon="fa-arrow-down"></button>
+        <button type="button" class="btn-space" (click)="showAddRow()" pButton icon="fa-external-link-square" label="Add Row"></button>
+        <button type="button" class="btn-space" (click)="moveRowUp()" pButton icon="fa-arrow-up"></button>
+        <button type="button" class="btn-space" (click)="moveRowDown()" pButton icon="fa-arrow-down"></button>
         <br>
         <br>
         <!--
@@ -242,10 +242,10 @@
         <div class="form-group">
 
             <div class="col-sm-10">
-                <button type="submit" pButton [disabled]="!templateForm.form.valid" label="{{templateButtonName}}"></button>
-                <button type="button" pButton label="Clear Form" *ngIf="!templateCreated" (click)="clearTemplateRows();templateForm.reset()"></button>
-                <button type="button" pButton label="Clone" *ngIf="templateCreated" [routerLink]="['/cloneTemplate',templateId]"></button>
-                <button type="button" pButton label="Cancel" [routerLink]="['/home']"></button>
+                <button type="submit" class="btn-space" pButton [disabled]="!templateForm.form.valid" label="{{templateButtonName}}"></button>
+                <button type="button" class="btn-space" pButton label="Clear Form" *ngIf="!templateCreated" (click)="clearTemplateRows();templateForm.reset()"></button>
+                <button type="button" class="btn-space" pButton label="Clone" *ngIf="templateCreated" [routerLink]="['/cloneTemplate',templateId]"></button>
+                <button type="button" class="btn-space" pButton label="Cancel" [routerLink]="['/home']"></button>
             </div>
 
 
@@ -343,8 +343,8 @@
             <div class="form-group">
                 <label for="submit" class="col-sm-3 control-label"></label>
                 <div class="col-sm-8">
-                    <button type="submit" pButton [disabled]="!templateRowForm.form.valid" label="Save"></button>
-                    <button type="button" pButton (click)="cancelAddRow();templateRowForm.reset()" label="Cancel"></button>
+                    <button type="submit" class="btn-space" pButton [disabled]="!templateRowForm.form.valid" label="Save"></button>
+                    <button type="button" class="btn-space" pButton (click)="cancelAddRow();templateRowForm.reset()" label="Cancel"></button>
                 </div>
             </div>
         </form>

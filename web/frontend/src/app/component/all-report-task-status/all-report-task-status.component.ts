@@ -3,7 +3,7 @@ import { Component, OnInit,Inject } from '@angular/core';
 import { ReportTaskService } from './../../service/report-task.service';
 import { Task } from '../../model/task';
 import { Lookup } from './../../model/lookup';
-import { DOCUMENT } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 import {ConfirmationService} from 'primeng/api';
 
 import { getBaseLocation } from './../../service/common-functions';

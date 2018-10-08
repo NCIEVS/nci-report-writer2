@@ -123,6 +123,18 @@
     padding: 2px 5px;
     border-radius: 3px;
     margin-top: 1px;
+    margin-right: 1px;
+}
+
+.ui-button-icon-only .ui-button-icon-left {
+    top: 50%;
+    left: 50%;
+    margin-top: -.5em;
+    margin-left: -.5em;
+    width: 1em;
+    height: 1em;
+    border-radius: 3px;
+    margin-right: 5px;
 }
 
 .ui-table .ui-table-tbody>tr>td {
@@ -139,4 +151,12 @@
 
 .ui-table-tbody .ui-chkbox {
     pointer-events: none;
+}
+
+.ui-table .ui-table-thead>tr>th,
+.ui-table .ui-table-tfoot>tr>td {
+    background-color: #f6f7f9;
+    border: 1px solid #d9d9d9;
+    color: #1b1d1f;
+    font-weight: lighter;
 }
