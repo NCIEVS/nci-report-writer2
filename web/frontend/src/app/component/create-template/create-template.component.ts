@@ -49,7 +49,7 @@ export class CreateTemplateComponent implements OnInit {
   templateButtonName: string;
 
   templateRows: TemplateRow[];
-
+  templateRows1:TemplateRow[];
 
   displayMessage: string;
 
@@ -223,6 +223,8 @@ arraymove(arr, fromIndex, toIndex) {
       this.reportTemplateService.getReportTemplate(this.templateId).subscribe(template => {
         this.template = template;
         this.templateRows = template.columns;
+        this.templateRows1 = template.columns;
+         
         console.log("after getReportTemplate ----- " + JSON.stringify(this.template));
         console.log("after getReportTemplate ----- " + JSON.stringify(this.templateRows));
       });

@@ -21,7 +21,8 @@ export class ReportTaskOutputComponent implements OnInit {
   template:Template;
   reportName:string;
   pageinationcount:string;
-
+  globalFilterFields:string[];
+ 
   columnOptions: Lookup[];
 
   constructor(private route: ActivatedRoute,private reportTaskService:ReportTaskService,) { 
@@ -36,12 +37,14 @@ export class ReportTaskOutputComponent implements OnInit {
   getReportTaskOutput(): void {
     this.reportTaskService.getReportTaskData(this.taskId).
     subscribe(reportTaskOutput => {this.reportTaskOutput = reportTaskOutput;  
-      
+      console.log("task output -" + JSON.stringify(this.reportTaskOutput.header));
       this.cols= this.reportTaskOutput.header;this.colsOrig= this.reportTaskOutput.header;this.reportData = this.reportTaskOutput.data
-    
+     
       this.columnOptions = [];
+      this.globalFilterFields = [];
       for(let i = 0; i < this.cols.length; i++) {
           this.columnOptions.push({label: this.cols[i].header, value: this.cols[i]});
+          this.globalFilterFields.push(this.cols[i].field);
       }
     
       let currentpageCount = 0 + 1;

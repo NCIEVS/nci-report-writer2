@@ -78,7 +78,7 @@
         <button type="button" (click)="moveRowDown()" pButton icon="fa-arrow-down"></button>
         <br>
         <br>
-
+        <!--
         <p-dataTable [immutable]=false [value]="templateRows" [(selection)]="selectedTemplateRow" [editable]="true" expandableRows="true">
             <p-column [style]="{'width':'38px'}" selectionMode="single"></p-column>
             <p-column styleClass="col-button" [style]="{'width':'50px'}">
@@ -129,7 +129,114 @@
                     <p-dropdown [filter]="true" [(ngModel)]="templateRow[col.field]" name="attr" [ngModelOptions]="{standalone: true}" [options]="attrs" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
                 </ng-template>
             </p-column>
-        </p-dataTable>
+        </p-dataTable>-->
+
+        <p-table [value]="templateRows" [(selection)]="selectedTemplateRow" selectionMode="single">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 2.25em"></th>
+                    <th> <button type="button" pButton icon="fa fa-trash"></button></th>
+                    <th>Label</th>
+                    <th>Display</th>
+                    <th>Property Type</th>
+                    <th>Property Target</th>
+                    <th>Source</th>
+                    <th>Group</th>
+                    <th>Subsource</th>
+                    <th>Attr</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td>
+                        <p-tableRadioButton [value]="rowData"></p-tableRadioButton>
+                    </td>
+                    <td> <button type="button" pButton (click)="deleteTemplateRow(rowData)" icon="fa fa-trash"></button></td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" [(ngModel)]="rowData.label" [ngModelOptions]="{standalone: true}" required>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.label}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [(ngModel)]="rowData.display" name="display" [ngModelOptions]="{standalone: true}" [options]="displays" [autoWidth]="false" [style]="{'width':'95%'}" required="true" appendTo="body"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.display}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [(ngModel)]="rowData.propertyType" name="propertyType" [ngModelOptions]="{standalone: true}" [options]="propertyTypes" [autoWidth]="false" [style]="{'width':'95%'}" required="true" appendTo="body"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.propertyType}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [(ngModel)]="rowData.property" name="property" [ngModelOptions]="{standalone: true}" [options]="propertyTargets" [autoWidth]="false" [style]="{'width':'95%'}" required="true" appendTo="body"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.property}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [(ngModel)]="rowData.source" name="source" [ngModelOptions]="{standalone: true}" [options]="sources" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.source}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [(ngModel)]="rowData.group" name="group" [options]="groups" [autoWidth]="false" [ngModelOptions]="{standalone: true}" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.group}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [(ngModel)]="rowData.subsource" name="subsource" [ngModelOptions]="{standalone: true}" [options]="subsources" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.subsource}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [(ngModel)]="rowData.attr" name="attr" [ngModelOptions]="{standalone: true}" [options]="attrs" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.attr}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
         <br>
         <br>
         <div class="form-group">
@@ -232,36 +339,7 @@
 
                 </div>
             </div>
-            <!--  <div class="form-group">
-                <label for="type" class="col-sm-3 control-label">Source:</label>
-                <div class="col-sm-8">
 
-                    <p-dropdown appendTo="body" [style]="{'width':'250px'}" [options]="sources" [(ngModel)]="templateRowUI.source" id="source" name="source" #source="ngModel" placeholder="Select a Source" required></p-dropdown>
-                    <div [hidden]="source.valid || source.pristine" class="alert form-error-message">
-                        Source is required
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="type" class="col-sm-3 control-label">Group:</label>
-                <div class="col-sm-8">
-
-                    <p-dropdown appendTo="body" [style]="{'width':'250px'}" [options]="groups" [(ngModel)]="templateRowUI.group" id="group" name="group" #group="ngModel" placeholder="Select a Group" required></p-dropdown>
-                    <div [hidden]="group.valid || group.pristine" class="alert form-error-message">
-                        Group is required
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="type" class="col-sm-3 control-label">Subsource:</label>
-                <div class="col-sm-8">
-
-                    <p-dropdown appendTo="body" [style]="{'width':'250px'}" [options]="subsources" [(ngModel)]="templateRowUI.subsource" id="subsource" name="subsource" #subsource="ngModel" placeholder="Select a Subsource" required></p-dropdown>
-                    <div [hidden]="subsource.valid || subsource.pristine" class="alert form-error-message">
-                        Subsource is required
-                    </div>
-                </div>
-            </div>-->
             <div class="form-group">
                 <label for="submit" class="col-sm-3 control-label"></label>
                 <div class="col-sm-8">

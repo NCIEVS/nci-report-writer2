@@ -2,12 +2,8 @@
     <div class="page-header">
         <span> All Report Writer Tasks</span>
     </div>
-    <!-- 
-            <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
-                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input #gb type="text" pInputText size="50" placeholder="Global Filter">
-            </div> -->
 
+    <!--
     <div class="ui-widget-header row">
         <div class="col-sm-6">
             <div class="input-group ">
@@ -35,12 +31,7 @@
         <p-column field="version" [sortable]="true" header="Version" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="databaseType" [sortable]="true" header="Database Type" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="id" styleClass="col-header" header="Action" [style]="{'width':'10%'}">
-            <ng-template let-templateTask="rowData" pTemplate="body">
-                <!--<button type="button" *ngIf="templateTask.status == 'Completed'" pButton [routerLink]="['/createTemplate', templateTask.id]" icon="fa-file-text-o"></button>-->
-                <!-- <a class="ui-pbutton-link" href="{{reportXLS}}/{{templateTask.id}}" *ngIf="templateTask.status == 'Completed'"><i class="fa fa-download" aria-hidden="true"></i> .xls</a>
-                        <a class="ui-pbutton-link" href="{{reportTxt}}/{{templateTask.id}}" *ngIf="templateTask.status == 'Completed'"><i class="fa fa-download" aria-hidden="true"></i> .txt</a>
-                        <a class="ui-pbutton-link" href="{{reportTemplate}}/{{templateTask.id}}" *ngIf="templateTask.status == 'Completed'"><i class="fa fa-download" aria-hidden="true"></i> .template</a><br> -->
-                <!-- <button type="button" *ngIf="templateTask.status == 'Completed'" pButton (click)="getXLSReport(templateTask)" icon="fa fa-file-excel-o"></button>-->
+            <ng-template let-templateTask="rowData" pTemplate="body">                
                 <button type="button" *ngIf="templateTask.status == 'Completed'" pButton [routerLink]="['/reportTaskOutput', templateTask.id]" icon="fa-eye"></button>
                 <button type="button" *ngIf="templateTask.status == 'Completed'" pButton (click)="deleteReportTask(templateTask)" icon="fa fa-trash-o"></button>
 
@@ -56,6 +47,83 @@
             </ng-template>
         </p-column>
 
-    </p-dataTable>
+    </p-dataTable>-->
+
+
+
+
+    <div class="ui-widget-header row">
+
+        <div class="col-sm-6">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                <input #gb type="text" pInputText size="50" placeholder="Global Filter" [(ngModel)]="globalFilter" (input)="dtTasks.filterGlobal($event.target.value, 'contains')" class="form-control" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="col-sm-6 ">
+            <div class="pull-right paginationCount">{{pageinationcount}}</div>
+        </div>
+    </div>
+
+    <p-table #dtTasks sortField="id" [sortOrder]="-1" [columns]="cols" [value]="tasks" (onFilter)="onFilter($event)" [responsive]="true" [rows]="20" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50]" [totalRecords]="totalRecordsCount" (onPage)="onPageChange($event)"
+        [alwaysShowPaginator]="true">
+
+
+        <ng-template pTemplate="header" let-columns>
+
+
+            <tr>
+
+
+                <th class="ui-column-title" *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                </th>
+            </tr>
+            <tr>
+
+                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <input *ngSwitchCase="'id'" pInputText type="text" style="width:100%" (input)="dtTasks.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <input *ngSwitchCase="'reportTemplateName'" pInputText type="text" style="width:100%" (input)="dtTasks.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <p-dropdown *ngSwitchCase="'status'" [options]="taskStatuses" [style]="{'width':'100%'}" (onChange)="dtTasks.filter($event.value, col.field, 'equals')"></p-dropdown>
+                    <input *ngSwitchCase="'dateCreated'" pInputText type="text" style="width:100%" (input)="dtTasks.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <input *ngSwitchCase="'dateStarted'" pInputText type="text" style="width:100%" (input)="dtTasks.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <input *ngSwitchCase="'dateCompleted'" pInputText type="text" style="width:100%" (input)="dtTasks.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <input *ngSwitchCase="'version'" pInputText type="text" style="width:100%" (input)="dtTasks.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <input *ngSwitchCase="'databaseType'" pInputText type="text" style="width:100%" (input)="dtTasks.filter($event.target.value, col.field, col.filterMatchMode)">
+
+                </th>
+
+
+            </tr>
+
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+
+                <td *ngFor="let col of columns;let idx=index">
+                    <span *ngIf="idx < 8">
+                    {{rowData[col.field]}}
+                    </span>
+                    <span *ngIf="idx == 8">
+                        <button type="button" *ngIf="rowData.status == 'Completed'" pButton [routerLink]="['/reportTaskOutput', rowData.id]" icon="fa-eye"></button>
+                        <button type="button" *ngIf="rowData.status == 'Completed'" pButton (click)="deleteReportTask(rowData)" icon="fa fa-trash-o"></button>
+                   </span>
+                    <span *ngIf="idx == 9">
+                        <a class="ui-pbutton-link" href="{{reportXLS}}/{{rowData.id}}" *ngIf="rowData.status == 'Completed'"><i class="fa fa-download" aria-hidden="true"></i> .xls</a>  
+                        <a class="ui-pbutton-link" href="{{reportTxt}}/{{rowData.id}}" *ngIf="rowData.status == 'Completed'"><i class="fa fa-download" aria-hidden="true"></i> .txt</a><br>
+                        <a class="ui-pbutton-link" href="{{reportTemplate}}/{{rowData.id}}" *ngIf="rowData.status == 'Completed'"><i class="fa fa-download" aria-hidden="true"></i> .template</a><br>
+                        <a class="ui-pbutton-link" href="{{reportLog}}/{{rowData.id}}" *ngIf="rowData.status == 'Completed'"><i class="fa fa-download" aria-hidden="true"></i> .log</a><br>                      
+                       </span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+
+
+
+
+
     <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425"></p-confirmDialog>
 </div>

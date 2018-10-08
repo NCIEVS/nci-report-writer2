@@ -11,7 +11,7 @@ import { AppComponent } from "./app.component";
 
 import { MultiSelectModule } from "primeng/primeng";
 import { DropdownModule } from "primeng/primeng";
-import { DataTableModule, SharedModule } from "primeng/primeng";
+import {  SharedModule } from "primeng/primeng";
 import { DialogModule } from "primeng/primeng";
 import { ButtonModule } from "primeng/primeng";
 import { MenubarModule, MenuItem } from "primeng/primeng";
@@ -74,8 +74,8 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
     MultiSelectModule,
     DropdownModule,
     FormsModule,
-    BrowserAnimationsModule,
-    DataTableModule,
+    BrowserAnimationsModule,   
+    TableModule,
     SharedModule,
     NgbModule.forRoot(),
     DialogModule,

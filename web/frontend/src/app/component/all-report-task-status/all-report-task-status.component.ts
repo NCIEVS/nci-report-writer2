@@ -8,7 +8,8 @@ import {ConfirmationService} from 'primeng/api';
 
 import { getBaseLocation } from './../../service/common-functions';
 import {ViewChild} from '@angular/core';
-import {DataTable} from 'primeng/datatable';
+
+import {Table} from 'primeng/table';
 
 
 
@@ -21,7 +22,8 @@ import {DataTable} from 'primeng/datatable';
 })
 export class AllReportTaskStatusComponent implements OnInit {
 
-  @ViewChild('dtTask') dataTable: DataTable;
+ 
+  @ViewChild('dtTasks') table: Table;
 
   tasks: Task[];
   taskStatuses: Lookup[];
@@ -41,7 +43,10 @@ export class AllReportTaskStatusComponent implements OnInit {
   reportTemplate:string;
   reportLog:string;
   globalFilter:string;
+  globalFilter1:string;
+  cols:any[];
 
+  
   constructor(private confirmationService: ConfirmationService,private reportTaskService:ReportTaskService,@Inject(DOCUMENT) private document: any) { }
 
   onFilter(e) {
@@ -50,11 +55,29 @@ export class AllReportTaskStatusComponent implements OnInit {
     if (!(this.globalFilter == null || this.globalFilter == undefined )){
       localStorage.setItem("globalfilters-task", this.globalFilter);
     }
-    console.log("filters - " +  JSON.stringify(this.dataTable.filters));
-    localStorage.setItem("filters-task", JSON.stringify(this.dataTable.filters));
+    console.log("filters - " +  JSON.stringify(this.table.filters));
+    localStorage.setItem("filters-task", JSON.stringify(this.table.filters));
   }
 
+
+  
+  
+
   ngOnInit() {
+
+    this.cols = [
+      { field: 'id', header: 'Task Id' ,filterMatchMode:'contains',width:'7%'},
+      { field: 'reportTemplateName', header: 'Name' ,filterMatchMode:'contains',width:'30%'},
+      { field: 'status', header: 'Status' ,filterMatchMode:'equals',width:'13%'},
+      { field: 'dateCreated', header: 'Date Created' ,filterMatchMode:'contains',width:'15%'},
+      { field: 'dateStarted', header: 'Date Started' ,filterMatchMode:'contains',width:'15%'},
+      { field: 'dateCompleted', header: 'Date Completed' ,filterMatchMode:'contains',width:'15%'},
+      { field: 'version', header: 'Version' ,filterMatchMode:'contains',width:'10%'},
+      { field: 'databaseType', header: 'Database Type' ,filterMatchMode:'contains',width:'10%'},
+      {field: 'id', header: 'Action' ,filterMatchMode:'contains',width:'18%'},
+      {field: 'id', header: 'Download' ,filterMatchMode:'contains',width:'18%'}
+  ];
+
     this.lookupNone = new Lookup();
     this.lookupNone.label = "All";
     this.lookupNone.value = null;
@@ -70,14 +93,20 @@ export class AllReportTaskStatusComponent implements OnInit {
     //setting the filters
     const filters = localStorage.getItem("filters-task");
     if (filters) {
-      console.log("filters in init - " + JSON.parse(filters));
-      this.dataTable.filters = JSON.parse(filters);
+      console.log("filters in init - " + filters);
+      this.table.filters = JSON.parse(filters);
+      if (this.table.filters.global != undefined && this.table.filters.global != null){
+        this.table.filterGlobal(this.table.filters.global.value, 'contains');
+      }
     }
     const globalfilters = localStorage.getItem("globalfilters-task");
     if (globalfilters != undefined || globalfilters != null) {
       console.log("global filters in init - " + globalfilters);
       this.globalFilter = globalfilters;
     }
+
+
+     
   
   }
 

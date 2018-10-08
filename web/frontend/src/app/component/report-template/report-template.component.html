@@ -19,9 +19,9 @@
     <div class="ui-widget-header row">
 
         <div class="col-sm-6">
-            <div class="input-group ">
+            <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input #gb type="text" pInputText size="50" placeholder="Global Filter" [(ngModel)]="globalFilter" class="form-control" aria-describedby="basic-addon1">
+                <input #gb type="text" pInputText size="50" placeholder="Global Filter" [(ngModel)]="globalFilter" (input)="dtTemplates.filterGlobal($event.target.value, 'contains')" class="form-control" aria-describedby="basic-addon1">
             </div>
         </div>
         <div class="col-sm-6 ">
@@ -33,7 +33,7 @@
             <button type="button" (click)="runTemplates()" pButton label="Run Template/Templates"></button>
         </div>
     </div>
-    <p-dataTable #dtTemplate [value]="templates" [(selection)]="selectedTemplates" (onRowSelect)="onRowSelect($event)" (onPage)="onPageChange($event)" [responsive]="true" [headerCheckboxToggleAllPages]="true" (onFilter)="onFilter($event)" [rows]="20" [paginator]="true"
+    <!-- <p-dataTable #dtTemplate [value]="templates" [(selection)]="selectedTemplates" (onRowSelect)="onRowSelect($event)" (onPage)="onPageChange($event)" [responsive]="true" [headerCheckboxToggleAllPages]="true" (onFilter)="onFilter($event)" [rows]="20" [paginator]="true"
         [alwaysShowPaginator]="true" [totalRecords]="2" [pageLinks]="3" [globalFilter]="gb" [rowsPerPageOptions]="[10,20,50]">
         <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
         <p-column field="id" styleClass="col-button" header="Action">
@@ -45,12 +45,7 @@
         </p-column>
         <p-column field="id" [style]="{'width':'55px'}" header="Id" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
         <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
-        <!-- <p-column field="status" header="Status" [filter]="true" [style]="{'width':'10%'}" filterPlaceholder="Search" filterMatchMode="contains"></p-column>
-         <p-column field="status" [style]="{'width':'100%'}" header="Status" [filter]="true" filterMatchMode="equals">
-            <ng-template pTemplate="filter" let-col>
-                <p-dropdown [options]="statuses" [style]="{'width':'100%'}" (onChange)="dtTemplate.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
-            </ng-template>
-        </p-column>-->
+       
         <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [style]="{'width':'10%'}">
             <ng-template pTemplate="filter" let-col>
                 <p-dropdown [options]="statuses" [(ngModel)]="selectedStatus" [style]="{'width':'100%'}" (onChange)="dtTemplate.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
@@ -61,8 +56,64 @@
         <p-column field="dateLastUpdated" header="Date Last Updated" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains">
 
         </p-column>
-    </p-dataTable>
+    </p-dataTable>-->
+
+    <p-table #dtTemplates sortMode="multiple" [columns]="cols" [value]="templates" [(selection)]="selectedTemplates" (onRowSelect)="onRowSelect($event)" (onFilter)="onFilter($event)" [responsive]="true" [rows]="20" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50]"
+        [totalRecords]="totalRecordsCount" (onPage)="onPageChange($event)" [alwaysShowPaginator]="true" selectionMode="multiple">
+
+        <!--
+        <ng-template pTemplate="caption">
+
+            <input type="text" class="pull-left" pInputText size="50" placeholder="Global Filter" [(ngModel)]="globalFilter1" (input)="dtTemplates.filterGlobal($event.target.value, 'contains')" style="width:auto">
+            <span class="pull-right paginationCount">{{pageinationcount}}</span>
+
+
+
+        </ng-template>-->
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+
+                <th style="width: 2.25em">
+                </th>
+                <th class="ui-column-title" *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+            </tr>
+            <tr>
+                <th style="width: 2.25em; vertical-align:'center'">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <input *ngSwitchCase="'name'" [(ngModel)]="selectedName" pInputText type="text" style="width:100%" (input)="dtTemplates.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <input *ngSwitchCase="'id'" [(ngModel)]="selectedId" pInputText type="text" style="width:100%" (input)="dtTemplates.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <input *ngSwitchCase="'dateCreated'" [(ngModel)]="selectedDateCreated" pInputText type="text" style="width:100%" (input)="dtTemplates.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <input *ngSwitchCase="'dateLastUpdated'" [(ngModel)]="selectedDateUpdated" pInputText type="text" style="width:100%" (input)="dtTemplates.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <p-dropdown *ngSwitchCase="'status'" [(ngModel)]="selectedStatus" [options]="statuses" [style]="{'width':'100%'}" (onChange)="dtTemplates.filter($event.value, col.field, 'equals')"></p-dropdown>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td>
+                    <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                </td>
+                <td *ngFor="let col of columns;let idx=index">
+                    <span *ngIf="idx == 0">
+                                <button type="button" pButton [routerLink]="['/createTemplate',rowData.id]" icon="fa-pencil-square-o"></button>
+                                <button type="button" pButton [routerLink]="['/reportTemplateView',rowData.id]" icon="fa-eye"></button>
+                                <button type="button" *ngIf="rowData.status == 'Active'" pButton (click)="runTemplate(rowData)" label="Run"></button>
+                           </span>
+                    <span *ngIf="idx != 0"> 
+                                    {{rowData[col.field]}}                        
+                           </span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
+
+
 
 <p-dialog header="Select Database Type" [(visible)]="displayDatabaseType" [width]="850">
     <div class="">

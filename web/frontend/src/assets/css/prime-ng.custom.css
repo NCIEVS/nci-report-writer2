@@ -92,10 +92,6 @@
     border: 1px solid #ccc;
 }
 
-.ui-datatable .ui-paginator {
-    padding: .125em 0px;
-}
-
 .ui-sortable-column.ui-state-active {
     background-color: #ebedf0 !important;
     color: #555555 !important;
@@ -129,7 +125,7 @@
     margin-top: 1px;
 }
 
-.ui-datatable-data>tr>td {
+.ui-table .ui-table-tbody>tr>td {
     -ms-word-break: break-all;
     word-break: break-all;
     /* Non standard for webkit */
@@ -139,4 +135,8 @@
     -ms-hyphens: auto;
     hyphens: auto;
     vertical-align: top;
+}
+
+.ui-table-tbody .ui-chkbox {
+    pointer-events: none;
 }
