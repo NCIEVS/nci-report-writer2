@@ -110,8 +110,7 @@ public class ReportWriter {
         logFile.println("Version: " + evsVersionInfo.getVersion());       
         logFile.println(reportTemplate.toString());
         
-        String rootConceptCode = reportTemplate.getRootConceptCode();
-        EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
+      
 
         // The conceptHash is used to improve performance, especially in the cases for reports that
         // are looking for parents concepts.  By first looking in the hash for the concept, time
@@ -119,10 +118,13 @@ public class ReportWriter {
         HashMap <String,EvsConcept> conceptHash = new <String,EvsConcept> HashMap();
         
         int currentLevel = 0;
-        int maxLevel = reportTemplate.getLevel();
+       
         String templateType = reportTemplate.getType();
         Report reportOutput = new Report();
         if (templateType.equals("Association")) {
+        	  String rootConceptCode = reportTemplate.getRootConceptCode();
+              EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
+              int maxLevel = reportTemplate.getLevel();
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset")) {
                 rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
                 rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
