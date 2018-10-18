@@ -1,6 +1,7 @@
 package gov.nih.nci.evs.reportwriter.web.service;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
@@ -180,6 +182,29 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		log.info("id" + reportTask.getId());
 		return reportTaskRet;
 	}
+	
+	
+	public void storeFile(ReportTask reportTask,MultipartFile file) throws IllegalStateException, IOException{
+		int reportTemplateId = reportTask.getReportTemplate().getId();
+		ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateId);
+		String outputDirectory = coreProperties.getOutputDirectory();
+		String reportName = "Task-" + reportTask.getId();
+		String lastDigit = Integer.toString(reportTask.getId());
+		lastDigit = lastDigit.substring(lastDigit.length() - 1);
+		String outputDirectoryName = outputDirectory + "/" + lastDigit + "/" + reportName;
+		try {
+			Path path = Paths.get(outputDirectoryName);
+			Files.createDirectory(path);
+		} catch (IOException ex) {
+
+		}
+		
+		File fileToMove = new File(outputDirectoryName,"ConceptList.txt");
+		file.transferTo(fileToMove);
+		
+		
+		
+	}
 
 	@Async
 	public void runReport(ReportTask reportTask) {
@@ -241,11 +266,11 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			String conceptListFileName = "";
 			if (reportTemplate.getType().equals("ConceptList")) {
 				conceptListFileName = outputDirectoryName + "/ConceptList.txt";
-				BufferedWriter conceptListWriter = new BufferedWriter(new FileWriter(conceptListFileName));
-				for (ReportTemplateConceptList concept: reportTemplateConceptListService.getReportTemplateConceptListsByReportTemplateID(reportTemplateId)) {
-					conceptListWriter.write(concept.getConceptCode() + "\n");
-				}
-				conceptListWriter.close();
+				//BufferedWriter conceptListWriter = new BufferedWriter(new FileWriter(conceptListFileName));
+				//for (ReportTemplateConceptList concept: reportTemplateConceptListService.getReportTemplateConceptListsByReportTemplateID(reportTemplateId)) {
+				//	conceptListWriter.write(concept.getConceptCode() + "\n");
+				//}
+				//conceptListWriter.close();
 			}
 
 			log.info("Running Report");

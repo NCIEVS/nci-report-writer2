@@ -1,6 +1,6 @@
 import { Task } from './../model/task';
 import { Injectable } from '@angular/core';
-import { Observable ,  of } from 'rxjs';
+import { Observable ,  of,throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { catchError, map, tap } from 'rxjs/operators';
@@ -14,94 +14,132 @@ const httpOptions = {
 @Injectable()
 export class ReportTemplateService {
 
+  url:string;
+
   constructor( private http: HttpClient) { }
 
     /** POST: add a new template to the server */
     addReportTemplate (template: Template): Observable<Template> {
+      this.url = "/reportwriter/createTemplate";
       console.log("addReportTemplate ----- " + JSON.stringify(template));
-      return this.http.post<Template>("/reportwriter/createTemplate", template, httpOptions)
-      .pipe(tap((template: Template) => console.log("Template Created")),
-            catchError(this.handleError<Template>('addReportTemplate'))
+      return this.http.post<Template>(this.url, template, httpOptions)
+      .pipe(
+        catchError(err => {
+          console.log(
+            "Handling error locally and rethrowing it...",
+            JSON.stringify(err)
+          );
+          err.message =
+            "Error adding report template - " + template.name;
+          return throwError(err);
+        })
       );
     }
 
     /** POST: save changes to the template to the server */
     saveReportTemplate (template: Template): Observable<Template> {
+      this.url = "/reportwriter/saveTemplate";
       console.log("saveReportTemplate ----- " + JSON.stringify(template));
-      return this.http.post<Template>("/reportwriter/saveTemplate", template, httpOptions).pipe(
-        tap((template: Template) => console.log("Template saved")),
-        catchError(this.handleError<Template>('saveReportTemplate'))
+      return this.http.post<Template>(this.url, template, httpOptions) .pipe(
+        catchError(err => {
+          console.log(
+            "Handling error locally and rethrowing it...",
+            JSON.stringify(err)
+          );
+          err.message =
+            "Error running saving template - " + template.name;
+          return throwError(err);
+        })
       );
     }
 
-   /* runReportTemplate(templateId:number): Observable<Task>{
-
-      return this.http.get<Task>("/reportwriter/runReport/" + templateId).pipe(
-        catchError(this.handleError('runReportTemplate', null))
-      );
-
-    }
-
-
-    runReportTemplates(templates: Template[]): Observable<Task[]>{
-      
-      return this.http.post<Task[]>("/reportwriter/runReportTemplates", templates, httpOptions)
-      .pipe(tap((tasks: Task[]) => console.log("runReportTemplates")),
-            catchError(this.handleError<Task[]>('runReportTemplates'))
-      );
-      
-    }*/
 
     runReportTemplates(runReportTemplateInfo: RunReportTemplateInfo): Observable<Task[]>{
+      this.url = "/reportwriter/runReportTemplates";
+      return this.http.post<Task[]>( this.url, runReportTemplateInfo, httpOptions)
+      .pipe(
+        catchError(err => {
+          console.log(
+            "Handling error locally and rethrowing it...",
+            JSON.stringify(err)
+          );
+          err.message =
+            "Error running report templates";
+          return throwError(err);
+        })
+      );
       
-      return this.http.post<Task[]>("/reportwriter/runReportTemplates", runReportTemplateInfo, httpOptions)
-      .pipe(tap((tasks: Task[]) => console.log("runAllReportTemplates")),
-            catchError(this.handleError<Task[]>('runAllReportTemplates'))
+    }
+
+    runReportTemplateConceptList(formData: FormData): Observable<Task[]>{
+      this.url = "/reportwriter/uploadConceptList";
+      return this.http.post<Task[]>( this.url, formData)
+      .pipe(
+        catchError(err => {
+          console.log(
+            "Handling error locally and rethrowing it...",
+            JSON.stringify(err)
+          );
+          err.message =
+            "Error running report templates";
+          return throwError(err);
+        })
       );
       
     }
 
     cloneTemplate(template:Template):  Observable<Template>{
       console.log("cloneTemplate ----- " + JSON.stringify(template));
-      return this.http.post<Template>("/reportwriter/cloneTemplate" ,template, httpOptions).pipe(
-        tap((template: Template) => console.log("New Template created")),
-        catchError(this.handleError<Template>('cloneTemplate'))
+      return this.http.post<Template>("/reportwriter/cloneTemplate" ,template, httpOptions)
+      .pipe(
+        catchError(err => {
+          console.log(
+            "Handling error locally and rethrowing it...",
+            JSON.stringify(err)
+          );
+          err.message =
+            "Error cloning report template";
+          return throwError(err);
+        })
       );
     }
 
     getReportTemplates(): Observable<Template[]> {    
       //return of(this.statuses);
-     
-      return this.http.get<Template[]>("/reportwriter/reporttemplates").pipe(
-        catchError(this.handleError(' reporttemplates', []))
+      this.url = "/reportwriter/reporttemplates";
+      return this.http.get<Template[]>(this.url)
+      .pipe(
+        catchError(err => {
+          console.log(
+            "Handling error locally and rethrowing it...",
+            JSON.stringify(err)
+          );
+          err.message =
+            "Error getting report templates from the backend";
+          return throwError(err);
+        })
       );
   
     }
 
     getReportTemplate(reportTemplateId): Observable<Template> {    
       //return of(this.statuses);
-     
-      return this.http.get<Template>("/reportwriter/reporttemplate/" + reportTemplateId).pipe(
-        catchError(this.handleError(' getReportTemplate', null))
+      this.url = "/reportwriter/reporttemplate/" + reportTemplateId;
+      return this.http.get<Template>(this.url).pipe(
+        catchError(err => {
+          console.log(
+            "Handling error locally and rethrowing it...",
+            JSON.stringify(err)
+          );
+          err.message =
+            "Error getting report template for template id " + reportTemplateId + "from the backend";
+          return throwError(err);
+        })
       );
+    
   
     }
 
-     /**
- * Handle Http operation that failed.
- * Let the app continue.
- * @param operation - name of the operation that failed
- * @param result - optional value to return as the observable result
- */
-private handleError<T> (operation = 'operation', result?: T) {
-  return (error: any): Observable<T> => {
- 
-    // TODO: send the error to remote logging infrastructure
-    console.error(error); // log to console instead
- 
-    // Let the app keep running by returning an empty result.
-    return of(result as T);
-  };
-}
+    
 
 }

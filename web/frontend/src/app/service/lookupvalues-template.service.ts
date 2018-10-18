@@ -1,62 +1,84 @@
-import { Injectable } from '@angular/core';
-import { Observable ,  of } from 'rxjs';
-import {Lookup} from './../model/lookup';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from "@angular/core";
 
-import { catchError, map, tap } from 'rxjs/operators';
+
+
+import { Lookup } from "./../model/lookup";
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse
+} from "@angular/common/http";
+
+import { Observable, of, throwError } from "rxjs";
+import { catchError, map, tap } from "rxjs/operators";
 
 @Injectable()
 export class LookupvaluesTemplateService {
+  url: string;
 
-  types:Lookup[]= [{label:'Association',value:'Association'},{ label:'Concept List',value:'Concept List'}];
+  types: Lookup[] = [
+    { label: "Association", value: "Association" },
+    { label: "Concept List", value: "Concept List" }
+  ];
 
- 
-  associations:Lookup[] = [{label:'Concept_In_Subset',value:'Concept_In_Subset'},{ label:'Children',value:'Children'}];
-  statuses:Lookup[] = [{label:'Pending',value:'P'},{ label:'Active',value:'A'}];
+  associations: Lookup[] = [
+    { label: "Concept_In_Subset", value: "Concept_In_Subset" },
+    { label: "Children", value: "Children" }
+  ];
+  statuses: Lookup[] = [
+    { label: "Pending", value: "P" },
+    { label: "Active", value: "A" }
+  ];
 
-  constructor( private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-   getTypes(): Observable<Lookup[]> {    
+  getTypes(): Observable<Lookup[]> {
+    this.url = "/reportwriter/lkreporttemplatetype";
     //return of(this.types);
-    return this.http.get<Lookup[]>("/reportwriter/lkreporttemplatetype").pipe(
-      catchError(this.handleError('lkreporttemplatetype', []))
+    return this.http.get<Lookup[]>(this.url).pipe(
+      catchError(err => {
+        console.log(
+          "Handling error locally and rethrowing it...",
+          JSON.stringify(err)
+        );
+        err.message =
+          "Error getting lookup values for template types from the backend";
+        return throwError(err);
+      })
     );
-    
   }
 
-  getAssociations(): Observable<Lookup[]> {    
+  getAssociations(): Observable<Lookup[]> {
+    this.url = "/reportwriter/lkassociation";
     //return of(this.associations);
-    return this.http.get<Lookup[]>("/reportwriter/lkassociation").pipe(
-      catchError(this.handleError('lkpropertytype', []))
+    return this.http.get<Lookup[]>(this.url).pipe(
+      catchError(err => {
+        console.log(
+          "Handling error locally and rethrowing it...",
+          JSON.stringify(err)
+        );
+        err.message =
+          "Error getting lookup values for associations from the backend";
+        return throwError(err);
+      })
     );
   }
 
-  getStatuses(): Observable<Lookup[]> {    
+  getStatuses(): Observable<Lookup[]> {
     //return of(this.statuses);
-   
-    return this.http.get<Lookup[]>("/reportwriter/lkreporttemplatestatus").pipe(
-      catchError(this.handleError(' lkreporttemplatestatus', []))
+    this.url = "/reportwriter/lkreporttemplatestatus";
+    return this.http.get<Lookup[]>(this.url).pipe(
+      catchError(err => {
+        console.log(
+          "Handling error locally and rethrowing it...",
+          JSON.stringify(err)
+        );
+        err.message =
+          "Error getting lookup values for template status from the backend";
+        return throwError(err);
+      })
     );
-
   }
 
-  /**
- * Handle Http operation that failed.
- * Let the app continue.
- * @param operation - name of the operation that failed
- * @param result - optional value to return as the observable result
- */
-private handleError<T> (operation = 'operation', result?: T) {
-  return (error: any): Observable<T> => {
- 
-    // TODO: send the error to remote logging infrastructure
-    console.error(error); // log to console instead
- 
-   
- 
-    // Let the app keep running by returning an empty result.
-    return of(result as T);
-  };
-}
-
+  p;
 }

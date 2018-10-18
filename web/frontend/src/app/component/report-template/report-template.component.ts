@@ -15,7 +15,7 @@ import { forEach } from "@angular/router/src/utils/collection";
 import { Lookup } from "./../../model/lookup";
 import { RunReportTemplateInfo } from "./../../model/runReportTemplateInfo";
 
-
+import { FileUploadModule, FileUpload } from "primeng/primeng";
 
 @Component({
   selector: "app-report-template",
@@ -24,7 +24,10 @@ import { RunReportTemplateInfo } from "./../../model/runReportTemplateInfo";
 })
 export class ReportTemplateComponent implements OnInit {
   //@ViewChild("dtTemplate") dataTable: DataTable;
-  @ViewChild("dtTemplates") table: Table;
+  @ViewChild("dtTemplates")
+  table: Table;
+  @ViewChild("fileUpload")
+  fileUpload: FileUpload;
 
   constructor(
     private reportTemplateService: ReportTemplateService,
@@ -45,14 +48,14 @@ export class ReportTemplateComponent implements OnInit {
   taskRun: boolean;
   public getBaseLocation = getBaseLocation;
   basePath: string;
-  
+
   statuses: Lookup[];
 
   selectedStatus: string;
-  selectedName:string;
-  selectedId:string;
-  selectedDateCreated:string;
-  selectedDateUpdated:string;
+  selectedName: string;
+  selectedId: string;
+  selectedDateCreated: string;
+  selectedDateUpdated: string;
   //selectedStatus1: string;
   filterObject: any;
   //filterObject1: any;
@@ -64,22 +67,9 @@ export class ReportTemplateComponent implements OnInit {
   displayDatabaseType: boolean = false;
   isSingleTemplateRun: boolean = true;
   runReportTemplateInfo: RunReportTemplateInfo = null;
-  cols:any[];
-
-  /*onFilter(e) {
-    //saving the filters
-    console.log(this.globalFilter);
-    if (!(this.globalFilter == null || this.globalFilter == undefined)) {
-      localStorage.setItem("globalfilters-template", this.globalFilter);
-    }
-    if (this.dataTable != undefined) {
-      console.log("filters - " + JSON.stringify(this.dataTable.filters));
-      localStorage.setItem(
-        "filters-template",
-        JSON.stringify(this.dataTable.filters)
-      );
-    }
-  }*/
+  cols: any[];
+  showFileUpload: boolean = false;
+  uploadUrl: string = "/reportwriter/uploadConceptList";
 
   onFilter(e) {
     //saving the filters
@@ -96,22 +86,85 @@ export class ReportTemplateComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  UploadFile(event): void {
+    console.log("UploadFile", event);
 
+    if (event.files.length == 0) {
+      alert("No File is selected. Please select a File.");
+      return;
+    }
+    let input = new FormData();
+    var fileToUpload = event.files[0];
+    input.append("conceptList", fileToUpload);
+    console.log("In BeforeSend -" + JSON.stringify(this.runReportTemplateInfo));
+    input.append(
+      "runReportTemplateInfo",
+      new Blob([JSON.stringify(this.runReportTemplateInfo)], {
+        type: "application/json"
+      })
+    );
+
+    this.reportTemplateService
+      .runReportTemplateConceptList(input)
+      .subscribe(tasks => {
+        this.tasks = tasks;
+        console.log("tasks" + JSON.stringify(this.tasks));
+        this.processReportTasks();
+      });
+  }
+
+  ngOnInit() {
     this.cols = [
-      { field: 'id', header: 'Action' ,filterMatchMode:'contains',width:'15%'},
-      { field: 'id', header: 'Id' ,filterMatchMode:'contains',width:'5%'},
-      { field: 'name', header: 'Name' ,filterMatchMode:'contains',width:'34%'},
-      { field: 'status', header: 'Status' ,filterMatchMode:'equals',width:'10%'},
-      { field: 'dateCreated', header: 'Date Created' ,filterMatchMode:'contains',width:'18%'},
-      { field: 'dateLastUpdated', header: 'Date Last Updated' ,filterMatchMode:'contains',width:'18%'}
-  ];
+      {
+        field: "id",
+        header: "Action",
+        filterMatchMode: "contains",
+        width: "15%"
+      },
+      { field: "id", header: "Id", filterMatchMode: "contains", width: "5%" },
+      {
+        field: "name",
+        header: "Name",
+        filterMatchMode: "contains",
+        width: "34%"
+      },
+      {
+        field: "status",
+        header: "Status",
+        filterMatchMode: "equals",
+        width: "10%"
+      },
+      {
+        field: "type",
+        header: "Type",
+        filterMatchMode: "contains",
+        width: "10%"
+      },
+      {
+        field: "dateCreated",
+        header: "Date Created",
+        filterMatchMode: "contains",
+        width: "18%"
+      },
+      {
+        field: "dateLastUpdated",
+        header: "Date Last Updated",
+        filterMatchMode: "contains",
+        width: "18%"
+      }
+    ];
 
     this.getReportTemplates();
 
-    this.databaseTypes = [{"label":"monthly","value":"monthly"},{"label":"weekly","value":"weekly"}];
-    
-    console.log("In ReportTemplateComponent - ngOnInit - " + JSON.stringify(this.databaseTypes));
+    this.databaseTypes = [
+      { label: "monthly", value: "monthly" },
+      { label: "weekly", value: "weekly" }
+    ];
+
+    console.log(
+      "In ReportTemplateComponent - ngOnInit - " +
+        JSON.stringify(this.databaseTypes)
+    );
 
     this.staticAlertClosed = true;
     this.taskRun = false;
@@ -124,8 +177,11 @@ export class ReportTemplateComponent implements OnInit {
       console.log("filters-template in init - " + filters);
       this.filterObject = JSON.parse(filters);
 
-      if (this.filterObject.global != undefined && this.filterObject.global != null){
-        this.table.filterGlobal(this.filterObject.global.value, 'contains');
+      if (
+        this.filterObject.global != undefined &&
+        this.filterObject.global != null
+      ) {
+        this.table.filterGlobal(this.filterObject.global.value, "contains");
       }
 
       if (
@@ -136,28 +192,23 @@ export class ReportTemplateComponent implements OnInit {
         this.filterObject.status.value = "Active";
         this.filterObject.status.matchMode = "equals";
         this.selectedStatus = "Active";
-        this.table.filter( this.filterObject.status.value, 'status', 'equals');
-      }
-       else {
+        this.table.filter(this.filterObject.status.value, "status", "equals");
+      } else {
         this.selectedStatus = this.filterObject.status.value;
-        this.table.filter( this.selectedStatus, 'status', 'equals');
+        this.table.filter(this.selectedStatus, "status", "equals");
       }
-      
 
       if (
         this.filterObject.name != undefined &&
         this.filterObject.name != null
       ) {
         this.selectedName = this.filterObject.name.value;
-        this.table.filter( this.selectedName, 'name', 'contains');
+        this.table.filter(this.selectedName, "name", "contains");
       }
 
-      if (
-        this.filterObject.id != undefined &&
-        this.filterObject.id != null
-      ) {
-        this.selectedId = this.filterObject.id.value; 
-       this.table.filter( this.selectedId, 'id', 'contains');
+      if (this.filterObject.id != undefined && this.filterObject.id != null) {
+        this.selectedId = this.filterObject.id.value;
+        this.table.filter(this.selectedId, "id", "contains");
       }
 
       if (
@@ -165,7 +216,7 @@ export class ReportTemplateComponent implements OnInit {
         this.filterObject.dateCreated != null
       ) {
         this.selectedDateCreated = this.filterObject.dateCreated.value;
-        this.table.filter( this.selectedDateCreated, 'dateCreated', 'contains');
+        this.table.filter(this.selectedDateCreated, "dateCreated", "contains");
       }
 
       if (
@@ -173,7 +224,11 @@ export class ReportTemplateComponent implements OnInit {
         this.filterObject.dateLastUpdated != null
       ) {
         this.selectedDateUpdated = this.filterObject.dateLastUpdated.value;
-        this.table.filter( this.selectedDateUpdated, 'dateLastUpdated', 'contains');
+        this.table.filter(
+          this.selectedDateUpdated,
+          "dateLastUpdated",
+          "contains"
+        );
       }
 
       this.table.filters = this.filterObject;
@@ -185,65 +240,21 @@ export class ReportTemplateComponent implements OnInit {
       this.filterObject.status.matchMode = "equals";
       this.table.filters = this.filterObject;
       this.selectedStatus = this.filterObject.status.value;
-      this.table.filter( this.selectedStatus, 'status', 'equals');
+      this.table.filter(this.selectedStatus, "status", "equals");
     }
-    
-    //setting the filters for th new table
-    /*const filters1 = localStorage.getItem("filters-template1");
-    if (filters1) {
-      console.log("filters-template1 in init - " + JSON.parse(filters1));
-      this.filterObject1 = JSON.parse(filters1);
-
-      if (
-        this.filterObject1.status == undefined ||
-        this.filterObject1.status == null
-      ) {
-        this.filterObject1.status = {};
-        this.filterObject1.status.value = "Active";
-        this.filterObject1.status.matchMode = "equals";
-        this.selectedStatus1 = "Active";
-      } else {
-        this.selectedStatus1 = this.filterObject1.status.value;
-      }
-
-      this.table.filters = this.filterObject1;
-    } else {
-      this.filterObject1 = {};
-      this.filterObject1.status = {};
-      this.filterObject1.status.value = "Active";
-      this.selectedStatus1 = "Active";
-      this.filterObject1.status.matchMode = "equals";
-      this.table.filters = this.filterObject1;
-    }*/
-
 
     const globalfilters = localStorage.getItem("globalfilters-template");
     if (globalfilters != undefined || globalfilters != null) {
       console.log("globalfilters-template in init - " + globalfilters);
       this.globalFilter = globalfilters;
     }
-
-    /*const globalfilters1 = localStorage.getItem("globalfilters-template1");
-    if (globalfilters1 != undefined || globalfilters1 != null) {
-      console.log("globalfilters-template1 in init - " + globalfilters1);
-      this.globalFilter1 = globalfilters1;
-    }*/
   }
 
   onRowSelect(event) {
     console.log(event.data.status);
     return true;
-    /*if (event.data.status == "Deleted") {
-      alert("This template will not run since the status is Deleted.");
-      this.selectedTemplates = this.selectedTemplates.filter(function(
-        templateIn
-      ) {
-        return templateIn.status != "Deleted";
-      });
-    }*/
   }
 
-  
   executeMultipleTemplates() {
     this.runReportTemplateInfo = new RunReportTemplateInfo(
       this.selectedDatabasetype,
@@ -293,12 +304,16 @@ export class ReportTemplateComponent implements OnInit {
   runTemplate(templateRow) {
     console.log("In runTemplate - " + JSON.stringify(templateRow));
     this.selectedTemplate = templateRow;
+    if (this.selectedTemplate.type === "ConceptList") {
+      this.showFileUpload = true;
+    } else {
+      this.showFileUpload = false;
+    }
     this.isSingleTemplateRun = true;
     this.displayDatabaseType = true;
   }
 
   runTemplates(): void {
-   
     console.log("In runTemplates - " + JSON.stringify(this.selectedTemplates));
     if (
       this.selectedTemplates == undefined ||
@@ -307,10 +322,21 @@ export class ReportTemplateComponent implements OnInit {
       alert("Please select one or more templates to run");
       return;
     }
+    this.showFileUpload = false;
+    for (let template of this.selectedTemplates) {
+      if (template.type === "ConceptList") {
+        alert(
+          "Please de-select the template of type ConceptList - " +
+            template.name +
+            ". The templates of type ConceptList need to be run individually."
+        );
+        return;
+      }
+    }
+
     this.isSingleTemplateRun = false;
     this.displayDatabaseType = true;
   }
-
 
   getStatuses(): void {
     this.lookupvaluesTemplateService
@@ -319,14 +345,21 @@ export class ReportTemplateComponent implements OnInit {
   }
 
   onSubmitDatabaseType() {
-    this.displayDatabaseType = false;
-    console.log(
-      "onSubmitDatabaseType - " + JSON.stringify(this.selectedDatabasetype)
-    );
-    if (this.isSingleTemplateRun) {
-      this.executeSelectedTemplate();
+    if (this.showFileUpload && this.fileUpload.files.length == 0) {
+      alert(
+        "Please select a file that contains a list of concept codes. Each concept code should be on a new line."
+      );
     } else {
-      this.executeSelectedTemplates();
+      this.displayDatabaseType = false;
+      console.log(
+        "onSubmitDatabaseType - " + JSON.stringify(this.selectedDatabasetype)
+      );
+
+      if (this.isSingleTemplateRun) {
+        this.executeSelectedTemplate();
+      } else {
+        this.executeSelectedTemplates();
+      }
     }
   }
 
@@ -340,10 +373,17 @@ export class ReportTemplateComponent implements OnInit {
       this.selectedDatabasetype,
       this.selectedTemplates
     );
-    this.runReportTemplates();
-   
+    if (this.showFileUpload) {
+      this.fileUpload.upload();
+    } else {
+      this.runReportTemplates();
+    }
   }
 
+  removeFile(file: File, uploader: FileUpload) {
+    const index = uploader.files.indexOf(file);
+    uploader.remove(null, index);
+  }
 
   executeSelectedTemplates() {
     this.runReportTemplateInfo = new RunReportTemplateInfo(
@@ -353,38 +393,41 @@ export class ReportTemplateComponent implements OnInit {
     this.runReportTemplates();
   }
 
-  runReportTemplates(){
+  runReportTemplates() {
     this.reportTemplateService
-    .runReportTemplates(this.runReportTemplateInfo)
-    .subscribe(tasks => {
-      this.tasks = tasks;
-      console.log(JSON.stringify(tasks));
-      this.displayMessage = "";
-      for (let task of tasks) {
-        this.displayMessage =
-          this.displayMessage +
-          " A task with Id - " +
-          task.reportTemplateId +
-          " has been created for the template - " +
-          task.reportTemplateName +
-          ".<br>";
-      }
-
-      this.displayMessage =
-        this.displayMessage +
-        "Please check the status of the report in the All Report Tasks page.";
-      this.taskRun = true;
-      this.staticAlertClosed = false;
-      window.scrollTo(0, 0);
-      setTimeout(() => {
-        this.staticAlertClosed = true;
-        console.log("setting staticAlertClosed to true");
-      }, 50000);
-    });
-
+      .runReportTemplates(this.runReportTemplateInfo)
+      .subscribe(tasks => {
+        this.tasks = tasks;
+        this.processReportTasks();
+      });
   }
 
   cancelSelectDatabaseType() {
     this.displayDatabaseType = false;
+  }
+
+  processReportTasks() {
+    console.log(JSON.stringify(this.tasks));
+    this.displayMessage = "";
+    for (let task of this.tasks) {
+      this.displayMessage =
+        this.displayMessage +
+        " A task with Id - " +
+        task.id +
+        " has been created for the template - " +
+        task.reportTemplateName +
+        ".<br>";
+    }
+
+    this.displayMessage =
+      this.displayMessage +
+      "Please check the status of the report in the All Report Tasks page.";
+    this.taskRun = true;
+    this.staticAlertClosed = false;
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      this.staticAlertClosed = true;
+      console.log("setting staticAlertClosed to true");
+    }, 50000);
   }
 }

@@ -1,76 +1,77 @@
 {
-    "name": "NCI_Report_Writer",
-    "version": "0.0.0",
-    "license": "MIT",
-    "scripts": {
-        "ng": "ng",
-        "start": "ng serve --proxy-config proxy.config.json",
-        "build": "ng build && npm run copyAll",
-        "build:prod": "ng build --prod --base-href /ncreportwriter/ && npm run copyAll",
-        "test": "ng test",
-        "lint": "ng lint",
-        "e2e": "ng e2e",
-        "copyAll": "cp -r dist/* ../src/main/resources/static/"
+  "name": "NCI_Report_Writer",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --proxy-config proxy.config.json",
+    "build": "ng build && npm run copyAll",
+    "build:prod": "ng build --prod --base-href /ncreportwriter/ && npm run copyAll",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e",
+    "copyAll": "cp -r dist/* ../src/main/resources/static/"
+  },
+  "browserify-shim": {
+    "angular": {
+      "exports": "angular"
     },
-    "browserify-shim": {
-        "angular": {
-            "exports": "angular"
-        },
-        "angular-local-storage": {
-            "exports": "angular.module('LocalStorageModule').name"
-        }
-    },
-    "browserify": {
-        "transform": [
-            "browserify-shim"
-        ]
-    },
-    "private": true,
-    "dependencies": {
-        "@angular-devkit/core": "0.8.4",
-        "@angular-devkit/schematics": "0.8.4",
-        "@angular/animations": "6.1.9",
-        "@angular/common": "6.1.9",
-        "@angular/compiler": "6.1.9",
-        "@angular/core": "6.1.9",
-        "@angular/forms": "6.1.9",
-        "@angular/http": "6.1.9",
-        "@angular/platform-browser": "6.1.9",
-        "@angular/platform-browser-dynamic": "6.1.9",
-        "@angular/router": "6.1.9",
-        "@ng-bootstrap/ng-bootstrap": "^3.3.0",
-        "bootstrap": "^3.3.7",
-        "core-js": "^2.5.7",
-        "font-awesome": "^4.7.0",
-        "jquery": "^3.2.1",
-        "popper.js": "^1.14.4",
-        "primeicons": "^1.0.0-beta.9",
-        "primeng": "^6.0.0",
-        "rxjs": "^6.3.3",
-        "zone.js": "^0.8.26"
-    },
-    "devDependencies": {
-        "@angular-devkit/build-angular": "~0.8.0",
-        "@angular/cli": "6.2.4",
-        "@angular/compiler-cli": "6.1.9",
-        "@angular/language-service": "6.1.9",
-        "@types/jasmine": "~2.5.53",
-        "@types/jasminewd2": "^2.0.5",
-        "@types/node": "^6.0.118",
-        "browserify": "^15.1.0",
-        "browserify-shim": "^3.8.14",
-        "codelyzer": "^4.5.0",
-        "jasmine-core": "~2.6.2",
-        "jasmine-spec-reporter": "~4.1.0",
-        "karma": "~1.7.0",
-        "karma-chrome-launcher": "~2.1.1",
-        "karma-cli": "~1.0.1",
-        "karma-coverage-istanbul-reporter": "^1.4.3",
-        "karma-jasmine": "^1.1.2",
-        "karma-jasmine-html-reporter": "^0.2.2",
-        "protractor": "~5.1.2",
-        "ts-node": "~3.2.0",
-        "tslint": "~5.7.0",
-        "typescript": "2.9.2"
+    "angular-local-storage": {
+      "exports": "angular.module('LocalStorageModule').name"
     }
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular-devkit/core": "0.8.4",
+    "@angular-devkit/schematics": "0.8.4",
+    "@angular/animations": "6.1.9",
+    "@angular/common": "6.1.9",
+    "@angular/compiler": "6.1.9",
+    "@angular/core": "6.1.9",
+    "@angular/forms": "6.1.9",
+    "@angular/http": "6.1.9",
+    "@angular/platform-browser": "6.1.9",
+    "@angular/platform-browser-dynamic": "6.1.9",
+    "@angular/router": "6.1.9",
+    "@ng-bootstrap/ng-bootstrap": "^3.3.0",
+    "bootstrap": "^3.3.7",
+    "core-js": "^2.5.7",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1",
+    "ngx-toastr": "^9.1.0",
+    "popper.js": "^1.14.4",
+    "primeicons": "^1.0.0-beta.9",
+    "primeng": "^6.0.0",
+    "rxjs": "^6.3.3",
+    "zone.js": "^0.8.26"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~0.8.0",
+    "@angular/cli": "6.2.4",
+    "@angular/compiler-cli": "6.1.9",
+    "@angular/language-service": "6.1.9",
+    "@types/jasmine": "~2.5.53",
+    "@types/jasminewd2": "^2.0.5",
+    "@types/node": "^6.14.0",
+    "browserify": "^15.1.0",
+    "browserify-shim": "^3.8.14",
+    "codelyzer": "^4.5.0",
+    "jasmine-core": "~2.6.2",
+    "jasmine-spec-reporter": "~4.1.0",
+    "karma": "~1.7.0",
+    "karma-chrome-launcher": "~2.1.1",
+    "karma-cli": "~1.0.1",
+    "karma-coverage-istanbul-reporter": "^1.4.3",
+    "karma-jasmine": "^1.1.2",
+    "karma-jasmine-html-reporter": "^0.2.2",
+    "protractor": "~5.1.2",
+    "ts-node": "~3.2.0",
+    "tslint": "~5.7.0",
+    "typescript": "2.9.2"
+  }
 }

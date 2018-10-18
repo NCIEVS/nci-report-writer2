@@ -1,9 +1,12 @@
 package gov.nih.nci.evs.reportwriter.web.service;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import gov.nih.nci.evs.reportwriter.web.model.ReportTask;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplate;
@@ -21,6 +24,8 @@ public interface ReportTaskService {
 	public ReportTemplateUI getReportNameByTaskId(Integer reportTaskId);
 	
 	public void runReport(ReportTask reportTask);
+	
+	public void storeFile(ReportTask reportTaskRet, MultipartFile file) throws IllegalStateException, IOException;
 	
 	public ReportTask save(ReportTask reportTask);
 	

@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" *ngIf="!conceptList">
             <label for="rootConceptCode" class="col-sm-2 control-label">Root Concept Code <span class="required-field">*</span></label>
             <div class="col-sm-10">
                 <input class="form-control" type="text" value="Root Concept Code" [(ngModel)]="template.rootConceptCode" id="rootConceptCode" name="rootConceptCode" #rootConceptCode="ngModel" required>
@@ -29,14 +29,14 @@
             <label for="type" class="col-sm-2 control-label">Type <span class="required-field">*</span></label>
             <div class="col-sm-4">
 
-                <p-dropdown [style]="{'width':'100%'}" [options]="types" [(ngModel)]="template.type" id="type" name="type" #type="ngModel" placeholder="Select a type" required></p-dropdown>
+                <p-dropdown [style]="{'width':'100%'}" [options]="types" (onChange)="onChangeType($event)" [(ngModel)]="template.type" id="type" name="type" #type="ngModel" placeholder="Select a type" required></p-dropdown>
                 <div [hidden]="type.valid || type.pristine">
                     <span class="form-error-message">Type is required</span>
                 </div>
             </div>
 
-            <label for="association" class="col-sm-2 control-label">Association Name <span class="required-field">*</span></label>
-            <div class="col-sm-4">
+            <label for="association" class="col-sm-2 control-label" *ngIf="!conceptList">Association Name <span class="required-field">*</span></label>
+            <div class="col-sm-4" *ngIf="!conceptList">
 
                 <p-dropdown [style]="{'width':'100%'}" [options]="associations" [(ngModel)]="template.association" id="association" name="association" placeholder="Select a value" #association="ngModel" required></p-dropdown>
                 <div [hidden]="association.valid || association.pristine">
@@ -46,8 +46,8 @@
         </div>
 
         <div class="form-group">
-            <label for="level" class="col-sm-2 control-label">Level <span class="required-field">*</span></label>
-            <div class="col-sm-4">
+            <label for="level" class="col-sm-2 control-label" *ngIf="!conceptList">Level <span class="required-field">*</span></label>
+            <div class="col-sm-4" *ngIf="!conceptList">
                 <input class="form-control" type="number" value="Level" id="level" name="level" [(ngModel)]="template.level" #level="ngModel" required>
                 <div [hidden]="level.valid || level.pristine">
                     <span class="form-error-message">Level is required</span>
@@ -73,9 +73,9 @@
             </div>
         </div>
 
-        <button type="button" class="btn-space" (click)="showAddRow()" pButton icon="fa-external-link-square" label="Add Row"></button>
-        <button type="button" class="btn-space" (click)="moveRowUp()" pButton icon="fa-arrow-up"></button>
-        <button type="button" class="btn-space" (click)="moveRowDown()" pButton icon="fa-arrow-down"></button>
+        <button type="button" class="btn-space" (click)="showAddRow()" pButton icon="fa fa-external-link-square" label="Add Row"></button>
+        <button type="button" class="btn-space" (click)="moveRowUp()" pButton icon="fa fa-arrow-up"></button>
+        <button type="button" class="btn-space" (click)="moveRowDown()" pButton icon="fa fa-arrow-down"></button>
         <br>
         <br>
         <!--
@@ -151,7 +151,7 @@
                     <td>
                         <p-tableRadioButton [value]="rowData"></p-tableRadioButton>
                     </td>
-                    <td> <button type="button" pButton (click)="deleteTemplateRow(rowData)" icon="fa fa-trash"></button></td>
+                    <td> <button type="button" class="ui-pbutton-link" pButton (click)="deleteTemplateRow(rowData)" icon="fa fa-trash"></button></td>
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
@@ -291,7 +291,8 @@
                 <label for="type" class="col-sm-3 control-label">Property Type <span class="required-field">*</span></label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="propertyTypes" [(ngModel)]="templateRowUI.propertyType" id="propertyType" name="propertyType" #propertyType="ngModel" placeholder="Select a Property Type" required></p-dropdown>
+                    <p-dropdown [filter]="true" #pt appendTo="body" [style]="{'width':'250px'}" [options]="propertyTypes" (onChange)="clearFilter(pt)" [(ngModel)]="templateRowUI.propertyType" id="propertyType" name="propertyType" #propertyType="ngModel" placeholder="Select a Property Type"
+                        required></p-dropdown>
                     <div [hidden]="propertyType.valid || propertyType.pristine">
                         <span class="form-error-message">Property Type is required</span>
                     </div>
@@ -301,7 +302,8 @@
                 <label for="type" class="col-sm-3 control-label">Property Target <span class="required-field">*</span></label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="propertyTargets" [(ngModel)]="templateRowUI.property" id="propertyTarget" name="propertyTarget" #propertyTarget="ngModel" placeholder="Select a Property Target" required></p-dropdown>
+                    <p-dropdown [filter]="true" #pTarget appendTo="body" [style]="{'width':'250px'}" [options]="propertyTargets" (onChange)="clearFilter(pTarget)" [(ngModel)]="templateRowUI.property" id="propertyTarget" name="propertyTarget" #propertyTarget="ngModel" placeholder="Select a Property Target"
+                        required></p-dropdown>
                     <div [hidden]="propertyTarget.valid || propertyTarget.pristine">
                         <span class="form-error-message">Property Target is required</span>
                     </div>
@@ -311,7 +313,7 @@
                 <label for="type" class="col-sm-3 control-label">Source:</label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="sources" [(ngModel)]="templateRowUI.source" id="source" name="source" placeholder="Select a Source"></p-dropdown>
+                    <p-dropdown [filter]="true" #source appendTo="body" [style]="{'width':'250px'}" [options]="sources" (onChange)="clearFilter(source)" [(ngModel)]="templateRowUI.source" id="source" name="source" placeholder="Select a Source"></p-dropdown>
 
                 </div>
             </div>
@@ -319,7 +321,7 @@
                 <label for="type" class="col-sm-3 control-label">Group:</label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="groups" [(ngModel)]="templateRowUI.group" id="group" name="group" placeholder="Select a Group"></p-dropdown>
+                    <p-dropdown [filter]="true" #group appendTo="body" [style]="{'width':'250px'}" [options]="groups" (onChange)="clearFilter(group)" [(ngModel)]="templateRowUI.group" id="group" name="group" placeholder="Select a Group"></p-dropdown>
 
                 </div>
             </div>
@@ -327,7 +329,7 @@
                 <label for="type" class="col-sm-3 control-label">Subsource:</label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="subsources" [(ngModel)]="templateRowUI.subsource" id="subsource" name="subsource" placeholder="Select a Subsource"></p-dropdown>
+                    <p-dropdown [filter]="true" #subsource appendTo="body" [style]="{'width':'250px'}" [options]="subsources" (onChange)="clearFilter(subsource)" [(ngModel)]="templateRowUI.subsource" id="subsource" name="subsource" placeholder="Select a Subsource"></p-dropdown>
 
                 </div>
             </div>
@@ -335,7 +337,7 @@
                 <label for="type" class="col-sm-3 control-label">Attr:</label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="attrs" [(ngModel)]="templateRowUI.attr" id="attr" name="attr" placeholder="Select a Attr"></p-dropdown>
+                    <p-dropdown [filter]="true" #attr appendTo="body" [style]="{'width':'250px'}" [options]="attrs" (onChange)="clearFilter(attr)" [(ngModel)]="templateRowUI.attr" id="attr" name="attr" placeholder="Select a Attr"></p-dropdown>
 
                 </div>
             </div>

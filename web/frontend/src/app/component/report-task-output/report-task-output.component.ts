@@ -22,6 +22,7 @@ export class ReportTaskOutputComponent implements OnInit {
   reportName:string;
   pageinationcount:string;
   globalFilterFields:string[];
+  globalFilter:string;
  
   columnOptions: Lookup[];
 

@@ -1,6 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { NgModule, APP_INITIALIZER } from "@angular/core";
+import { NgModule, APP_INITIALIZER, ErrorHandler } from "@angular/core";
 import {
   Location,
   LocationStrategy,
@@ -23,10 +23,21 @@ import { ProgressBarModule } from "primeng/primeng";
 import { ProgressSpinnerModule } from "primeng/primeng";
 import { TableModule } from "primeng/table";
 import { InputTextModule } from "primeng/inputtext";
+import {FileUploadModule} from 'primeng/fileupload';
+
+import {MessageService} from 'primeng/api';
+
+import { ToastrModule } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
+
+import {ToastModule} from 'primeng/toast';
+
 
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 import { FormsModule } from "@angular/forms";
+
+
 
 import { CreateTemplateComponent } from "./component/create-template/create-template.component";
 
@@ -34,6 +45,7 @@ import { LookupvaluesTemplateService } from "./service/lookupvalues-template.ser
 import { LookupvaluesTemplaterowService } from "./service/lookupvalues-templaterow.service";
 import { ReportTemplateService } from "./service/report-template.service";
 import { ReportTaskService } from "./service/report-task.service";
+import { GlobalErrorHandler }  from "./service/GlobalErrorHandler";
 
 import { LoaderService } from "./service/loader.service";
 import { HttpService } from "./service/http.interceptor";
@@ -89,7 +101,17 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
     BlockUIModule,
     ProgressBarModule,
     ProgressSpinnerModule,
-    InputTextModule
+    InputTextModule,
+    FileUploadModule,
+    ToastModule,
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+      maxOpened: 5,
+      autoDismiss: true,
+      newestOnTop: true
+    }),
   ],
   providers: [
     LookupvaluesTemplateService,
@@ -97,6 +119,13 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
     ReportTemplateService,
     ReportTaskService,
     LoaderService,
+    MessageService,
+    ToastrService,
+    GlobalErrorHandler,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    },
     Location,
     {
       provide: LocationStrategy,
@@ -111,6 +140,7 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
       provide: APP_BASE_HREF,
       useFactory: getBaseLocation
     }
+   
   ],
   bootstrap: [AppComponent]
 })

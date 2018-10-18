@@ -10,6 +10,8 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { ActivatedRoute } from '@angular/router';
 
+import {Dropdown} from 'primeng/dropdown';
+
 @Component({
   selector: 'app-create-template',
   templateUrl: './create-template.component.html',
@@ -60,6 +62,8 @@ export class CreateTemplateComponent implements OnInit {
 
   displayAddRow: boolean = false;
 
+  conceptList: boolean = false;
+
   showAddRow() {
     this.displayAddRow = true;
   }
@@ -89,6 +93,7 @@ arraymove(arr, fromIndex, toIndex) {
   }
 
   moveRowDown(){
+    this.getStatuses();
     if (this.selectedTemplateRow != undefined){
       console.log("selected row - " + JSON.stringify(this.selectedTemplateRow));
       var fromIndex = this.templateRows.indexOf(this.selectedTemplateRow);
@@ -159,6 +164,12 @@ arraymove(arr, fromIndex, toIndex) {
     console.log("templateRows" + JSON.stringify(this.templateRows));
   }
 
+
+  clearFilter(dropdown: Dropdown){
+    console.log("in dropdown");
+    dropdown.resetFilter();
+  }
+
   cancelAddRow(): void {
 
     this.displayAddRow = false;
@@ -193,6 +204,8 @@ arraymove(arr, fromIndex, toIndex) {
   }
 
   ngOnInit() {
+    
+  
     console.log("In ngInit***")
 
     this.lookupNone = new Lookup();
@@ -224,7 +237,9 @@ arraymove(arr, fromIndex, toIndex) {
         this.template = template;
         this.templateRows = template.columns;
         this.templateRows1 = template.columns;
-         
+        if (this.template.type === "ConceptList"){
+          this.conceptList = true;
+        } 
         console.log("after getReportTemplate ----- " + JSON.stringify(this.template));
         console.log("after getReportTemplate ----- " + JSON.stringify(this.templateRows));
       });
@@ -376,6 +391,19 @@ arraymove(arr, fromIndex, toIndex) {
       return `with: ${reason}`;
     }
 
+
+  }
+
+
+  //events
+
+  onChangeType(event){
+    console.log("event -" + JSON.stringify(event));
+    if (event.value === "ConceptList"){
+      this.conceptList = true;
+    } else{
+      this.conceptList = false;
+    }
 
   }
 

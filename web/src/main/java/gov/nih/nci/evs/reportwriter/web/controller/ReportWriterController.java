@@ -1,10 +1,12 @@
 package gov.nih.nci.evs.reportwriter.web.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -436,13 +441,44 @@ public class ReportWriterController {
 			log.info("TaskId" + reportTaskRet.getId());
 			ReportTaskUI reportTaskUI = new ReportTaskUI();
 			reportTaskUI.setReportTemplateName(reportTemplateUI.getName());
-			reportTaskUI.setReportTemplateId(reportTaskRet.getId());
+			reportTaskUI.setId(reportTaskRet.getId());
 			reportTaskService.runReport(reportTaskRet);
 			log.info("Run Report Submitted");
 			reportTasks.add(reportTaskUI);
 
 		}
 		return reportTasks;
+	}
+	
+	
+	
+	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/uploadConceptList",  produces = "application/json")
+	public @ResponseBody ArrayList<ReportTaskUI> UploadConceptList(@RequestPart("conceptList")MultipartFile file,
+			@RequestPart("runReportTemplateInfo")RunReportTemplateInfo runReportTemplateInfo,
+			HttpServletResponse response) throws Exception {
+    
+		log.info("Database type - " + runReportTemplateInfo.getDatbaseType());
+		List<ReportTemplateUI> reportTemplates = runReportTemplateInfo.getReportTemplates();
+		ArrayList<ReportTaskUI> reportTasks = new ArrayList<ReportTaskUI>();
+		for (ReportTemplateUI reportTemplateUI : reportTemplates) {
+			log.info("template id - " + reportTemplateUI.getId() + " report name - " + reportTemplateUI.getName());
+			ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateUI.getId());
+			ReportTask reportTaskRet = reportTaskService.createReportTask(reportTemplate, runReportTemplateInfo.getDatbaseType());
+			log.info("TaskId" + reportTaskRet.getId());
+			ReportTaskUI reportTaskUI = new ReportTaskUI();
+			reportTaskUI.setReportTemplateName(reportTemplateUI.getName());
+			reportTaskUI.setId(reportTaskRet.getId());
+			reportTaskService.storeFile(reportTaskRet,file);
+			
+			reportTaskService.runReport(reportTaskRet);
+			log.info("Run Report Submitted");
+			reportTasks.add(reportTaskUI);
+		}
+		
+		return reportTasks;
+
 	}
 
 }

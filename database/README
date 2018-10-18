@@ -72,3 +72,9 @@ insert into lk_attr(name,description) values("Stability","Stability");
 
 For Sept 14th changes, add INC as lk_source
 insert into lk_source(name,description) values ("INC","INC");
+
+
+
+Changes to be made -Oct 16th 2018
+ALTER TABLE report_template MODIFY association varchar(255) null;
+ALTER TABLE report_template MODIFY root_concept_code varchar(255) null;

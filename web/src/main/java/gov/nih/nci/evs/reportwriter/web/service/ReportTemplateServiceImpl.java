@@ -51,6 +51,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 			reportTemplateUI.setId(reportTemplate.getId());
 			reportTemplateUI.setName(reportTemplate.getName());
 			reportTemplateUI.setStatus(reportTemplate.getStatus());
+			reportTemplateUI.setType(reportTemplate.getType());
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
 			String txtDateCreated = reportTemplate.getDateCreated().format(formatter);
 			reportTemplateUI.setDateCreated(txtDateCreated);
@@ -138,6 +139,14 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 		reportTemplatedb.setSortColumn(reportTemplate.getSortColumn());		
 		reportTemplatedb.setDateLastUpdated(LocalDateTime.now());		
 		reportTemplatedb.setLastUpdatedBy("system");
+		if (reportTemplate.getType().equalsIgnoreCase("ConceptList")) {
+			reportTemplatedb.setRootConceptCode(null);
+			reportTemplatedb.setAssociation(null);
+			reportTemplatedb.setLevel(null);
+		}
+		
+		
+		
 		reportTemplatedb.getColumns().clear();
 		reportTemplateRepository.save(reportTemplatedb);
 		

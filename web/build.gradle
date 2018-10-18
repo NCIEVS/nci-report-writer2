@@ -63,7 +63,7 @@ dependencies {
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
    
     compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.4.RELEASE')
+    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.5-SNAPSHOT')
 
     /*
      * Test Dependencies

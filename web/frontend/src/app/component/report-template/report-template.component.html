@@ -100,8 +100,8 @@
                 </td>
                 <td *ngFor="let col of columns;let idx=index">
                     <span *ngIf="idx == 0">
-                                <button type="button" class="ui-pbutton-link" pButton [routerLink]="['/createTemplate',rowData.id]" icon="fa-pencil-square-o"  ></button>
-                                <button type="button" class="ui-pbutton-link" pButton [routerLink]="['/reportTemplateView',rowData.id]" icon="fa-eye"  ></button>
+                                <button type="button" class="ui-pbutton-link" pButton [routerLink]="['/createTemplate',rowData.id]" icon="fa fa-pencil-square-o"  ></button>
+                                <button type="button" class="ui-pbutton-link" pButton [routerLink]="['/reportTemplateView',rowData.id]" icon="fa fa-eye"  ></button>
                                 <button type="button" class="ui-pbutton-link" *ngIf="rowData.status == 'Active'" pButton (click)="runTemplate(rowData)" label="Run"></button>
                            </span>
                     <span *ngIf="idx != 0"> 
@@ -117,7 +117,7 @@
 
 <p-dialog header="Select Database Type" [(visible)]="displayDatabaseType" [width]="850">
     <div class="">
-        <form class="form-horizontal" #databaseTypeForm="ngForm" (ngSubmit)="onSubmitDatabaseType();databaseTypeForm.reset()">
+        <form class="form-horizontal" #databaseTypeForm="ngForm" (ngSubmit)="onSubmitDatabaseType();">
 
             <div class="form-group">
                 <label for="type" class="col-sm-3 control-label">Database Type<span class="required-field">*</span></label>
@@ -129,11 +129,33 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group" *ngIf="showFileUpload">
+                <label class="col-sm-3 control-label"><span class="required-field"></span></label>
+                <div class="col-sm-8">Please select a file that contains a list of concept codes. Each concept code should be on a new line. </div>
+
+            </div>
+            <div class="form-group" *ngIf="showFileUpload">
+                <label class="col-sm-3 control-label"><span class="required-field"></span></label>
+                <div class="col-sm-8">
+
+                    <!--
+                    <p-fileUpload #fileUpload name="conceptList" (onBeforeSend)="onBeforeSendAppendParameters($event)" (onUpload)="onUpload($event)" [showUploadButton]="false" [url]="uploadUrl" accept=".txt" maxFileSize="1000000" required>
+
+
+                    </p-fileUpload>-->
+
+                    <p-fileUpload #fileUpload name="conceptList" customUpload="true" [showUploadButton]="false" accept=".txt" (uploadHandler)="UploadFile($event)" maxFileSize="1000000" required>
+
+
+                    </p-fileUpload>
+
+                </div>
+            </div>
             <div class="form-group">
                 <label for="submit" class="col-sm-3 control-label"></label>
                 <div class="col-sm-8">
-                    <button type="submit" pButton [disabled]="!databaseTypeForm.form.valid" label="Run"></button>
-                    <button type="button" pButton (click)="cancelSelectDatabaseType();databaseTypeForm.reset()" label="Cancel"></button>
+                    <button type="submit" class="btn-space" pButton [disabled]="!databaseTypeForm.form.valid" label="Run"></button>
+                    <button type="button" class="btn-space" pButton (click)="cancelSelectDatabaseType();databaseTypeForm.reset()" label="Cancel"></button>
                 </div>
             </div>
         </form>

@@ -46,11 +46,8 @@ export class HttpService implements HttpInterceptor {
         error => {
           // if any error (not for just HttpResponse) we stop our loader bar
           this.loaderService.hideLoader();
-          console.log("----response----");
-          console.error("status code:");
-          console.error(error.status);
-          console.error(error.message);
-          console.log("--- end of response---");
+          console.log(" http interceptor - error status- " + error.status + ", error message - " + error.message);         
+          throw error;
         }
       )
     );
