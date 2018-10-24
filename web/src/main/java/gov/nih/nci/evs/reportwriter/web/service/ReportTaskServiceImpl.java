@@ -296,14 +296,14 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 
 	public ReportTask findOne(Integer reportTaskId) {
 
-		return reportTaskRepository.findOne(reportTaskId);
+		return reportTaskRepository.findById(reportTaskId).orElse(null);
 
 	}
 	
 	@Transactional
 	public ReportTemplateUI getReportNameByTaskId(Integer reportTaskId) {
 		
-		ReportTask reportTask = reportTaskRepository.findOne(reportTaskId);
+		ReportTask reportTask = reportTaskRepository.findById(reportTaskId).orElse(null);
 		ReportTemplate  reportTemplate = reportTask.getReportTemplate();
 		ReportTemplateUI reportTemplateUI = new ReportTemplateUI();
 		reportTemplateUI.setName(reportTemplate.getName());
@@ -315,7 +315,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 
 	@Transactional
 	public ReportTask deleteReportTask(Integer reportTaskId) {
-		ReportTask reportTask = reportTaskRepository.findOne(reportTaskId);
+		ReportTask reportTask = reportTaskRepository.findById(reportTaskId).orElse(null);
 		reportTask.setStatus("Deleted");
 		return reportTaskRepository.save(reportTask);
 

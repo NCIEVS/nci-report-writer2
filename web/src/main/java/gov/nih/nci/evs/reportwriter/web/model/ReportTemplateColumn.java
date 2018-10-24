@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name="report_template_column")
 @NamedQueries({   
     @NamedQuery(name = "ReportTemplateColumn.getReportColumnsByReportTemplateId", 
-    		query="SELECT u FROM ReportTemplateColumn u where u.reportTemplate.id = :reportTemplateId)")
+    		query="SELECT u FROM ReportTemplateColumn u where u.reportTemplate.id = :reportTemplateId")
 })
 @JsonFilter("yamlFilter")
 public class ReportTemplateColumn implements Serializable {

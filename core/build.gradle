@@ -1,15 +1,17 @@
 buildscript {
-
+    ext {
+		springBootVersion = '2.0.5.RELEASE'
+	}
     repositories {
-        jcenter()
+        mavenCentral()
         maven { url "http://repo.spring.io/release" }
         maven { url "http://repo.spring.io/milestone" }
         maven { url "http://repo.spring.io/snapshot" }
-        mavenCentral() 
+       
     }
 
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.17.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
     }
 }
 
@@ -25,33 +27,43 @@ ext {
 
 }
 
+apply plugin:'java' 
 apply plugin: 'org.springframework.boot'
-apply plugin: 'java'
+/*
+ * The dependency management plugin remains a transitive dependency of spring-boot-gradle-plugin
+ * so there’s no need for it to be listed as a classpath dependency in the buildscript configuration. */
+apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+
 
 
 group = "gov.nih.nci.evs.reportwriter.core"
-version = "1.0.5.RELEASE"
-
+version = "1.0.6-SNAPSHOT"
 sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
+
+bootJar {
+    enabled = false;
+}
+
+jar {
+    enabled = true
+}
 
 springBoot {
-    backupSource = false // do not backup original jar to *.original
-}
-
-bootRepackage {
-	enabled = false
+    buildInfo()          // generate file META-INF/build-info.properties during the build
 }
 
 
-repositories {
-    mavenLocal()
-    jcenter()
-    maven { url "http://repo.spring.io/release" }
-    maven { url "http://repo.spring.io/milestone" }
-    maven { url "http://repo.spring.io/snapshot" }
-}
+ repositories {
+        maven { url "http://repo.spring.io/release" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "http://repo.spring.io/snapshot" }
+        mavenCentral()
+    }
+
 
 dependencies {
     compile ('org.springframework.boot:spring-boot-starter')
@@ -72,10 +84,7 @@ dependencies {
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
-jar {
-    baseName = project.name
-    version =  project.version
-}
+
 
 test {
     /*
@@ -90,31 +99,11 @@ test {
     systemProperties 'spring.profiles.active': 'test'
 }
 
-task zipFile(type: Zip) {
-    def zipFileRootDirectory = "${project.name}-${project.version}"
 
-    from('src/main/bin') {
-        fileMode = 0755
-        into "$zipFileRootDirectory/bin"
-    }
-    from("$buildDir/libs") {
-        include '*.jar'
-        into "$zipFileRootDirectory/lib"
-    }
-    rename { String fileName ->
-        fileName.replace("-${project.version}", "")
-    }
-}
-
-task bootJar
-bootJar.dependsOn = [jar, bootRepackage]
-zipFile.dependsOn = [ bootJar ]
-build.dependsOn = [ test, bootJar, zipFile ]
-install.dependsOn = [ bootJar, zipFile ]
 
 /*
  * Wrapper task
  */
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
+    gradleVersion = '4.4'
 }

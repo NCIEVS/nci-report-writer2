@@ -1,18 +1,22 @@
 buildscript {
-
-    repositories {
-        mavenLocal()
-        jcenter()
+	ext {
+		springBootVersion = '2.0.5.RELEASE'
+	}
+    repositories {  
+        mavenLocal()    
+        mavenCentral() 
         maven { url "http://repo.spring.io/release" }
         maven { url "http://repo.spring.io/milestone" }
         maven { url "http://repo.spring.io/snapshot" }
-        mavenCentral() 
+       
     }
 
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.17.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
     }
 }
+
+
 
 /*
  * Extra Properties
@@ -28,25 +32,30 @@ ext {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'idea'
+apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
+/*
+ * The dependency management plugin remains a transitive dependency of spring-boot-gradle-plugin
+ * so there’s no need for it to be listed as a classpath dependency in the buildscript configuration.
+ */
+apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
-apply plugin: 'war'
+
+
 
 group = "gov.nih.nci.evs.reportwriter.web"
-version = "1.0.5.RELEASE"
-
+version = "1.0.6-SNAPSHOT"
 sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
 
 springBoot {
-    backupSource = false // do not backup original jar to *.original
+    buildInfo()          // generate file META-INF/build-info.properties during the build
 }
 
 repositories {
-    mavenLocal()
-    jcenter()
+    mavenLocal()  
+    mavenCentral() 
     maven { url "http://repo.spring.io/release" }
     maven { url "http://repo.spring.io/milestone" }
     maven { url "http://repo.spring.io/snapshot" }
@@ -59,11 +68,14 @@ dependencies {
     compile ('org.springframework.boot:spring-boot-starter-data-jpa')
     compile 'org.springframework.boot:spring-boot-actuator'
     compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.springframework.boot:spring-boot-properties-migrator'
     
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    
    
     compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.5.RELEASE')
+    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.6-SNAPSHOT')
 
     /*
      * Test Dependencies
@@ -72,13 +84,6 @@ dependencies {
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
-jar {
-    baseName = project.name
-    version =  project.version
-     manifest {
-        attributes 'Main-Class': 'main.java.gov.nih.nci.evs.reportwriter.web.Application'
-    }
-}
 
 
 jar {
@@ -110,7 +115,7 @@ task zipFile(type: Zip) {
         into "$zipFileRootDirectory/bin"
     }
     from("$buildDir/libs") {
-        include '*.jar'
+        include '*.war'
         into "$zipFileRootDirectory/lib"
     }
     rename { String fileName ->
@@ -118,11 +123,10 @@ task zipFile(type: Zip) {
     }
 }
 
-task bootJar
-bootJar.dependsOn = [jar, bootRepackage]
-zipFile.dependsOn = [ bootJar ]
-build.dependsOn = [ test, bootJar, zipFile ]
-install.dependsOn = [ bootJar, zipFile ]
+
+zipFile.dependsOn = [ bootWar ]
+build.dependsOn = [ test, bootWar, zipFile ]
+install.dependsOn = [ bootWar, zipFile ]
 
 /*
  * Wrapper task

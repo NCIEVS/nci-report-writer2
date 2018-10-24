@@ -38,7 +38,10 @@ public class StaticResourcesConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //Add all static files
-        Integer cachePeriod = resourceProperties.getCachePeriod();
+        Long cachePeriodLong = resourceProperties.getCache().getPeriod().getSeconds();
+        int cachePeriodInt = cachePeriodLong.intValue();
+        Integer cachePeriod = Integer.valueOf(cachePeriodInt);
+        
         registry.addResourceHandler(STATIC_RESOURCES)
             .addResourceLocations(resourceProperties.getStaticLocations())
             .setCachePeriod(cachePeriod);

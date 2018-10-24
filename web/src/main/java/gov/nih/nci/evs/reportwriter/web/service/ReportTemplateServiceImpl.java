@@ -93,7 +93,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 		reportTemplate.setId(reportTemplateRet.getId());
 		
 		
-		reportTemplateRet = reportTemplateRepository.findOne(reportTemplateRet.getId());
+		reportTemplateRet = reportTemplateRepository.findById(reportTemplateRet.getId()).orElse(null);
 		
 		for (ReportTemplateColumn reportTemplateColumn : reportTemplateColumns) {
 			
@@ -129,7 +129,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 		//save the template	
 		log.info("id**-" + reportTemplate.getId());
 		
-		ReportTemplate reportTemplatedb = reportTemplateRepository.findOne(reportTemplate.getId());		
+		ReportTemplate reportTemplatedb = reportTemplateRepository.findById(reportTemplate.getId()).orElse(null);	
 		reportTemplatedb.setLevel(reportTemplate.getLevel());
 		reportTemplatedb.setName(reportTemplate.getName());
 		reportTemplatedb.setRootConceptCode(reportTemplate.getRootConceptCode());
@@ -150,7 +150,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 		reportTemplatedb.getColumns().clear();
 		reportTemplateRepository.save(reportTemplatedb);
 		
-		ReportTemplate reportTemplateRet = reportTemplateRepository.findOne(reportTemplate.getId());
+		ReportTemplate reportTemplateRet = reportTemplateRepository.findById(reportTemplate.getId()).orElse(null);	
 		
 		for (ReportTemplateColumn reportTemplateColumn : reportTemplateColumns) {			
 			reportTemplateColumn.setReportTemplate(reportTemplateRet);
@@ -174,7 +174,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 	
 	
 	public ReportTemplateUI clone(ReportTemplateUI reportTemplate) {
-		ReportTemplate oldReportTemplate = reportTemplateRepository.findOne(reportTemplate.getId());
+		ReportTemplate oldReportTemplate = reportTemplateRepository.findById(reportTemplate.getId()).orElse(null);
 		
 		List<ReportTemplateColumn> oldReportTemplateColumns = oldReportTemplate.getColumns();	
 		
@@ -194,7 +194,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 	
 		ReportTemplate newReportTemplateRet =  reportTemplateRepository.save(newReportTemplate);
 		
-		ReportTemplate newReportTemplatedb = reportTemplateRepository.findOne(newReportTemplateRet.getId());
+		ReportTemplate newReportTemplatedb = reportTemplateRepository.findById(newReportTemplateRet.getId()).orElse(null);
 		
 				
 		for (ReportTemplateColumn oldReportTemplateColumn : oldReportTemplateColumns) {	
@@ -225,7 +225,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 	
 	
 	public ReportTemplate findOne(Integer id) {
-		return reportTemplateRepository.findOne(id);
+		return reportTemplateRepository.findById(id).orElse(null);
 		
 	}
 	
