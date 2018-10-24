@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.5.RELEASE'
+		springBootVersion = '2.1.0.RC1'
 	}
     repositories {  
         mavenLocal()    
@@ -128,9 +128,3 @@ zipFile.dependsOn = [ bootWar ]
 build.dependsOn = [ test, bootWar, zipFile ]
 install.dependsOn = [ bootWar, zipFile ]
 
-/*
- * Wrapper task
- */
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
-}
