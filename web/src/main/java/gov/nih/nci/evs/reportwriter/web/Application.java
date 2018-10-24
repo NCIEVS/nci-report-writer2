@@ -21,7 +21,7 @@ import gov.nih.nci.evs.reportwriter.web.controller.ReportWriterController;
 @SpringBootApplication
 @ComponentScan(basePackages = {"gov.nih.nci.evs.reportwriter"})
 @EnableAsync
-public class Application   {
+public class Application  extends SpringBootServletInitializer {
 
 	
 	private static final Logger log = LoggerFactory.getLogger(ReportWriterController.class);
@@ -32,7 +32,10 @@ public class Application   {
         SpringApplication.run(Application.class, args);
     }
 
-   
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Application.class);
+    }
   
     
     @Bean
