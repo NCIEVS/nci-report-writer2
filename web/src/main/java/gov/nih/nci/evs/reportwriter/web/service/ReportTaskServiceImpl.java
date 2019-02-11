@@ -112,6 +112,22 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		return reportTaskUIs;
 
 	}
+	
+	public EvsVersionInfo getVersionInfo(String databaseType) {
+		String namedGraph = "";
+		String databaseUrl = "";
+		if(databaseType.equalsIgnoreCase("monthly")) {
+			namedGraph = stardogProperties.getMonthlyGraphName();
+			databaseUrl = stardogProperties.getMonthlyQueryUrl();
+		} else {
+			namedGraph = stardogProperties.getWeeklyGraphName();
+			databaseUrl = stardogProperties.getWeeklyQueryUrl();
+		}
+		log.debug("namedGraph - " + namedGraph);
+		log.debug("databaseUrl - " + databaseUrl);
+		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl,namedGraph);
+		return evsVersionInfo;
+	}
 
 	public ReportTask createReportTask(ReportTemplate reportTemplate, String databaseType) {
 		String namedGraph = "";

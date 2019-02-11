@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.web.model.LkGeneric;
 import gov.nih.nci.evs.reportwriter.web.model.LkProperty;
 import gov.nih.nci.evs.reportwriter.web.model.LookUp;
@@ -187,6 +188,12 @@ public class ReportWriterController {
 		}
 		return lookUps;
 
+	}
+	
+	// Get all Templates
+	@RequestMapping(value = "/versionInfo/{databaseType}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody EvsVersionInfo versionInfo(@PathVariable String databaseType) throws JsonProcessingException {
+		return reportTaskService.getVersionInfo(databaseType);
 	}
 
 	// Creating a new Template
