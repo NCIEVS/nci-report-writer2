@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 
 
 import { Lookup } from "./../model/lookup";
+import { EvsVersionInfo } from "./../model/evsVersionInfo";
 import {
   HttpClient,
   HttpHeaders,
@@ -80,5 +81,20 @@ export class LookupvaluesTemplateService {
     );
   }
 
-  p;
+  getVersionInfo(databaseType):Observable<EvsVersionInfo> {
+    this.url = "/reportwriter/versionInfo/"  + databaseType;
+    return this.http.get<EvsVersionInfo>(this.url).pipe(
+      catchError(err => {
+        console.log(
+          "Handling error locally and rethrowing it...",
+          JSON.stringify(err)
+        );
+        err.message =
+          "Error getting version info from the backend for database type:" + databaseType;
+          return throwError(err);
+      })
+    );
+
+  }
+
 }

@@ -1,3 +1,4 @@
+import { EvsVersionInfo } from './../../model/evsVersionInfo';
 import { Task } from "./../../model/task";
 import { Template } from "./../../model/template";
 import { Component, OnInit } from "@angular/core";
@@ -34,6 +35,10 @@ export class ReportTemplateComponent implements OnInit {
     private lookupvaluesTemplateService: LookupvaluesTemplateService
   ) {
     this.getStatuses();
+    this.getMonthlyVersionInfo();
+
+    this.getWeeklyVersionInfo();
+    
   }
 
   templates: Template[];
@@ -50,6 +55,8 @@ export class ReportTemplateComponent implements OnInit {
   basePath: string;
 
   statuses: Lookup[];
+  evsVersionInfo : EvsVersionInfo;
+  
 
   selectedStatus: string;
   selectedName: string;
@@ -62,7 +69,10 @@ export class ReportTemplateComponent implements OnInit {
   globalFilter: string;
   //globalFilter1: string;
 
-  databaseTypes: Lookup[] = null;
+  databaseTypes: Lookup[] =  [
+    { label: "", value: "monthly"},
+    { label: "", value: "weekly"}
+  ];
   selectedDatabasetype: string = null;
   displayDatabaseType: boolean = false;
   isSingleTemplateRun: boolean = true;
@@ -155,11 +165,8 @@ export class ReportTemplateComponent implements OnInit {
     ];
 
     this.getReportTemplates();
-
-    this.databaseTypes = [
-      { label: "monthly", value: "monthly" },
-      { label: "weekly", value: "weekly" }
-    ];
+   
+    
 
     console.log(
       "In ReportTemplateComponent - ngOnInit - " +
@@ -342,6 +349,19 @@ export class ReportTemplateComponent implements OnInit {
     this.lookupvaluesTemplateService
       .getStatuses()
       .subscribe(statuses => (this.statuses = statuses));
+  }
+
+
+  getMonthlyVersionInfo(): void {
+    this.lookupvaluesTemplateService
+      .getVersionInfo("monthly")
+      .subscribe(evsVersionInfo => (this.databaseTypes[0].label = "monthly (" + evsVersionInfo.version + ")"));
+  }
+
+  getWeeklyVersionInfo(): void {
+    this.lookupvaluesTemplateService
+      .getVersionInfo("weekly")
+      .subscribe(evsVersionInfo => (this.databaseTypes[1].label = "weekly (" + evsVersionInfo.version + ")"));
   }
 
   onSubmitDatabaseType() {
