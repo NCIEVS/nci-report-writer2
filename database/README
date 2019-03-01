@@ -79,3 +79,8 @@ ALTER TABLE report_template MODIFY root_concept_code varchar(255) null;
 
 For Feb 12 - 2019 - Added row to lk_subsource
 insert into lk_subsource(name,description) values ("PQ/CMC","PQ/CMC");
+
+For March 1st - 2019 Added row to lk_source
+insert into lk_source(name, description) values("CPTAC","CPTAC");
+
+
