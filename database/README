@@ -87,3 +87,9 @@ For March 14th - 2019 Added row to lk_source
 insert into lk_source(name, description) values("PQCMC","PQCMC");
 
 
+For April 23rd - 2019 Added two rows to lk_source
+insert into lk_source(name, description) values("BRIDG 3.0.3","BRIDG 3.0.3");
+insert into lk_source(name, description) values("BRIDG 5.3","BRIDG 5.3");
+
+
+
