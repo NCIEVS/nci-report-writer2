@@ -63,7 +63,9 @@ CREATE TABLE report_task
   created_by            VARCHAR(20) NOT NULL,
   last_updated_by       VARCHAR(20) NOT NULL,
   version               VARCHAR(20) NULL,
-  graph_name            VARCHAR(2000) NULL
+  graph_name            VARCHAR(2000) NULL,
+  database_url          VARCHAR(2000) NULL,
+  database_type         VARCHAR(200) NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ;

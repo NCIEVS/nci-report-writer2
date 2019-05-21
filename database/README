@@ -21,6 +21,10 @@ example assume the database name is "rw".
 
    loadData.sh localhost root PASSWORD rw
 
+The changes below are for History purposes. The scripts above should
+have been modified to contain these changes.
+=======================================================================
+
 For May 14 changes, added column to the report_task table:
 
   ALTER TABLE report_task

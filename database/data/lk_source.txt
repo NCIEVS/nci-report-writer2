@@ -1,9 +1,12 @@
 BIOCARTA~@~BIOCARTA~@@~
 BRIDG~@~BRIDG~@@~
+BRIDG 3.0.3~@~BRIDG 3.0.3~@@~
+BRIDG 5.3~@~BRIDG 5.3~@@~
 CADSR~@~CADSR~@@~
 CDC~@~CDC~@@~
 CDISC~@~CDISC~@@~
 CDISC-GLOSS~@~CDISC-GLOSS~@@~
+CPTAC~@~CPTAC~@@~
 CRCH~@~CRCH~@@~
 CTCAE~@~CTCAE~@@~
 CTCAE 3.0~@~CTCAE 3.0~@@~
@@ -32,7 +35,9 @@ NCPDP~@~NCPDP~@@~
 NICHD~@~NICHD~@@~
 PI-RADS~@~PI-RADS~@@~
 PID~@~PID~@@~
+PQCMC~@~PQCMC~@@~
 RENI~@~RENI~@@~
 SEER~@~SEER~@@~
+SPL~@~SPL~@@~
 UCUM~@~UCUM~@@~
 ZFin~@~ZFin~@@~
