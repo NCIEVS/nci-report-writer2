@@ -1,10 +1,10 @@
 CREATE TABLE report_template
 (
   id                 INT NOT NULL AUTO_INCREMENT,
-  association        VARCHAR(255) NOT NULL,
+  association        VARCHAR(255),
   level              INT,
   name               VARCHAR(255) NOT NULL,
-  root_concept_code  VARCHAR(255) NOT NULL,
+  root_concept_code  VARCHAR(255),
   sort_column        INT,
   status             VARCHAR(20) NOT NULL,
   type               VARCHAR(20) NOT NULL,
