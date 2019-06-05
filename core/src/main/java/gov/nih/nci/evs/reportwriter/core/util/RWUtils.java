@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -181,6 +182,8 @@ public class RWUtils {
 	 */
 	public void writeColumnData(Report reportOutput, EvsConcept parentConcept, EvsConcept concept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, String namedGraph, String restURL) {
 		ReportRow reportRow = new ReportRow();
+		String propertySepartor = " | ";
+		String contentSepartor = " || ";
 		for (TemplateColumn column: templateColumns) {
 			String propertyType = column.getPropertyType();
 			String property = column.getProperty();
@@ -323,11 +326,39 @@ public class RWUtils {
 						System.err.println("2nd CDRH Parent Property Not Supported");
 					}
 				}
+			} else if (propertyType.equals("Maps_To Axiom")) {
+    			List <EvsAxiom> axioms = concept.getAxioms();
+    			for (EvsAxiom axiom: axioms) {
+    				List <String> v = new ArrayList <String> ();
+    				if (axiom.getAnnotatedProperty().equals("P375")) {
+   				    	v.add(axiom.getAnnotatedTarget());
+       		    		v.add(axiom.getTargetTerminology());
+   				    	v.add(axiom.getRelationshipToTarget());
+  	    		    	v.add(axiom.getTargetTermType());
+   	    	    		v.add(axiom.getTargetCode());
+    					String vv = String.join(propertySepartor, v);
+    					values.add(vv);
+    				}
+			    }
+			} else if (propertyType.equals("FULL_SYN Axiom")) {
+    			List <EvsAxiom> axioms = concept.getAxioms();
+    			for (EvsAxiom axiom: axioms) {
+    				List <String> v = new ArrayList <String> ();
+    				if (axiom.getAnnotatedProperty().equals("P90")) {
+   				    	v.add(axiom.getAnnotatedTarget());
+   				    	v.add(axiom.getTermSource());
+   				    	v.add(axiom.getTermGroup());
+   				    	v.add(axiom.getSourceCode());
+   				    	v.add(axiom.getSubsourceName());
+    					String vv = String.join(propertySepartor, v);
+    					values.add(vv);
+    				}
+			    }
 			} else {
 			  // Don't do anything for now	
 			}
 
-			columnString = String.join("|", values);
+			columnString = String.join(contentSepartor, values);
 			String name = column.getLabel();
 			ReportColumn reportColumn = new ReportColumn(name,columnString);
 			reportRow.getColumns().add(reportColumn);
