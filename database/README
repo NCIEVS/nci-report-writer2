@@ -95,5 +95,11 @@ For April 23rd - 2019 Added two rows to lk_source
 insert into lk_source(name, description) values("BRIDG 3.0.3","BRIDG 3.0.3");
 insert into lk_source(name, description) values("BRIDG 5.3","BRIDG 5.3");
 
+For June 7th -2019 Added two rows to  lk_property_type
+
+insert into lk_property_type (name, description) values ('Maps_To Axiom', 'Maps_To Axiom');
+insert into lk_property_type (name, description) values ('FULL_SYN Axiom', 'FULL_SYN Axiom');
+
+
 
 

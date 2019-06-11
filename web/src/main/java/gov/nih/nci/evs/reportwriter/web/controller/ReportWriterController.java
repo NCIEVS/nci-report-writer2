@@ -358,6 +358,19 @@ public class ReportWriterController {
 
 		return null;
 	}
+	
+	@RequestMapping(value = "/convertReport/{id}/{type}/{column}", method = RequestMethod.GET)
+	public ModelAndView convertReport(@PathVariable("id") String id, @PathVariable("type") String type,@PathVariable("column") String column,
+			HttpServletResponse response) throws Exception {
+		log.debug("In here getTxtReport");
+		
+		FileUI fileUI = reportTaskService.convertReportTask(id, type, column, "txt");
+
+		getFile(fileUI, response);
+		 
+
+		return null;
+	}
 
 	@RequestMapping(value = "/getTemplateReport/{id}", method = RequestMethod.GET)
 	public ModelAndView getTemplateReport(@PathVariable("id") String id, HttpServletResponse response)

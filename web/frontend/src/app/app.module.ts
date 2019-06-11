@@ -11,7 +11,7 @@ import { AppComponent } from "./app.component";
 
 import { MultiSelectModule } from "primeng/primeng";
 import { DropdownModule } from "primeng/primeng";
-import {  SharedModule } from "primeng/primeng";
+import { SharedModule } from "primeng/primeng";
 import { DialogModule } from "primeng/primeng";
 import { ButtonModule } from "primeng/primeng";
 import { MenubarModule, MenuItem } from "primeng/primeng";
@@ -23,21 +23,19 @@ import { ProgressBarModule } from "primeng/primeng";
 import { ProgressSpinnerModule } from "primeng/primeng";
 import { TableModule } from "primeng/table";
 import { InputTextModule } from "primeng/inputtext";
-import {FileUploadModule} from 'primeng/fileupload';
+import { FileUploadModule } from "primeng/fileupload";
+import { InputMaskModule } from "primeng/inputmask";
 
-import {MessageService} from 'primeng/api';
+import { MessageService } from "primeng/api";
 
-import { ToastrModule } from 'ngx-toastr';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrModule } from "ngx-toastr";
+import { ToastrService } from "ngx-toastr";
 
-import {ToastModule} from 'primeng/toast';
-
+import { ToastModule } from "primeng/toast";
 
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 import { FormsModule } from "@angular/forms";
-
-
 
 import { CreateTemplateComponent } from "./component/create-template/create-template.component";
 
@@ -45,11 +43,10 @@ import { LookupvaluesTemplateService } from "./service/lookupvalues-template.ser
 import { LookupvaluesTemplaterowService } from "./service/lookupvalues-templaterow.service";
 import { ReportTemplateService } from "./service/report-template.service";
 import { ReportTaskService } from "./service/report-task.service";
-import { GlobalErrorHandler }  from "./service/GlobalErrorHandler";
+import { GlobalErrorHandler } from "./service/GlobalErrorHandler";
 
 import { LoaderService } from "./service/loader.service";
 import { HttpService } from "./service/http.interceptor";
-
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
@@ -86,7 +83,7 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
     MultiSelectModule,
     DropdownModule,
     FormsModule,
-    BrowserAnimationsModule,   
+    BrowserAnimationsModule,
     TableModule,
     SharedModule,
     NgbModule.forRoot(),
@@ -104,14 +101,15 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
     InputTextModule,
     FileUploadModule,
     ToastModule,
+    InputMaskModule,
     ToastrModule.forRoot({
       timeOut: 10000,
-      positionClass: 'toast-top-right',
+      positionClass: "toast-top-right",
       preventDuplicates: true,
       maxOpened: 5,
       autoDismiss: true,
       newestOnTop: true
-    }),
+    })
   ],
   providers: [
     LookupvaluesTemplateService,
@@ -140,7 +138,6 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
       provide: APP_BASE_HREF,
       useFactory: getBaseLocation
     }
-   
   ],
   bootstrap: [AppComponent]
 })

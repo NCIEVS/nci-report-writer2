@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
+import gov.nih.nci.evs.reportwriter.web.exception.InvalidInputParameterException;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTask;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.web.support.FileUI;
@@ -41,4 +42,6 @@ public interface ReportTaskService {
 	public ReportTaskOutput getReportTaskData(String id) throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
 	public EvsVersionInfo getVersionInfo(String databaseType);
+	
+	public FileUI convertReportTask(String id, String type, String column, String fileType)  throws FileNotFoundException, InvalidInputParameterException;
 }

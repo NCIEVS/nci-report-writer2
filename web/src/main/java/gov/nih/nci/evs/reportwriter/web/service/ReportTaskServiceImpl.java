@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.reportwriter.web.service;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,15 +10,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +44,7 @@ import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.core.properties.CoreProperties;
 import gov.nih.nci.evs.reportwriter.core.properties.StardogProperties;
 import gov.nih.nci.evs.reportwriter.core.service.ReportWriter;
+import gov.nih.nci.evs.reportwriter.web.exception.InvalidInputParameterException;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTask;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateColumn;
@@ -53,6 +61,7 @@ import gov.nih.nci.evs.reportwriter.web.support.TableHeader;
 public class ReportTaskServiceImpl implements ReportTaskService {
 
 	private static final Logger log = LoggerFactory.getLogger(ReportTaskServiceImpl.class);
+	final static Charset ENCODING = StandardCharsets.UTF_8;
 
 	@Autowired
 	ReportTaskRepository reportTaskRepository;
@@ -112,11 +121,11 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		return reportTaskUIs;
 
 	}
-	
+
 	public EvsVersionInfo getVersionInfo(String databaseType) {
 		String namedGraph = "";
 		String databaseUrl = "";
-		if(databaseType.equalsIgnoreCase("monthly")) {
+		if (databaseType.equalsIgnoreCase("monthly")) {
 			namedGraph = stardogProperties.getMonthlyGraphName();
 			databaseUrl = stardogProperties.getMonthlyQueryUrl();
 		} else {
@@ -125,14 +134,14 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		}
 		log.debug("namedGraph - " + namedGraph);
 		log.debug("databaseUrl - " + databaseUrl);
-		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl,namedGraph);
+		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl, namedGraph);
 		return evsVersionInfo;
 	}
 
 	public ReportTask createReportTask(ReportTemplate reportTemplate, String databaseType) {
 		String namedGraph = "";
 		String databaseUrl = "";
-		if(databaseType.equalsIgnoreCase("monthly")) {
+		if (databaseType.equalsIgnoreCase("monthly")) {
 			namedGraph = stardogProperties.getMonthlyGraphName();
 			databaseUrl = stardogProperties.getMonthlyQueryUrl();
 		} else {
@@ -141,7 +150,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		}
 		log.debug("namedGraph - " + namedGraph);
 		log.debug("databaseUrl - " + databaseUrl);
-		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl,namedGraph);
+		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl, namedGraph);
 		ReportTask reportTask = new ReportTask();
 		reportTask.setStatus("Pending");
 		reportTask.setReportTemplate(reportTemplate);
@@ -152,12 +161,12 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		reportTask.setVersion(evsVersionInfo.getVersion());
 		reportTask.setGraphName(namedGraph);
 		reportTask.setDatabaseUrl(databaseUrl);
-		reportTask.setDatabaseType(databaseType);		
+		reportTask.setDatabaseType(databaseType);
 		ReportTask reportTaskRet = save(reportTask);
-		
+
 		return reportTaskRet;
 	}
-	
+
 	public List<ReportTaskUI> getAllDeletedTasks() {
 
 		List<ReportTask> reportTasks = (List<ReportTask>) reportTaskRepository.findByStatus("Deleted");
@@ -198,9 +207,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		log.info("id" + reportTask.getId());
 		return reportTaskRet;
 	}
-	
-	
-	public void storeFile(ReportTask reportTask,MultipartFile file) throws IllegalStateException, IOException{
+
+	public void storeFile(ReportTask reportTask, MultipartFile file) throws IllegalStateException, IOException {
 		int reportTemplateId = reportTask.getReportTemplate().getId();
 		ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateId);
 		String outputDirectory = coreProperties.getOutputDirectory();
@@ -214,12 +222,10 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		} catch (IOException ex) {
 
 		}
-		
-		File fileToMove = new File(outputDirectoryName,"ConceptList.txt");
+
+		File fileToMove = new File(outputDirectoryName, "ConceptList.txt");
 		file.transferTo(fileToMove);
-		
-		
-		
+
 	}
 
 	@Async
@@ -278,15 +284,18 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(templateFileName));
 			writer.write(str);
 			writer.close();
-			
+
 			String conceptListFileName = "";
 			if (reportTemplate.getType().equals("ConceptList")) {
 				conceptListFileName = outputDirectoryName + "/ConceptList.txt";
-				//BufferedWriter conceptListWriter = new BufferedWriter(new FileWriter(conceptListFileName));
-				//for (ReportTemplateConceptList concept: reportTemplateConceptListService.getReportTemplateConceptListsByReportTemplateID(reportTemplateId)) {
-				//	conceptListWriter.write(concept.getConceptCode() + "\n");
-				//}
-				//conceptListWriter.close();
+				// BufferedWriter conceptListWriter = new BufferedWriter(new
+				// FileWriter(conceptListFileName));
+				// for (ReportTemplateConceptList concept:
+				// reportTemplateConceptListService.getReportTemplateConceptListsByReportTemplateID(reportTemplateId))
+				// {
+				// conceptListWriter.write(concept.getConceptCode() + "\n");
+				// }
+				// conceptListWriter.close();
 			}
 
 			log.info("Running Report");
@@ -294,7 +303,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			reportTask.setDateLastUpdated(LocalDateTime.now());
 			reportTask.setStatus("Started");
 			save(reportTask);
-			String status = reportWriter.runReport(templateFileName, reportName, conceptListFileName,databaseUrl, namedGraph);
+			String status = reportWriter.runReport(templateFileName, reportName, conceptListFileName, databaseUrl,
+					namedGraph);
 			reportTask.setDateCompleted(LocalDateTime.now());
 			reportTask.setDateLastUpdated(LocalDateTime.now());
 			if (status.equals("success")) {
@@ -315,18 +325,16 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		return reportTaskRepository.findById(reportTaskId).orElse(null);
 
 	}
-	
+
 	@Transactional
 	public ReportTemplateUI getReportNameByTaskId(Integer reportTaskId) {
-		
+
 		ReportTask reportTask = reportTaskRepository.findById(reportTaskId).orElse(null);
-		ReportTemplate  reportTemplate = reportTask.getReportTemplate();
+		ReportTemplate reportTemplate = reportTask.getReportTemplate();
 		ReportTemplateUI reportTemplateUI = new ReportTemplateUI();
 		reportTemplateUI.setName(reportTemplate.getName());
 		return reportTemplateUI;
-		
-		
-		
+
 	}
 
 	@Transactional
@@ -349,7 +357,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		fileUI.setFilePath(filePath);
 		ReportTemplateUI reportTemplateUI = getReportNameByTaskId(Integer.valueOf(id));
 		String fileName = reportTemplateUI.getName() + "-Task-" + id + "." + fileType;
-		//String fileName = "Task-" + id + "." + fileType;
+		// String fileName = "Task-" + id + "." + fileType;
 		log.info("fileName - " + fileName);
 		fileUI.setFileName(fileName);
 		InputStream is = new FileInputStream(filePath);
@@ -358,7 +366,120 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 
 	}
 
-	public ReportTaskOutput getReportTaskData(String id) throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public FileUI convertReportTask(String id, String type, String column, String fileType) throws FileNotFoundException, InvalidInputParameterException {
+		FileUI fileUI = new FileUI();
+		ArrayList<String> mapsToHeadings = new ArrayList<String>(Arrays.asList("Target_Terminology", "Relationship_to_Target", 
+				"Target_Term_Type","Target_Code"));
+		
+		ArrayList<String> fullSynHeadings = new ArrayList<String>(Arrays.asList("Source", "Type", "Code", "Subsource Name"));
+		
+		
+		String outputDirectory = coreProperties.getOutputDirectory();
+		log.info("outputDirectory - " + outputDirectory);
+		String lastDigitofId = id.substring(id.length() - 1);
+		log.info("lastDigitofId - " + lastDigitofId);
+		String filePath = outputDirectory + "/" + lastDigitofId + "/Task-" + id + "/Task-" + id + "." + fileType;
+		String convertedfilePath = outputDirectory + "/" + lastDigitofId + "/Task-" + id + "/Task-" + id + "-" + type
+				+ "-" + column + "." + fileType;
+
+		Path path = Paths.get(filePath);
+		//exists then download the same file
+		Path convertedPathTemp = Paths.get(convertedfilePath);
+		boolean fileExists = Files.exists(convertedPathTemp);
+		if (!fileExists) {	
+				try (BufferedReader reader = Files.newBufferedReader(path, ENCODING)) {
+					Path convertedPath = Paths.get(convertedfilePath);
+					try(BufferedWriter writer = Files.newBufferedWriter(convertedPath, ENCODING)){
+					String line = null;
+					int count = 0;
+					while ((line = reader.readLine()) != null) {
+						
+						// process each line in some way
+						if (!(line == null)){					
+							String[] elements = line.split("\\t");  
+						    
+							ArrayList<String> elementList = new ArrayList<String>(Arrays.asList(elements));
+							int columnNo = Integer.parseInt(column);	
+							if (columnNo > elements.length) {
+								throw new InvalidInputParameterException("The column number " + columnNo + " is greater than the number of columns");
+							}
+							String strToBeProcessed = elements[columnNo - 1];
+							//if (!strToBeProcessed.equalsIgnoreCase("Maps_to") && (count == 0) && type.equalsIgnoreCase("Maps_To")) {
+							//	throw new InvalidInputParameterException("The column number " + columnNo + " does not seem to be of type " + type);
+							//} else if (!strToBeProcessed.equalsIgnoreCase("Full syn") && (count == 0) && type.equalsIgnoreCase("Full_syn")) {
+							//	throw new InvalidInputParameterException("The column number " + columnNo + " does not seem to be of type " + type);
+							//}else
+								if ((count == 0) && type.equalsIgnoreCase("Maps_To")) {	
+								int columnNoTemp = columnNo;
+								for (String heading:mapsToHeadings) {
+								 elementList.add(columnNoTemp,heading);
+								 columnNoTemp++;
+								}
+								line =  String.join("\t", elementList);
+								log.info("line  " + line);
+								writer.write(line);
+								writer.newLine();
+							} else if ((count == 0) && type.equalsIgnoreCase("Full_syn")) {	
+								int columnNoTemp = columnNo;
+								for (String heading:fullSynHeadings) {
+								 elementList.add(columnNoTemp,heading);
+								 columnNoTemp++;
+								}
+								line =  String.join("\t", elementList);
+								log.info("line  " + line);
+								writer.write(line);
+								writer.newLine();
+							} else if (type.equalsIgnoreCase("Maps_To") || type.equalsIgnoreCase("Full_syn")) {
+								String[] records =  strToBeProcessed.split(Pattern.quote(" || "));
+								
+								for (String rec:records) {
+									List<String> elementListCopy = elementList.stream()
+											  .collect(Collectors.toList());
+									String[] terms =  rec.split(Pattern.quote(" | "));
+									int columnNoTemp = columnNo -1;
+									for (String term:terms) {
+										if (columnNoTemp == columnNo -1) {
+											elementListCopy.set(columnNoTemp, term);
+										}else {
+											elementListCopy.add(columnNoTemp,term);
+										}
+										columnNoTemp++;
+									}
+									line =  String.join("\t", elementListCopy);
+									log.info("line  " + line);
+									writer.write(line);
+									writer.newLine();
+									
+								}
+							}
+							
+						}
+						count++;
+					}
+				 }
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+		log.info("filePath - " + convertedfilePath);
+		fileUI.setFilePath(convertedfilePath);
+		ReportTemplateUI reportTemplateUI = getReportNameByTaskId(Integer.valueOf(id));
+		String fileName = reportTemplateUI.getName() + "-Task-" + id +  "-" + type + "-" + column + "." + fileType;
+		// String fileName = "Task-" + id + "." + fileType;
+		log.info("fileName - " + fileName);
+		fileUI.setFileName(fileName);
+		InputStream is = new FileInputStream(convertedfilePath);
+		fileUI.setRawFileStream(is);
+		return fileUI;
+
+	}
+
+	private static void log(Object msg) {
+		System.out.println(String.valueOf(msg));
+	}
+
+	public ReportTaskOutput getReportTaskData(String id) throws IOException, NoSuchMethodException, SecurityException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		ReportTaskOutput reportTaskOutput = new ReportTaskOutput();
 		String outputDirectory = coreProperties.getOutputDirectory();
 		log.info("outputDirectory - " + outputDirectory);
@@ -369,17 +490,17 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		ArrayList<String> list = new ArrayList<String>();
 
 		Files.lines(Paths.get(filePath)).forEach(line -> {
-			//log.debug(line);
+			// log.debug(line);
 			list.add(line);
 		});
 
 		int count = 0;
 		ArrayList<TableHeader> header = new ArrayList<TableHeader>();
 		ArrayList<ReportData> data = new ArrayList<ReportData>();
-		 int headerLength = 0; 
+		int headerLength = 0;
 		for (String st : list) {
 			String[] datacolumn = st.split("\\t");
-           
+
 			if (count == 0) {
 				String fieldname = "column";
 				headerLength = datacolumn.length;
@@ -390,19 +511,19 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 					tableHeader.setField(fieldname + (index + 1));
 					header.add(tableHeader);
 				}
-				
+
 			} else {
 				String fieldname = "Column";
 				ReportData reportData = new ReportData();
 				for (int index = 0; index < headerLength; index++) {
-					
+
 					int columnIndex = index + 1;
 					Method setColumnMethod = ReportData.class.getMethod("set" + fieldname + columnIndex, String.class);
 					if (index < datacolumn.length) {
 						setColumnMethod.invoke(reportData, datacolumn[index]);
 					} else {
 						setColumnMethod.invoke(reportData, "");
-						
+
 					}
 				}
 				data.add(reportData);

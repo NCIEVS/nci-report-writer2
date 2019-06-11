@@ -160,3 +160,8 @@
     color: #1b1d1f;
     font-weight: lighter;
 }
+
+.ui-widget-content a {
+    color: #337ab7;
+    text-decoration: none;
+}
