@@ -101,5 +101,7 @@ insert into lk_property_type (name, description) values ('Maps_To Axiom', 'Maps_
 insert into lk_property_type (name, description) values ('FULL_SYN Axiom', 'FULL_SYN Axiom');
 
 
-
+For June 11 -2019 Add a row to lk_source
+insert into lk_source(name, description) values ("CBDD","CBDD");
+insert into lk_source(name, description) values("PQCMC","PQCMC");
 
