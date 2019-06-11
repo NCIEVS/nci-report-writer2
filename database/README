@@ -103,5 +103,5 @@ insert into lk_property_type (name, description) values ('FULL_SYN Axiom', 'FULL
 
 For June 11 -2019 Add a row to lk_source
 insert into lk_source(name, description) values ("CBDD","CBDD");
-insert into lk_source(name, description) values("PQCMC","PQCMC");
+
 
