@@ -104,4 +104,17 @@ insert into lk_property_type (name, description) values ('FULL_SYN Axiom', 'FULL
 For June 11 -2019 Add a row to lk_source
 insert into lk_source(name, description) values ("CBDD","CBDD");
 
+For July 9 - 2019 Add 6 rows to lk_property_type
+insert into lk_property_type (name, description) values ("Pharmaceutical_Administration_Method", "Pharmaceutical_Administration_Method");
+
+insert into lk_property_type (name, description) values ("Pharmaceutical_State_Of_Matter", "Pharmaceutical_State_Of_Matter");
+
+insert into lk_property_type (name, description) values ("Pharmaceutical_Intended_Site", "Pharmaceutical_Intended_Site");
+
+insert into lk_property_type (name, description) values ("Pharmaceutical_Release_Characteristics", "Pharmaceutical_Release_Characteristics");
+
+insert into lk_property_type (name, description) values ("Pharmaceutical_Basic_Dose_Form", "Pharmaceutical_Basic_Dose_Form");
+
+insert into lk_property_type (name, description) values ("Pharmaceutical_Transformation", "Pharmaceutical_Transformation");
+
 

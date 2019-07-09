@@ -354,6 +354,18 @@ public class RWUtils {
     					values.add(vv);
     				}
 			    }
+			} else if (propertyType.equals("Pharmaceutical_State_Of_Matter")) {
+				values = processAssociation("A17", conceptProperties, property, column, conceptHash, namedGraph, restURL);
+			} else if (propertyType.equals("Pharmaceutical_Basic_Dose_Form")) {
+				values = processAssociation("A18", conceptProperties, property, column, conceptHash, namedGraph, restURL);
+			} else if (propertyType.equals("Pharmaceutical_Administration_Method")) {
+				values = processAssociation("A19", conceptProperties, property, column, conceptHash, namedGraph, restURL);
+			} else if (propertyType.equals("Pharmaceutical_Intended_Site")) {
+				values = processAssociation("A20", conceptProperties, property, column, conceptHash, namedGraph, restURL);
+			} else if (propertyType.equals("Pharmaceutical_Release_Characteristics")) {
+				values = processAssociation("A21", conceptProperties, property, column, conceptHash, namedGraph, restURL);
+			} else if (propertyType.equals("Pharmaceutical_Transformation")) {
+				values = processAssociation("A22", conceptProperties, property, column, conceptHash, namedGraph, restURL);
 			} else {
 			  // Don't do anything for now	
 			}
@@ -364,6 +376,30 @@ public class RWUtils {
 			reportRow.getColumns().add(reportColumn);
 		}
 		reportOutput.getRows().add(reportRow);
+	}
+	
+	public List <String> processAssociation(String associationCode, List <EvsProperty> conceptProperties,
+			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
+		List <String> values = new ArrayList <String>();
+		List <String> properties = EVSUtils.getProperty(associationCode, conceptProperties);
+		for (int i = 0; i < properties.size(); i++ ) {
+			String code = properties.get(i).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
+			EvsConcept assocConcept = null;
+			if (conceptHash.containsKey(code)) {
+				assocConcept = conceptHash.get(code);
+			} else {
+	            assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);	
+	            assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+	            assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));	
+	            conceptHash.put(code, assocConcept);
+			}
+			if (property.equals("P90")) {
+				values.addAll(getFullSynonym(column,assocConcept.getAxioms()));
+			} else {
+				System.err.println("Association Property Not Supported");
+			}
+		}
+		return values;
 	}
 	
 	/**

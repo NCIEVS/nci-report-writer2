@@ -49,7 +49,7 @@
         <ng-template pTemplate="header">
             <tr>
                 <th *ngFor="let col of cols" [pSortableColumn]="col.field">
-                    {{col.header}}
+                    <span style="word-break:break-all">{{col.header}}</span>
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th>
 

@@ -14,3 +14,11 @@ Associated Concept Property~@~Associated Concept Property~@@~
 1st CDRH Parent Property~@~1st CDRH Parent Property~@@~
 2nd CDRH Parent Property~@~2nd CDRH Parent Property~@@~
 hasDbXref~@~hasDbXref~@@~
+Maps_To Axiom~@~Maps_To Axiom~@@~
+FULL_SYN Axiom~@~FULL_SYN Axiom~@@~
+Pharmaceutical_Administration_Method~@~Pharmaceutical_Administration_Method~@@~
+Pharmaceutical_State_Of_Matter~@~Pharmaceutical_State_Of_Matter~@@~
+Pharmaceutical_Intended_Site~@~Pharmaceutical_Intended_Site~@@~
+Pharmaceutical_Release_Characteristics~@~Pharmaceutical_Release_Characteristics~@@~
+Pharmaceutical_Basic_Dose_Form~@~Pharmaceutical_Basic_Dose_Form~@@~
+Pharmaceutical_Transformation~@~Pharmaceutical_Transformation~@@~
