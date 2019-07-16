@@ -40,7 +40,7 @@ apply plugin: 'maven-publish'
 
 
 group = "gov.nih.nci.evs.reportwriter.core"
-version = "1.0.6-SNAPSHOT"
+version = "1.0.7.RELEASE"
 sourceCompatibility = 1.8
 
 
