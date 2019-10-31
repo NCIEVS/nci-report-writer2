@@ -25,7 +25,7 @@ import gov.nih.nci.evs.reportwriter.core.util.RESTUtils;
 
 @Service
 /**
- * 
+ *
  * Contains methods for executing SPARQL queries and converting the results
  * into Class instances.
  *
@@ -33,7 +33,7 @@ import gov.nih.nci.evs.reportwriter.core.util.RESTUtils;
 public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService {
 
 	private static final Logger log = LoggerFactory.getLogger(QueryBuilderServiceImpl.class);
-	
+
 	@Autowired
 	StardogProperties stardogProperties;
 
@@ -50,17 +50,17 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		restUtils = new RESTUtils(stardogProperties.getUsername(),
 				stardogProperties.getPassword(),stardogProperties.getReadTimeout(),stardogProperties.getConnectTimeout());
 	}
-	
+
 	/**
 	 * Return the list of potential NamedGraph's
-	 * 
+	 *
 	 * @return List namedGraphs
 	 */
 	public List <String> getNamedGraphs(String restURL) {
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.constructNamedGraphQuery();
 		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ArrayList<String> namedGraphs = new ArrayList<String>();
@@ -79,7 +79,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 
 	/**
 	 * Return a list of properties for a concept.
-	 * 
+	 *
 	 * @param conceptCode Concept code.
 	 * @return List of EVSProperty instances.
 	 */
@@ -111,7 +111,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 			     	} catch (Exception ex) {
 			     		evsProperty.setCode("");
 			     	}
-				}			
+				}
 				evsProperty.setLabel(b.getPropertyLabel().getValue());
 				evsProperty.setValue(b.getPropertyValue().getValue());
 				evsProperties.add(evsProperty);
@@ -125,7 +125,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 
 	/**
 	 * Return the label for a concept
-	 * 
+	 *
 	 * @param conceptCode Concept code.
 	 * @return Concept label
 	 */
@@ -153,7 +153,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 
 	/**
 	 * Return a list of axioms for a concept.
-	 * 
+	 *
 	 * @param conceptCode Concept code.
 	 * @return List of EVSAxiom instances.
 	 */
@@ -219,6 +219,12 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 				case "P396":
 					evsAxiom.setTargetTerminology(value);
 					break;
+
+                //[EVSREPORT2-36] Adding Target_Terminology_Version Qualifier
+				case "P397":
+					evsAxiom.setTargetTerminologyVersion(value);
+					break;
+
 				case "P381":
 					evsAxiom.setAttr(value);
 					break;
@@ -252,7 +258,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 				case "xref-source":
                     evsAxiom.setXrefSource(value);
                     break;
-				
+
 				default:
 
 				}
@@ -268,7 +274,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 
 	/**
 	 * Return a list of subclass concepts for a concept.
-	 * 
+	 *
 	 * @param conceptCode Concept code.
 	 * @return List of EvsConcept instances.
 	 */
@@ -300,7 +306,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 
 	/**
 	 * Return a list of super concepts for a concept.
-	 * 
+	 *
 	 * @param conceptCode Concept code.
 	 * @return List of EvsConcept instances.
 	 */
@@ -331,7 +337,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 
 	/**
 	 * Return a list of concepts related to a concept using the ConceptInSubset relationship.
-	 * 
+	 *
 	 * @param conceptCode Concept code.
 	 * @return List of EvsConcept instances.
 	 */
@@ -359,10 +365,10 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		}
 		return evsConcepts;
 	}
-	
+
 	/**
 	 * Return concept detail complete content.
-	 * 
+	 *
 	 * @param conceptCode Concept code.
 	 * @return EvsConcept instance.
 	 */
@@ -381,13 +387,13 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		evsConcept.setSubclasses(subclasses);
 		evsConcept.setSuperclasses(superclasses);
 		evsConcept.setSynonyms(EVSUtils.getFullSynonym(axioms));
-		
+
 		return evsConcept;
 	}
 
 	/**
 	 * Return concept detail short content.
-	 * 
+	 *
 	 * @param conceptCode Concept code.
 	 * @return EvsConcept instance.
 	 */
@@ -405,13 +411,13 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		evsConcept.setDisplayName(EVSUtils.getDisplayName(properties));
 		evsConcept.setNeoplasticStatus(EVSUtils.getNeoplasticStatus(properties));
 		evsConcept.setSemanticTypes(EVSUtils.getSemanticType(properties));
-		
+
 		return evsConcept;
 	}
-	
+
 	/**
 	 * Return the EvsVersion Information
-	 * 
+	 *
 	 * @return EvsVersionInfo instance.
 	 */
 	public EvsVersionInfo getEvsVersionInfo(String namedGraph, String restURL) {

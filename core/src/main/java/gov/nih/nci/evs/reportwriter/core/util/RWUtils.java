@@ -24,29 +24,29 @@ import gov.nih.nci.evs.reportwriter.core.service.SparqlQueryManagerService;
 
 @Service
 /**
- * 
+ *
  * Helper methods for running a report based on a Report Template.
  *
  */
 public class RWUtils {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(RWUtils.class);
-	
+
 	@Autowired
 	SparqlQueryManagerService sparqlQueryManagerService;
-	
+
 	public RWUtils() {}
-	
+
 	/**
 	 * Run the ConceptInSubset query and then process the report based on the report template.
-	 * 
+	 *
 	 * @param reportOutput ReportOutput contains the data retrieved from the SPARQL queries and processing.
 	 * @param rootConcept Root Concept.
 	 * @param conceptHash ConceptHash cache to improve performance.
 	 * @param templateColumns TemplateColumns contain template definitions for each column.
 	 */
 	public void processConceptInSubset(Report reportOutput, EvsConcept rootConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph, String restURL) {
-		
+
 		List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getEvsConceptInSubset(rootConcept.getCode(), namedGraph, restURL);
 		log.info("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
 		System.out.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
@@ -69,15 +69,15 @@ public class RWUtils {
 			writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
 		}
 	}
-	
+
 	/**
 	 * Run the ConceptSubclasses query and then process the report based on the report template.
-	 * 
+	 *
 	 * @param reportOutput ReportOutput contains the data retrieved from the SPARQL queries and processing.
 	 * @param rootConcept Root Concept.
 	 * @param conceptHash ConceptHash cache to improve performance.
 	 * @param templateColumns TemplateColumns contain template definitions for each column.
-	 * 
+	 *
 	 * This methods supports recursion.
 	 */
 	public void processConceptSubclasses(Report reportOutput, EvsConcept parentConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile, String namedGraph, String restURL) {
@@ -103,16 +103,16 @@ public class RWUtils {
 
 	/**
 	 * Run the ConceptSubclasses query and then process the report based on the report template.
-	 * 
+	 *
 	 * This is a special case where the recursion limit is set by the maxLevel parameter.
-	 * 
+	 *
 	 * @param reportOutput ReportOutput contains the data retrieved from the SPARQL queries and processing.
 	 * @param rootConcept Root Concept.
 	 * @param conceptHash ConceptHash cache to improve performance.
 	 * @param templateColumns TemplateColumns contain template definitions for each column.
 	 * @param currentLevel Integer representing the current depth of the recursion.
 	 * @param MaxLevel Integer representing the maximum depth of the recursion.
-	 * 
+	 *
 	 * This methods supports recursion, but limited by the maxLevel parameters.
 	 */
 	public void processConceptSubclassesOnly(Report reportOutput,EvsConcept parentConcept,HashMap<String,EvsConcept> conceptHash,List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile, String namedGraph, String restURL) {
@@ -136,17 +136,17 @@ public class RWUtils {
 		}
 		return;
 	}
-	
+
 	/**
 	 * Uses the conceptFile to locate individual concepts and then report on the concept using the template definition.
-	 * 
+	 *
 	 * The conceptFile is a text file containing one concept per line.
-	 * 
+	 *
 	 * @param reportOutput ReportOutput contains the data retrieved from the SPARQL queries and processing.
 	 * @param conceptHash ConceptHash cache to improve performance.
 	 * @param templateColumns TemplateColumns contain template definitions for each column.
 	 * @param conceptFile File name of the input file.
-	 * 
+	 *
 	 */
 	public void processConceptList(Report reportOutput, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, String conceptFile, PrintWriter logFile, String namedGraph, String restURL ) {
 		try {
@@ -154,11 +154,11 @@ public class RWUtils {
 			String line;
 			int total = 0;
 			while ((line = br.readLine()) != null) {
-		        EvsConcept concept = sparqlQueryManagerService.getEvsConceptDetailShort(line,namedGraph,restURL);	
+		        EvsConcept concept = sparqlQueryManagerService.getEvsConceptDetailShort(line,namedGraph,restURL);
 				concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(),namedGraph,restURL));
 				concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(),namedGraph,restURL));
 				writeColumnData(reportOutput,concept,concept,conceptHash,templateColumns,namedGraph,restURL);
-				
+
 				total += 1;
 				if (total % 100 == 0) {
 					log.info("Number of concepts processed: " + total);
@@ -173,7 +173,7 @@ public class RWUtils {
 
 	/**
 	 * Populate a row of data based on the SPARQL query results and the template column definitions.
-	 * 
+	 *
 	 * @param reportOutput ReportOutput contains the data retrieved from the SPARQL queries and processing.
 	 * @param parentConcept Parent concept.
 	 * @param concept Current concept.
@@ -188,11 +188,11 @@ public class RWUtils {
 			String propertyType = column.getPropertyType();
 			String property = column.getProperty();
 			String columnString = "";
-			
+
 			List <String> values = new ArrayList <String>();
 			List <EvsProperty> conceptProperties = concept.getProperties();
 			List <EvsAxiom> conceptAxioms = concept.getAxioms();
-			
+
 			if (propertyType.equals("code")) {
 				List <String> properties = EVSUtils.getProperty("NHC0", conceptProperties);
 				values.add(properties.get(0));
@@ -238,9 +238,9 @@ public class RWUtils {
 					if (conceptHash.containsKey(code)) {
 						nichdParentConcept = conceptHash.get(code);
 					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);	
+			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
 			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));	
+			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
 			            conceptHash.put(code, nichdParentConcept);
 					}
 
@@ -259,9 +259,9 @@ public class RWUtils {
 					if (conceptHash.containsKey(code)) {
 						nichdParentConcept = conceptHash.get(code);
 					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);	
+			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
 			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));	
+			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
 			            conceptHash.put(code, nichdParentConcept);
 					}
 
@@ -287,17 +287,17 @@ public class RWUtils {
 				List <String> properties = EVSUtils.getProperty("A10", conceptProperties);
 				if (properties.size() > 0) {
 					String code = properties.get(0).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-					
+
 					EvsConcept nichdParentConcept = null;
 					if (conceptHash.containsKey(code)) {
 						nichdParentConcept = conceptHash.get(code);
 					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);	
+			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
 			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));	
+			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
 			            conceptHash.put(code, nichdParentConcept);
 					}
-					
+
 					if (property.equals("P90")) {
 						values = getFullSynonym(column,nichdParentConcept.getAxioms());
 					} else {
@@ -308,18 +308,18 @@ public class RWUtils {
 				List <String> properties = EVSUtils.getProperty("A10", conceptProperties);
 				if (properties.size() > 1) {
 					String code = properties.get(1).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-					
-					
+
+
 					EvsConcept nichdParentConcept = null;
 					if (conceptHash.containsKey(code)) {
 						nichdParentConcept = conceptHash.get(code);
 					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);	
+			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
 			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));	
+			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
 			            conceptHash.put(code, nichdParentConcept);
 					}
-					
+
 					if (property.equals("P90")) {
 						values = getFullSynonym(column,nichdParentConcept.getAxioms());
 					} else {
@@ -333,6 +333,8 @@ public class RWUtils {
     				if (axiom.getAnnotatedProperty().equals("P375")) {
    				    	v.add(axiom.getAnnotatedTarget());
        		    		v.add(axiom.getTargetTerminology());
+       		    		//[EVSREPORT2-36] Adding Target_Terminology_Version Qualifier
+       		    		v.add(axiom.getTargetTerminologyVersion());
    				    	v.add(axiom.getRelationshipToTarget());
   	    		    	v.add(axiom.getTargetTermType());
    	    	    		v.add(axiom.getTargetCode());
@@ -367,7 +369,7 @@ public class RWUtils {
 			} else if (propertyType.equals("Pharmaceutical_Transformation")) {
 				values = processAssociation("A22", conceptProperties, property, column, conceptHash, namedGraph, restURL);
 			} else {
-			  // Don't do anything for now	
+			  // Don't do anything for now
 			}
 
 			columnString = String.join(contentSepartor, values);
@@ -377,7 +379,7 @@ public class RWUtils {
 		}
 		reportOutput.getRows().add(reportRow);
 	}
-	
+
 	public List <String> processAssociation(String associationCode, List <EvsProperty> conceptProperties,
 			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
 		List <String> values = new ArrayList <String>();
@@ -388,9 +390,9 @@ public class RWUtils {
 			if (conceptHash.containsKey(code)) {
 				assocConcept = conceptHash.get(code);
 			} else {
-	            assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);	
+	            assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
 	            assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-	            assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));	
+	            assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
 	            conceptHash.put(code, assocConcept);
 			}
 			if (property.equals("P90")) {
@@ -401,17 +403,17 @@ public class RWUtils {
 		}
 		return values;
 	}
-	
+
 	/**
 	 * Find FullSynonym axioms that match the search criteria.
-	 * 
+	 *
 	 * @param column Template column definiton.
 	 * @param axioms List of concept axioms
 	 * @return List of full synonyms that match the search criteria.
 	 */
 	public ArrayList <String> getFullSynonym(TemplateColumn column,List <EvsAxiom> axioms) {
 		ArrayList <String> values = new ArrayList<String>();
-		
+
 		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>(axioms);
 		String property = column.getProperty();
 		String termSource = column.getSource();
@@ -419,7 +421,7 @@ public class RWUtils {
 		String subsource = column.getSubsource();
 		String attr = column.getAttr();
 		String display = column.getDisplay();
-		
+
 		List <EvsAxiom>axioms1 = new ArrayList<EvsAxiom>();
 		if (property != null) {
 			for (EvsAxiom axiom: axiomsKeep) {
@@ -459,7 +461,7 @@ public class RWUtils {
 			}
 			axiomsKeep = new ArrayList<EvsAxiom>(axioms4);
 		}
-		
+
 		List <EvsAxiom>axioms5 = new ArrayList<EvsAxiom>();
 		if (attr != null) {
 			for (EvsAxiom axiom: axiomsKeep) {
@@ -478,7 +480,7 @@ public class RWUtils {
 					values.add(axiom.getSourceCode());
 				}
 			} else {
-			  // Don't do anything at this time	
+			  // Don't do anything at this time
 			}
 		}
 
@@ -487,19 +489,19 @@ public class RWUtils {
 
 	/**
 	 * Find Definition axioms that match the search criteria.
-	 * 
+	 *
 	 * @param column Template column definiton.
 	 * @param axioms List of concept axioms
 	 * @return List of definitions that match the search criteria.
 	 */
 	public ArrayList <String> getDefinition(TemplateColumn column,List <EvsAxiom> axioms) {
 		ArrayList <String> values = new ArrayList<String>();
-		
+
 		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>(axioms);
 		String property = column.getProperty();
 		String defSource = column.getSource();
 		String display = column.getDisplay();
-		
+
 		/*
 		 * This is a Hack, John C. August 31, 2018
 		 * Originaly the templates did not include the "attr" property as an option
@@ -512,7 +514,7 @@ public class RWUtils {
 		if (attr == null) {
 			attr = column.getGroup();
 		}
-		
+
 		List <EvsAxiom>axioms1 = new ArrayList<EvsAxiom>();
 		if (property != null) {
 			for (EvsAxiom axiom: axiomsKeep) {
@@ -549,7 +551,7 @@ public class RWUtils {
 			} else if (display.equals("subsource_code")) {
 				values.add(axiom.getSourceCode());
 			} else {
-			  // Don't do anything at this time	
+			  // Don't do anything at this time
 			}
 		}
 
@@ -559,29 +561,29 @@ public class RWUtils {
             System.out.println(writer.writerWithDefaultPrettyPrinter().writeValueAsString(axiomsKeep));
         } catch (Exception ex){
         	System.err.println(ex);
-        }	
+        }
         */
-		
+
 		return values;
 	}
-	
+
 	/**
 	 * Find DbXref axioms that match the search criteria.
-	 * 
+	 *
 	 * @param column Template column definiton.
 	 * @param axioms List of concept axioms
 	 * @return List of definitions that match the search criteria.
 	 */
 	public ArrayList <String> getDbXref(TemplateColumn column,List <EvsAxiom> axioms) {
 		ArrayList <String> values = new ArrayList<String>();
-		
+
 		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>(axioms);
 		String property = column.getProperty();
 		String defSource = column.getSource();
 		String attr = column.getGroup();
 		String display = column.getDisplay();
 
-		
+
 		List <EvsAxiom>axioms1 = new ArrayList<EvsAxiom>();
 		if (property != null) {
 			for (EvsAxiom axiom: axiomsKeep) {
@@ -619,7 +621,7 @@ public class RWUtils {
 			} else if (display.equals("subsource_code")) {
 				values.add(axiom.getSourceCode());
 			} else {
-			  // Don't do anything at this time	
+			  // Don't do anything at this time
 			}
 		}
 

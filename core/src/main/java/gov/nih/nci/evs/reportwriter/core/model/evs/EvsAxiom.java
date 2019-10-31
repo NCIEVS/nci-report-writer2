@@ -13,6 +13,7 @@ public class EvsAxiom {
 	String targetCode;
 	String targetTermType;
 	String targetTerminology;
+	String targetTerminologyVersion;
 	String attr;
 	String defSource;
 	String goEvi;
@@ -85,6 +86,15 @@ public class EvsAxiom {
 	public void setTargetTerminology(String targetTerminology) {
 		this.targetTerminology = targetTerminology;
 	}
+
+	//[EVSREPORT2-36] Adding Target_Terminology_Version Qualifier
+	public String getTargetTerminologyVersion() {
+		return targetTerminologyVersion;
+	}
+	public void setTargetTerminologyVersion(String targetTerminologyVersion) {
+		this.targetTerminologyVersion = targetTerminologyVersion;
+	}
+
 	public String getAttr() {
 		return attr;
 	}
