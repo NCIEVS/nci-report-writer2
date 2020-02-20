@@ -40,33 +40,42 @@ import gov.nih.nci.evs.reportwriter.core.model.report.ReportColumn;
 import gov.nih.nci.evs.reportwriter.core.model.report.ReportRow;
 import gov.nih.nci.evs.reportwriter.core.model.template.Template;
 import gov.nih.nci.evs.reportwriter.core.model.template.TemplateColumn;
-import gov.nih.nci.evs.reportwriter.core.util.RWUtils;
+//import gov.nih.nci.evs.reportwriter.core.util.RWUtils;
+import gov.nih.nci.evs.reportwriter.core.util.*;
 
 @Service
 /**
  * Generates a report based on a report template file.
- * 
+ *
  */
 public class ReportWriter {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(ReportWriter.class);
-	
+
+	/*
     @Autowired
     SparqlQueryManagerService sparqlQueryManagerService;
 
     @Autowired
     RWUtils rwUtils;
+    */
 
-    public ReportWriter() {}
-	
+    SparqlQueryManagerServiceImpl sparqlQueryManagerService = null;
+    RWUtils rwUtils = null;
+
+    public ReportWriter() {
+		sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
+		rwUtils = new RWUtils();
+	}
+
     /**
      * Run a report using template file.
-     * 
+     *
      * @param templateFile Template file name.
      * @param outputFile Output file name.
      * @param conceptFile Concept file name.
      * @return Returns a string of either "success" or "failure".
-     * 
+     *
      * <p>
      * This methods supports 2 basic types of template definitions.
      * <dl>
@@ -76,11 +85,11 @@ public class ReportWriter {
      * <dd>For this type the conceptFile must be specified and should
      *                  contain one concept code per line.</dd>
      * </dl>
-     * 
+     *
      * <p>
      * The templateFile format is YAML, which allows for the simple marshalling of the content
      * into the ReportTemplate class.
-     * 
+     *
      */
 	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL,String namedGraph) {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
@@ -94,7 +103,7 @@ public class ReportWriter {
         	System.err.println(ex);
         	return "failure";
         }
-        
+
         log.info("Template Information");
         log.info("********************");
         log.info(reportTemplate.toString());
@@ -107,33 +116,51 @@ public class ReportWriter {
         logFile.println("Template Information");
         logFile.println("********************************");
         EvsVersionInfo evsVersionInfo = getEvsVersionInfo(restURL, namedGraph);
-        logFile.println("Version: " + evsVersionInfo.getVersion());       
+        logFile.println("Version: " + evsVersionInfo.getVersion());
         logFile.println(reportTemplate.toString());
-        
-      
+
+
 
         // The conceptHash is used to improve performance, especially in the cases for reports that
         // are looking for parents concepts.  By first looking in the hash for the concept, time
         // can be saved by not repeating the SPARQL queries.
         HashMap <String,EvsConcept> conceptHash = new <String,EvsConcept> HashMap();
-        
+
         int currentLevel = 0;
-       
+
         String templateType = reportTemplate.getType();
         Report reportOutput = new Report();
-        if (templateType.equals("Association")) {
-        	  String rootConceptCode = reportTemplate.getRootConceptCode();
-              EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
-              int maxLevel = reportTemplate.getLevel();
+
+        String associationName = reportTemplate.getAssociation();
+        boolean sourceOf = true;
+        if (templateType.equals("Inverse Association")) {
+			sourceOf = false;
+		}
+
+        if (templateType.equals("Association") || templateType.equals("Inverse Association")) {
+        	String rootConceptCode = reportTemplate.getRootConceptCode();
+            EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
+            int maxLevel = reportTemplate.getLevel();
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset")) {
                 rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
                 rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
         	} else if (reportTemplate.getAssociation().equals("Subclass")) {
                 rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
+
+////////////////////////
+        	} else if (associationName.equals("Has_PCDC_Data_Type")) {
+                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+
+        	} else if (associationName.equals("Has_PCDC_AML_Permissible_Value")) {
+                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+////////////////////////
+
         	} else {
         		System.err.println("Invalid Association Type: " + reportTemplate.getAssociation());
         		return "failure";
         	}
+
+
         } else if (templateType.equals("ConceptList")) {
                 rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph,restURL);
         } else {
@@ -141,7 +168,7 @@ public class ReportWriter {
         	return "failure";
         }
 
-        
+
         /*
          * Print out tab separated and Excel output files
          */
@@ -152,17 +179,17 @@ public class ReportWriter {
         Sheet sheet = wb.createSheet("report");
         sheet.createFreezePane(0, 1);
         int rowIndex = 0;
-        
+
         Font headerFont = wb.createFont();
         headerFont.setColor(IndexedColors.BLACK.getIndex());
         CellStyle headerStyle = createBorderedStyle(wb);
         headerStyle.setAlignment(HorizontalAlignment.CENTER);
         headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
         headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        
+
 		try {
 			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(outputFileText)),StandardCharsets.UTF_8),true);
-			
+
 			// Added May 10, 2018  to output the OWL version information
 		   	Row excelRow = sheet.createRow(rowIndex++);
          	Cell versionCell = excelRow.createCell(0);
@@ -174,7 +201,7 @@ public class ReportWriter {
 	        Cell databaseCell = excelRow.createCell(2);
 	        databaseCell.setCellValue("REST URL: " + restURL);
 	        databaseCell.setCellStyle(headerStyle);
-	        
+
 			ArrayList <String> columnHeadings = new ArrayList <String>();
 	       	excelRow = sheet.createRow(rowIndex++);
 	       	int cellIndex = 0;
@@ -186,7 +213,7 @@ public class ReportWriter {
         	}
             //pw.write("Version: " + evsVersionInfo.getVersion() + "\n");
             pw.write(String.join("\t",columnHeadings) + "\n");
-            
+
             /*
              * Sort the rows based on the template sortColumn specification
              */
@@ -209,7 +236,7 @@ public class ReportWriter {
         	    }
                 pw.write(String.join("\t",values) + "\n");
             }
-            
+
             for (int i = 0; i < reportTemplate.getColumns().size(); i++) {
             	sheet.autoSizeColumn(i);
             }
@@ -227,21 +254,21 @@ public class ReportWriter {
     	    if (pw != null) {
     		    pw.close();
     	    }
-        } 
-		
+        }
+
         logFile.println("");
         logFile.println("********************************");
         logFile.println("Completed: " + LocalDateTime.now());
 		logFile.close();
-        
+
 		return "success";
-		
+
 	}
-	
+
 	private static CellStyle createBorderedStyle(Workbook wb){
 	        BorderStyle thin = BorderStyle.THIN;
 	        short black = IndexedColors.BLACK.getIndex();
-	        
+
 	        CellStyle style = wb.createCellStyle();
 	        style.setBorderRight(thin);
 	        style.setRightBorderColor(black);
@@ -253,13 +280,13 @@ public class ReportWriter {
 	        style.setTopBorderColor(black);
 	        return style;
     }
-	
+
 	public EvsVersionInfo getEvsVersionInfo(String restURL,String namedGraph) {
 		return sparqlQueryManagerService.getEvsVersionInfo(namedGraph,restURL);
-	}	
-	
+	}
+
 	public List <String> getNamedGraphs(String restURL) {
 		return sparqlQueryManagerService.getNamedGraphs(restURL);
 	}
-	
+
 }

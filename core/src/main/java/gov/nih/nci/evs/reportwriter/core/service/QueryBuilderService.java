@@ -1,15 +1,15 @@
 package gov.nih.nci.evs.reportwriter.core.service;
 
 public interface QueryBuilderService {
-	
+
 	public String contructPrefix();
 
 	public String constructConceptQuery(String conceptCode,String namedGraph);
-	
+
 	public String constructPropertyQuery(String conceptCode,String namedGraph);
-	
+
 	public String constructAxiomQuery(String conceptCode, String namedGraph);
-	
+
 	public String constructSubclassQuery(String conceptCode, String namedGraph);
 
 	public String constructSuperclassQuery(String conceptCode, String namedGraph);
@@ -17,6 +17,8 @@ public interface QueryBuilderService {
 	public String constructConceptInSubsetQuery(String conceptCode, String namedGraph);
 
 	public String constructVersionInfoQuery(String namedGraph);
-	
+
+	public String construct_associated_concept_query(String namespace, String associationName, String code, boolean sourceOf);
+
 	public String constructNamedGraphQuery();
 }

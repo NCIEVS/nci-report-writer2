@@ -6,19 +6,20 @@ import java.util.List;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAxiom;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsProperty;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSynonym;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
 
 /**
- * 
+ *
  * Helper class for retrieving information from the Concept properties
  *
  */
 public class EVSUtils {
-	
+
 	public EVSUtils() {}
-	
+
 	/**
 	 * Return a property value if the code matches a property code.
-	 * 
+	 *
 	 * @param code property code.
 	 * @param properties List of properties.
 	 * @return List of property values.
@@ -35,7 +36,7 @@ public class EVSUtils {
 
 	/**
 	 * Return a concept code.
-	 * 
+	 *
 	 * @param properties List of properties.
 	 * @return Concept code.
 	 */
@@ -49,8 +50,8 @@ public class EVSUtils {
 	}
 
 	/**
-	 * Return a concept display name. 
-	 * 
+	 * Return a concept display name.
+	 *
 	 * @param properties List of properties.
 	 * @return Concept display name.
 	 */
@@ -64,8 +65,8 @@ public class EVSUtils {
 	}
 
 	/**
-	 * Return a concept preferred name. 
-	 * 
+	 * Return a concept preferred name.
+	 *
 	 * @param properties List of properties.
 	 * @return Concept preferred name.
 	 */
@@ -79,8 +80,8 @@ public class EVSUtils {
 	}
 
 	/**
-	 * Return a concept preferred name. 
-	 * 
+	 * Return a concept preferred name.
+	 *
 	 * @param properties List of properties.
 	 * @return Concept preferred name.
 	 */
@@ -94,8 +95,8 @@ public class EVSUtils {
 	}
 
 	/**
-	 * Return a concept definition. 
-	 * 
+	 * Return a concept definition.
+	 *
 	 * @param properties List of properties.
 	 * @return Concept definition.
 	 */
@@ -110,7 +111,7 @@ public class EVSUtils {
 
 	/**
 	 * Return a concept's semantic types.
-	 * 
+	 *
 	 * @param properties List of properties.
 	 * @return Concept semantic types.
 	 */
@@ -120,7 +121,7 @@ public class EVSUtils {
 
 	/**
 	 * Return a concept's full synonyms.
-	 * 
+	 *
 	 * @param axioms List of axioms.
 	 * @return Concept full synonyms.
 	 */
@@ -141,5 +142,29 @@ public class EVSUtils {
 		}
 		return results;
 	}
-	
+
+////KLO 11/26/2019 ///////////////////////////////////////////////////////////////////////////////////////////
+    public static List <String> getSuperclassCodes(EvsConcept concept) {
+		List<String> list = new ArrayList <String>();
+		try {
+			if (concept == null) {
+				return list;
+			}
+			List<EvsConcept> superclasses = concept.getSuperclasses();
+			if (superclasses != null) {
+				if (superclasses.size() == 0) {
+					return list;
+				}
+				for (int i=0; i<superclasses.size(); i++) {
+					EvsConcept superclass = superclasses.get(i);
+					if (superclass != null) {
+						list.add(superclass.getCode());
+					}
+				}
+	    	}
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+        return list;
+	}
 }

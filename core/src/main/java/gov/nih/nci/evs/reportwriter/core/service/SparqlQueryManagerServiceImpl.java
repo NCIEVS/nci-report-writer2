@@ -51,6 +51,15 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 				stardogProperties.getPassword(),stardogProperties.getReadTimeout(),stardogProperties.getConnectTimeout());
 	}
 
+//KLO
+	public void setQueryBuilderService(QueryBuilderService queryBuilderService) {
+		this.queryBuilderService = queryBuilderService;
+	}
+
+	public void setRESTUtils(RESTUtils restUtils) {
+		this.restUtils = restUtils;
+	}
+
 	/**
 	 * Return the list of potential NamedGraph's
 	 *
@@ -365,6 +374,39 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		}
 		return evsConcepts;
 	}
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //[EVSREPORT2-42] Associations in Report Writer. KLO, 02202020
+	public List <EvsConcept> getAssociatedEvsConcepts(String conceptCode, String namedGraph, String restURL, String associationName) {
+        boolean sourceOf = true;
+        return getAssociatedEvsConcepts(conceptCode, namedGraph, restURL, associationName, sourceOf);
+	}
+
+	public List <EvsConcept> getAssociatedEvsConcepts(String conceptCode, String namedGraph, String restURL, String associationName, boolean sourceOf) {
+		String queryPrefix = queryBuilderService.contructPrefix();
+		String query = queryBuilderService.construct_associated_concept_query(namedGraph, associationName, conceptCode, sourceOf);
+		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		ArrayList<EvsConcept> evsConcepts = new ArrayList<EvsConcept>();
+		try {
+			Sparql sparqlResult = mapper.readValue(res, Sparql.class);
+			Bindings[] bindings = sparqlResult.getResults().getBindings();
+			for (Bindings b : bindings) {
+				EvsConcept evsConcept = new EvsConcept();
+				evsConcept.setLabel(b.getConceptLabel().getValue());
+				evsConcept.setCode(b.getConceptCode().getValue());
+				evsConcepts.add(evsConcept);
+			}
+		} catch (Exception ex) {
+			System.out.println("Bad News Exception");
+			System.out.println(ex);
+		}
+		return evsConcepts;
+	}
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
 
 	/**
 	 * Return concept detail complete content.

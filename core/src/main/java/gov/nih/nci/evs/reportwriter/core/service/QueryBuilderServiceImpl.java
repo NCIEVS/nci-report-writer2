@@ -16,7 +16,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 
 	/**
 	 * Return the SPARQL prefix defintion
-	 * 
+	 *
 	 * @return SPARQL prefix
 	 */
 	public String contructPrefix() {
@@ -32,10 +32,10 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 
 		return prefix;
 	}
-	
+
 	/**
 	 * Return the SPARQL concept query
-	 * 
+	 *
 	 *  @param conceptCode Concept code.
 	 *  @param namedGraph Named graph.
 	 *  @return SPARQL concept query
@@ -55,7 +55,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 
 	/**
 	 * Return the SPARQL concept property query
-	 * 
+	 *
 	 *  @param conceptCode Concept code.
 	 *  @param namedGraph Named graph.
 	 *  @return SPARQL concept property query
@@ -78,7 +78,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 
 	/**
 	 * Return the SPARQL concept axiom query
-	 * 
+	 *
 	 *  @param conceptCode Concept code.
 	 *  @param namedGraph Named graph.
 	 *  @return SPARQL concept axiom query
@@ -100,7 +100,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 
 	/**
 	 * Return the SPARQL concept subclass query
-	 * 
+	 *
 	 *  @param conceptCode Concept code.
 	 *  @param namedGraph Named graph.
 	 *  @return SPARQL concept subclass query
@@ -144,7 +144,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 
 	/**
 	 * Return the SPARQL concept superclass query
-	 * 
+	 *
 	 *  @param conceptCode Concept code.
 	 *  @param namedGraph Named graph.
 	 *  @return SPARQL concept superclass query
@@ -188,7 +188,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 
 	/**
 	 * Return the SPARQL ConceptInSubset  query
-	 * 
+	 *
 	 *  @param conceptCode Concept code.
 	 *  @param namedGraph Named graph.
 	 *  @return SPARQL ConceptInSubset query
@@ -208,10 +208,10 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 
 		return query.toString();
 	}
-	
+
 	/**
 	 * Return the SPARQL VersionInfo Query
-	 * 
+	 *
 	 * @param namedGraph Named graph.
 	 * @return SPARQL Version Info query
 	 */
@@ -226,15 +226,15 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
         query.append("    ?o rdfs:comment ?comment\n");
 		query.append("  }\n");
 		query.append("}\n");
-		
+
 		System.out.println(query.toString());
 
 		return query.toString();
 	}
-	
+
 	/**
 	 * Return the SPARQL NamedGraph Query
-	 * 
+	 *
 	 * @return SPARQL NamedGraph query
 	 */
 	public String constructNamedGraphQuery() {
@@ -244,8 +244,63 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		//query.append("UNION\n");
 		query.append("  { graph ?namedGraph {?s ?p ?o}}\n");
 		query.append("}\n");
-		
+
 		System.out.println(query.toString());
 		return query.toString();
 	}
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //[EVSREPORT2-42] Associations in Report Writer. KLO, 02202020
+	public String construct_concept_in_subset_query(String conceptCode, String namedGraph) {
+		String associationName = "Concept_In_Subset";
+		return construct_associated_concept_query(namedGraph, associationName, conceptCode);
+	}
+
+	public String construct_associated_concept_query(String namespace, String associationName, String code) {
+		boolean sourceOf = true;
+		return construct_associated_concept_query(namespace, associationName, code, sourceOf);
+	}
+
+	public String construct_associated_concept_query(String namespace, String associationName, String code, boolean sourceOf) {
+		StringBuffer buf = new StringBuffer();
+		if (sourceOf) {
+			buf.append("SELECT ?x_code ?x_label").append("\n");
+		} else {
+			buf.append("SELECT ?z_code ?z_label").append("\n");
+		}
+
+		buf.append("{").append("\n");
+		buf.append("    graph <" + namespace + ">").append("\n");
+		buf.append("    {").append("\n");
+		buf.append("            ?x a owl:Class .").append("\n");
+		buf.append("            ?x rdfs:label ?x_label .").append("\n");
+
+		if (sourceOf) {
+			buf.append("            ?x :NHC0 ?x_code .").append("\n");
+		} else {
+			buf.append("            ?x :NHC0 \"" + code + "\"^^<http://www.w3.org/2001/XMLSchema#string> .").append("\n");
+		}
+
+		buf.append("            ?y a owl:AnnotationProperty .").append("\n");
+		buf.append("            ?y rdfs:label \"" + associationName + "\"^^<http://www.w3.org/2001/XMLSchema#string> .").append("\n");
+
+		buf.append("            ?x ?y ?z .").append("\n");
+		buf.append("            ?z a owl:Class .").append("\n");
+		buf.append("            ?z rdfs:label ?z_label .").append("\n");
+
+		if (!sourceOf) {
+			buf.append("            ?z :NHC0 ?z_code .").append("\n");
+		} else {
+			buf.append("            ?z :NHC0 \"" + code + "\"^^<http://www.w3.org/2001/XMLSchema#string> .").append("\n");
+		}
+
+		buf.append("            ?z :NHC0 ?z_code .").append("\n");
+		buf.append("            ?y rdfs:range ?y_range").append("\n");
+		buf.append("    }").append("\n");
+		buf.append("    FILTER (str(?y_range)=\"http://www.w3.org/2001/XMLSchema#anyURI\")").append("\n");
+		buf.append("}").append("\n");
+		return buf.toString();
+	}
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
 }

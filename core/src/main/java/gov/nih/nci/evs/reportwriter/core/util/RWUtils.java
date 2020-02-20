@@ -21,6 +21,7 @@ import gov.nih.nci.evs.reportwriter.core.model.report.ReportColumn;
 import gov.nih.nci.evs.reportwriter.core.model.report.ReportRow;
 import gov.nih.nci.evs.reportwriter.core.model.template.TemplateColumn;
 import gov.nih.nci.evs.reportwriter.core.service.SparqlQueryManagerService;
+import gov.nih.nci.evs.reportwriter.core.service.SparqlQueryManagerServiceImpl;
 
 @Service
 /**
@@ -32,10 +33,18 @@ public class RWUtils {
 
 	private static final Logger log = LoggerFactory.getLogger(RWUtils.class);
 
+/*
 	@Autowired
 	SparqlQueryManagerService sparqlQueryManagerService;
+*/
+    SparqlQueryManagerServiceImpl sparqlQueryManagerService = null;
 
-	public RWUtils() {}
+	public RWUtils() {
+		sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
+	}
+
+
+
 
 	/**
 	 * Run the ConceptInSubset query and then process the report based on the report template.
@@ -217,12 +226,19 @@ public class RWUtils {
 				} else {
 					values = EVSUtils.getProperty(property, parentConcept.getProperties());
 				}
+////KLO 11/26/2019 ///////////////////////////////////////////////////////////////////////////////////////////
+			} else if (propertyType.equals("Parent Codes")) {
+				List <EvsConcept> superclasses = sparqlQueryManagerService.getEvsSuperclasses(concept.getCode(), namedGraph, restURL);
+				concept.setSuperclasses(superclasses);
+				values = EVSUtils.getSuperclassCodes(concept);
+
 			} else if (propertyType.equals("1st NICHD Parent Code")) {
 				List <String> properties = EVSUtils.getProperty("A11", conceptProperties);
 				if (properties.size() > 0) {
 					String code = properties.get(0).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
 					values.add(code);
 				}
+
 			} else if (propertyType.equals("2nd NICHD Parent Code")) {
 				List <String> properties = EVSUtils.getProperty("A11", conceptProperties);
 				if (properties.size() > 1) {
@@ -627,4 +643,46 @@ public class RWUtils {
 
 		return values;
 	}
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Run the getAssociatedConcepts query and then process the report based on the report template.
+	 *
+	 * @param reportOutput ReportOutput contains the data retrieved from the SPARQL queries and processing.
+	 * @param rootConcept Root Concept.
+	 * @param conceptHash ConceptHash cache to improve performance.
+	 * @param templateColumns TemplateColumns contain template definitions for each column.
+	 */
+
+	public void processAssociatedConcepts(Report reportOutput, EvsConcept rootConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph, String restURL, String associationName, boolean sourceOf) {
+
+		List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getAssociatedEvsConcepts(rootConcept.getCode(), namedGraph, restURL, associationName, sourceOf);
+		log.info("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
+		System.out.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
+		logFile.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
+		int total = 0;
+		for (EvsConcept concept: associatedConcepts) {
+			total += 1;
+			if (total % 100 == 0) {
+				log.info("Number of associations processed: " + total);
+				System.out.println("Number of associations processed: " + total);
+				logFile.println("Number of associations processed: " + total);
+			}
+			if (conceptHash.containsKey(concept.getCode())) {
+				concept = conceptHash.get(concept.getCode());
+			} else {
+				concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(), namedGraph, restURL));
+				concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
+				conceptHash.put(concept.getCode(), concept);
+			}
+			writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
+		}
+	}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 }
