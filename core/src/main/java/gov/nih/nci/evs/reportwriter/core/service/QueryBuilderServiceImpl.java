@@ -294,7 +294,6 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 			buf.append("            ?z :NHC0 \"" + code + "\"^^<http://www.w3.org/2001/XMLSchema#string> .").append("\n");
 		}
 
-		buf.append("            ?z :NHC0 ?z_code .").append("\n");
 		buf.append("            ?y rdfs:range ?y_range").append("\n");
 		buf.append("    }").append("\n");
 		buf.append("    FILTER (str(?y_range)=\"http://www.w3.org/2001/XMLSchema#anyURI\")").append("\n");

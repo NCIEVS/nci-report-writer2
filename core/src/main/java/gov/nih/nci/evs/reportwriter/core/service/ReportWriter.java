@@ -152,8 +152,11 @@ public class ReportWriter {
 ////////////////////////
 
         	} else {
+                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+				/*
         		System.err.println("Invalid Association Type: " + reportTemplate.getAssociation());
         		return "failure";
+        		*/
         	}
 
 
