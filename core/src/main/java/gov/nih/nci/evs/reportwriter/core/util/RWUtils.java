@@ -36,15 +36,10 @@ public class RWUtils {
 
 	@Autowired
 	SparqlQueryManagerService sparqlQueryManagerService;
-/*
-    SparqlQueryManagerServiceImpl sparqlQueryManagerService = null;
 
 	public RWUtils() {
 		sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
 	}
-*/
-
-
 
 	/**
 	 * Run the ConceptInSubset query and then process the report based on the report template.

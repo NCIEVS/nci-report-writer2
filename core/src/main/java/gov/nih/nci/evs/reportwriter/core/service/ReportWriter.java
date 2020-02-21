@@ -59,15 +59,10 @@ public class ReportWriter {
     @Autowired
     RWUtils rwUtils;
 
-    /*
-    SparqlQueryManagerServiceImpl sparqlQueryManagerService = null;
-    RWUtils rwUtils = null;
-
     public ReportWriter() {
 		sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
 		rwUtils = new RWUtils();
 	}
-	*/
 
     /**
      * Run a report using template file.
