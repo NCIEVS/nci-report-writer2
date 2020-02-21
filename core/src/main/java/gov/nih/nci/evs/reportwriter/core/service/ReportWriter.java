@@ -52,14 +52,14 @@ public class ReportWriter {
 
 	private static final Logger log = LoggerFactory.getLogger(ReportWriter.class);
 
-	/*
+
     @Autowired
     SparqlQueryManagerService sparqlQueryManagerService;
 
     @Autowired
     RWUtils rwUtils;
-    */
 
+    /*
     SparqlQueryManagerServiceImpl sparqlQueryManagerService = null;
     RWUtils rwUtils = null;
 
@@ -67,6 +67,7 @@ public class ReportWriter {
 		sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
 		rwUtils = new RWUtils();
 	}
+	*/
 
     /**
      * Run a report using template file.

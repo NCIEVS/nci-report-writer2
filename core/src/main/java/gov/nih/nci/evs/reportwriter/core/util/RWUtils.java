@@ -33,16 +33,16 @@ public class RWUtils {
 
 	private static final Logger log = LoggerFactory.getLogger(RWUtils.class);
 
-/*
+
 	@Autowired
 	SparqlQueryManagerService sparqlQueryManagerService;
-*/
+/*
     SparqlQueryManagerServiceImpl sparqlQueryManagerService = null;
 
 	public RWUtils() {
 		sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
 	}
-
+*/
 
 
 
