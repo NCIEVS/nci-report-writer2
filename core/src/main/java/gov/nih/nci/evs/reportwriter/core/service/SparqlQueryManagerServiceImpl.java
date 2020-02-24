@@ -1,7 +1,9 @@
 package gov.nih.nci.evs.reportwriter.core.service;
+import gov.nih.nci.evs.reportwriter.core.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.annotation.PostConstruct;
 
@@ -385,8 +387,23 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	public List <EvsConcept> getAssociatedEvsConcepts(String conceptCode, String namedGraph, String restURL, String associationName, boolean sourceOf) {
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.construct_associated_concept_query(namedGraph, associationName, conceptCode, sourceOf);
-		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
+		String res = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+		Vector v = new gov.nih.nci.evs.reportwriter.core.util.JSONUtils().parseJSON(res);
+		v = new gov.nih.nci.evs.reportwriter.core.util.ParserUtils().getResponseValues(v);
 
+		ArrayList<EvsConcept> evsConcepts = new ArrayList<EvsConcept>();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			Vector u = new ParserUtils().parseData(t, '|');
+			EvsConcept evsConcept = new EvsConcept();
+			String code = (String) u.elementAt(0);
+			String label = (String) u.elementAt(1);
+			evsConcept.setCode(code);
+			evsConcept.setLabel(label);
+			evsConcepts.add(evsConcept);
+		}
+
+		/*
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ArrayList<EvsConcept> evsConcepts = new ArrayList<EvsConcept>();
@@ -403,6 +420,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 			System.out.println("Bad News Exception");
 			System.out.println(ex);
 		}
+		*/
 		return evsConcepts;
 	}
     ///////////////////////////////////////////////////////////////////////////////////////////////
