@@ -227,7 +227,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		query.append("  }\n");
 		query.append("}\n");
 
-		System.out.println(query.toString());
+		//System.out.println(query.toString());
 
 		return query.toString();
 	}
@@ -245,7 +245,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		query.append("  { graph ?namedGraph {?s ?p ?o}}\n");
 		query.append("}\n");
 
-		System.out.println(query.toString());
+		//System.out.println(query.toString());
 		return query.toString();
 	}
 
@@ -277,7 +277,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 
 		if (sourceOf) {
 			buf.append("            ?x :NHC0 ?x_code .").append("\n");
-		} else {
+		} else if (code != null) {
 			buf.append("            ?x :NHC0 \"" + code + "\"^^<http://www.w3.org/2001/XMLSchema#string> .").append("\n");
 		}
 
@@ -290,7 +290,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 
 		if (!sourceOf) {
 			buf.append("            ?z :NHC0 ?z_code .").append("\n");
-		} else {
+		} else if (code != null) {
 			buf.append("            ?z :NHC0 \"" + code + "\"^^<http://www.w3.org/2001/XMLSchema#string> .").append("\n");
 		}
 
