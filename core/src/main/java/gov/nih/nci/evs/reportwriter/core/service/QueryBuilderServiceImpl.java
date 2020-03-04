@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-
-
 @Service
 /**
  * Contains the SPARQL queries used by the ReportWriter
@@ -256,12 +254,12 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		return construct_associated_concept_query(namedGraph, associationName, conceptCode);
 	}
 
-	public String construct_associated_concept_query(String namespace, String associationName, String code) {
+	public String construct_associated_concept_query(String namedGraph, String associationName, String code) {
 		boolean sourceOf = true;
-		return construct_associated_concept_query(namespace, associationName, code, sourceOf);
+		return construct_associated_concept_query(namedGraph, associationName, code, sourceOf);
 	}
 
-	public String construct_associated_concept_query(String namespace, String associationName, String code, boolean sourceOf) {
+	public String construct_associated_concept_query(String namedGraph, String associationName, String code, boolean sourceOf) {
 		StringBuffer buf = new StringBuffer();
 		if (sourceOf) {
 			buf.append("SELECT ?x_code ?x_label").append("\n");
@@ -270,7 +268,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		}
 
 		buf.append("{").append("\n");
-		buf.append("    graph <" + namespace + ">").append("\n");
+		buf.append("    graph <" + namedGraph + ">").append("\n");
 		buf.append("    {").append("\n");
 		buf.append("            ?x a owl:Class .").append("\n");
 		buf.append("            ?x rdfs:label ?x_label .").append("\n");
@@ -300,6 +298,35 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		buf.append("}").append("\n");
 		return buf.toString();
 	}
+
+	public String construct_get_associated_concepts(String namedGraph, String association) {
+		return construct_get_associated_concepts(namedGraph, association, true);
+	}
+
+	public String construct_get_associated_concepts(String namedGraph, String association, boolean sourceOf) {
+		StringBuffer buf = new StringBuffer();
+		if (sourceOf) {
+			buf.append("SELECT distinct ?x_label ?x_code ?y_label ?z_label ?z_code").append("\n");
+		} else {
+			buf.append("SELECT distinct ?z_label ?z_code ?y_label ?x_label ?x_code").append("\n");
+		}
+		buf.append("{").append("\n");
+		buf.append("    graph <" + namedGraph + ">").append("\n");
+		buf.append("    {").append("\n");
+		buf.append("            ?x a owl:Class .").append("\n");
+		buf.append("            ?x rdfs:label ?x_label .").append("\n");
+		buf.append("            ?x :NHC0 ?x_code .").append("\n");
+		buf.append("            ?y a owl:AnnotationProperty .").append("\n");
+		buf.append("            ?x ?y ?z .").append("\n");
+		buf.append("            ?y rdfs:label ?y_label .").append("\n");
+		buf.append("            ?z :NHC0 ?z_code .").append("\n");
+		buf.append("            ?z rdfs:label ?z_label .").append("\n");
+		buf.append("            ?y rdfs:label " + "\"" + association + "\"^^xsd:string ").append("\n");
+		buf.append("    }").append("\n");
+		buf.append("}").append("\n");
+		return buf.toString();
+	}
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
 }
