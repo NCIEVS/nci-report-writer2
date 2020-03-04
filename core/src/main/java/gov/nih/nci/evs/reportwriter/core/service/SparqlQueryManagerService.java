@@ -6,6 +6,7 @@ import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAxiom;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsProperty;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAssociation;
 
 public interface SparqlQueryManagerService {
 
@@ -30,5 +31,7 @@ public interface SparqlQueryManagerService {
 	public List <String> getNamedGraphs(String restURL);
 
 	public List <EvsConcept> getAssociatedEvsConcepts(String conceptCode, String namedGraph, String restURL, String associationName, boolean sourceOf);
+
+	public List <EvsAssociation> getEvsAssociations(String namedGraph, String restURL, String associationName, boolean sourceOf);
 
 }

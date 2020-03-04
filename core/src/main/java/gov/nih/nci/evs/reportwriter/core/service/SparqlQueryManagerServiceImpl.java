@@ -19,6 +19,7 @@ import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAxiom;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsProperty;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAssociation;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Bindings;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Sparql;
 import gov.nih.nci.evs.reportwriter.core.properties.StardogProperties;
@@ -503,4 +504,32 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		}
 		return evsVersionInfo;
 	}
+
+
+	public List <EvsAssociation> getEvsAssociations(String namedGraph, String restURL, String associationName, boolean sourceOf) {
+		String queryPrefix = queryBuilderService.contructPrefix();
+		String query = queryBuilderService.construct_get_associated_concepts(namedGraph, associationName, sourceOf);
+		String res = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+		Vector v = new gov.nih.nci.evs.reportwriter.core.util.JSONUtils().parseJSON(res);
+		v = new gov.nih.nci.evs.reportwriter.core.util.ParserUtils().getResponseValues(v);
+		ArrayList<EvsAssociation> evsAssociations = new ArrayList<EvsAssociation>();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			Vector u = new ParserUtils().parseData(t, '|');
+			EvsAssociation evsAssociation = new EvsAssociation();
+			String sourceName = (String) u.elementAt(0);
+			String sourceCode = (String) u.elementAt(1);
+			String sassoName = (String) u.elementAt(2);
+			String targetName = (String) u.elementAt(3);
+			String targetCode = (String) u.elementAt(4);
+			evsAssociation.setSourceName(sourceName);
+			evsAssociation.setSourceCode(sourceCode);
+			evsAssociation.setAssociationName(sassoName);
+			evsAssociation.setTargetName(targetName);
+			evsAssociation.setTargetCode(targetCode);
+			evsAssociations.add(evsAssociation);
+		}
+		return evsAssociations;
+   }
+
 }

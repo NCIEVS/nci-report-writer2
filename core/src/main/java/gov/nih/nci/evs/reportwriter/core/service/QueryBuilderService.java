@@ -21,4 +21,7 @@ public interface QueryBuilderService {
 	public String construct_associated_concept_query(String namespace, String associationName, String code, boolean sourceOf);
 
 	public String constructNamedGraphQuery();
+
+	public String construct_get_associated_concepts(String namedGraph, String association, boolean sourceOf);
+
 }

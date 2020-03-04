@@ -93,6 +93,7 @@ public class ReportWriter {
         PrintWriter logFile = null;
         try {
             reportTemplate = mapper.readValue(new File(templateFile), Template.class);
+
             String rootConceptCode = reportTemplate.getRootConceptCode();
             rootConceptCode = rootConceptCode.trim();
             if (rootConceptCode.compareToIgnoreCase("Not specified") == 0 ||
@@ -145,10 +146,10 @@ public class ReportWriter {
         	String rootConceptCode = reportTemplate.getRootConceptCode();
             EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
             int maxLevel = reportTemplate.getLevel();
-        	if (reportTemplate.getAssociation().equals("Concept_In_Subset")) {
+        	if (reportTemplate.getAssociation().equals("Concept_In_Subset") && sourceOf) {
                 rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
                 rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
-        	} else if (reportTemplate.getAssociation().equals("Subclass")) {
+        	} else if (reportTemplate.getAssociation().equals("Subclass") && sourceOf) {
                 rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
 
 ////////////////////////
@@ -161,12 +162,7 @@ public class ReportWriter {
 
         	} else {
                 rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
-				/*
-        		System.err.println("Invalid Association Type: " + reportTemplate.getAssociation());
-        		return "failure";
-        		*/
         	}
-
 
         } else if (templateType.equals("ConceptList")) {
                 rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph,restURL);
