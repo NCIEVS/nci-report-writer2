@@ -26,6 +26,13 @@ public class EVSUtils {
 	 */
 	public static List <String> getProperty(String code, List <EvsProperty>properties) {
 		ArrayList <String> results = new ArrayList<String>();
+
+
+		if (properties == null) {
+			return results;
+		}
+
+
 		for ( EvsProperty property: properties) {
 			if (property.getCode().equals(code)) {
 				results.add(property.getValue());

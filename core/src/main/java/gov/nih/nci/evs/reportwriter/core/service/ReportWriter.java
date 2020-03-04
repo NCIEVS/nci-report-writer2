@@ -95,11 +95,13 @@ public class ReportWriter {
             reportTemplate = mapper.readValue(new File(templateFile), Template.class);
 
             String rootConceptCode = reportTemplate.getRootConceptCode();
-            rootConceptCode = rootConceptCode.trim();
-            if (rootConceptCode.compareToIgnoreCase("Not specified") == 0 ||
-                rootConceptCode.compareToIgnoreCase("Not applicable") == 0 ||
-                rootConceptCode.compareToIgnoreCase("NA") == 0) {
-            	reportTemplate.setRootConceptCode(null);
+            if (rootConceptCode != null) {
+				rootConceptCode = rootConceptCode.trim();
+				if (rootConceptCode.compareToIgnoreCase("Not specified") == 0 ||
+					rootConceptCode.compareToIgnoreCase("Not applicable") == 0 ||
+					rootConceptCode.compareToIgnoreCase("NA") == 0) {
+					reportTemplate.setRootConceptCode(null);
+				}
 			}
 
             String logOutputFile = outputFile + ".log";
