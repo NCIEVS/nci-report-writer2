@@ -93,6 +93,14 @@ public class ReportWriter {
         PrintWriter logFile = null;
         try {
             reportTemplate = mapper.readValue(new File(templateFile), Template.class);
+            String rootConceptCode = reportTemplate.getRootConceptCode();
+            rootConceptCode = rootConceptCode.trim();
+            if (rootConceptCode.compareToIgnoreCase("Not specified") == 0 ||
+                rootConceptCode.compareToIgnoreCase("Not applicable") == 0 ||
+                rootConceptCode.compareToIgnoreCase("NA") == 0) {
+            	reportTemplate.setRootConceptCode(null);
+			}
+
             String logOutputFile = outputFile + ".log";
             logFile = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(logOutputFile)),StandardCharsets.UTF_8),true);
         } catch (Exception ex) {
