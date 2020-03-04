@@ -7,11 +7,12 @@ buildscript {
         maven { url "http://repo.spring.io/release" }
         maven { url "http://repo.spring.io/milestone" }
         maven { url "http://repo.spring.io/snapshot" }
-       
+        maven { url "https://mvnrepository.com/artifact/org.json/json" }
     }
 
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "org.json:json:20131018"
     }
 }
 
