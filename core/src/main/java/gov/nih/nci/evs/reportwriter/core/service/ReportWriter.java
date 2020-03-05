@@ -61,10 +61,12 @@ public class ReportWriter {
     RWUtils rwUtils;
 
     public ReportWriter() {
+		/*
 		if (ConfigurationController.testMode) {
 			sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
 			rwUtils = new RWUtils();
 		}
+		*/
 	}
 
     /**

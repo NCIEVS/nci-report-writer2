@@ -78,6 +78,7 @@ abstract public class ConfigurationController {
 	 * @return the properties
 	 */
 	private static Properties loadProperties() {
+		/*
 		try{
 			File f = new File("resources/Test.properties");
 	        if (f.exists()) {
@@ -97,6 +98,7 @@ abstract public class ConfigurationController {
 		} catch (Exception e){
 
 		}
+		*/
 		return null;
 	}
 
