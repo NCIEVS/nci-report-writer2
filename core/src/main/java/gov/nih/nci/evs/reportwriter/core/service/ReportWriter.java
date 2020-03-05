@@ -1,4 +1,5 @@
 package gov.nih.nci.evs.reportwriter.core.service;
+import gov.nih.nci.evs.reportwriter.core.configuration.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,7 +52,7 @@ import gov.nih.nci.evs.reportwriter.core.util.*;
 public class ReportWriter {
 
 	private static final Logger log = LoggerFactory.getLogger(ReportWriter.class);
-
+    //public static boolean test_mode = true;
 
     @Autowired
     SparqlQueryManagerService sparqlQueryManagerService;
@@ -60,8 +61,10 @@ public class ReportWriter {
     RWUtils rwUtils;
 
     public ReportWriter() {
-		sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
-		rwUtils = new RWUtils();
+		if (ConfigurationController.testMode) {
+			sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
+			rwUtils = new RWUtils();
+		}
 	}
 
     /**
@@ -107,7 +110,8 @@ public class ReportWriter {
             String logOutputFile = outputFile + ".log";
             logFile = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(logOutputFile)),StandardCharsets.UTF_8),true);
         } catch (Exception ex) {
-        	System.err.println(ex);
+			log.info("Report generation using " + templateFile + " failed.");
+        	//System.err.println(ex);
         	return "failure";
         }
 

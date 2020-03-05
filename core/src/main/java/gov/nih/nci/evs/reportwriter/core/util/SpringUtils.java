@@ -18,12 +18,30 @@ import gov.nih.nci.evs.reportwriter.core.service.QueryBuilderServiceImpl;
 
 import gov.nih.nci.evs.reportwriter.core.configuration.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SpringUtils {
-	static String restURL = ConfigurationController.restURL;
-	static String username = ConfigurationController.username;
-	static String password = ConfigurationController.password;
-	static int readTimeout = ConfigurationController.readTimeout;
-	static int connectTimeout = ConfigurationController.connectTimeout;
+	private static final Logger log = LoggerFactory.getLogger(ConfigurationController.class);
+
+	static String restURL = null;
+	static String username = null;
+	static String password = null;
+	static int readTimeout = 0;
+	static int connectTimeout = 0;
+
+	static {
+		try {
+			restURL = ConfigurationController.restURL;
+			username = ConfigurationController.username;
+			password = ConfigurationController.password;
+			readTimeout = ConfigurationController.readTimeout;
+			connectTimeout = ConfigurationController.connectTimeout;
+		} catch (Exception ex) {
+			log.info("Tetsing mode: false");
+			System.out.println("Tetsing mode: false");
+		}
+	}
 
 	public static SparqlQueryManagerServiceImpl createSparqlQueryManagerService() {
 		SparqlQueryManagerServiceImpl sparqlQueryManagerService = new SparqlQueryManagerServiceImpl();

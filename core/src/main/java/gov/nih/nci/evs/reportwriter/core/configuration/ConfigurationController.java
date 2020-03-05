@@ -12,6 +12,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author EVS Team
  * @version 1.0
@@ -23,22 +26,40 @@ import org.w3c.dom.NodeList;
 
 abstract public class ConfigurationController {
 	/** The sys prop. */
+	private static final Logger log = LoggerFactory.getLogger(ConfigurationController.class);
 	private static Properties sysProp = System.getProperties();
 
 	/** The dom. */
 	private static Document dom;
 
 	/** The properties. */
-	private static Properties properties = loadProperties();
+	private static Properties properties = null;
 
 	/** The Constants. */
 
+	public static String restURL = null;
+	public static String username = null;
+	public static String password = null;
+	public static int readTimeout = 0;
+	public static int connectTimeout = 0;
+	public static boolean testMode = false;
 
-	public final static String restURL = properties.getProperty("restURL");
-	public final static String username = properties.getProperty("username");
-	public final static String password = properties.getProperty("password");
-	public final static int readTimeout = Integer.parseInt(properties.getProperty("readTimeout"));
-	public final static int connectTimeout = Integer.parseInt(properties.getProperty("connectTimeout"));
+	static {
+		try {
+			properties = loadProperties();
+			if (properties != null) {
+				restURL = properties.getProperty("restURL");
+				username = properties.getProperty("username");
+				password = properties.getProperty("password");
+				readTimeout = Integer.parseInt(properties.getProperty("readTimeout"));
+				connectTimeout = Integer.parseInt(properties.getProperty("connectTimeout"));
+			}
+
+		} catch (Exception ex) {
+			log.info("Tetsing mode: false");
+			System.out.println("Tetsing mode: false");
+		}
+	}
 
 
 	/**
@@ -58,16 +79,25 @@ abstract public class ConfigurationController {
 	 */
 	private static Properties loadProperties() {
 		try{
-			String propertyFile = "resources/Test.properties";
-			Properties lproperties = new Properties();
-			FileInputStream fis = new FileInputStream(new File(propertyFile));
-			lproperties.load(fis);
-			return lproperties;
+			File f = new File("resources/Test.properties");
+	        if (f.exists()) {
+			    System.out.println("Test mode: true");
+			    testMode = true;
+				String propertyFile = "resources/Test.properties";
+				Properties lproperties = new Properties();
+				FileInputStream fis = new FileInputStream(new File(propertyFile));
+				lproperties.load(fis);
+				return lproperties;
+
+			} else {
+                System.out.println("Test.properties file Does not Exists");
+                testMode = false;
+			}
+
 		} catch (Exception e){
-			System.out.println("Error reading properties file");
-			e.printStackTrace();
-			return null;
+
 		}
+		return null;
 	}
 
 	/**

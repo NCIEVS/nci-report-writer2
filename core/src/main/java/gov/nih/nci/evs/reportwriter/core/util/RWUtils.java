@@ -1,5 +1,8 @@
 package gov.nih.nci.evs.reportwriter.core.util;
 
+import gov.nih.nci.evs.reportwriter.core.service.*;
+import gov.nih.nci.evs.reportwriter.core.configuration.*;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
@@ -33,15 +36,15 @@ import gov.nih.nci.evs.reportwriter.core.service.SparqlQueryManagerServiceImpl;
  *
  */
 public class RWUtils {
-
 	private static final Logger log = LoggerFactory.getLogger(RWUtils.class);
-
 
 	@Autowired
 	SparqlQueryManagerService sparqlQueryManagerService;
 
 	public RWUtils() {
-		sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
+		if (ConfigurationController.testMode) {
+			sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
+		}
 	}
 
 	/**
