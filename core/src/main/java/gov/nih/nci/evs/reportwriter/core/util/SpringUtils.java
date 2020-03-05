@@ -11,9 +11,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import gov.nih.nci.evs.reportwriter.core.service.SparqlQueryManagerServiceImpl;
 import gov.nih.nci.evs.reportwriter.core.service.QueryBuilderServiceImpl;
 
@@ -31,9 +28,6 @@ public class SpringUtils {
 	static int readTimeout = 0;
 	static int connectTimeout = 0;
 
-	@Autowired
-	StardogProperties stardogProperties;
-
 	static {
 		try {
 			if (ConfigurationController.testMode) {
@@ -42,12 +36,6 @@ public class SpringUtils {
 				password = ConfigurationController.password;
 				readTimeout = ConfigurationController.readTimeout;
 				connectTimeout = ConfigurationController.connectTimeout;
-			} else {
-				restURL = stardogProperties.getMonthlyQueryUrl();
-				username = stardogProperties.getUsername();
-				password = stardogProperties.getPassword();
-				readTimeout = stardogProperties.getReadTimeout();
-				connectTimeout = stardogProperties.getConnectTimeout();
 			}
 		} catch (Exception ex) {
 			log.info("Tetsing mode: false");

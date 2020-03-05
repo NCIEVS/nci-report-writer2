@@ -722,6 +722,7 @@ public class RWUtils {
 	    List <EvsAssociation> evsAssociations = sparqlQueryManagerService.getEvsAssociations(namedGraph, restURL, associationName, sourceOf);
         HashMap root2AssociatedConceptHashMap = getRoot2AssociatedConceptHashMap(evsAssociations);
         ParserUtils parser = new ParserUtils();
+        conceptHash = new HashMap();
         int total = 0;
         Iterator it = root2AssociatedConceptHashMap.keySet().iterator();
         while (it.hasNext()) {
@@ -738,7 +739,6 @@ public class RWUtils {
 			rootConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(rootConcept.getCode(), namedGraph, restURL));
 
 			List<EvsConcept> associatedConcepts = (List) root2AssociatedConceptHashMap.get(key);
-			conceptHash = new HashMap();
 			for (EvsConcept concept: associatedConcepts) {
 				//System.out.println(concept.getCode() + " " + concept.getLabel());
 				total += 1;
