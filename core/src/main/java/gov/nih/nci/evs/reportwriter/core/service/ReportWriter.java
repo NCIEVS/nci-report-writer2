@@ -150,7 +150,10 @@ public class ReportWriter {
 
         if (templateType.equals("Association") || templateType.equals("Inverse Association")) {
         	String rootConceptCode = reportTemplate.getRootConceptCode();
-            EvsConcept rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
+            EvsConcept rootConcept = null;
+            if (rootConceptCode != null) {
+            	sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
+			}
             int maxLevel = reportTemplate.getLevel();
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset") && sourceOf) {
                 rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
