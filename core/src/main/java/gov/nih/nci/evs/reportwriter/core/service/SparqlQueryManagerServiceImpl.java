@@ -390,6 +390,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.construct_associated_concept_query(namedGraph, associationName, conceptCode, sourceOf);
 		String res = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+/*
 		Vector v = new gov.nih.nci.evs.reportwriter.core.util.JSONUtils().parseJSON(res);
 		v = new gov.nih.nci.evs.reportwriter.core.util.ParserUtils().getResponseValues(v);
 
@@ -404,8 +405,8 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 			evsConcept.setLabel(label);
 			evsConcepts.add(evsConcept);
 		}
+*/
 
-		/*
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ArrayList<EvsConcept> evsConcepts = new ArrayList<EvsConcept>();
@@ -422,7 +423,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 			System.out.println("Bad News Exception");
 			System.out.println(ex);
 		}
-		*/
+
 		return evsConcepts;
 	}
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -483,11 +484,9 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * @return EvsVersionInfo instance.
 	 */
 	public EvsVersionInfo getEvsVersionInfo(String namedGraph, String restURL) {
-
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.constructVersionInfoQuery(namedGraph);
 		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
-
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		EvsVersionInfo evsVersionInfo = new EvsVersionInfo();
@@ -511,6 +510,28 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.construct_get_associated_concepts(namedGraph, associationName, sourceOf);
 		String res = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		ArrayList<EvsAssociation> evsAssociations = new ArrayList<EvsAssociation>();
+		try {
+			Sparql sparqlResult = mapper.readValue(res, Sparql.class);
+			Bindings[] bindings = sparqlResult.getResults().getBindings();
+			for (Bindings b : bindings) {
+				EvsAssociation evsAssociation = new EvsAssociation();
+				evsAssociation.setSourceName(b.getSourceName().getValue());
+				evsAssociation.setSourceCode(b.getSourceCode().getValue());
+				evsAssociation.setAssociationName(b.getAssociationName().getValue());
+				evsAssociation.setTargetName(b.getTargetName().getValue());
+				evsAssociation.setTargetCode(b.getTargetCode().getValue());
+				evsAssociations.add(evsAssociation);
+			}
+		} catch (Exception ex) {
+			System.out.println("Bad News Exception");
+			System.out.println(ex);
+			//ex.printStackTrace();
+		}
+
+		/*
 		Vector v = new gov.nih.nci.evs.reportwriter.core.util.JSONUtils().parseJSON(res);
 		v = new gov.nih.nci.evs.reportwriter.core.util.ParserUtils().getResponseValues(v);
 		ArrayList<EvsAssociation> evsAssociations = new ArrayList<EvsAssociation>();
@@ -520,16 +541,17 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 			EvsAssociation evsAssociation = new EvsAssociation();
 			String sourceName = (String) u.elementAt(0);
 			String sourceCode = (String) u.elementAt(1);
-			String sassoName = (String) u.elementAt(2);
+			String assoName = (String) u.elementAt(2);
 			String targetName = (String) u.elementAt(3);
 			String targetCode = (String) u.elementAt(4);
 			evsAssociation.setSourceName(sourceName);
 			evsAssociation.setSourceCode(sourceCode);
-			evsAssociation.setAssociationName(sassoName);
+			evsAssociation.setAssociationName(assoName);
 			evsAssociation.setTargetName(targetName);
 			evsAssociation.setTargetCode(targetCode);
 			evsAssociations.add(evsAssociation);
 		}
+		*/
 		return evsAssociations;
    }
 

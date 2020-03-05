@@ -17,7 +17,59 @@ public class Bindings {
 	private Property superclassCode;
 	private Property superclassLabel;
 	private Property namedGraph;
-	
+
+
+////////////////////////////////////////////////////////////
+
+	private Property sourceName;
+	private Property sourceCode;
+	private Property associationName;
+	private Property targetName;
+	private Property targetCode;
+
+	public Property getSourceName() {
+		return sourceName;
+	}
+
+	public Property getSourceCode() {
+		return sourceCode;
+	}
+
+	public Property getAssociationName() {
+		return associationName;
+	}
+
+	public Property getTargetName() {
+		return targetName;
+	}
+
+	public Property getTargetCode() {
+		return targetCode;
+	}
+
+	public void setSourceName(Property sourceName) {
+		this.sourceName = sourceName;
+	}
+
+	public void setSourceCode(Property sourceCode) {
+		this.sourceCode = sourceCode;
+	}
+
+	public void setAssociationName(Property associationName) {
+		this.associationName = associationName;
+	}
+
+	public void setTargetName(Property targetName) {
+		this.targetName = targetName;
+	}
+
+	public void setTargetCode(Property targetCode) {
+		this.targetCode = targetCode;
+	}
+
+////////////////////////////////////////////////////////////
+
+
 	// Support for Version Info
 	private Property version;
 	private Property date;
@@ -152,7 +204,7 @@ public class Bindings {
 	public void setSuperclassLabel(Property superclassLabel) {
 		this.superclassLabel = superclassLabel;
 	}
-	
+
 	public Property getVersion() {
 		return version;
 	}
@@ -176,7 +228,7 @@ public class Bindings {
 	public void setComment(Property comment) {
 		this.comment = comment;
 	}
-	
+
 	public Property getNamedGraph() {
 		return namedGraph;
 	}

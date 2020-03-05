@@ -259,6 +259,11 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		return construct_associated_concept_query(namedGraph, associationName, code, sourceOf);
 	}
 
+	public String construct_get_associated_concepts(String namedGraph, String association) {
+		return construct_get_associated_concepts(namedGraph, association, true);
+	}
+
+/*
 	public String construct_associated_concept_query(String namedGraph, String associationName, String code, boolean sourceOf) {
 		StringBuffer buf = new StringBuffer();
 		if (sourceOf) {
@@ -299,9 +304,6 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		return buf.toString();
 	}
 
-	public String construct_get_associated_concepts(String namedGraph, String association) {
-		return construct_get_associated_concepts(namedGraph, association, true);
-	}
 
 	public String construct_get_associated_concepts(String namedGraph, String association, boolean sourceOf) {
 		StringBuffer buf = new StringBuffer();
@@ -326,6 +328,74 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		buf.append("}").append("\n");
 		return buf.toString();
 	}
+*/
+
+
+	public String construct_associated_concept_query(String namedGraph, String associationName, String code, boolean sourceOf) {
+		StringBuffer buf = new StringBuffer();
+		if (sourceOf) {
+			buf.append("SELECT ?sourceCode ?sourceName").append("\n");
+		} else {
+			buf.append("SELECT ?targetCode ?targetName").append("\n");
+		}
+
+		buf.append("{").append("\n");
+		buf.append("    graph <" + namedGraph + ">").append("\n");
+		buf.append("    {").append("\n");
+		buf.append("            ?x a owl:Class .").append("\n");
+		buf.append("            ?x rdfs:label ?sourceName .").append("\n");
+
+		if (sourceOf) {
+			buf.append("            ?x :NHC0 ?sourceCode .").append("\n");
+		} else if (code != null) {
+			buf.append("            ?x :NHC0 \"" + code + "\"^^<http://www.w3.org/2001/XMLSchema#string> .").append("\n");
+		}
+
+		buf.append("            ?y a owl:AnnotationProperty .").append("\n");
+		buf.append("            ?y rdfs:label \"" + associationName + "\"^^<http://www.w3.org/2001/XMLSchema#string> .").append("\n");
+
+		buf.append("            ?x ?y ?z .").append("\n");
+		buf.append("            ?z a owl:Class .").append("\n");
+		buf.append("            ?z rdfs:label ?targetName .").append("\n");
+
+		if (!sourceOf) {
+			buf.append("            ?z :NHC0 ?targetCode .").append("\n");
+		} else if (code != null) {
+			buf.append("            ?z :NHC0 \"" + code + "\"^^<http://www.w3.org/2001/XMLSchema#string> .").append("\n");
+		}
+
+		buf.append("            ?y rdfs:range ?y_range").append("\n");
+		buf.append("    }").append("\n");
+		buf.append("    FILTER (str(?y_range)=\"http://www.w3.org/2001/XMLSchema#anyURI\")").append("\n");
+		buf.append("}").append("\n");
+		return buf.toString();
+	}
+
+
+	public String construct_get_associated_concepts(String namedGraph, String association, boolean sourceOf) {
+		StringBuffer buf = new StringBuffer();
+		if (sourceOf) {
+			buf.append("SELECT distinct ?sourceName ?sourceCode ?associationName ?targetName ?targetCode").append("\n");
+		} else {
+			buf.append("SELECT distinct ?targetName ?targetCode ?associationName ?sourceName ?sourceCode").append("\n");
+		}
+		buf.append("{").append("\n");
+		buf.append("    graph <" + namedGraph + ">").append("\n");
+		buf.append("    {").append("\n");
+		buf.append("            ?x a owl:Class .").append("\n");
+		buf.append("            ?x rdfs:label ?sourceName .").append("\n");
+		buf.append("            ?x :NHC0 ?sourceCode .").append("\n");
+		buf.append("            ?y a owl:AnnotationProperty .").append("\n");
+		buf.append("            ?x ?y ?z .").append("\n");
+		buf.append("            ?y rdfs:label ?associationName .").append("\n");
+		buf.append("            ?z :NHC0 ?targetCode .").append("\n");
+		buf.append("            ?z rdfs:label ?targetName .").append("\n");
+		buf.append("            ?y rdfs:label " + "\"" + association + "\"^^xsd:string ").append("\n");
+		buf.append("    }").append("\n");
+		buf.append("}").append("\n");
+		return buf.toString();
+	}
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
