@@ -111,7 +111,7 @@ public class ReportWriter {
             logFile = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(logOutputFile)),StandardCharsets.UTF_8),true);
         } catch (Exception ex) {
 			log.info("Report generation using " + templateFile + " failed.");
-        	//System.err.println(ex);
+        	System.err.println(ex);
         	return "failure";
         }
 

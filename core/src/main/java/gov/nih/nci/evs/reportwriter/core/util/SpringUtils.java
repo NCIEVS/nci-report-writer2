@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +31,24 @@ public class SpringUtils {
 	static int readTimeout = 0;
 	static int connectTimeout = 0;
 
+	@Autowired
+	StardogProperties stardogProperties;
+
 	static {
 		try {
-			restURL = ConfigurationController.restURL;
-			username = ConfigurationController.username;
-			password = ConfigurationController.password;
-			readTimeout = ConfigurationController.readTimeout;
-			connectTimeout = ConfigurationController.connectTimeout;
+			if (ConfigurationController.testMode) {
+				restURL = ConfigurationController.restURL;
+				username = ConfigurationController.username;
+				password = ConfigurationController.password;
+				readTimeout = ConfigurationController.readTimeout;
+				connectTimeout = ConfigurationController.connectTimeout;
+			} else {
+				restURL = stardogProperties.getMonthlyQueryUrl();
+				username = stardogProperties.getUsername();
+				password = stardogProperties.getPassword();
+				readTimeout = stardogProperties.getReadTimeout();
+				connectTimeout = stardogProperties.getConnectTimeout();
+			}
 		} catch (Exception ex) {
 			log.info("Tetsing mode: false");
 			System.out.println("Tetsing mode: false");
