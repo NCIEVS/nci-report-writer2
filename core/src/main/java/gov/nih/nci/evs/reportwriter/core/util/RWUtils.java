@@ -730,9 +730,9 @@ public class RWUtils {
 			String code = (String) u.elementAt(1);
 
 			EvsConcept rootConcept = new EvsConcept();
-			rootConcept.setCode(code);
-			rootConcept.setLabel(name);
-
+			//rootConcept.setCode(code);
+			//rootConcept.setLabel(name);
+			rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code, namedGraph, restURL);
 			rootConcept.setProperties(sparqlQueryManagerService.getEvsProperties(rootConcept.getCode(), namedGraph, restURL));
 			rootConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(rootConcept.getCode(), namedGraph, restURL));
 
