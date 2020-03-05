@@ -152,7 +152,7 @@ public class ReportWriter {
         	String rootConceptCode = reportTemplate.getRootConceptCode();
             EvsConcept rootConcept = null;
             if (rootConceptCode != null) {
-            	sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
+            	rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
 			}
             int maxLevel = reportTemplate.getLevel();
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset") && sourceOf) {
