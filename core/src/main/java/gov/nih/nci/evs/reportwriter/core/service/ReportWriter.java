@@ -90,6 +90,14 @@ public class ReportWriter {
      *
      */
 	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL,String namedGraph) {
+		log.info("runReport using templateFile: " + templateFile);
+		log.info("restURL: " + restURL);
+		log.info("namedGraph: " + namedGraph);
+
+		System.out.println("runReport using templateFile: " + templateFile);
+		System.out.println("restURL: " + restURL);
+		System.out.println("namedGraph: " + namedGraph);
+
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         Template reportTemplate = null;
         PrintWriter logFile = null;
@@ -105,6 +113,8 @@ public class ReportWriter {
 					reportTemplate.setRootConceptCode(null);
 				}
 			}
+
+			log.info("rootConceptCode: " + rootConceptCode);
 
             String logOutputFile = outputFile + ".log";
             logFile = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(logOutputFile)),StandardCharsets.UTF_8),true);
