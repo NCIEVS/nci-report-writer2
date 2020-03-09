@@ -63,6 +63,9 @@ springBoot {
         maven { url "http://repo.spring.io/milestone" }
         maven { url "http://repo.spring.io/snapshot" }
         maven { url "https://mvnrepository.com/artifact/org.json/json" }
+        
+        maven { url "https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-jul" }
+        
         mavenCentral()
     }
 
@@ -79,6 +82,9 @@ dependencies {
    
     compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
     compile "org.json:json:20131018"
+    
+    compile "org.apache.logging.log4j:log4j-jul:2.13.1"
+    
 
     /*
      * Test Dependencies
