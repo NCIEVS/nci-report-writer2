@@ -52,7 +52,6 @@ import gov.nih.nci.evs.reportwriter.core.util.*;
 public class ReportWriter {
 
 	private static final Logger log = LoggerFactory.getLogger(ReportWriter.class);
-    //public static boolean test_mode = true;
 
     @Autowired
     SparqlQueryManagerService sparqlQueryManagerService;
@@ -61,12 +60,10 @@ public class ReportWriter {
     RWUtils rwUtils;
 
     public ReportWriter() {
-		/*
 		if (ConfigurationController.testMode) {
 			sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
 			rwUtils = new RWUtils();
 		}
-		*/
 	}
 
     /**

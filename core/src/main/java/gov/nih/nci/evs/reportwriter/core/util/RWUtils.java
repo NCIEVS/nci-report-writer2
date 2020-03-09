@@ -42,11 +42,9 @@ public class RWUtils {
 	SparqlQueryManagerService sparqlQueryManagerService;
 
 	public RWUtils() {
-		/*
 		if (ConfigurationController.testMode) {
 			sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
 		}
-		*/
 	}
 
 	/**
