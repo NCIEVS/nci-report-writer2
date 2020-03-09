@@ -15,11 +15,3 @@ gov:
          connectTimeout: ${STARDOG_CONNECT_TIMEOUT:10000}
          graphName: ${STARDOG_GRAPH_NAME:http://NCI_T}
 
-#
-# Logging Properties
-#
-logging:
-    level:
-        org.springframework: INFO
-        org.springframework.boot: WARN        
-        gov.nih.nci.evs.reportwriter.core: INFO
