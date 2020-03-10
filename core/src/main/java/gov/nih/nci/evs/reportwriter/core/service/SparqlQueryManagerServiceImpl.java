@@ -390,22 +390,6 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		String queryPrefix = queryBuilderService.contructPrefix();
 		String query = queryBuilderService.construct_associated_concept_query(namedGraph, associationName, conceptCode, sourceOf);
 		String res = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
-/*
-		Vector v = new gov.nih.nci.evs.reportwriter.core.util.JSONUtils().parseJSON(res);
-		v = new gov.nih.nci.evs.reportwriter.core.util.ParserUtils().getResponseValues(v);
-
-		ArrayList<EvsConcept> evsConcepts = new ArrayList<EvsConcept>();
-		for (int i=0; i<v.size(); i++) {
-			String t = (String) v.elementAt(i);
-			Vector u = new ParserUtils().parseData(t, '|');
-			EvsConcept evsConcept = new EvsConcept();
-			String code = (String) u.elementAt(0);
-			String label = (String) u.elementAt(1);
-			evsConcept.setCode(code);
-			evsConcept.setLabel(label);
-			evsConcepts.add(evsConcept);
-		}
-*/
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -530,28 +514,6 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 			System.out.println(ex);
 			//ex.printStackTrace();
 		}
-
-		/*
-		Vector v = new gov.nih.nci.evs.reportwriter.core.util.JSONUtils().parseJSON(res);
-		v = new gov.nih.nci.evs.reportwriter.core.util.ParserUtils().getResponseValues(v);
-		ArrayList<EvsAssociation> evsAssociations = new ArrayList<EvsAssociation>();
-		for (int i=0; i<v.size(); i++) {
-			String t = (String) v.elementAt(i);
-			Vector u = new ParserUtils().parseData(t, '|');
-			EvsAssociation evsAssociation = new EvsAssociation();
-			String sourceName = (String) u.elementAt(0);
-			String sourceCode = (String) u.elementAt(1);
-			String assoName = (String) u.elementAt(2);
-			String targetName = (String) u.elementAt(3);
-			String targetCode = (String) u.elementAt(4);
-			evsAssociation.setSourceName(sourceName);
-			evsAssociation.setSourceCode(sourceCode);
-			evsAssociation.setAssociationName(assoName);
-			evsAssociation.setTargetName(targetName);
-			evsAssociation.setTargetCode(targetCode);
-			evsAssociations.add(evsAssociation);
-		}
-		*/
 		return evsAssociations;
    }
 
