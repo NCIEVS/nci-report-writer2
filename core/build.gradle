@@ -7,10 +7,12 @@ buildscript {
         maven { url "http://repo.spring.io/release" }
         maven { url "http://repo.spring.io/milestone" }
         maven { url "http://repo.spring.io/snapshot" }
+        maven { url "https://mvnrepository.com/artifact/org.json/json" }
     }
 
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "org.json:json:20190722"
     }
 }
 
@@ -75,6 +77,7 @@ dependencies {
     compile "org.apache.poi:poi-ooxml:3.17"
    
     compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
+    compile "org.json:json:20190722"
 
     /*
      * Test Dependencies
