@@ -59,15 +59,6 @@ public class ReportWriter {
     @Autowired
     RWUtils rwUtils;
 
-/*
-    public ReportWriter() {
-		if (ConfigurationController.testMode) {
-			sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
-			rwUtils = new RWUtils();
-		}
-	}
-*/
-
     public ReportWriter(SparqlQueryManagerService sparqlQueryManagerService) {
 		this.sparqlQueryManagerService = sparqlQueryManagerService;
 		this.rwUtils = new RWUtils(sparqlQueryManagerService);
@@ -100,10 +91,6 @@ public class ReportWriter {
 		log.info("runReport using templateFile: " + templateFile);
 		log.info("restURL: " + restURL);
 		log.info("namedGraph: " + namedGraph);
-
-		System.out.println("runReport using templateFile: " + templateFile);
-		System.out.println("restURL: " + restURL);
-		System.out.println("namedGraph: " + namedGraph);
 
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         Template reportTemplate = null;
@@ -311,18 +298,14 @@ public class ReportWriter {
     }
 
 	public EvsVersionInfo getEvsVersionInfo(String restURL,String namedGraph) {
-
-
-System.out.println("*********** restURL: " + restURL);
-System.out.println("*********** namedGraph: " + namedGraph);
-
-if (sparqlQueryManagerService == null) {
-	System.out.println("sparqlQueryManagerService == null???");
-} else {
-	System.out.println("Calling sparqlQueryManagerService getEvsVersionInfo...");
-}
-
-		return sparqlQueryManagerService.getEvsVersionInfo(namedGraph,restURL);
+		if (sparqlQueryManagerService == null) {
+			log.info("sparqlQueryManagerService == null???");
+			System.out.println("sparqlQueryManagerService == null???");
+			return sparqlQueryManagerService.getEvsVersionInfo(namedGraph,restURL);
+		} else {
+			System.out.println("Calling sparqlQueryManagerService getEvsVersionInfo...");
+		}
+		return null;
 	}
 
 	public List <String> getNamedGraphs(String restURL) {
