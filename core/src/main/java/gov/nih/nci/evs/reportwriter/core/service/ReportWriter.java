@@ -59,11 +59,18 @@ public class ReportWriter {
     @Autowired
     RWUtils rwUtils;
 
+/*
     public ReportWriter() {
 		if (ConfigurationController.testMode) {
 			sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
 			rwUtils = new RWUtils();
 		}
+	}
+*/
+
+    public ReportWriter(SparqlQueryManagerService sparqlQueryManagerService) {
+		this.sparqlQueryManagerService = sparqlQueryManagerService;
+		this.rwUtils = new RWUtils(sparqlQueryManagerService);
 	}
 
     /**
@@ -135,6 +142,7 @@ public class ReportWriter {
         logFile.println("");
         logFile.println("Template Information");
         logFile.println("********************************");
+
         EvsVersionInfo evsVersionInfo = getEvsVersionInfo(restURL, namedGraph);
         logFile.println("Version: " + evsVersionInfo.getVersion());
         logFile.println(reportTemplate.toString());
@@ -303,6 +311,17 @@ public class ReportWriter {
     }
 
 	public EvsVersionInfo getEvsVersionInfo(String restURL,String namedGraph) {
+
+
+System.out.println("*********** restURL: " + restURL);
+System.out.println("*********** namedGraph: " + namedGraph);
+
+if (sparqlQueryManagerService == null) {
+	System.out.println("sparqlQueryManagerService == null???");
+} else {
+	System.out.println("Calling sparqlQueryManagerService getEvsVersionInfo...");
+}
+
 		return sparqlQueryManagerService.getEvsVersionInfo(namedGraph,restURL);
 	}
 

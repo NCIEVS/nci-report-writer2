@@ -41,10 +41,15 @@ public class RWUtils {
 	@Autowired
 	SparqlQueryManagerService sparqlQueryManagerService;
 
+/*
 	public RWUtils() {
 		if (ConfigurationController.testMode) {
 			sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
 		}
+	}
+*/
+	public RWUtils(SparqlQueryManagerService sparqlQueryManagerService) {
+		this.sparqlQueryManagerService = sparqlQueryManagerService;
 	}
 
 	/**
