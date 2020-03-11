@@ -697,7 +697,7 @@ public class RWUtils {
 				writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
 			}
 		} catch (Exception ex) {
-			return "failed";
+			return "failure";
 		}
 		return "success";
 	}
@@ -761,7 +761,7 @@ public class RWUtils {
 				}
 			}
 		} catch (Exception ex) {
-			return "failed";
+			return "failure";
 		}
 		return "success";
 	}

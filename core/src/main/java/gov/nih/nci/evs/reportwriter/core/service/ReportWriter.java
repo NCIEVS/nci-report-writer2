@@ -92,6 +92,8 @@ public class ReportWriter {
 		log.info("restURL: " + restURL);
 		log.info("namedGraph: " + namedGraph);
 
+		String status = "success";
+
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         Template reportTemplate = null;
         PrintWriter logFile = null;
@@ -167,15 +169,19 @@ public class ReportWriter {
 
 ////////////////////////
         	} else if (associationName.equals("Has_PCDC_Data_Type")) {
-                return rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+                status = rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
 
         	} else if (associationName.equals("Has_PCDC_AML_Permissible_Value")) {
-                return rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+                status = rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
 ////////////////////////
 
         	} else {
-                return rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+                status = rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
         	}
+
+        	if (status.compareTo("success") != 0) {
+				return "failure";
+			}
 
         } else if (templateType.equals("ConceptList")) {
             rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph,restURL);
