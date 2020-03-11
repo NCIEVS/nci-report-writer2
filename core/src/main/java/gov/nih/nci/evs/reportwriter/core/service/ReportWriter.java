@@ -301,9 +301,9 @@ public class ReportWriter {
 		if (sparqlQueryManagerService == null) {
 			log.info("sparqlQueryManagerService == null???");
 			System.out.println("sparqlQueryManagerService == null???");
-			return sparqlQueryManagerService.getEvsVersionInfo(namedGraph,restURL);
 		} else {
 			System.out.println("Calling sparqlQueryManagerService getEvsVersionInfo...");
+			return sparqlQueryManagerService.getEvsVersionInfo(namedGraph,restURL);
 		}
 		return null;
 	}
