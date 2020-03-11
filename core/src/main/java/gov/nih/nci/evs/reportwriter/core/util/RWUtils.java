@@ -666,8 +666,7 @@ public class RWUtils {
 			String rootConceptCode = rootConcept.getCode();
 			if (rootConceptCode == null) {
 				conceptHash = new HashMap();
-				processAssociatedConcepts(reportOutput, conceptHash, templateColumns, logFile, namedGraph, restURL, associationName, sourceOf);
-				return;
+				return processAssociatedConcepts(reportOutput, conceptHash, templateColumns, logFile, namedGraph, restURL, associationName, sourceOf);
 			}
 			List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getAssociatedEvsConcepts(rootConcept.getCode(), namedGraph, restURL, associationName, sourceOf);
 			if (rootConcept != null) {
