@@ -163,22 +163,22 @@ public class ReportWriter {
                 rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
                 rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
         	} else if (reportTemplate.getAssociation().equals("Subclass") && sourceOf) {
-                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
+                return rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
 
 ////////////////////////
         	} else if (associationName.equals("Has_PCDC_Data_Type")) {
-                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+                return rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
 
         	} else if (associationName.equals("Has_PCDC_AML_Permissible_Value")) {
-                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+                return rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
 ////////////////////////
 
         	} else {
-                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+                return rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
         	}
 
         } else if (templateType.equals("ConceptList")) {
-                rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph,restURL);
+            rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph,restURL);
         } else {
         	System.err.println("Invalid Template Type: " + templateType);
         	return "failure";

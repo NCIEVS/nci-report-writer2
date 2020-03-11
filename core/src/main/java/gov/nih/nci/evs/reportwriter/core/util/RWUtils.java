@@ -656,46 +656,51 @@ public class RWUtils {
 	 * @param templateColumns TemplateColumns contain template definitions for each column.
 	 */
 
-	public void processAssociatedConcepts(Report reportOutput, EvsConcept rootConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph, String restURL, String associationName, boolean sourceOf) {
+	public String processAssociatedConcepts(Report reportOutput, EvsConcept rootConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph, String restURL, String associationName, boolean sourceOf) {
 		if (rootConcept == null) {
 			conceptHash = new HashMap();
-			processAssociatedConcepts(reportOutput, conceptHash, templateColumns, logFile, namedGraph, restURL, associationName, sourceOf);
-			return;
+			return processAssociatedConcepts(reportOutput, conceptHash, templateColumns, logFile, namedGraph, restURL, associationName, sourceOf);
 		}
-		String rootConceptCode = rootConcept.getCode();
-		if (rootConceptCode == null) {
-			conceptHash = new HashMap();
-			processAssociatedConcepts(reportOutput, conceptHash, templateColumns, logFile, namedGraph, restURL, associationName, sourceOf);
-			return;
-		}
-		List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getAssociatedEvsConcepts(rootConcept.getCode(), namedGraph, restURL, associationName, sourceOf);
-		if (rootConcept != null) {
-			log.info("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
-			//System.out.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
-			logFile.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
-	    }
-		int total = 0;
-		for (EvsConcept concept: associatedConcepts) {
-			//System.out.println(concept.getCode() + " " + concept.getLabel());
-			total += 1;
-			if (total % 100 == 0) {
-				log.info("Number of associations processed: " + total);
-				System.out.println("Number of associations processed: " + total);
-				logFile.println("Number of associations processed: " + total);
+
+		try {
+			String rootConceptCode = rootConcept.getCode();
+			if (rootConceptCode == null) {
+				conceptHash = new HashMap();
+				processAssociatedConcepts(reportOutput, conceptHash, templateColumns, logFile, namedGraph, restURL, associationName, sourceOf);
+				return;
 			}
-			if (conceptHash.containsKey(concept.getCode())) {
-				concept = conceptHash.get(concept.getCode());
-			} else {
-				try {
-					concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(), namedGraph, restURL));
-					concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
-					conceptHash.put(concept.getCode(), concept);
-				} catch (Exception ex) {
-					System.out.println("Populating data error???");
+			List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getAssociatedEvsConcepts(rootConcept.getCode(), namedGraph, restURL, associationName, sourceOf);
+			if (rootConcept != null) {
+				log.info("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
+				//System.out.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
+				logFile.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
+			}
+			int total = 0;
+			for (EvsConcept concept: associatedConcepts) {
+				//System.out.println(concept.getCode() + " " + concept.getLabel());
+				total += 1;
+				if (total % 100 == 0) {
+					log.info("Number of associations processed: " + total);
+					System.out.println("Number of associations processed: " + total);
+					logFile.println("Number of associations processed: " + total);
 				}
+				if (conceptHash.containsKey(concept.getCode())) {
+					concept = conceptHash.get(concept.getCode());
+				} else {
+					try {
+						concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(), namedGraph, restURL));
+						concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
+						conceptHash.put(concept.getCode(), concept);
+					} catch (Exception ex) {
+						System.out.println("Populating data error???");
+					}
+				}
+				writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
 			}
-			writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
+		} catch (Exception ex) {
+			return "failed";
 		}
+		return "success";
 	}
 
 	public HashMap getRoot2AssociatedConceptHashMap(List <EvsAssociation> evsAssociations) {
@@ -716,45 +721,50 @@ public class RWUtils {
 		return root2AssociatedConceptHashMap;
     }
 
-	public void processAssociatedConcepts(Report reportOutput, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph, String restURL, String associationName, boolean sourceOf) {
-	    List <EvsAssociation> evsAssociations = sparqlQueryManagerService.getEvsAssociations(namedGraph, restURL, associationName, sourceOf);
-        HashMap root2AssociatedConceptHashMap = getRoot2AssociatedConceptHashMap(evsAssociations);
-        ParserUtils parser = new ParserUtils();
-        conceptHash = new HashMap();
-        int total = 0;
-        Iterator it = root2AssociatedConceptHashMap.keySet().iterator();
-        while (it.hasNext()) {
-			String key = (String) it.next();
-			Vector u = parser.parseData(key, '|');
-			String name = (String) u.elementAt(0);
-			String code = (String) u.elementAt(1);
+	public String processAssociatedConcepts(Report reportOutput, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph, String restURL, String associationName, boolean sourceOf) {
+        try {
+			List <EvsAssociation> evsAssociations = sparqlQueryManagerService.getEvsAssociations(namedGraph, restURL, associationName, sourceOf);
+			HashMap root2AssociatedConceptHashMap = getRoot2AssociatedConceptHashMap(evsAssociations);
+			ParserUtils parser = new ParserUtils();
+			conceptHash = new HashMap();
+			int total = 0;
+			Iterator it = root2AssociatedConceptHashMap.keySet().iterator();
+			while (it.hasNext()) {
+				String key = (String) it.next();
+				Vector u = parser.parseData(key, '|');
+				String name = (String) u.elementAt(0);
+				String code = (String) u.elementAt(1);
 
-			EvsConcept rootConcept = new EvsConcept();
-			//rootConcept.setCode(code);
-			//rootConcept.setLabel(name);
-			rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code, namedGraph, restURL);
-			rootConcept.setProperties(sparqlQueryManagerService.getEvsProperties(rootConcept.getCode(), namedGraph, restURL));
-			rootConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(rootConcept.getCode(), namedGraph, restURL));
+				EvsConcept rootConcept = new EvsConcept();
+				//rootConcept.setCode(code);
+				//rootConcept.setLabel(name);
+				rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code, namedGraph, restURL);
+				rootConcept.setProperties(sparqlQueryManagerService.getEvsProperties(rootConcept.getCode(), namedGraph, restURL));
+				rootConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(rootConcept.getCode(), namedGraph, restURL));
 
-			List<EvsConcept> associatedConcepts = (List) root2AssociatedConceptHashMap.get(key);
-			for (EvsConcept concept: associatedConcepts) {
-				//System.out.println(concept.getCode() + " " + concept.getLabel());
-				total += 1;
-				if (total % 100 == 0) {
-					log.info("Number of associations processed: " + total);
-					System.out.println("Number of associations processed: " + total);
-					logFile.println("Number of associations processed: " + total);
+				List<EvsConcept> associatedConcepts = (List) root2AssociatedConceptHashMap.get(key);
+				for (EvsConcept concept: associatedConcepts) {
+					//System.out.println(concept.getCode() + " " + concept.getLabel());
+					total += 1;
+					if (total % 100 == 0) {
+						log.info("Number of associations processed: " + total);
+						System.out.println("Number of associations processed: " + total);
+						logFile.println("Number of associations processed: " + total);
+					}
+					if (conceptHash.containsKey(concept.getCode())) {
+						concept = conceptHash.get(concept.getCode());
+					} else {
+						concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(), namedGraph, restURL));
+						concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
+						conceptHash.put(concept.getCode(), concept);
+					}
+					writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
 				}
-				if (conceptHash.containsKey(concept.getCode())) {
-					concept = conceptHash.get(concept.getCode());
-				} else {
-					concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(), namedGraph, restURL));
-					concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
-					conceptHash.put(concept.getCode(), concept);
-				}
-				writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
 			}
+		} catch (Exception ex) {
+			return "failed";
 		}
+		return "success";
 	}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
