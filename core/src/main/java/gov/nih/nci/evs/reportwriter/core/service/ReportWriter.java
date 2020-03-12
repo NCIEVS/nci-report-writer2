@@ -92,8 +92,6 @@ public class ReportWriter {
 		log.info("restURL: " + restURL);
 		log.info("namedGraph: " + namedGraph);
 
-		String status = "success";
-
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         Template reportTemplate = null;
         PrintWriter logFile = null;
@@ -166,7 +164,7 @@ public class ReportWriter {
                 rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
         	} else if (reportTemplate.getAssociation().equals("Subclass") && sourceOf) {
                 rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
-
+/*
 ////////////////////////
         	} else if (associationName.equals("Has_PCDC_Data_Type")) {
                 status = rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
@@ -174,14 +172,10 @@ public class ReportWriter {
         	} else if (associationName.equals("Has_PCDC_AML_Permissible_Value")) {
                 status = rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
 ////////////////////////
-
+*/
         	} else {
-                status = rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
         	}
-
-        	if (status.compareTo("success") != 0) {
-				return "failure";
-			}
 
         } else if (templateType.equals("ConceptList")) {
             rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph,restURL);
