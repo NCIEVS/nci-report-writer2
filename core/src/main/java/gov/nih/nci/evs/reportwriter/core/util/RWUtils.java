@@ -431,6 +431,7 @@ public class RWUtils {
 		reportOutput.getRows().add(reportRow);
 	}
 
+/*
 	public List <String> processAssociation(String associationCode, List <EvsProperty> conceptProperties,
 			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
 		List <String> values = new ArrayList <String>();
@@ -454,6 +455,36 @@ public class RWUtils {
 		}
 		return values;
 	}
+*/
+
+
+	public List <String> processAssociation(String associationCode, List <EvsProperty> conceptProperties,
+			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
+		List <String> values = new ArrayList <String>();
+		List <String> properties = EVSUtils.getProperty(associationCode, conceptProperties);
+		for (int i = 0; i < properties.size(); i++ ) {
+			String code = properties.get(i).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
+			EvsConcept assocConcept = null;
+			if (conceptHash.containsKey(code)) {
+				assocConcept = conceptHash.get(code);
+			} else {
+	            assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
+	            assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+	            assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
+	            conceptHash.put(code, assocConcept);
+			}
+			String col_property = column.getProperty();
+			if (col_property.compareTo("NHC0") == 0) {
+				values.add(assocConcept.getCode());
+			} else {
+				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
+				values = EVSUtils.getProperty(col_property, asso_conceptProperties);
+			}
+		}
+		return values;
+	}
+
+
 
 	/**
 	 * Find FullSynonym axioms that match the search criteria.
