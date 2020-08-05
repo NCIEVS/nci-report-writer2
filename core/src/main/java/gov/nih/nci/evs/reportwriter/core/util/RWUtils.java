@@ -475,10 +475,12 @@ public class RWUtils {
 			}
 			String col_property = column.getProperty();
 			if (col_property.compareTo("NHC0") == 0) {
-				values.add(assocConcept.getCode());
+				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
+				List <String> asso_properties = EVSUtils.getProperty("NHC0", asso_conceptProperties);
+				values.add(asso_properties.get(0));
 			} else {
 				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
-				values = EVSUtils.getProperty(col_property, asso_conceptProperties);
+				values.addAll(EVSUtils.getProperty(col_property, asso_conceptProperties));
 			}
 		}
 		return values;
