@@ -36,6 +36,34 @@ import gov.nih.nci.evs.reportwriter.core.service.SparqlQueryManagerServiceImpl;
  *
  */
 public class RWUtils {
+	private static HashMap associationLabel2CodeHashMap = null;
+	static {
+		associationLabel2CodeHashMap = new HashMap();
+		associationLabel2CodeHashMap.put("Concept_In_Subset", "A8");
+		associationLabel2CodeHashMap.put("Has_CDRH_Parent", "A10");
+		associationLabel2CodeHashMap.put("Has_CTCAE_5_Parent", "A15");
+		associationLabel2CodeHashMap.put("Has_Data_Element", "A12");
+		associationLabel2CodeHashMap.put("Has_Free_Acid_Or_Base_Form", "A6");
+		associationLabel2CodeHashMap.put("Has_INC_Parent", "A16");
+		associationLabel2CodeHashMap.put("Has_NICHD_Parent", "A11");
+		associationLabel2CodeHashMap.put("Has_PCDC_Data_Type", "A23");
+		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Administration_Method", "A19");
+		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Basic_Dose_Form", "A18");
+		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Intended_Site", "A20");
+		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Release_Characteristics", "A21");
+		associationLabel2CodeHashMap.put("Has_Pharmaceutical_State_Of_Matter", "A17");
+		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Transformation", "A22");
+		associationLabel2CodeHashMap.put("Has_Salt_Form", "A5");
+		associationLabel2CodeHashMap.put("Has_Target", "A7");
+		associationLabel2CodeHashMap.put("Is_PCDC_AML_Permissible_Value_For", "A24");
+		associationLabel2CodeHashMap.put("Is_Related_To_Endogenous_Product", "A9");
+		associationLabel2CodeHashMap.put("Neoplasm_Has_Special_Category", "A14");
+		associationLabel2CodeHashMap.put("Qualifier_Applies_To", "A4");
+		associationLabel2CodeHashMap.put("Related_To_Genetic_Biomarker", "A13");
+		associationLabel2CodeHashMap.put("Role_Has_Domain", "A1");
+		associationLabel2CodeHashMap.put("Role_Has_Parent", "A3");
+		associationLabel2CodeHashMap.put("Role_Has_Range", "A2");
+	};
 	private static final Logger log = LoggerFactory.getLogger(RWUtils.class);
 
 	@Autowired
@@ -368,6 +396,7 @@ public class RWUtils {
     					values.add(vv);
     				}
 			    }
+			/*
 			} else if (propertyType.equals("Pharmaceutical_State_Of_Matter")) {
 				values = processAssociation("A17", conceptProperties, property, column, conceptHash, namedGraph, restURL);
 			} else if (propertyType.equals("Pharmaceutical_Basic_Dose_Form")) {
@@ -382,6 +411,12 @@ public class RWUtils {
 				values = processAssociation("A22", conceptProperties, property, column, conceptHash, namedGraph, restURL);
 			} else {
 			  // Don't do anything for now
+			}
+			*/
+
+			} else if (associationLabel2CodeHashMap.containsKey(propertyType)) {
+				String associationCode = (String) associationLabel2CodeHashMap.get(propertyType);
+				values = processAssociation(associationCode, conceptProperties, property, column, conceptHash, namedGraph, restURL);
 			}
 
 			if (values == null || values.size() == 0) {
