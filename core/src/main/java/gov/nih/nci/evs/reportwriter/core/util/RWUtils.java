@@ -231,6 +231,9 @@ public class RWUtils {
 				values.add(properties.get(0));
 			} else if (propertyType.equals("property")) {
 				values = EVSUtils.getProperty(property, conceptProperties);
+				if (property.compareTo("hasDbXref") == 0) {
+					values = filterXrefCodes(property, values, column.getLabel());
+				}
 			} else if (propertyType.equals("FULL_SYN")) {
 				values = getFullSynonym(column,conceptAxioms);
 			} else if (propertyType.equals("DEFINITION")) {
@@ -827,7 +830,43 @@ public class RWUtils {
 		} catch (Exception ex) {
 
 		}
+	}
 
+    public static Vector parseData(String line, char delimiter) {
+		if(line == null) return null;
+		Vector w = new Vector();
+		StringBuffer buf = new StringBuffer();
+		for (int i=0; i<line.length(); i++) {
+			char c = line.charAt(i);
+			if (c == delimiter) {
+				w.add(buf.toString());
+				buf = new StringBuffer();
+			} else {
+				buf.append(c);
+			}
+		}
+		w.add(buf.toString());
+		return w;
+	}
+
+    public static List <String> filterXrefCodes(String property, List <String> values, String label) {
+		if (property.compareTo("hasDbXref") != 0) return values;
+		if (label.compareToIgnoreCase("Xref Codes") == 0) return values;
+		String label_lc = label.toLowerCase();
+		Vector u = parseData(label_lc, ' ');
+		String src = (String) u.elementAt(0);
+		System.out.println("src: " + src);
+        List <String> list = new ArrayList <String>();
+        for (int i=0; i<values.size(); i++) {
+			String code = values.get(i);
+			String code_lc = code.toLowerCase();
+			if (code_lc.startsWith(src)) {
+				list.add(code);
+			}
+			//UBERON:0002481 || UBERON:0001474
+			//IMDRF:E1901
+		}
+		return list;
 	}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
