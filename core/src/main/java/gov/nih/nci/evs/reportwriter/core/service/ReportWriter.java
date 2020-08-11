@@ -87,7 +87,8 @@ public class ReportWriter {
      * into the ReportTemplate class.
      *
      */
-	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL,String namedGraph) {
+
+	public String runReport0(String templateFile, String outputFile, String conceptFile, String restURL,String namedGraph) {
 		log.info("runReport using templateFile: " + templateFile);
 		log.info("restURL: " + restURL);
 		log.info("namedGraph: " + namedGraph);
@@ -161,6 +162,195 @@ public class ReportWriter {
             int maxLevel = reportTemplate.getLevel();
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset") && sourceOf) {
                 rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
+                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
+        	} else if (reportTemplate.getAssociation().equals("Subclass") && sourceOf) {
+                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
+
+        	} else {
+                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+        	}
+
+        } else if (templateType.equals("ConceptList")) {
+            rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph,restURL);
+        } else {
+        	System.err.println("Invalid Template Type: " + templateType);
+        	return "failure";
+        }
+
+
+
+        /*
+         * Print out tab separated and Excel output files
+         */
+        String outputFileText = outputFile + ".txt";
+        String outputFileExcel = outputFile + ".xls";
+        PrintWriter pw = null;
+        Workbook wb = new HSSFWorkbook();
+        Sheet sheet = wb.createSheet("report");
+        sheet.createFreezePane(0, 1);
+        int rowIndex = 0;
+
+        Font headerFont = wb.createFont();
+        headerFont.setColor(IndexedColors.BLACK.getIndex());
+        CellStyle headerStyle = createBorderedStyle(wb);
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+        headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		try {
+			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(outputFileText)),StandardCharsets.UTF_8),true);
+
+			// Added May 10, 2018  to output the OWL version information
+		   	Row excelRow = sheet.createRow(rowIndex++);
+         	Cell versionCell = excelRow.createCell(0);
+	        versionCell.setCellValue("Version: " + evsVersionInfo.getVersion());
+	        versionCell.setCellStyle(headerStyle);
+         	Cell graphCell = excelRow.createCell(1);
+	        graphCell.setCellValue("NamedGraph: " + namedGraph);
+	        graphCell.setCellStyle(headerStyle);
+	        Cell databaseCell = excelRow.createCell(2);
+	        databaseCell.setCellValue("REST URL: " + restURL);
+	        databaseCell.setCellStyle(headerStyle);
+
+			ArrayList <String> columnHeadings = new ArrayList <String>();
+	       	excelRow = sheet.createRow(rowIndex++);
+	       	int cellIndex = 0;
+        	for (TemplateColumn templateColumn: reportTemplate.getColumns()) {
+		       	columnHeadings.add(templateColumn.getLabel());
+		       	Cell cell = excelRow.createCell(cellIndex++);
+		        cell.setCellValue(templateColumn.getLabel());
+		        cell.setCellStyle(headerStyle);
+        	}
+            //pw.write("Version: " + evsVersionInfo.getVersion() + "\n");
+            pw.write(String.join("\t",columnHeadings) + "\n");
+
+            /*
+             * Sort the rows based on the template sortColumn specification
+             */
+            Integer sortColumnTemp = 0;
+            if (reportTemplate.getSortColumn() != null) {
+            	sortColumnTemp = reportTemplate.getSortColumn() - 1;
+            }
+            final Integer sortColumn = sortColumnTemp;
+            ArrayList <ReportRow> reportRows = reportOutput.getRows();
+            Collections.sort(reportRows,(row1, row2) -> row1.getColumns().get(sortColumn).getValue().compareTo(row2.getColumns().get(sortColumn).getValue()));
+
+            for (ReportRow row: reportRows) {
+            	excelRow = sheet.createRow(rowIndex++);
+        	    ArrayList <String> values = new ArrayList <String>();
+        	    cellIndex = 0;
+        	    for (ReportColumn column: row.getColumns()) {
+                    values.add(column.getValue());
+                    Cell cell =  excelRow.createCell(cellIndex++);
+		            cell.setCellValue(column.getValue());
+        	    }
+                pw.write(String.join("\t",values) + "\n");
+            }
+
+            for (int i = 0; i < reportTemplate.getColumns().size(); i++) {
+            	sheet.autoSizeColumn(i);
+            }
+
+            OutputStream fos = new FileOutputStream(new File(outputFileExcel));
+            wb.write(fos);
+    	    fos.close();
+        } catch (FileNotFoundException e) {
+        	System.err.println("File Not Found Exception");
+        	return "failure";
+        } catch (IOException e) {
+        	System.err.println("IOException");
+        	return "failure";
+        } finally {
+    	    if (pw != null) {
+    		    pw.close();
+    	    }
+        }
+
+        logFile.println("");
+        logFile.println("********************************");
+        logFile.println("Completed: " + LocalDateTime.now());
+		logFile.close();
+
+		return "success";
+
+	}
+
+
+	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL,String namedGraph) {
+		log.info("runReport using templateFile: " + templateFile);
+		log.info("restURL: " + restURL);
+		log.info("namedGraph: " + namedGraph);
+
+		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        Template reportTemplate = null;
+        PrintWriter logFile = null;
+        try {
+            reportTemplate = mapper.readValue(new File(templateFile), Template.class);
+
+            String rootConceptCode = reportTemplate.getRootConceptCode();
+            if (rootConceptCode != null) {
+				rootConceptCode = rootConceptCode.trim();
+				if (rootConceptCode.compareToIgnoreCase("Not specified") == 0 ||
+					rootConceptCode.compareToIgnoreCase("Not applicable") == 0 ||
+					rootConceptCode.compareToIgnoreCase("NA") == 0) {
+					reportTemplate.setRootConceptCode(null);
+				}
+			}
+
+			log.info("rootConceptCode: " + rootConceptCode);
+
+            String logOutputFile = outputFile + ".log";
+            logFile = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(logOutputFile)),StandardCharsets.UTF_8),true);
+        } catch (Exception ex) {
+			log.info("Report generation using " + templateFile + " failed.");
+        	System.err.println(ex);
+        	return "failure";
+        }
+
+        log.info("Template Information");
+        log.info("********************");
+        log.info(reportTemplate.toString());
+        System.out.println("Template Information");
+        System.out.println("********************");
+        System.out.println(reportTemplate.toString());
+        logFile.println("Started: " + LocalDateTime.now());
+        logFile.println("********************************");
+        logFile.println("");
+        logFile.println("Template Information");
+        logFile.println("********************************");
+
+        EvsVersionInfo evsVersionInfo = getEvsVersionInfo(restURL, namedGraph);
+        logFile.println("Version: " + evsVersionInfo.getVersion());
+        logFile.println(reportTemplate.toString());
+
+
+
+        // The conceptHash is used to improve performance, especially in the cases for reports that
+        // are looking for parents concepts.  By first looking in the hash for the concept, time
+        // can be saved by not repeating the SPARQL queries.
+        HashMap <String,EvsConcept> conceptHash = new <String,EvsConcept> HashMap();
+
+        int currentLevel = 0;
+        int maxLevel = reportTemplate.getLevel().intValue();
+
+        String templateType = reportTemplate.getType();
+        Report reportOutput = new Report();
+
+        String associationName = reportTemplate.getAssociation();
+        boolean sourceOf = true;
+        if (templateType.equals("Inverse Association")) {
+			sourceOf = false;
+		}
+
+        if (templateType.equals("Association") || templateType.equals("Inverse Association")) {
+        	String rootConceptCode = reportTemplate.getRootConceptCode();
+            EvsConcept rootConcept = null;
+            if (rootConceptCode != null) {
+            	rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
+			}
+        	if (reportTemplate.getAssociation().equals("Concept_In_Subset") && sourceOf) {
+                //rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
+                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph, restURL);
                 rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
         	} else if (reportTemplate.getAssociation().equals("Subclass") && sourceOf) {
                 rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
@@ -280,6 +470,7 @@ public class ReportWriter {
 		return "success";
 
 	}
+
 
 	private static CellStyle createBorderedStyle(Workbook wb){
 	        BorderStyle thin = BorderStyle.THIN;
