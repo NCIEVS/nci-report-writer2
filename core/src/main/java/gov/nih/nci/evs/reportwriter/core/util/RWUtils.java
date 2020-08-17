@@ -884,7 +884,6 @@ public class RWUtils {
 		String label_lc = label.toLowerCase();
 		Vector u = parseData(label_lc, ' ');
 		String src = (String) u.elementAt(0);
-		System.out.println("src: " + src);
         List <String> list = new ArrayList <String>();
         for (int i=0; i<values.size(); i++) {
 			String code = values.get(i);
