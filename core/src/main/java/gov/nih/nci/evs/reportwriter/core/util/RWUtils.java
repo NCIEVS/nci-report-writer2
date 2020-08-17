@@ -63,6 +63,9 @@ public class RWUtils {
 		associationLabel2CodeHashMap.put("Role_Has_Domain", "A1");
 		associationLabel2CodeHashMap.put("Role_Has_Parent", "A3");
 		associationLabel2CodeHashMap.put("Role_Has_Range", "A2");
+		associationLabel2CodeHashMap.put("Value_Set_Is_Paired_With", "A25");
+		associationLabel2CodeHashMap.put("Has_PCDC_AML_Permissible_Value", "A26");
+		associationLabel2CodeHashMap.put("Has_CTDC_Value", "A27");
 	};
 	private static final Logger log = LoggerFactory.getLogger(RWUtils.class);
 
