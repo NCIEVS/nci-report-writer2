@@ -509,10 +509,18 @@ public class RWUtils {
 	            conceptHash.put(code, assocConcept);
 			}
 			String col_property = column.getProperty();
+			List <EvsAxiom> conceptAxioms = assocConcept.getAxioms();
+
 			if (col_property.compareTo("NHC0") == 0) {
 				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
 				List <String> asso_properties = EVSUtils.getProperty("NHC0", asso_conceptProperties);
 				values.add(asso_properties.get(0));
+			} else if (col_property.compareTo("FULL_SYN") == 0 || col_property.compareTo("P90") == 0) {
+				values.addAll(getFullSynonym(column,conceptAxioms));
+			} else if (col_property.compareTo("DEFINITION") == 0 || col_property.compareTo("P97") == 0) {
+				values.addAll(getDefinition(column,conceptAxioms));
+			} else if (col_property.compareTo("ALT_DEFINITION") == 0 || col_property.compareTo("P325") == 0) {
+				values.addAll(getDefinition(column,conceptAxioms));
 			} else {
 				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
 				values.addAll(EVSUtils.getProperty(col_property, asso_conceptProperties));
@@ -530,7 +538,7 @@ public class RWUtils {
 	 * @param axioms List of concept axioms
 	 * @return List of full synonyms that match the search criteria.
 	 */
-	public ArrayList <String> getFullSynonym(TemplateColumn column,List <EvsAxiom> axioms) {
+	public ArrayList <String> getFullSynonym(TemplateColumn column, List<EvsAxiom> axioms) {
 		ArrayList <String> values = new ArrayList<String>();
 
 		List <EvsAxiom>axiomsKeep = new ArrayList<EvsAxiom>(axioms);
