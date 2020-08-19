@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.1.0.RC1'
+		springBootVersion = '2.1.0.RELEASE'
 	}
     repositories {  
         mavenLocal()    
@@ -75,7 +75,7 @@ dependencies {
     
    
     compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.6-SNAPSHOT')
+    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.7-SNAPSHOT')
 
     /*
      * Test Dependencies
