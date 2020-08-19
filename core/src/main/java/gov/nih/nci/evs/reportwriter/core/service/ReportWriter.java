@@ -162,7 +162,7 @@ public class ReportWriter {
             int maxLevel = reportTemplate.getLevel();
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset") && sourceOf) {
                 rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
-                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
+                //rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
         	} else if (reportTemplate.getAssociation().equals("Subclass") && sourceOf) {
                 rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
 
