@@ -84,6 +84,42 @@ public class RWUtils {
 	 * @param conceptHash ConceptHash cache to improve performance.
 	 * @param templateColumns TemplateColumns contain template definitions for each column.
 	 */
+	public void processSubset(List<String> codes, Report reportOutput, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, PrintWriter logFile, String namedGraph, String restURL) {
+		List <EvsConcept> associatedConcepts = new ArrayList();
+		for (int i=0; i<codes.size(); i++) {
+			String code = (String) codes.get(i);
+	        EvsConcept assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
+	        assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+	        assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
+	        associatedConcepts.add(assocConcept);
+		}
+        processSubset(reportOutput, associatedConcepts, conceptHash, templateColumns, logFile, namedGraph, restURL);
+	}
+
+	public void processSubset(Report reportOutput, List <EvsConcept> associatedConcepts, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph, String restURL) {
+		//List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getEvsConceptInSubset(rootConcept.getCode(), namedGraph, restURL);
+		//log.info("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
+		//System.out.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
+		//logFile.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
+		int total = 0;
+		for (EvsConcept concept: associatedConcepts) {
+			total += 1;
+			if (total % 100 == 0) {
+				log.info("Number of associations processed: " + total);
+				System.out.println("Number of associations processed: " + total);
+				logFile.println("Number of associations processed: " + total);
+			}
+			if (conceptHash.containsKey(concept.getCode())) {
+				concept = conceptHash.get(concept.getCode());
+			} else {
+				concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(), namedGraph, restURL));
+				concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
+				conceptHash.put(concept.getCode(), concept);
+			}
+			writeColumnData(reportOutput,null,concept,conceptHash,templateColumns,namedGraph,restURL);
+		}
+	}
+
 	public void processConceptInSubset(Report reportOutput, EvsConcept rootConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph, String restURL) {
 		List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getEvsConceptInSubset(rootConcept.getCode(), namedGraph, restURL);
 		log.info("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
@@ -107,7 +143,6 @@ public class RWUtils {
 			writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
 		}
 	}
-
 
 	public void processConceptInSubset(Report reportOutput, EvsConcept rootConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile, String namedGraph, String restURL) {
 		if (currentLevel < maxLevel) {
@@ -515,6 +550,7 @@ public class RWUtils {
 				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
 				List <String> asso_properties = EVSUtils.getProperty("NHC0", asso_conceptProperties);
 				values.add(asso_properties.get(0));
+			//????????????????????????????????????????????????????????????????????????????????????????????????
 			} else if (col_property.compareTo("FULL_SYN") == 0 || col_property.compareTo("P90") == 0) {
 				values.addAll(getFullSynonym(column,conceptAxioms));
 			} else if (col_property.compareTo("DEFINITION") == 0 || col_property.compareTo("P97") == 0) {
