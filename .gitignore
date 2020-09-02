@@ -1,3 +1,14 @@
 .gradle/*
 build/*
 setenv.sh
+.classpath
+*/.classpath
+.gradle/*
+**/.gradle/*
+.project
+.settings/*
+*/.settings/*
+build/
+*.log
+web/src/main/resources/static/
+core/bin/main
