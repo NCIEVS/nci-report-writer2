@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -64,31 +65,7 @@ public class ReportWriter {
 		this.rwUtils = new RWUtils(sparqlQueryManagerService);
 	}
 
-    /**
-     * Run a report using template file.
-     *
-     * @param templateFile Template file name.
-     * @param outputFile Output file name.
-     * @param conceptFile Concept file name.
-     * @return Returns a string of either "success" or "failure".
-     *
-     * <p>
-     * This methods supports 2 basic types of template definitions.
-     * <dl>
-     * <dt>Association</dt>
-     * <dd>The types of associations supported are either "Concept_In_Subset" or "Subclass".</dd>
-     * <dt>ConceptList</dt>
-     * <dd>For this type the conceptFile must be specified and should
-     *                  contain one concept code per line.</dd>
-     * </dl>
-     *
-     * <p>
-     * The templateFile format is YAML, which allows for the simple marshalling of the content
-     * into the ReportTemplate class.
-     *
-     */
-
-	public String runReport0(String templateFile, String outputFile, String conceptFile, String restURL,String namedGraph) {
+	public String run_report(List codes, String templateFile, String outputFile, String conceptFile, String restURL, String namedGraph) {
 		log.info("runReport using templateFile: " + templateFile);
 		log.info("restURL: " + restURL);
 		log.info("namedGraph: " + namedGraph);
@@ -98,19 +75,6 @@ public class ReportWriter {
         PrintWriter logFile = null;
         try {
             reportTemplate = mapper.readValue(new File(templateFile), Template.class);
-
-            String rootConceptCode = reportTemplate.getRootConceptCode();
-            if (rootConceptCode != null) {
-				rootConceptCode = rootConceptCode.trim();
-				if (rootConceptCode.compareToIgnoreCase("Not specified") == 0 ||
-					rootConceptCode.compareToIgnoreCase("Not applicable") == 0 ||
-					rootConceptCode.compareToIgnoreCase("NA") == 0) {
-					reportTemplate.setRootConceptCode(null);
-				}
-			}
-
-			log.info("rootConceptCode: " + rootConceptCode);
-
             String logOutputFile = outputFile + ".log";
             logFile = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(logOutputFile)),StandardCharsets.UTF_8),true);
         } catch (Exception ex) {
@@ -143,6 +107,7 @@ public class ReportWriter {
         HashMap <String,EvsConcept> conceptHash = new <String,EvsConcept> HashMap();
 
         int currentLevel = 0;
+        int maxLevel = reportTemplate.getLevel().intValue();
 
         String templateType = reportTemplate.getType();
         Report reportOutput = new Report();
@@ -153,31 +118,7 @@ public class ReportWriter {
 			sourceOf = false;
 		}
 
-        if (templateType.equals("Association") || templateType.equals("Inverse Association")) {
-        	String rootConceptCode = reportTemplate.getRootConceptCode();
-            EvsConcept rootConcept = null;
-            if (rootConceptCode != null) {
-            	rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
-			}
-            int maxLevel = reportTemplate.getLevel();
-        	if (reportTemplate.getAssociation().equals("Concept_In_Subset") && sourceOf) {
-                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
-                //rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
-        	} else if (reportTemplate.getAssociation().equals("Subclass") && sourceOf) {
-                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
-
-        	} else {
-                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
-        	}
-
-        } else if (templateType.equals("ConceptList")) {
-            rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph,restURL);
-        } else {
-        	System.err.println("Invalid Template Type: " + templateType);
-        	return "failure";
-        }
-
-
+        rwUtils.processSubset(codes, reportOutput, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
 
         /*
          * Print out tab separated and Excel output files
@@ -276,7 +217,7 @@ public class ReportWriter {
 	}
 
 
-	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL,String namedGraph) {
+	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL, String namedGraph) {
 		log.info("runReport using templateFile: " + templateFile);
 		log.info("restURL: " + restURL);
 		log.info("namedGraph: " + namedGraph);
@@ -295,6 +236,10 @@ public class ReportWriter {
 					rootConceptCode.compareToIgnoreCase("NA") == 0) {
 					reportTemplate.setRootConceptCode(null);
 				}
+			} else {
+				String datafile = reportTemplate.getType();
+				List codes = ReportWriterRunner.readFile(datafile);
+				return run_report(codes, templateFile, outputFile, conceptFile, restURL, namedGraph);
 			}
 
 			log.info("rootConceptCode: " + rootConceptCode);

@@ -3,7 +3,7 @@ package gov.nih.nci.evs.reportwriter.core.util;
 import gov.nih.nci.evs.reportwriter.core.util.*;
 import gov.nih.nci.evs.reportwriter.core.service.*;
 
-
+import java.io.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -97,6 +98,23 @@ public class ReportWriterRunner {
 		return evsVersionInfo;
 	}
 
+	public static List readFile(String filename)
+	{
+		List list = new ArrayList();
+		try {
+			BufferedReader in = new BufferedReader(
+			   new InputStreamReader(
+						  new FileInputStream(filename), "UTF8"));
+			String str;
+			while ((str = in.readLine()) != null) {
+				list.add(str);
+			}
+            in.close();
+		} catch (Exception ex) {
+            ex.printStackTrace();
+		}
+		return list;
+	}
 
 	public static void main(String[] args) {
 		long ms = System.currentTimeMillis();
@@ -110,11 +128,19 @@ public class ReportWriterRunner {
 		System.out.println("restURL: " + restURL);
 		String namedGraph = args[2];
 		System.out.println("namedGraph: " + namedGraph);
-
+		List codes = null;
+		if (args.length == 4) {
+			String datafile = args[3];
+            codes = readFile(datafile);
+		}
+		String str = null;
         SparqlQueryManagerService sparqlQueryManagerService = SpringUtils.createSparqlQueryManagerService();
-		String str = new ReportWriter(sparqlQueryManagerService).runReport(templateFile, outputFile, conceptFile, restURL, namedGraph);
+		if (codes != null) {
+		    str = new ReportWriter(sparqlQueryManagerService).run_report(codes, templateFile, outputFile, conceptFile, restURL, namedGraph);
+		} else {
+		    str = new ReportWriter(sparqlQueryManagerService).runReport(templateFile, outputFile, conceptFile, restURL, namedGraph);
+	    }
 		System.out.println(str);
-
 		System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
 	}
 
