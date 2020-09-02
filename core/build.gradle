@@ -1,6 +1,6 @@
 buildscript {
     ext {
-		springBootVersion = '2.1.0.RELEASE'
+		springBootVersion = '2.2.4.RELEASE'
 	}
     repositories {
         mavenCentral()
@@ -22,8 +22,6 @@ ext {
      * Software versions
      */
     mysqlConnectorVersion = "5.1.37"
-  
-
 }
 
 apply plugin:'java' 
