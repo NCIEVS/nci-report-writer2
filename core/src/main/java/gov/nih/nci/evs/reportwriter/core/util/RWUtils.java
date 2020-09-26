@@ -3,6 +3,12 @@ package gov.nih.nci.evs.reportwriter.core.util;
 import gov.nih.nci.evs.reportwriter.core.service.*;
 import gov.nih.nci.evs.reportwriter.core.configuration.*;
 
+import java.io.*;
+import java.util.*;
+import java.time.LocalDateTime;
+import java.nio.charset.StandardCharsets;
+
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
@@ -28,6 +34,29 @@ import gov.nih.nci.evs.reportwriter.core.model.report.ReportRow;
 import gov.nih.nci.evs.reportwriter.core.model.template.TemplateColumn;
 import gov.nih.nci.evs.reportwriter.core.service.SparqlQueryManagerService;
 import gov.nih.nci.evs.reportwriter.core.service.SparqlQueryManagerServiceImpl;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
+import gov.nih.nci.evs.reportwriter.core.model.report.Report;
+import gov.nih.nci.evs.reportwriter.core.model.report.ReportColumn;
+import gov.nih.nci.evs.reportwriter.core.model.report.ReportRow;
+import gov.nih.nci.evs.reportwriter.core.model.template.Template;
+import gov.nih.nci.evs.reportwriter.core.model.template.TemplateColumn;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 @Service
 /**
@@ -71,6 +100,9 @@ public class RWUtils {
 
 	@Autowired
 	SparqlQueryManagerService sparqlQueryManagerService;
+
+	public RWUtils() {
+	}
 
 	public RWUtils(SparqlQueryManagerService sparqlQueryManagerService) {
 		this.sparqlQueryManagerService = sparqlQueryManagerService;
@@ -995,6 +1027,141 @@ public class RWUtils {
 	}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private static CellStyle createBorderedStyle(Workbook wb){
+	        BorderStyle thin = BorderStyle.THIN;
+	        short black = IndexedColors.BLACK.getIndex();
+
+	        CellStyle style = wb.createCellStyle();
+	        style.setBorderRight(thin);
+	        style.setRightBorderColor(black);
+	        style.setBorderBottom(thin);
+	        style.setBottomBorderColor(black);
+	        style.setBorderLeft(thin);
+	        style.setLeftBorderColor(black);
+	        style.setBorderTop(thin);
+	        style.setTopBorderColor(black);
+	        return style;
+    }
+
+    public Report loadReport(Vector data_vec, char delim) {
+		if (data_vec == null || data_vec.size() == 0) return null;
+		String heading = (String) data_vec.elementAt(0);
+		Vector heading_vec = parseData(heading, delim);
+		Report report = new Report();
+		ArrayList<ReportRow> rows = new ArrayList<ReportRow>();
+		for (int i=1; i<data_vec.size(); i++) {
+			ReportRow row = new ReportRow();
+			String line = (String) data_vec.elementAt(i);
+			Vector u = parseData(line, delim);
+			List<ReportColumn> columns = new ArrayList<ReportColumn>();
+			for (int j=0; j<u.size(); j++) {
+				ReportColumn column = new ReportColumn((String) heading_vec.elementAt(j),(String) u.elementAt(j));
+				columns.add(column);
+			}
+			row.setColumns(columns);
+			rows.add(row);
+		}
+		report.setRows(rows);
+		return report;
+	}
+
+	public String run(String templateFile, Vector data_vec, String outputFile, String version, String namedGraph, String restURL) {
+        String outputFileText = outputFile + ".txt";
+        String outputFileExcel = outputFile + ".xls";
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        Template reportTemplate = null;
+        PrintWriter logFile = null;
+
+        try {
+            reportTemplate = mapper.readValue(new File(templateFile), Template.class);
+        } catch (Exception ex) {
+        	return "failure";
+        }
+
+        char delim = '\t';
+        Report reportOutput = loadReport(data_vec, delim);
+
+        PrintWriter pw = null;
+        Workbook wb = new HSSFWorkbook();
+        Sheet sheet = wb.createSheet("report");
+        sheet.createFreezePane(0, 1);
+        int rowIndex = 0;
+
+        Font headerFont = wb.createFont();
+        headerFont.setColor(IndexedColors.BLACK.getIndex());
+        CellStyle headerStyle = createBorderedStyle(wb);
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+        headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		try {
+			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(outputFileText)),StandardCharsets.UTF_8),true);
+		   	Row excelRow = sheet.createRow(rowIndex++);
+         	Cell versionCell = excelRow.createCell(0);
+	        versionCell.setCellValue("Version: " + version);//evsVersionInfo.getVersion());
+	        versionCell.setCellStyle(headerStyle);
+         	Cell graphCell = excelRow.createCell(1);
+	        graphCell.setCellValue("NamedGraph: " + namedGraph);
+	        graphCell.setCellStyle(headerStyle);
+	        Cell databaseCell = excelRow.createCell(2);
+	        databaseCell.setCellValue("REST URL: " + restURL);
+	        databaseCell.setCellStyle(headerStyle);
+
+			ArrayList <String> columnHeadings = new ArrayList <String>();
+	       	excelRow = sheet.createRow(rowIndex++);
+	       	int cellIndex = 0;
+        	for (TemplateColumn templateColumn: reportTemplate.getColumns()) {
+		       	columnHeadings.add(templateColumn.getLabel());
+		       	Cell cell = excelRow.createCell(cellIndex++);
+		        cell.setCellValue(templateColumn.getLabel());
+		        cell.setCellStyle(headerStyle);
+        	}
+            pw.write(String.join("\t",columnHeadings) + "\n");
+
+            /*
+             * Sort the rows based on the template sortColumn specification
+             */
+            Integer sortColumnTemp = 0;
+            if (reportTemplate.getSortColumn() != null) {
+            	sortColumnTemp = reportTemplate.getSortColumn() - 1;
+            }
+            final Integer sortColumn = sortColumnTemp;
+            ArrayList <ReportRow> reportRows = reportOutput.getRows();
+            Collections.sort(reportRows,(row1, row2) -> row1.getColumns().get(sortColumn).getValue().compareTo(row2.getColumns().get(sortColumn).getValue()));
+
+            for (ReportRow row: reportRows) {
+            	excelRow = sheet.createRow(rowIndex++);
+        	    ArrayList <String> values = new ArrayList <String>();
+        	    cellIndex = 0;
+        	    for (ReportColumn column: row.getColumns()) {
+                    values.add(column.getValue());
+                    Cell cell =  excelRow.createCell(cellIndex++);
+		            cell.setCellValue(column.getValue());
+        	    }
+                pw.write(String.join("\t",values) + "\n");
+            }
+
+            for (int i = 0; i < reportTemplate.getColumns().size(); i++) {
+            	sheet.autoSizeColumn(i);
+            }
+
+            OutputStream fos = new FileOutputStream(new File(outputFileExcel));
+            wb.write(fos);
+    	    fos.close();
+        } catch (FileNotFoundException e) {
+        	System.err.println("File Not Found Exception");
+        	return "failure";
+        } catch (IOException e) {
+        	System.err.println("IOException");
+        	return "failure";
+        } finally {
+    	    if (pw != null) {
+    		    pw.close();
+    	    }
+        }
+        System.out.println("Completed: " + LocalDateTime.now());
+		return "success";
+	}
 
 }
 
