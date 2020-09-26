@@ -1065,18 +1065,10 @@ public class RWUtils {
 		return report;
 	}
 
-	public String run(String templateFile, Vector data_vec, String outputFile, String version, String namedGraph, String restURL) {
+	public String run(ArrayList<String> columnHeadings, Vector data_vec, String outputFile, String version, String namedGraph, String restURL) {
         String outputFileText = outputFile + ".txt";
         String outputFileExcel = outputFile + ".xls";
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        Template reportTemplate = null;
         PrintWriter logFile = null;
-
-        try {
-            reportTemplate = mapper.readValue(new File(templateFile), Template.class);
-        } catch (Exception ex) {
-        	return "failure";
-        }
 
         char delim = '\t';
         Report reportOutput = loadReport(data_vec, delim);
@@ -1107,28 +1099,17 @@ public class RWUtils {
 	        databaseCell.setCellValue("REST URL: " + restURL);
 	        databaseCell.setCellStyle(headerStyle);
 
-			ArrayList <String> columnHeadings = new ArrayList <String>();
+			//ArrayList <String> columnHeadings = new ArrayList <String>();
 	       	excelRow = sheet.createRow(rowIndex++);
 	       	int cellIndex = 0;
-        	for (TemplateColumn templateColumn: reportTemplate.getColumns()) {
-		       	columnHeadings.add(templateColumn.getLabel());
+        	for (int k=0; k<columnHeadings.size(); k++) {
+				String label = columnHeadings.get(k);
 		       	Cell cell = excelRow.createCell(cellIndex++);
-		        cell.setCellValue(templateColumn.getLabel());
+		        cell.setCellValue(label);
 		        cell.setCellStyle(headerStyle);
         	}
             pw.write(String.join("\t",columnHeadings) + "\n");
-
-            /*
-             * Sort the rows based on the template sortColumn specification
-             */
-            Integer sortColumnTemp = 0;
-            if (reportTemplate.getSortColumn() != null) {
-            	sortColumnTemp = reportTemplate.getSortColumn() - 1;
-            }
-            final Integer sortColumn = sortColumnTemp;
             ArrayList <ReportRow> reportRows = reportOutput.getRows();
-            Collections.sort(reportRows,(row1, row2) -> row1.getColumns().get(sortColumn).getValue().compareTo(row2.getColumns().get(sortColumn).getValue()));
-
             for (ReportRow row: reportRows) {
             	excelRow = sheet.createRow(rowIndex++);
         	    ArrayList <String> values = new ArrayList <String>();
@@ -1141,7 +1122,7 @@ public class RWUtils {
                 pw.write(String.join("\t",values) + "\n");
             }
 
-            for (int i = 0; i < reportTemplate.getColumns().size(); i++) {
+            for (int i = 0; i < columnHeadings.size(); i++) {
             	sheet.autoSizeColumn(i);
             }
 
