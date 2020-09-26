@@ -75,7 +75,7 @@ public class RWUtils {
 	public RWUtils(SparqlQueryManagerService sparqlQueryManagerService) {
 		this.sparqlQueryManagerService = sparqlQueryManagerService;
 	}
-
+/////////////////////////////////
 	/**
 	 * Run the ConceptInSubset query and then process the report based on the report template.
 	 *
@@ -501,32 +501,6 @@ public class RWUtils {
 		reportOutput.getRows().add(reportRow);
 	}
 
-/*
-	public List <String> processAssociation(String associationCode, List <EvsProperty> conceptProperties,
-			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
-		List <String> values = new ArrayList <String>();
-		List <String> properties = EVSUtils.getProperty(associationCode, conceptProperties);
-		for (int i = 0; i < properties.size(); i++ ) {
-			String code = properties.get(i).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-			EvsConcept assocConcept = null;
-			if (conceptHash.containsKey(code)) {
-				assocConcept = conceptHash.get(code);
-			} else {
-	            assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
-	            assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-	            assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
-	            conceptHash.put(code, assocConcept);
-			}
-			if (property.equals("P90")) {
-				values.addAll(getFullSynonym(column,assocConcept.getAxioms()));
-			} else {
-				System.err.println("Association Property Not Supported");
-			}
-		}
-		return values;
-	}
-*/
-
 
 	public List <String> processAssociation(String associationCode, List <EvsProperty> conceptProperties,
 			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
@@ -550,13 +524,17 @@ public class RWUtils {
 				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
 				List <String> asso_properties = EVSUtils.getProperty("NHC0", asso_conceptProperties);
 				values.add(asso_properties.get(0));
-			//????????????????????????????????????????????????????????????????????????????????????????????????
 			} else if (col_property.compareTo("FULL_SYN") == 0 || col_property.compareTo("P90") == 0) {
 				values.addAll(getFullSynonym(column,conceptAxioms));
 			} else if (col_property.compareTo("DEFINITION") == 0 || col_property.compareTo("P97") == 0) {
 				values.addAll(getDefinition(column,conceptAxioms));
 			} else if (col_property.compareTo("ALT_DEFINITION") == 0 || col_property.compareTo("P325") == 0) {
 				values.addAll(getDefinition(column,conceptAxioms));
+
+			//KLO Modification 09252020
+			} else if (col_property.compareTo("subsource_code") == 0 || col_property.compareTo("P385") == 0) {
+				values.addAll(getFullSynonym(column,conceptAxioms));
+
 			} else {
 				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
 				values.addAll(EVSUtils.getProperty(col_property, asso_conceptProperties));
@@ -565,6 +543,66 @@ public class RWUtils {
 		return values;
 	}
 
+    public boolean compareQualifierValues(String value1, String value2) {
+		if (value1 == null) return true; // no comparison needed
+		if (value2 == null) return false;
+		return value2.equals(value1);
+	}
+
+	public ArrayList <String> getMatchedValuesFromFullSynonyms(List<EvsAxiom> axioms, String qualifier,
+	    String termGroup, String termSource, String sourceCode, String subsourceName) {
+		ArrayList<String> values = new ArrayList<String>();
+		if (qualifier.equals("termGroup")) {
+			for (EvsAxiom axiom: axioms) {
+			    boolean matched =
+			        //compareQualifierValues(termGroup, axiom.getTermGroup()) &&
+			        compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
+			        compareQualifierValues(termSource, axiom.getTermSource()) &&
+			        compareQualifierValues(subsourceName, axiom.getSubsourceName());
+			    if (matched && axiom.getTermGroup() != null) {
+					values.add(axiom.getTermGroup());
+				}
+
+			}
+		} else if (qualifier.equals("sourceCode")) {
+			for (EvsAxiom axiom: axioms) {
+			    boolean matched =
+			        compareQualifierValues(termGroup, axiom.getTermGroup()) &&
+			        //compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
+			        compareQualifierValues(termSource, axiom.getTermSource()) &&
+			        compareQualifierValues(subsourceName, axiom.getSubsourceName());
+			    if (matched && axiom.getSourceCode() != null) {
+					values.add(axiom.getSourceCode());
+				}
+
+			}
+		} else if (qualifier.equals("termSource")) {
+			for (EvsAxiom axiom: axioms) {
+			    boolean matched =
+			        compareQualifierValues(termGroup, axiom.getTermGroup()) &&
+			        compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
+			        //compareQualifierValues(termSource, axiom.getTermSource()) &&
+			        compareQualifierValues(subsourceName, axiom.getSubsourceName());
+
+			    if (matched && axiom.getTermSource() != null) {
+					values.add(axiom.getTermSource());
+				}
+			}
+		} else if (qualifier.equals("subsourceName")) {
+			for (EvsAxiom axiom: axioms) {
+			    boolean matched =
+			        compareQualifierValues(termGroup, axiom.getTermGroup()) &&
+			        compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
+			        compareQualifierValues(termSource, axiom.getTermSource());
+			        //compareQualifierValues(subsourceName, axiom.getSubsourceName());
+
+			    if (matched && axiom.getSubsourceName() != null) {
+					values.add(axiom.getSubsourceName());
+				}
+			}
+		}
+		return values;
+	}
 
 
 	/**
@@ -585,68 +623,80 @@ public class RWUtils {
 		String attr = column.getAttr();
 		String display = column.getDisplay();
 
-		List <EvsAxiom>axioms1 = new ArrayList<EvsAxiom>();
-		if (property != null) {
-			for (EvsAxiom axiom: axiomsKeep) {
-			    if (property.equals(axiom.getAnnotatedProperty())) {
-			    	axioms1.add(axiom);
+		if (display.compareTo("property") == 0 && (property.compareTo("P385") == 0 || property.compareTo("subsource_code") == 0)) {
+			/*
+			for (EvsAxiom axiom: axioms) {
+			    if (axiom.getTermSource() != null && axiom.getTermSource().equals(termSource)) {
+			    	values.add(axiom.getSourceCode());
 			    }
 			}
-			axiomsKeep = new ArrayList<EvsAxiom>(axioms1);
-		}
-
-		List <EvsAxiom>axioms2 = new ArrayList<EvsAxiom>();
-		if (termSource != null) {
-			for (EvsAxiom axiom: axiomsKeep) {
-			    if (termSource.equals(axiom.getTermSource())) {
-			    	axioms2.add(axiom);
-			    }
-			}
-			axiomsKeep = new ArrayList<EvsAxiom>(axioms2);
-		}
-
-		List <EvsAxiom>axioms3 = new ArrayList<EvsAxiom>();
-		if (termGroup != null) {
-			for (EvsAxiom axiom: axiomsKeep) {
-			    if (termGroup.equals(axiom.getTermGroup())) {
-			    	axioms3.add(axiom);
-			    }
-			}
-			axiomsKeep = new ArrayList<EvsAxiom>(axioms3);
-		}
-
-		List <EvsAxiom>axioms4 = new ArrayList<EvsAxiom>();
-		if (subsource != null) {
-			for (EvsAxiom axiom: axiomsKeep) {
-			    if (subsource.equals(axiom.getSubsourceName())) {
-			    	axioms4.add(axiom);
-			    }
-			}
-			axiomsKeep = new ArrayList<EvsAxiom>(axioms4);
-		}
-
-		List <EvsAxiom>axioms5 = new ArrayList<EvsAxiom>();
-		if (attr != null) {
-			for (EvsAxiom axiom: axiomsKeep) {
-			    if (attr.equals(axiom.getAttr())) {
-			    	axioms5.add(axiom);
-			    }
-			}
-			axiomsKeep = new ArrayList<EvsAxiom>(axioms5);
-		}
-
-		for (EvsAxiom axiom: axiomsKeep) {
-			if (display.equals("property")) {
-				values.add(axiom.getAnnotatedTarget());
-			} else if (display.equals("subsource_code")) {
-				if (axiom.getSourceCode() != null) {
-					values.add(axiom.getSourceCode());
+			*/
+			values = getMatchedValuesFromFullSynonyms(axioms, "sourceCode", termGroup, termSource, null, subsource);
+		} else {
+			List <EvsAxiom>axioms1 = new ArrayList<EvsAxiom>();
+			if (property != null) {
+				for (EvsAxiom axiom: axiomsKeep) {
+					if (property.equals(axiom.getAnnotatedProperty())) {
+						axioms1.add(axiom);
+					}
 				}
-			} else {
-			  // Don't do anything at this time
+				axiomsKeep = new ArrayList<EvsAxiom>(axioms1);
+			}
+			List <EvsAxiom>axioms2 = new ArrayList<EvsAxiom>();
+			if (termSource != null) {
+				for (EvsAxiom axiom: axiomsKeep) {
+					if (termSource.equals(axiom.getTermSource())) {
+						axioms2.add(axiom);
+					}
+				}
+				axiomsKeep = new ArrayList<EvsAxiom>(axioms2);
+			}
+
+			List <EvsAxiom>axioms3 = new ArrayList<EvsAxiom>();
+			if (termGroup != null) {
+				for (EvsAxiom axiom: axiomsKeep) {
+					if (termGroup.equals(axiom.getTermGroup())) {
+						axioms3.add(axiom);
+					}
+				}
+				axiomsKeep = new ArrayList<EvsAxiom>(axioms3);
+			}
+
+			List <EvsAxiom>axioms4 = new ArrayList<EvsAxiom>();
+			if (subsource != null) {
+				for (EvsAxiom axiom: axiomsKeep) {
+					if (subsource.equals(axiom.getSubsourceName())) {
+						axioms4.add(axiom);
+					}
+				}
+				axiomsKeep = new ArrayList<EvsAxiom>(axioms4);
+			}
+
+
+
+			List <EvsAxiom>axioms5 = new ArrayList<EvsAxiom>();
+			if (attr != null) {
+				for (EvsAxiom axiom: axiomsKeep) {
+					if (attr.equals(axiom.getAttr())) {
+						axioms5.add(axiom);
+					}
+				}
+				axiomsKeep = new ArrayList<EvsAxiom>(axioms5);
+			}
+
+			for (EvsAxiom axiom: axiomsKeep) {
+				String sourcecode = axiom.getSourceCode();
+				if (display.equals("property")) {
+					values.add(axiom.getAnnotatedTarget());
+				} else if (display.equals("subsource_code")) {
+					if (axiom.getSourceCode() != null) {
+						values.add(axiom.getSourceCode());
+					}
+				} else {
+				  // Don't do anything at this time
+				}
 			}
 		}
-
 		return values;
 	}
 
@@ -947,3 +997,5 @@ public class RWUtils {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }
+
+
