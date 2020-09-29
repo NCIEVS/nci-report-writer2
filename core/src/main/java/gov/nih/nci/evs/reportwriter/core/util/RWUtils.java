@@ -42,6 +42,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -1065,14 +1066,22 @@ public class RWUtils {
 		return report;
 	}
 
-	public String run(ArrayList<String> columnHeadings, Vector data_vec, String outputFile, String version, String namedGraph, String restURL) {
+	private static CellStyle createWrapTextCellStyle(Workbook wb){
+         CellStyle cs = wb.createCellStyle();
+         cs.setWrapText( true );
+         cs.setVerticalAlignment(VerticalAlignment.TOP);
+         cs.setAlignment(HorizontalAlignment.LEFT);
+         cs.setFillForegroundColor(IndexedColors.WHITE.getIndex());
+         //cs.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+         return cs;
+    }
+
+	public String reformat(ArrayList <String> columnHeadings, Vector data_vec, String outputFile, String version, String namedGraph, String restURL) {
         String outputFileText = outputFile + ".txt";
         String outputFileExcel = outputFile + ".xls";
         PrintWriter logFile = null;
-
         char delim = '\t';
         Report reportOutput = loadReport(data_vec, delim);
-
         PrintWriter pw = null;
         Workbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet("report");
@@ -1086,8 +1095,10 @@ public class RWUtils {
         headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
         headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
+        CellStyle wrapTextCellStyle = createWrapTextCellStyle(wb);
 		try {
 			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(outputFileText)),StandardCharsets.UTF_8),true);
+
 		   	Row excelRow = sheet.createRow(rowIndex++);
          	Cell versionCell = excelRow.createCell(0);
 	        versionCell.setCellValue("Version: " + version);//evsVersionInfo.getVersion());
@@ -1107,7 +1118,9 @@ public class RWUtils {
 		       	Cell cell = excelRow.createCell(cellIndex++);
 		        cell.setCellValue(label);
 		        cell.setCellStyle(headerStyle);
+		        //cell.setCellStyle(wrapTextCellStyle);
         	}
+
             pw.write(String.join("\t",columnHeadings) + "\n");
             ArrayList <ReportRow> reportRows = reportOutput.getRows();
             for (ReportRow row: reportRows) {
@@ -1115,24 +1128,35 @@ public class RWUtils {
         	    ArrayList <String> values = new ArrayList <String>();
         	    cellIndex = 0;
         	    for (ReportColumn column: row.getColumns()) {
+					String column_value = column.getValue();
                     values.add(column.getValue());
                     Cell cell =  excelRow.createCell(cellIndex++);
-		            cell.setCellValue(column.getValue());
+					cell.setCellStyle(wrapTextCellStyle);
+					column_value = column_value.replace(" || ", "\n");
+					column_value = column_value.trim();
+				    cell.setCellValue(column_value);
         	    }
-                pw.write(String.join("\t",values) + "\n");
+        	    String line = String.join("\t",values);
+        	    pw.write(line + "\n");
             }
 
             for (int i = 0; i < columnHeadings.size(); i++) {
             	sheet.autoSizeColumn(i);
             }
 
-            OutputStream fos = new FileOutputStream(new File(outputFileExcel));
-            wb.write(fos);
-    	    fos.close();
+			try {
+				FileOutputStream fileOut = new FileOutputStream(outputFileExcel);
+				wb.write(fileOut);
+				fileOut.close();
+				wb.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
         } catch (FileNotFoundException e) {
         	System.err.println("File Not Found Exception");
         	return "failure";
-        } catch (IOException e) {
+        } catch (Exception e) {
         	System.err.println("IOException");
         	return "failure";
         } finally {
@@ -1143,7 +1167,6 @@ public class RWUtils {
         System.out.println("Completed: " + LocalDateTime.now());
 		return "success";
 	}
-
 }
 
 
