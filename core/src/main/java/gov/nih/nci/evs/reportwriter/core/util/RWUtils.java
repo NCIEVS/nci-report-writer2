@@ -326,6 +326,7 @@ public class RWUtils {
 			List <String> values = new ArrayList <String>();
 			List <EvsProperty> conceptProperties = concept.getProperties();
 			List <EvsAxiom> conceptAxioms = concept.getAxioms();
+
 			if (propertyType.equals("code")) {
 				List <String> properties = EVSUtils.getProperty("NHC0", conceptProperties);
 				values.add(properties.get(0));
@@ -534,6 +535,16 @@ public class RWUtils {
 		reportOutput.getRows().add(reportRow);
 	}
 
+/*
+  - columnNumber: 7
+    label: Has_Pharmaceutical_Administration_Method Source PT
+    display: property
+    propertyType: Has_Pharmaceutical_Administration_Method
+    property: term-name
+    source: EDQM-HC
+    group:
+    subsource:
+*/
 
 	public List <String> processAssociation(String associationCode, List <EvsProperty> conceptProperties,
 			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
@@ -565,8 +576,14 @@ public class RWUtils {
 				values.addAll(getDefinition(column,conceptAxioms));
 
 			//KLO Modification 09252020
+			} else if (col_property.compareTo("term-name") == 0 || col_property.compareTo("P382") == 0) {
+				values.addAll(getFullSynonym(column,conceptAxioms));
+
+
+			//KLO Modification 10092020
 			} else if (col_property.compareTo("subsource_code") == 0 || col_property.compareTo("P385") == 0) {
 				values.addAll(getFullSynonym(column,conceptAxioms));
+
 
 			} else {
 				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
@@ -585,10 +602,23 @@ public class RWUtils {
 	public ArrayList <String> getMatchedValuesFromFullSynonyms(List<EvsAxiom> axioms, String qualifier,
 	    String termGroup, String termSource, String sourceCode, String subsourceName) {
 		ArrayList<String> values = new ArrayList<String>();
-		if (qualifier.equals("termGroup")) {
+
+//10092020
+		if (qualifier.equals("termName")) {
 			for (EvsAxiom axiom: axioms) {
 			    boolean matched =
-			        //compareQualifierValues(termGroup, axiom.getTermGroup()) &&
+			        compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
+			        compareQualifierValues(termSource, axiom.getTermSource()) &&
+			        compareQualifierValues(subsourceName, axiom.getSubsourceName());
+			    if (matched && axiom.getTermGroup() != null) {
+					values.add(axiom.getAnnotatedTarget());
+				}
+
+			}
+
+		} else if (qualifier.equals("termGroup")) {
+			for (EvsAxiom axiom: axioms) {
+			    boolean matched =
 			        compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
 			        compareQualifierValues(termSource, axiom.getTermSource()) &&
 			        compareQualifierValues(subsourceName, axiom.getSubsourceName());
@@ -665,6 +695,10 @@ public class RWUtils {
 			}
 			*/
 			values = getMatchedValuesFromFullSynonyms(axioms, "sourceCode", termGroup, termSource, null, subsource);
+
+		} else if (display.compareTo("property") == 0 && (property.compareTo("P382") == 0 || property.compareTo("term-name") == 0)) {
+			values = getMatchedValuesFromFullSynonyms(axioms, "termName", termGroup, termSource, null, subsource);
+
 		} else {
 			List <EvsAxiom>axioms1 = new ArrayList<EvsAxiom>();
 			if (property != null) {
