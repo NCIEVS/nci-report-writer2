@@ -85,7 +85,7 @@ public class RWUtils {
 		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Transformation", "A22");
 		associationLabel2CodeHashMap.put("Has_Salt_Form", "A5");
 		associationLabel2CodeHashMap.put("Has_Target", "A7");
-		associationLabel2CodeHashMap.put("Is_PCDC_AML_Permissible_Value_For", "A24");
+		associationLabel2CodeHashMap.put("Is_PCDC_AML_Permissible_Value_For_Variable", "A24");
 		associationLabel2CodeHashMap.put("Is_Related_To_Endogenous_Product", "A9");
 		associationLabel2CodeHashMap.put("Neoplasm_Has_Special_Category", "A14");
 		associationLabel2CodeHashMap.put("Qualifier_Applies_To", "A4");
