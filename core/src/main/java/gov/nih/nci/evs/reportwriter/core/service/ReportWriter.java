@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
+import java.util.HashSet;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -174,6 +175,8 @@ public class ReportWriter {
             }
             final Integer sortColumn = sortColumnTemp;
             ArrayList <ReportRow> reportRows = reportOutput.getRows();
+            //KLO 10272020
+            reportRows = removeDuplicates(reportRows);
             Collections.sort(reportRows,(row1, row2) -> row1.getColumns().get(sortColumn).getValue().compareTo(row2.getColumns().get(sortColumn).getValue()));
 
             for (ReportRow row: reportRows) {
@@ -376,6 +379,8 @@ if (maxLevel > 1) {
             }
             final Integer sortColumn = sortColumnTemp;
             ArrayList <ReportRow> reportRows = reportOutput.getRows();
+            //KLO 10272020
+            reportRows = removeDuplicates(reportRows);
             Collections.sort(reportRows,(row1, row2) -> row1.getColumns().get(sortColumn).getValue().compareTo(row2.getColumns().get(sortColumn).getValue()));
 
             for (ReportRow row: reportRows) {
@@ -418,6 +423,19 @@ if (maxLevel > 1) {
 
 	}
 
+    private ArrayList<ReportRow> removeDuplicates(ArrayList<ReportRow> reportRows) {
+		ArrayList<ReportRow> list = new ArrayList<ReportRow>();
+		HashSet hset = new HashSet();
+		for (int i=0; i<reportRows.size(); i++) {
+			ReportRow row = (ReportRow) reportRows.get(i);
+			String value = row.getValue();
+			if (!hset.contains(value)) {
+				list.add(row);
+				hset.add(value);
+			}
+		}
+		return list;
+	}
 
 	private static CellStyle createBorderedStyle(Workbook wb){
 	        BorderStyle thin = BorderStyle.THIN;
