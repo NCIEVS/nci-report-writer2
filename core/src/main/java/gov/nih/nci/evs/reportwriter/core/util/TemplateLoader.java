@@ -121,35 +121,37 @@ public class TemplateLoader {
 					col = new TemplateColumn();
 					col.setColumnNumber(Integer.parseInt(value));
 				} else {
-					Vector u = parseData(line, ':');
-					String key = (String) u.elementAt(0);
-					String value = (String) u.elementAt(1);
+					if (line.length() > 0) {
+						Vector u = parseData(line, ':');
+						String key = (String) u.elementAt(0);
+						String value = (String) u.elementAt(1);
 
-					value = value.trim();
-					if (value.startsWith("\"")) {
-						value = value.substring(1, value.length());
-					}
-					if (value.endsWith("\"")) {
-						value = value.substring(0, value.length()-1);
-					}
+						value = value.trim();
+						if (value.startsWith("\"")) {
+							value = value.substring(1, value.length());
+						}
+						if (value.endsWith("\"")) {
+							value = value.substring(0, value.length()-1);
+						}
 
-					key = key.trim();
-					if (key.compareTo("label") == 0) {
-						col.setLabel(value);
-					} else if (key.compareTo("display") == 0) {
-						col.setDisplay(value);
-					} else if (key.compareTo("propertyType") == 0) {
-						col.setPropertyType(value);
-					} else if (key.compareTo("property") == 0) {
-						col.setProperty(value);
-					} else if (key.compareTo("source") == 0) {
-						col.setSource(value);
-					} else if (key.compareTo("group") == 0) {
-						col.setGroup(value);
-					} else if (key.compareTo("subsource") == 0) {
-						col.setSubsource(value);
-					} else if (key.compareTo("attr") == 0) {
-						col.setAttr(value);
+						key = key.trim();
+						if (key.compareTo("label") == 0) {
+							col.setLabel(value);
+						} else if (key.compareTo("display") == 0) {
+							col.setDisplay(value);
+						} else if (key.compareTo("propertyType") == 0) {
+							col.setPropertyType(value);
+						} else if (key.compareTo("property") == 0) {
+							col.setProperty(value);
+						} else if (key.compareTo("source") == 0) {
+							col.setSource(value);
+						} else if (key.compareTo("group") == 0) {
+							col.setGroup(value);
+						} else if (key.compareTo("subsource") == 0) {
+							col.setSubsource(value);
+						} else if (key.compareTo("attr") == 0) {
+							col.setAttr(value);
+						}
 					}
 				}
 			}
@@ -169,7 +171,10 @@ public class TemplateLoader {
 						  new FileInputStream(filename), "UTF8"));
 			String str;
 			while ((str = in.readLine()) != null) {
-				v.add(str);
+				if (str.length() > 0) {
+					System.out.println(str);
+					v.add(str);
+				}
 			}
             in.close();
 		} catch (Exception ex) {
@@ -228,25 +233,19 @@ public class TemplateLoader {
 	}
 
 	public void dumpTemplate(Template template) {
-        System.out.println("name: " + template.getName());
-        System.out.println("rootConceptCode: " + template.getRootConceptCode());
-        System.out.println("sortColumn: " + template.getSortColumn());
-        System.out.println("type: " + template.getType());
-        System.out.println("association: " + template.getAssociation());
-        System.out.println("level: " + template.getLevel());
-        System.out.println("columns:");
+        System.out.println(template.toString());
         List<TemplateColumn> list = template.getColumns();
         for (int i=0; i<list.size(); i++) {
 			TemplateColumn col = (TemplateColumn) list.get(i);
-            System.out.println("- columnNumber: " + col.getColumnNumber());
-            System.out.println("\tlabel: " + col.getLabel());
-            System.out.println("\tdisplay: " + col.getDisplay());
-            System.out.println("\tpropertyType: " + col.getPropertyType());
-            System.out.println("\tproperty: " + col.getProperty());
-            System.out.println("\tsource: " + col.getSource());
-            System.out.println("\tgroup: " + col.getGroup());
-            System.out.println("\tsubsource: " + col.getSubsource());
-            System.out.println("\tattr: " + col.getAttr());
+            System.out.println("\n" + col.getColumnNumber());
+            System.out.println("" + col.getLabel());
+            System.out.println("" + col.getDisplay());
+            System.out.println("" + col.getPropertyType());
+            System.out.println("" + col.getProperty());
+            System.out.println("" + col.getSource());
+            System.out.println("" + col.getGroup());
+            System.out.println("" + col.getSubsource());
+            System.out.println("" + col.getAttr());
 		}
 	}
 
