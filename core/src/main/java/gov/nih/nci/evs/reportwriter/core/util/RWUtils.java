@@ -99,6 +99,8 @@ public class RWUtils {
 
 		associationLabel2CodeHashMap.put("Is_PCDC_EWS_Permissible_Value_For_Variable", "A28");
 		associationLabel2CodeHashMap.put("Has_PCDC_EWS_Permissible_Value", "A29");
+		associationLabel2CodeHashMap.put("Has_ICDC_Value", "A30");
+
 
 	};
 	private static final Logger log = LoggerFactory.getLogger(RWUtils.class);
