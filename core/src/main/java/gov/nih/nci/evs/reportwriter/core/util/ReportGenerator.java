@@ -236,6 +236,9 @@ public class ReportGenerator {
         logFile.println("********************************");
         logFile.println("Completed: " + LocalDateTime.now());
 		logFile.close();
+
+		System.out.println("Output file " + outputFileExcel + " generated.");
+
 		return "success";
 	}
 
