@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAxiom;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAssociation;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedAssociation;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsProperty;
 import gov.nih.nci.evs.reportwriter.core.model.report.Report;
 import gov.nih.nci.evs.reportwriter.core.model.report.ReportColumn;
@@ -66,6 +67,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
  *
  */
 public class RWUtils {
+	private HashMap associationLabel2CodeHashMap = null;
+	/*
 	private static HashMap associationLabel2CodeHashMap = null;
 	static {
 		associationLabel2CodeHashMap = new HashMap();
@@ -101,8 +104,8 @@ public class RWUtils {
 		associationLabel2CodeHashMap.put("Has_PCDC_EWS_Permissible_Value", "A29");
 		associationLabel2CodeHashMap.put("Has_ICDC_Value", "A30");
 
-
 	};
+	*/
 	private static final Logger log = LoggerFactory.getLogger(RWUtils.class);
 
 	@Autowired
@@ -113,6 +116,10 @@ public class RWUtils {
 
 	public RWUtils(SparqlQueryManagerService sparqlQueryManagerService) {
 		this.sparqlQueryManagerService = sparqlQueryManagerService;
+	}
+
+	public void setAssociationLabel2CodeHashMap(HashMap hmap) {
+		this.associationLabel2CodeHashMap = hmap;
 	}
 /////////////////////////////////
 	/**
@@ -222,7 +229,19 @@ public class RWUtils {
 	 * This methods supports recursion.
 	 */
 	public void processConceptSubclasses(Report reportOutput, EvsConcept parentConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile, String namedGraph, String restURL) {
+
+		System.out.println("In processConceptSubclasses ...");
+
 		if (currentLevel < maxLevel) {
+
+			if (parentConcept == null) {
+				log.info("Parent Concept is null.");
+				System.out.println("(*) Parent Concept is null.");
+				return;
+			} else {
+				System.out.println("(*) parentConcept.getCode(): " + parentConcept.getCode());
+			}
+
 		    List <EvsConcept> subclasses = sparqlQueryManagerService.getEvsSubclasses(parentConcept.getCode(), namedGraph, restURL);
     		log.info("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
 	    	System.out.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
@@ -257,7 +276,19 @@ public class RWUtils {
 	 * This methods supports recursion, but limited by the maxLevel parameters.
 	 */
 	public void processConceptSubclassesOnly(Report reportOutput,EvsConcept parentConcept,HashMap<String,EvsConcept> conceptHash,List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile, String namedGraph, String restURL) {
+
+		System.out.println("In processConceptSubclassesOnly ...");
+
 		if (currentLevel < maxLevel) {
+
+			if (parentConcept == null) {
+				log.info("(*) Parent Concept is null.");
+				System.out.println("Parent Concept is null.");
+				return;
+			} else {
+				System.out.println("(*) parentConcept.getCode(): " + parentConcept.getCode());
+			}
+
 			List <EvsConcept> subclasses = sparqlQueryManagerService.getEvsSubclasses(parentConcept.getCode(), namedGraph, restURL);
 			log.info("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
 			System.out.println("Parent Concept: " + parentConcept.getCode() + " Number of Subclasses: " + subclasses.size());
@@ -616,10 +647,9 @@ public class RWUtils {
 			        compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
 			        compareQualifierValues(termSource, axiom.getTermSource()) &&
 			        compareQualifierValues(subsourceName, axiom.getSubsourceName());
-			    if (matched && axiom.getTermGroup() != null) {
+			    if (matched && axiom.getAnnotatedTarget() != null) {
 					values.add(axiom.getAnnotatedTarget());
 				}
-
 			}
 
 		} else if (qualifier.equals("termGroup")) {

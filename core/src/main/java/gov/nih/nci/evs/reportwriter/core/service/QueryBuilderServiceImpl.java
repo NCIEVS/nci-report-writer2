@@ -396,7 +396,19 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		return buf.toString();
 	}
 
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
+    public String constructSupportedAssociationQuery(String namedGraph) {
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT distinct ?supportedAssociationName ?supportedAssociationCode").append("\n");
+		query.append("{").append("\n");
+		query.append("  GRAPH <" + namedGraph + ">").append("\n");
+		query.append("	{").append("\n");
+        query.append("    ?x a owl:AnnotationProperty .").append("\n");
+		query.append("    ?x :NHC0 ?supportedAssociationCode .").append("\n");
+        query.append("    ?x rdfs:label ?supportedAssociationName .").append("\n");
+        query.append("    ?x rdfs:range ?x_range").append("\n");
+		query.append("  }").append("\n");
+		query.append("  FILTER (str(?x_range)=\"http://www.w3.org/2001/XMLSchema#anyURI\")").append("\n");
+		query.append("}").append("\n");
+		return query.toString();
+	}
 }

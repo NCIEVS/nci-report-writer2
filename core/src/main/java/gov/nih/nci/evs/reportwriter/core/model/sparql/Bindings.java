@@ -27,6 +27,23 @@ public class Bindings {
 	private Property targetName;
 	private Property targetCode;
 
+	////////////////////////////////////////////
+	private Property supportedAssociationName;
+	private Property supportedAssociationCode;
+	public Property getSupportedAssociationName() {
+		return supportedAssociationName;
+	}
+	public Property getSupportedAssociationCode() {
+		return supportedAssociationCode;
+	}
+	public void setSupportedAssociationName(Property supportedAssociationName) {
+		this.supportedAssociationName = supportedAssociationName;
+	}
+	public void setSupportedAssociationCode(Property supportedAssociationCode) {
+		this.supportedAssociationCode = supportedAssociationCode;
+	}
+	////////////////////////////////////////////
+
 	public Property getSourceName() {
 		return sourceName;
 	}

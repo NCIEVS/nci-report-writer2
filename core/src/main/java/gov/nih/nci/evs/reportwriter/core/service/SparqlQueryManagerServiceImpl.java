@@ -21,6 +21,7 @@ import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsProperty;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAssociation;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedAssociation;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Bindings;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Sparql;
 import gov.nih.nci.evs.reportwriter.core.properties.StardogProperties;
@@ -515,6 +516,29 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 			//ex.printStackTrace();
 		}
 		return evsAssociations;
+   }
+
+	public List <EvsSupportedAssociation> getEvsSupportedAssociations(String namedGraph, String restURL) {
+		String queryPrefix = queryBuilderService.contructPrefix();
+		String query = queryBuilderService.constructSupportedAssociationQuery(namedGraph);
+		String res = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		ArrayList<EvsSupportedAssociation> evsSupportedAssociations = new ArrayList<EvsSupportedAssociation>();
+		try {
+			Sparql sparqlResult = mapper.readValue(res, Sparql.class);
+			Bindings[] bindings = sparqlResult.getResults().getBindings();
+			for (Bindings b : bindings) {
+				EvsSupportedAssociation evsSupportedAssociation = new EvsSupportedAssociation();
+				evsSupportedAssociation.setName(b.getSupportedAssociationName().getValue());
+				evsSupportedAssociation.setCode(b.getSupportedAssociationCode().getValue());
+				evsSupportedAssociations.add(evsSupportedAssociation);
+			}
+		} catch (Exception ex) {
+			System.out.println("Bad News Exception");
+			System.out.println(ex);
+		}
+		return evsSupportedAssociations;
    }
 
 }

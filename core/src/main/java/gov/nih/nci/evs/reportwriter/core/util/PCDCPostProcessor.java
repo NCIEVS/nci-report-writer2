@@ -66,67 +66,36 @@ import org.json.*;
  */
 
 
-/*
-Terry's
-AML12	C173229	Subject Characteristics Table	C175600	PCDC Subject Identifier	Pediatric Cancer Data Commons Unique Subject Identifier	PCDC_SUBJECT_IDENTIFIER		A unique identifier for a subject in a Pediatric Cancer Data Commons (PCDC) study.						C45253	string
-
-Mine:
-AML12	C173245	Transfusion Medicine Procedures Table	C175600	PCDC Subject Identifier	Pediatric Cancer Data Commons Unique Subject Identifier	PCDC_SUBJECT_IDENTIFIER		A unique identifier for a subject in a Pediatric Cancer Data Commons (PCDC) study.						C45253	string
-*/
-
-
 public class PCDCPostProcessor {
     String ordered_file = null;
     HashMap row2CodeAndSourceMap = new HashMap();
-    HashMap row2SubsetCodeAndMemberCodeMap = new HashMap();
     HashMap codeAndSource2RowMap = new HashMap();
     Vector row_data = null;
     Vector ordered_row_data = null;
     Vector ordered_data = null;
     String rw2textfile = null;
     Vector member_concepts = null;
-    HashMap rw2SubsetCodeAndMemberCode2RowDataMap = null;
+    HashMap rw2Code2RowDataMap = null;
 
     public PCDCPostProcessor() {
 
     }
 
-/*
-C173199	Course Timing Table	C168852	Age in Days at Course ANC 500		AGE_AT_COURSE_ANC_500		Age of subject (in days) when their neutrophil count exceeded a threshold of 500 (ANC/mm3) during the course.						C25337	number
-C173199	Course Timing Table	C168851	Age in Days at Course End		AGE_AT_COURSE_END		Age of subject (in days) at the end of the course.						C25337	number
-C173199	Course Timing Table	C168850	Age in Days at Course Start		AGE_AT_COURSE_START		Age of subject (in days) at the start of the course.						C25337	number
-C173199	Course Timing Table	C15679	Consolidation Therapy	Post Remission Therapy || Postremission Therapy	Consolidation		Treatment that is given after initial therapy to kill any remaining cancer cells.		C168807	COURSE
-C173199	Course Timing Table	C173105	Delayed Intensification Therapy		Intensification		A second round of intense chemotherapy as part of consolidation therapy.		C168807	COURSE
-C173199	Course Timing Table	C168794	Hematopoietic Cell Transplantation Conditioning Regimen	HCT Conditioning Regimen || HSCT Conditioning Regimen	Stem Cell Transplant Conditioning		A regimen that can be used as a conditioning regimen for hematopoietic stem cell transplantation (HSCT).		C168807	COURSE
-C173199	Course Timing Table	C158876	Induction Therapy		Induction		The first choice of treatment for a particular type of cancer.		C168807	COURSE
-*/
-    public HashMap generateRw2SubsetCodeAndMemberCode2RowDataMap(String rw2textfile) {
-		rw2SubsetCodeAndMemberCode2RowDataMap = new HashMap();
+    public HashMap generateRW2Code2RowDataMap(String rw2textfile) {
+		rw2Code2RowDataMap = new HashMap();
 		Vector v = ReportLoader.readFile(rw2textfile);
 		for (int i=1; i<v.size(); i++) { // skip heading
 			String line = (String) v.elementAt(i);
-
-
 			Vector u = ReportLoader.parseData(line, '\t');
-			String subcode = (String) u.elementAt(0);
 			String code = (String) u.elementAt(2);
-
-			rw2SubsetCodeAndMemberCode2RowDataMap.put(subcode+ "|" + code, line);
+			rw2Code2RowDataMap.put(code, line);
 		}
-		return rw2SubsetCodeAndMemberCode2RowDataMap;
+		return rw2Code2RowDataMap;
 	}
 
     public Vector convertRowData(String rw2textfile, String ordered_file) {
 		Vector w = new Vector();
-        set_ordered_file(ordered_file); //"6Jan_AML_Ordered.txt";
-
-/*
- 		this.ordered_file = ordered_file;
-        this.row2CodeAndSourceMap = new HashMap();
-        this.codeAndSource2RowMap = new HashMap();
-        this.ordered_data = ReportLoader.readFile(ordered_file);
-*/
-
+        set_ordered_file(ordered_file);
         Vector rw2_data = ReportLoader.readFile(rw2textfile);
         String heading = (String) rw2_data.elementAt(0);
         w.add("Row\t" + heading);
@@ -139,8 +108,7 @@ C173199	Course Timing Table	C158876	Induction Therapy		Induction		The first choi
 				break;
 			}
 		}
-        rw2SubsetCodeAndMemberCode2RowDataMap = generateRw2SubsetCodeAndMemberCode2RowDataMap(rw2textfile);
-
+        rw2Code2RowDataMap = generateRW2Code2RowDataMap(rw2textfile);
         for (int i=1; i<row_data.size(); i++) {
 			String line = (String) row_data.elementAt(i);
 			Vector u0 = ReportLoader.parseData(line, '|');
@@ -148,12 +116,12 @@ C173199	Course Timing Table	C158876	Induction Therapy		Induction		The first choi
 			String member_concept_code = null;
 			String sourceCode = "";
 			row = (String) u0.elementAt(0);
-
-			String subset_code_bar_member_code = null;
-			subset_code_bar_member_code = (String) row2SubsetCodeAndMemberCodeMap.get(row);
-            String rw2RowData = (String) rw2SubsetCodeAndMemberCode2RowDataMap.get(subset_code_bar_member_code);
-            //String newRowData = convertRowData(rw2RowData, row, sourceCode, source_code_col);
-            String newRowData = row + "\t" + rw2RowData;//convertRowData(rw2RowData, row, sourceCode, source_code_col);
+			member_concept_code = (String) u0.elementAt(1);
+            if (u0.size() == 3) {
+				sourceCode = (String) u0.elementAt(2);
+			}
+            String rw2RowData = (String) rw2Code2RowDataMap.get(member_concept_code);
+            String newRowData = convertRowData(rw2RowData, row, sourceCode, source_code_col);
             w.add(newRowData);
 		}
 		return w;
@@ -177,20 +145,10 @@ C173199	Course Timing Table	C158876	Induction Therapy		Induction		The first choi
 		return buf.toString();
 	}
 
-/*
-Row	NCIt Code of Table	PCDC Table PT	NCIt Concept Code	NCIt PT	NCIt SY	PCDC PT	Source Code	NCIt Definition	PCDC Definition	Belongs to Variable Code	Belongs to Variable	Has Permissible Value Code	Has Permissible Value	Variable has Expected Data Type Code	Variable has Expected Data Type PT	Uberon Code
-AML12	C173229	Subject Characteristics Table	C175600	PCDC Subject Identifier	Pediatric Cancer Data Commons Unique Subject Identifier	PCDC_SUBJECT_IDENTIFIER		A unique identifier for a subject in a Pediatric Cancer Data Commons (PCDC) study.						C45253	string
-
-Row	NCIt Code of Table	PCDC Table PT	NCIt Concept Code	NCIt PT	NCIt SY	PCDC PT	Source Code	NCIt Definition	PCDC Definition	Belongs to Variable Code	Belongs to Variable	Has Permissible Value Code	Has Permissible Value	Variable has Expected Data Type Code	Variable has Expected Data Type PT	Uberon Code
-AML12	C173229	Subject Characteristics Table	C175600	PCDC Subject Identifier	Pediatric Cancer Data Commons Unique Subject Identifier	PCDC_SUBJECT_IDENTIFIER		A unique identifier for a subject in a Pediatric Cancer Data Commons (PCDC) study.						C45253	string
-AML13	C173229	Subject Characteristics Table	C168949	Honest Broker Subject ID		HONEST_BROKER_SUBJECT_ID		Subject identifier assigned by the honest broker.						C45253	string
-
-*/
-    public void set_ordered_file(String ordered_file) { //"6Jan_AML_Ordered.txt";
+    public void set_ordered_file(String ordered_file) {
 		this.ordered_file = ordered_file;
         this.row2CodeAndSourceMap = new HashMap();
         this.codeAndSource2RowMap = new HashMap();
-        this.row2SubsetCodeAndMemberCodeMap = new HashMap();
         this.ordered_data = ReportLoader.readFile(ordered_file);
         this.row_data = new Vector();
         for (int i=0; i<this.ordered_data.size(); i++) {
@@ -199,12 +157,7 @@ AML13	C173229	Subject Characteristics Table	C168949	Honest Broker Subject ID		HO
 			if (line.length() > 0) {
 				Vector u = ReportLoader.parseData(line, '\t');
 				String row = (String) u.elementAt(0);
-
 				String member_conept_code = (String) u.elementAt(3);
-				String subset_code = (String) u.elementAt(1);
-
-				row2SubsetCodeAndMemberCodeMap.put(row, subset_code + "|" + member_conept_code);
-
 				String source_code = null;
 				if (u.size() > 7) {
 					source_code = (String) u.elementAt(7);

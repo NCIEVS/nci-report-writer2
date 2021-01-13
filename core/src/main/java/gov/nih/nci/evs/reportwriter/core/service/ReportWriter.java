@@ -28,6 +28,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,8 @@ import gov.nih.nci.evs.reportwriter.core.model.report.ReportColumn;
 import gov.nih.nci.evs.reportwriter.core.model.report.ReportRow;
 import gov.nih.nci.evs.reportwriter.core.model.template.Template;
 import gov.nih.nci.evs.reportwriter.core.model.template.TemplateColumn;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedAssociation;
+
 //import gov.nih.nci.evs.reportwriter.core.util.RWUtils;
 import gov.nih.nci.evs.reportwriter.core.util.*;
 
@@ -66,7 +69,18 @@ public class ReportWriter {
 		this.rwUtils = new RWUtils(sparqlQueryManagerService);
 	}
 
+	public void setAssociationLabel2CodeHashMap(String restURL, String namedGraph) {
+		HashMap associationLabel2CodeHashMap = new HashMap();
+		List<EvsSupportedAssociation> list = this.sparqlQueryManagerService.getEvsSupportedAssociations(namedGraph, restURL);
+		for (int i=0; i<list.size(); i++) {
+			EvsSupportedAssociation e = list.get(i);
+			associationLabel2CodeHashMap.put(e.getName(), e.getCode());
+		}
+		rwUtils.setAssociationLabel2CodeHashMap(associationLabel2CodeHashMap);
+	}
+
 	public String run_report(List codes, String templateFile, String outputFile, String conceptFile, String restURL, String namedGraph) {
+		setAssociationLabel2CodeHashMap(restURL, namedGraph);
 		log.info("runReport using templateFile: " + templateFile);
 		log.info("restURL: " + restURL);
 		log.info("namedGraph: " + namedGraph);
@@ -99,8 +113,6 @@ public class ReportWriter {
         EvsVersionInfo evsVersionInfo = getEvsVersionInfo(restURL, namedGraph);
         logFile.println("Version: " + evsVersionInfo.getVersion());
         logFile.println(reportTemplate.toString());
-
-
 
         // The conceptHash is used to improve performance, especially in the cases for reports that
         // are looking for parents concepts.  By first looking in the hash for the concept, time
@@ -177,6 +189,7 @@ public class ReportWriter {
             ArrayList <ReportRow> reportRows = reportOutput.getRows();
             //KLO 10272020
             reportRows = removeDuplicates(reportRows);
+
             Collections.sort(reportRows,(row1, row2) -> row1.getColumns().get(sortColumn).getValue().compareTo(row2.getColumns().get(sortColumn).getValue()));
 
             for (ReportRow row: reportRows) {
@@ -216,11 +229,10 @@ public class ReportWriter {
 		logFile.close();
 
 		return "success";
-
 	}
 
-
 	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL, String namedGraph) {
+		setAssociationLabel2CodeHashMap(restURL, namedGraph);
 		log.info("runReport using templateFile: " + templateFile);
 		log.info("restURL: " + restURL);
 		log.info("namedGraph: " + namedGraph);
@@ -289,30 +301,28 @@ public class ReportWriter {
         if (templateType.equals("Inverse Association")) {
 			sourceOf = false;
 		}
-
         if (templateType.equals("Association") || templateType.equals("Inverse Association")) {
         	String rootConceptCode = reportTemplate.getRootConceptCode();
+        	System.out.println("(*) rootConceptCode: " + rootConceptCode);
             EvsConcept rootConcept = null;
             if (rootConceptCode != null) {
             	rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
 			}
+			System.out.println("(*) rootConceptLabel: " + rootConcept.getLabel());
+
         	if (reportTemplate.getAssociation().equals("Concept_In_Subset") && sourceOf) {
                 //rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL);
+
+                //rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph, restURL);
+                //rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
+
                 rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph, restURL);
-if (maxLevel > 1) {
-                rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
-}
+                if (maxLevel > 1) {
+                	rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
+			    }
+
         	} else if (reportTemplate.getAssociation().equals("Subclass") && sourceOf) {
                 rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
-/*
-////////////////////////
-        	} else if (associationName.equals("Has_PCDC_Data_Type")) {
-                status = rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
-
-        	} else if (associationName.equals("Has_PCDC_AML_Permissible_Value")) {
-                status = rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
-////////////////////////
-*/
         	} else {
                 rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
         	}
@@ -323,7 +333,6 @@ if (maxLevel > 1) {
         	System.err.println("Invalid Template Type: " + templateType);
         	return "failure";
         }
-
 
         /*
          * Print out tab separated and Excel output files
@@ -381,6 +390,7 @@ if (maxLevel > 1) {
             ArrayList <ReportRow> reportRows = reportOutput.getRows();
             //KLO 10272020
             reportRows = removeDuplicates(reportRows);
+
             Collections.sort(reportRows,(row1, row2) -> row1.getColumns().get(sortColumn).getValue().compareTo(row2.getColumns().get(sortColumn).getValue()));
 
             for (ReportRow row: reportRows) {
