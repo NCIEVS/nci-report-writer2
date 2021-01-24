@@ -1,12 +1,10 @@
-//package gov.nih.nci.evs.restapi.util;
 package gov.nih.nci.evs.reportwriter.core.util;
-import gov.nih.nci.evs.reportwriter.core.model.evs.*;
 
 
-//import gov.nih.nci.evs.restapi.bean.*;
 import java.io.*;
 import java.util.*;
 import org.json.*;
+import gov.nih.nci.evs.reportwriter.core.model.evs.*;
 
 
 /**
