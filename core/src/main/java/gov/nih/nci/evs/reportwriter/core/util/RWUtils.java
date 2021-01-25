@@ -21,6 +21,7 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,8 +58,8 @@ import gov.nih.nci.evs.reportwriter.core.model.report.ReportRow;
 import gov.nih.nci.evs.reportwriter.core.model.template.Template;
 import gov.nih.nci.evs.reportwriter.core.model.template.TemplateColumn;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 @Service
 /**
@@ -68,44 +69,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
  */
 public class RWUtils {
 	private HashMap associationLabel2CodeHashMap = null;
-	/*
-	private static HashMap associationLabel2CodeHashMap = null;
-	static {
-		associationLabel2CodeHashMap = new HashMap();
-		associationLabel2CodeHashMap.put("Concept_In_Subset", "A8");
-		associationLabel2CodeHashMap.put("Has_CDRH_Parent", "A10");
-		associationLabel2CodeHashMap.put("Has_CTCAE_5_Parent", "A15");
-		associationLabel2CodeHashMap.put("Has_Data_Element", "A12");
-		associationLabel2CodeHashMap.put("Has_Free_Acid_Or_Base_Form", "A6");
-		associationLabel2CodeHashMap.put("Has_INC_Parent", "A16");
-		associationLabel2CodeHashMap.put("Has_NICHD_Parent", "A11");
-		associationLabel2CodeHashMap.put("Has_PCDC_Data_Type", "A23");
-		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Administration_Method", "A19");
-		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Basic_Dose_Form", "A18");
-		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Intended_Site", "A20");
-		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Release_Characteristics", "A21");
-		associationLabel2CodeHashMap.put("Has_Pharmaceutical_State_Of_Matter", "A17");
-		associationLabel2CodeHashMap.put("Has_Pharmaceutical_Transformation", "A22");
-		associationLabel2CodeHashMap.put("Has_Salt_Form", "A5");
-		associationLabel2CodeHashMap.put("Has_Target", "A7");
-		associationLabel2CodeHashMap.put("Is_PCDC_AML_Permissible_Value_For_Variable", "A24");
-		associationLabel2CodeHashMap.put("Is_Related_To_Endogenous_Product", "A9");
-		associationLabel2CodeHashMap.put("Neoplasm_Has_Special_Category", "A14");
-		associationLabel2CodeHashMap.put("Qualifier_Applies_To", "A4");
-		associationLabel2CodeHashMap.put("Related_To_Genetic_Biomarker", "A13");
-		associationLabel2CodeHashMap.put("Role_Has_Domain", "A1");
-		associationLabel2CodeHashMap.put("Role_Has_Parent", "A3");
-		associationLabel2CodeHashMap.put("Role_Has_Range", "A2");
-		associationLabel2CodeHashMap.put("Value_Set_Is_Paired_With", "A25");
-		associationLabel2CodeHashMap.put("Has_PCDC_AML_Permissible_Value", "A26");
-		associationLabel2CodeHashMap.put("Has_CTDC_Value", "A27");
 
-		associationLabel2CodeHashMap.put("Is_PCDC_EWS_Permissible_Value_For_Variable", "A28");
-		associationLabel2CodeHashMap.put("Has_PCDC_EWS_Permissible_Value", "A29");
-		associationLabel2CodeHashMap.put("Has_ICDC_Value", "A30");
-
-	};
-	*/
 	private static final Logger log = LoggerFactory.getLogger(RWUtils.class);
 
 	@Autowired
@@ -357,6 +321,7 @@ public class RWUtils {
 		String propertySepartor = " | ";
 		String contentSepartor = " || ";
 		for (TemplateColumn column: templateColumns) {
+			String label = column.getLabel();
 			String propertyType = column.getPropertyType();
 			String property = column.getProperty();
 			String columnString = "";
@@ -364,7 +329,13 @@ public class RWUtils {
 			List <EvsProperty> conceptProperties = concept.getProperties();
 			List <EvsAxiom> conceptAxioms = concept.getAxioms();
 
-			if (propertyType.equals("code")) {
+			//CDISC Submission Value
+			if (label.compareTo("CDISC Submission Value") == 0) {
+				List <EvsAxiom> parentAxioms = parentConcept.getAxioms();
+	            String CDISC_Submission_Value = getCDISCSubmissionValue(parentAxioms, conceptAxioms);
+				values.add(CDISC_Submission_Value);
+
+			} else if (propertyType.equals("code")) {
 				List <String> properties = EVSUtils.getProperty("NHC0", conceptProperties);
 				values.add(properties.get(0));
 			} else if (propertyType.equals("property")) {
@@ -1236,6 +1207,47 @@ public class RWUtils {
         }
         System.out.println("Completed: " + LocalDateTime.now());
 		return "success";
+	}
+
+
+	public static String getCDISCSubmissionValue(List<EvsAxiom> parentAxioms, List<EvsAxiom> axioms) {
+
+		System.out.println("\nparentAxioms: " + parentAxioms.size());
+		System.out.println("axioms: " + axioms.size());
+
+		String termSource = "CDISC";
+		String termType = "PT";
+		String sourceCode = null;
+		String subsourceName = null;
+	    List<String> cdisc_pts = EVSUtils.getSynonymsWithQualifiers(axioms,
+	       termSource, termType, sourceCode, subsourceName);
+
+	    if (cdisc_pts == null || cdisc_pts.size() == 0) {
+			System.out.println("WARNING: getCDISCSubmissionValue No CDISC PT is found.");
+			return "CDISC PT not found???";
+		} else if (cdisc_pts.size() == 1) {
+			return cdisc_pts.get(0);
+		}
+
+		termSource = "NCI";
+		termType = "AB";
+		sourceCode = null;
+		subsourceName = null;
+	    List<String> nci_abs = EVSUtils.getSynonymsWithQualifiers(parentAxioms,
+	       termSource, termType, sourceCode, subsourceName);
+	    if (nci_abs == null || nci_abs.size() == 0) {
+			System.out.println("WARNING: getCDISCSubmissionValue No NCI AB is found.");
+			return "NCI AB not found???";
+		}
+
+	    String nci_ab = nci_abs.get(0);
+		termSource = "CDISC";
+		termType = "PT";
+		sourceCode = nci_ab;
+		subsourceName = null;
+	    List<String> results = EVSUtils.getSynonymsWithQualifiers(axioms,
+	       termSource, termType, sourceCode, subsourceName);
+	    return results.get(0);
 	}
 }
 

@@ -174,4 +174,77 @@ public class EVSUtils {
 		}
         return list;
 	}
+
+
+////KLO 01/25/2021 ///////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * Return FULL_SYN term names that match a give set of qualifiers .
+	 *
+	 * @param axioms List of EvsAxiom.
+	 * @return list of FULL_SYN term names
+	 */
+
+	public static List<String> getSynonymsWithQualifiers(List<EvsAxiom> axioms,
+	    String termSource, String termType, String sourceCode, String subsourceName) {
+	    List<String> list = new ArrayList<String>();
+		List <EvsSynonym> full_syns = getFullSynonym(axioms);
+
+		for (int i=0; i<full_syns.size(); i++) {
+			EvsSynonym synonym = full_syns.get(i);
+
+			System.out.println(synonym.getTermName() + "|" +
+			                   synonym.getTermSource() + "|" +
+			                   synonym.getTermGroup() + "|" +
+			                   synonym.getSourceCode() + "|" +
+			                   synonym.getSubSourceName());
+
+
+			System.out.println(termSource +  " vs " + synonym.getTermSource());
+			System.out.println(termType +  " vs " + synonym.getTermGroup());
+			System.out.println(sourceCode +  " vs " + synonym.getSourceCode());
+			System.out.println(subsourceName +  " vs " + synonym.getSubSourceName());
+
+/*
+ADCCPS source: CDISC term group: PT source code: QS-ADAS-Cog CDISC Version TESTCD subsource name: null
+CDISC vs CDISC
+PT vs PT
+null vs QS-ADAS-Cog CDISC Version TESTCD
+null vs null
+*/
+
+            boolean match = true;
+			if (termSource != null) {
+				if (synonym.getTermSource() == null || synonym.getTermSource().compareTo("null") == 0) {
+					match = false;
+				} else if (synonym.getTermSource().compareTo(termSource) != 0) {
+					match = false;
+				}
+			}
+			if (termType != null) {
+				if (synonym.getTermGroup() == null || synonym.getTermGroup().compareTo("null") == 0) {
+					match = false;
+				} else if (synonym.getTermGroup().compareTo(termType) != 0) {
+					match = false;
+				}
+			}
+			if (sourceCode != null) {
+				if (synonym.getSourceCode() == null || synonym.getSourceCode().compareTo("null") == 0) {
+					match = false;
+				} else if (synonym.getSourceCode().compareTo(sourceCode) != 0) {
+					match = false;
+				}
+			}
+			if (subsourceName != null) {
+				if (synonym.getSubSourceName() == null || synonym.getSubSourceName().compareTo("null") == 0) {
+					match = false;
+				} else if (synonym.getSubSourceName().compareTo(subsourceName) != 0) {
+					match = false;
+				}
+			}
+			if (match) {
+				list.add(synonym.getTermName());
+			}
+		}
+		return list;
+	}
 }
