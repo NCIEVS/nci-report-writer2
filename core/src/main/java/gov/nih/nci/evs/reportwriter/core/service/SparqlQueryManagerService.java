@@ -1,6 +1,7 @@
 package gov.nih.nci.evs.reportwriter.core.service;
 
 import java.util.List;
+import java.util.Vector;
 
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAxiom;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
@@ -36,5 +37,15 @@ public interface SparqlQueryManagerService {
 	public List <EvsAssociation> getEvsAssociations(String namedGraph, String restURL, String associationName, boolean sourceOf);
 
 	public List <EvsSupportedAssociation> getEvsSupportedAssociations(String namedGraph, String restURL);
+
+	public List<String> getSubsets(String named_graph, String root, String restURL);
+
+	public List<String> getConceptsInSubset(String named_graph, String code, String restURL);
+
+    public List<String> getSubsetMemberConceptData(String named_graph, String subset_code, String restURL);
+
+	public List<String> getMatchedAnnotatedTarget(String named_graph, String code, String propertyName, Vector qualifierNames, Vector qualifierValues, String restURL);
+
+	public List<String> getSubsetCconceptData(String named_graph, String code, String restURL);
 
 }

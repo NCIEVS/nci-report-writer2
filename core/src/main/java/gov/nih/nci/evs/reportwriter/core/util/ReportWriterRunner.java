@@ -1,6 +1,6 @@
 package gov.nih.nci.evs.reportwriter.core.util;
 
-import gov.nih.nci.evs.reportwriter.core.util.*;
+
 import gov.nih.nci.evs.reportwriter.core.service.*;
 
 import java.io.*;

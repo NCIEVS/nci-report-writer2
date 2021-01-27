@@ -126,7 +126,11 @@ public class RWUtils {
 				concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
 				conceptHash.put(concept.getCode(), concept);
 			}
-			writeColumnData(reportOutput,null,concept,conceptHash,templateColumns,namedGraph,restURL);
+			try {
+				writeColumnData(reportOutput,null,concept,conceptHash,templateColumns,namedGraph,restURL);
+			} catch (Exception ex) {
+				logFile.println("ERROR: writeColumnData failed at " + concept.getLabel() + " (" + concept.getCode() + ")");
+			}
 		}
 	}
 
@@ -150,7 +154,11 @@ public class RWUtils {
 				concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
 				conceptHash.put(concept.getCode(), concept);
 			}
-			writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
+			try {
+				writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 
@@ -175,8 +183,13 @@ public class RWUtils {
 					concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
 					conceptHash.put(concept.getCode(), concept);
 				}
-				writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
-				processConceptInSubset(reportOutput, concept, conceptHash, templateColumns, currentLevel+1, maxLevel, logFile, namedGraph, restURL);
+
+				try {
+					writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
+					processConceptInSubset(reportOutput, concept, conceptHash, templateColumns, currentLevel+1, maxLevel, logFile, namedGraph, restURL);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 	}
@@ -266,8 +279,12 @@ public class RWUtils {
 					subclass.setAxioms(sparqlQueryManagerService.getEvsAxioms(subclass.getCode(), namedGraph, restURL));
 					conceptHash.put(subclass.getCode(), subclass);
 				}
-				writeColumnData(reportOutput,parentConcept,subclass,conceptHash,templateColumns,namedGraph,restURL);
-				processConceptSubclassesOnly(reportOutput,subclass,conceptHash,templateColumns,currentLevel + 1,maxLevel,logFile, namedGraph, restURL);
+				try {
+					writeColumnData(reportOutput,parentConcept,subclass,conceptHash,templateColumns,namedGraph,restURL);
+					processConceptSubclassesOnly(reportOutput,subclass,conceptHash,templateColumns,currentLevel + 1,maxLevel,logFile, namedGraph, restURL);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 		return;
@@ -293,7 +310,11 @@ public class RWUtils {
 		        EvsConcept concept = sparqlQueryManagerService.getEvsConceptDetailShort(line,namedGraph,restURL);
 				concept.setProperties(sparqlQueryManagerService.getEvsProperties(concept.getCode(),namedGraph,restURL));
 				concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(),namedGraph,restURL));
-				writeColumnData(reportOutput,concept,concept,conceptHash,templateColumns,namedGraph,restURL);
+				try {
+					writeColumnData(reportOutput,concept,concept,conceptHash,templateColumns,namedGraph,restURL);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 
 				total += 1;
 				if (total % 100 == 0) {
@@ -320,227 +341,230 @@ public class RWUtils {
 		ReportRow reportRow = new ReportRow();
 		String propertySepartor = " | ";
 		String contentSepartor = " || ";
-		for (TemplateColumn column: templateColumns) {
-			String label = column.getLabel();
-			String propertyType = column.getPropertyType();
-			String property = column.getProperty();
-			String columnString = "";
-			List <String> values = new ArrayList <String>();
-			List <EvsProperty> conceptProperties = concept.getProperties();
-			List <EvsAxiom> conceptAxioms = concept.getAxioms();
+		String label = null;
+		try {
+			for (TemplateColumn column: templateColumns) {
+				label = column.getLabel();
+				String propertyType = column.getPropertyType();
+				String property = column.getProperty();
+				String columnString = "";
+				List <String> values = new ArrayList <String>();
+				List <EvsProperty> conceptProperties = concept.getProperties();
+				List <EvsAxiom> conceptAxioms = concept.getAxioms();
 
-			//CDISC Submission Value
-			if (label.compareTo("CDISC Submission Value") == 0) {
-				List <EvsAxiom> parentAxioms = parentConcept.getAxioms();
-	            String CDISC_Submission_Value = getCDISCSubmissionValue(parentAxioms, conceptAxioms);
-				values.add(CDISC_Submission_Value);
+				//CDISC Submission Value
+				if (label.compareTo("CDISC Submission Value") == 0) {
+					if (parentConcept != null) {
+						List <EvsAxiom> parentAxioms = parentConcept.getAxioms();
+						String CDISC_Submission_Value = "";
+						try {
+							CDISC_Submission_Value = getCDISCSubmissionValue(parentAxioms, conceptAxioms);
+							values.add(CDISC_Submission_Value);
+						} catch (Exception ex) {
+							System.out.println("getCDISCSubmissionValue failed at " + concept.getCode());
+						}
+					}
 
-			} else if (propertyType.equals("code")) {
-				List <String> properties = EVSUtils.getProperty("NHC0", conceptProperties);
-				values.add(properties.get(0));
-			} else if (propertyType.equals("property")) {
-				values = EVSUtils.getProperty(property, conceptProperties);
-				if (property.compareTo("hasDbXref") == 0) {
-					values = filterXrefCodes(property, values, column.getLabel());
+				} else if (propertyType.equals("code")) {
+					List <String> properties = EVSUtils.getProperty("NHC0", conceptProperties);
+					values.add(properties.get(0));
+				} else if (propertyType.equals("property")) {
+					values = EVSUtils.getProperty(property, conceptProperties);
+					if (property.compareTo("hasDbXref") == 0) {
+						values = filterXrefCodes(property, values, column.getLabel());
+					}
+				} else if (propertyType.equals("FULL_SYN")) {
+					values = getFullSynonym(column,conceptAxioms);
+				} else if (propertyType.equals("DEFINITION")) {
+					values = getDefinition(column,conceptAxioms);
+				} else if (propertyType.equals("ALT_DEFINITION")) {
+					values = getDefinition(column,conceptAxioms);
+				/*
+				 * Not needed because hasDbXref is now a property only. Mar 29, 2018
+				} else if (propertyType.equals("hasDbXref")) {
+					values = getDbXref(column,conceptAxioms);
+				*/
+				} else if (propertyType.equals("Associated Concept Code")) {
+					if (parentConcept != null) {
+						values = EVSUtils.getProperty(property, parentConcept.getProperties());
+					}
+				} else if (propertyType.equals("Associated Concept Property")) {
+					if (parentConcept != null) {
+						if (property.equals("P90")) {
+							values = getFullSynonym(column,parentConcept.getAxioms());
+						} else {
+							values = EVSUtils.getProperty(property, parentConcept.getProperties());
+						}
+					}
+				//KLO 11/26/2019 ///////////////////////////////////////////////////////////////////////////////////////////
+				} else if (propertyType.equals("Parent Codes")) {
+					List <EvsConcept> superclasses = sparqlQueryManagerService.getEvsSuperclasses(concept.getCode(), namedGraph, restURL);
+					concept.setSuperclasses(superclasses);
+					values = EVSUtils.getSuperclassCodes(concept);
+
+				} else if (propertyType.equals("1st NICHD Parent Code")) {
+					List <String> properties = EVSUtils.getProperty("A11", conceptProperties);
+					if (properties.size() > 0) {
+						String code = properties.get(0).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
+						values.add(code);
+					}
+
+				} else if (propertyType.equals("2nd NICHD Parent Code")) {
+					List <String> properties = EVSUtils.getProperty("A11", conceptProperties);
+					if (properties.size() > 1) {
+						String code = properties.get(1).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
+						values.add(code);
+					}
+				} else if (propertyType.equals("1st NICHD Parent Property")) {
+					List <String> properties = EVSUtils.getProperty("A11", conceptProperties);
+					if (properties.size() > 0) {
+						String code = properties.get(0).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
+
+						EvsConcept nichdParentConcept = null;
+						if (conceptHash.containsKey(code)) {
+							nichdParentConcept = conceptHash.get(code);
+						} else {
+							nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
+							nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+							nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
+							conceptHash.put(code, nichdParentConcept);
+						}
+
+						if (property.equals("P90")) {
+							values = getFullSynonym(column,nichdParentConcept.getAxioms());
+						} else {
+							System.err.println("1st NICHD Parent Property Not Supported");
+						}
+					}
+				} else if (propertyType.equals("2nd NICHD Parent Property")) {
+					List <String> properties = EVSUtils.getProperty("A11", conceptProperties);
+					if (properties.size() > 1) {
+						String code = properties.get(1).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
+
+						EvsConcept nichdParentConcept = null;
+						if (conceptHash.containsKey(code)) {
+							nichdParentConcept = conceptHash.get(code);
+						} else {
+							nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
+							nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+							nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
+							conceptHash.put(code, nichdParentConcept);
+						}
+
+						if (property.equals("P90")) {
+							values = getFullSynonym(column,nichdParentConcept.getAxioms());
+						} else {
+							System.err.println("2nd NICHD Parent Property Not Supported");
+						}
+					}
+				} else if (propertyType.equals("1st CDRH Parent Code")) {
+					List <String> properties = EVSUtils.getProperty("A10", conceptProperties);
+					if (properties.size() > 0) {
+						String code = properties.get(0).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
+						values.add(code);
+					}
+				} else if (propertyType.equals("2nd CDRH Parent Code")) {
+					List <String> properties = EVSUtils.getProperty("A10", conceptProperties);
+					if (properties.size() > 1) {
+						String code = properties.get(1).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
+						values.add(code);
+					}
+				} else if (propertyType.equals("1st CDRH Parent Property")) {
+					List <String> properties = EVSUtils.getProperty("A10", conceptProperties);
+					if (properties.size() > 0) {
+						String code = properties.get(0).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
+
+						EvsConcept nichdParentConcept = null;
+						if (conceptHash.containsKey(code)) {
+							nichdParentConcept = conceptHash.get(code);
+						} else {
+							nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
+							nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+							nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
+							conceptHash.put(code, nichdParentConcept);
+						}
+
+						if (property.equals("P90")) {
+							values = getFullSynonym(column,nichdParentConcept.getAxioms());
+						} else {
+							System.err.println("1st CDRH Parent Property Not Supported");
+						}
+					}
+				} else if (propertyType.equals("2nd CDRH Parent Property")) {
+					List <String> properties = EVSUtils.getProperty("A10", conceptProperties);
+					if (properties.size() > 1) {
+						String code = properties.get(1).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
+
+
+						EvsConcept nichdParentConcept = null;
+						if (conceptHash.containsKey(code)) {
+							nichdParentConcept = conceptHash.get(code);
+						} else {
+							nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
+							nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+							nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
+							conceptHash.put(code, nichdParentConcept);
+						}
+
+						if (property.equals("P90")) {
+							values = getFullSynonym(column,nichdParentConcept.getAxioms());
+						} else {
+							System.err.println("2nd CDRH Parent Property Not Supported");
+						}
+					}
+				} else if (propertyType.equals("Maps_To Axiom")) {
+					List <EvsAxiom> axioms = concept.getAxioms();
+					for (EvsAxiom axiom: axioms) {
+						List <String> v = new ArrayList <String> ();
+						if (axiom.getAnnotatedProperty().equals("P375")) {
+							v.add(axiom.getAnnotatedTarget());
+							v.add(axiom.getTargetTerminology());
+							//[EVSREPORT2-36] Adding Target_Terminology_Version Qualifier
+							v.add(axiom.getTargetTerminologyVersion());
+							v.add(axiom.getRelationshipToTarget());
+							v.add(axiom.getTargetTermType());
+							v.add(axiom.getTargetCode());
+							String vv = String.join(propertySepartor, v);
+							values.add(vv);
+						}
+					}
+				} else if (propertyType.equals("FULL_SYN Axiom")) {
+					List <EvsAxiom> axioms = concept.getAxioms();
+					for (EvsAxiom axiom: axioms) {
+						List <String> v = new ArrayList <String> ();
+						if (axiom.getAnnotatedProperty().equals("P90")) {
+							v.add(axiom.getAnnotatedTarget());
+							v.add(axiom.getTermSource());
+							v.add(axiom.getTermGroup());
+							v.add(axiom.getSourceCode());
+							v.add(axiom.getSubsourceName());
+							String vv = String.join(propertySepartor, v);
+							values.add(vv);
+						}
+					}
+
+				} else if (associationLabel2CodeHashMap.containsKey(propertyType)) {
+					String associationCode = (String) associationLabel2CodeHashMap.get(propertyType);
+					values = processAssociation(associationCode, conceptProperties, property, column, conceptHash, namedGraph, restURL);
 				}
-			} else if (propertyType.equals("FULL_SYN")) {
-				values = getFullSynonym(column,conceptAxioms);
-			} else if (propertyType.equals("DEFINITION")) {
-				values = getDefinition(column,conceptAxioms);
-			} else if (propertyType.equals("ALT_DEFINITION")) {
-				values = getDefinition(column,conceptAxioms);
-			/*
-			 * Not needed because hasDbXref is now a property only. Mar 29, 2018
-            } else if (propertyType.equals("hasDbXref")) {
-                values = getDbXref(column,conceptAxioms);
-            */
-			} else if (propertyType.equals("Associated Concept Code")) {
-				values = EVSUtils.getProperty(property, parentConcept.getProperties());
-			} else if (propertyType.equals("Associated Concept Property")) {
-				if (property.equals("P90")) {
-					values = getFullSynonym(column,parentConcept.getAxioms());
+
+				if (values == null || values.size() == 0) {
 				} else {
-					values = EVSUtils.getProperty(property, parentConcept.getProperties());
-				}
-////KLO 11/26/2019 ///////////////////////////////////////////////////////////////////////////////////////////
-			} else if (propertyType.equals("Parent Codes")) {
-				List <EvsConcept> superclasses = sparqlQueryManagerService.getEvsSuperclasses(concept.getCode(), namedGraph, restURL);
-				concept.setSuperclasses(superclasses);
-				values = EVSUtils.getSuperclassCodes(concept);
-
-			} else if (propertyType.equals("1st NICHD Parent Code")) {
-				List <String> properties = EVSUtils.getProperty("A11", conceptProperties);
-				if (properties.size() > 0) {
-					String code = properties.get(0).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-					values.add(code);
+					columnString = String.join(contentSepartor, values);
 				}
 
-			} else if (propertyType.equals("2nd NICHD Parent Code")) {
-				List <String> properties = EVSUtils.getProperty("A11", conceptProperties);
-				if (properties.size() > 1) {
-					String code = properties.get(1).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-					values.add(code);
-				}
-			} else if (propertyType.equals("1st NICHD Parent Property")) {
-				List <String> properties = EVSUtils.getProperty("A11", conceptProperties);
-				if (properties.size() > 0) {
-					String code = properties.get(0).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-
-					EvsConcept nichdParentConcept = null;
-					if (conceptHash.containsKey(code)) {
-						nichdParentConcept = conceptHash.get(code);
-					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
-			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
-			            conceptHash.put(code, nichdParentConcept);
-					}
-
-					if (property.equals("P90")) {
-						values = getFullSynonym(column,nichdParentConcept.getAxioms());
-					} else {
-						System.err.println("1st NICHD Parent Property Not Supported");
-					}
-				}
-			} else if (propertyType.equals("2nd NICHD Parent Property")) {
-				List <String> properties = EVSUtils.getProperty("A11", conceptProperties);
-				if (properties.size() > 1) {
-					String code = properties.get(1).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-
-					EvsConcept nichdParentConcept = null;
-					if (conceptHash.containsKey(code)) {
-						nichdParentConcept = conceptHash.get(code);
-					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
-			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
-			            conceptHash.put(code, nichdParentConcept);
-					}
-
-					if (property.equals("P90")) {
-						values = getFullSynonym(column,nichdParentConcept.getAxioms());
-					} else {
-						System.err.println("2nd NICHD Parent Property Not Supported");
-					}
-				}
-			} else if (propertyType.equals("1st CDRH Parent Code")) {
-				List <String> properties = EVSUtils.getProperty("A10", conceptProperties);
-				if (properties.size() > 0) {
-					String code = properties.get(0).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-					values.add(code);
-				}
-			} else if (propertyType.equals("2nd CDRH Parent Code")) {
-				List <String> properties = EVSUtils.getProperty("A10", conceptProperties);
-				if (properties.size() > 1) {
-					String code = properties.get(1).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-					values.add(code);
-				}
-			} else if (propertyType.equals("1st CDRH Parent Property")) {
-				List <String> properties = EVSUtils.getProperty("A10", conceptProperties);
-				if (properties.size() > 0) {
-					String code = properties.get(0).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-
-					EvsConcept nichdParentConcept = null;
-					if (conceptHash.containsKey(code)) {
-						nichdParentConcept = conceptHash.get(code);
-					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
-			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
-			            conceptHash.put(code, nichdParentConcept);
-					}
-
-					if (property.equals("P90")) {
-						values = getFullSynonym(column,nichdParentConcept.getAxioms());
-					} else {
-						System.err.println("1st CDRH Parent Property Not Supported");
-					}
-				}
-			} else if (propertyType.equals("2nd CDRH Parent Property")) {
-				List <String> properties = EVSUtils.getProperty("A10", conceptProperties);
-				if (properties.size() > 1) {
-					String code = properties.get(1).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-
-
-					EvsConcept nichdParentConcept = null;
-					if (conceptHash.containsKey(code)) {
-						nichdParentConcept = conceptHash.get(code);
-					} else {
-			            nichdParentConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
-			            nichdParentConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-			            nichdParentConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
-			            conceptHash.put(code, nichdParentConcept);
-					}
-
-					if (property.equals("P90")) {
-						values = getFullSynonym(column,nichdParentConcept.getAxioms());
-					} else {
-						System.err.println("2nd CDRH Parent Property Not Supported");
-					}
-				}
-			} else if (propertyType.equals("Maps_To Axiom")) {
-    			List <EvsAxiom> axioms = concept.getAxioms();
-    			for (EvsAxiom axiom: axioms) {
-    				List <String> v = new ArrayList <String> ();
-    				if (axiom.getAnnotatedProperty().equals("P375")) {
-   				    	v.add(axiom.getAnnotatedTarget());
-       		    		v.add(axiom.getTargetTerminology());
-       		    		//[EVSREPORT2-36] Adding Target_Terminology_Version Qualifier
-       		    		v.add(axiom.getTargetTerminologyVersion());
-   				    	v.add(axiom.getRelationshipToTarget());
-  	    		    	v.add(axiom.getTargetTermType());
-   	    	    		v.add(axiom.getTargetCode());
-    					String vv = String.join(propertySepartor, v);
-    					values.add(vv);
-    				}
-			    }
-			} else if (propertyType.equals("FULL_SYN Axiom")) {
-    			List <EvsAxiom> axioms = concept.getAxioms();
-    			for (EvsAxiom axiom: axioms) {
-    				List <String> v = new ArrayList <String> ();
-    				if (axiom.getAnnotatedProperty().equals("P90")) {
-   				    	v.add(axiom.getAnnotatedTarget());
-   				    	v.add(axiom.getTermSource());
-   				    	v.add(axiom.getTermGroup());
-   				    	v.add(axiom.getSourceCode());
-   				    	v.add(axiom.getSubsourceName());
-    					String vv = String.join(propertySepartor, v);
-    					values.add(vv);
-    				}
-			    }
-			/*
-			} else if (propertyType.equals("Pharmaceutical_State_Of_Matter")) {
-				values = processAssociation("A17", conceptProperties, property, column, conceptHash, namedGraph, restURL);
-			} else if (propertyType.equals("Pharmaceutical_Basic_Dose_Form")) {
-				values = processAssociation("A18", conceptProperties, property, column, conceptHash, namedGraph, restURL);
-			} else if (propertyType.equals("Pharmaceutical_Administration_Method")) {
-				values = processAssociation("A19", conceptProperties, property, column, conceptHash, namedGraph, restURL);
-			} else if (propertyType.equals("Pharmaceutical_Intended_Site")) {
-				values = processAssociation("A20", conceptProperties, property, column, conceptHash, namedGraph, restURL);
-			} else if (propertyType.equals("Pharmaceutical_Release_Characteristics")) {
-				values = processAssociation("A21", conceptProperties, property, column, conceptHash, namedGraph, restURL);
-			} else if (propertyType.equals("Pharmaceutical_Transformation")) {
-				values = processAssociation("A22", conceptProperties, property, column, conceptHash, namedGraph, restURL);
-			} else {
-			  // Don't do anything for now
+				String name = column.getLabel();
+				ReportColumn reportColumn = new ReportColumn(name,columnString);
+				reportRow.getColumns().add(reportColumn);
 			}
-			*/
-
-			} else if (associationLabel2CodeHashMap.containsKey(propertyType)) {
-				String associationCode = (String) associationLabel2CodeHashMap.get(propertyType);
-				values = processAssociation(associationCode, conceptProperties, property, column, conceptHash, namedGraph, restURL);
-			}
-
-			if (values == null || values.size() == 0) {
-			} else {
-				columnString = String.join(contentSepartor, values);
-			}
-
-			String name = column.getLabel();
-			ReportColumn reportColumn = new ReportColumn(name,columnString);
-			reportRow.getColumns().add(reportColumn);
+			reportOutput.getRows().add(reportRow);
+		} catch (Exception ex) {
+			//ex.printStackTrace();
+			System.out.println("ERROR: writeColumnData failed at " + concept.getLabel() + " (" + concept.getCode() + ") - column label: " + label);
+			if (parentConcept != null) {
+				System.out.println("\tparentConcept: " + parentConcept.getLabel() + "(" + parentConcept.getCode() + ")");
+		    }
 		}
-		reportOutput.getRows().add(reportRow);
 	}
 
 /*
@@ -963,7 +987,11 @@ public class RWUtils {
 							System.out.println("Populating data error???");
 						}
 					}
-					writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
+					try {
+						writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
 				}
 		    }
 	    }
@@ -1024,7 +1052,11 @@ public class RWUtils {
 						concept.setAxioms(sparqlQueryManagerService.getEvsAxioms(concept.getCode(), namedGraph, restURL));
 						conceptHash.put(concept.getCode(), concept);
 					}
-					writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
+					try {
+						writeColumnData(reportOutput,rootConcept,concept,conceptHash,templateColumns,namedGraph,restURL);
+				    } catch (Exception ex) {
+					    ex.printStackTrace();
+				    }
 				}
 			}
 		} catch (Exception ex) {
@@ -1211,10 +1243,6 @@ public class RWUtils {
 
 
 	public static String getCDISCSubmissionValue(List<EvsAxiom> parentAxioms, List<EvsAxiom> axioms) {
-
-		System.out.println("\nparentAxioms: " + parentAxioms.size());
-		System.out.println("axioms: " + axioms.size());
-
 		String termSource = "CDISC";
 		String termType = "PT";
 		String sourceCode = null;

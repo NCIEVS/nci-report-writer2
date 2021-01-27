@@ -189,9 +189,14 @@ public class EVSUtils {
 	    List<String> list = new ArrayList<String>();
 		List <EvsSynonym> full_syns = getFullSynonym(axioms);
 
+		if (full_syns.size() == 0) {
+			System.out.println("full_syns.size() == 0???");
+			return list;
+		}
+
 		for (int i=0; i<full_syns.size(); i++) {
 			EvsSynonym synonym = full_syns.get(i);
-
+/*
 			System.out.println(synonym.getTermName() + "|" +
 			                   synonym.getTermSource() + "|" +
 			                   synonym.getTermGroup() + "|" +
@@ -203,6 +208,8 @@ public class EVSUtils {
 			System.out.println(termType +  " vs " + synonym.getTermGroup());
 			System.out.println(sourceCode +  " vs " + synonym.getSourceCode());
 			System.out.println(subsourceName +  " vs " + synonym.getSubSourceName());
+
+*/
 
 /*
 ADCCPS source: CDISC term group: PT source code: QS-ADAS-Cog CDISC Version TESTCD subsource name: null

@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.reportwriter.core.service;
 import gov.nih.nci.evs.reportwriter.core.configuration.*;
+import gov.nih.nci.evs.reportwriter.formatter.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -256,7 +259,6 @@ public class ReportWriter {
 				List codes = ReportWriterRunner.readFile(datafile);
 				return run_report(codes, templateFile, outputFile, conceptFile, restURL, namedGraph);
 			}
-
 			log.info("rootConceptCode: " + rootConceptCode);
 
             String logOutputFile = outputFile + ".log";
@@ -266,6 +268,10 @@ public class ReportWriter {
         	System.err.println(ex);
         	return "failure";
         }
+
+        if (isCDISCReport(reportTemplate)) {
+			return new SpecialReportWriter(sparqlQueryManagerService).runSpecialReport(templateFile, outputFile, conceptFile, restURL, namedGraph);
+		}
 
         log.info("Template Information");
         log.info("********************");
@@ -478,4 +484,15 @@ public class ReportWriter {
 		return sparqlQueryManagerService.getNamedGraphs(restURL);
 	}
 
+    public boolean isCDISCReport(Template template) {
+        System.out.println(template.toString());
+        List<TemplateColumn> list = template.getColumns();
+        for (int i=0; i<list.size(); i++) {
+			TemplateColumn col = (TemplateColumn) list.get(i);
+            if (col.getLabel().compareTo("CDISC Submission Value") == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

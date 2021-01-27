@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.*;
+
 @Service
 /**
  * Contains the SPARQL queries used by the ReportWriter
@@ -411,4 +413,240 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		query.append("}").append("\n");
 		return query.toString();
 	}
+/*
+	public String construct_get_subsets(String named_graph, String root, boolean subset_code_only) {
+		//String prefixes = getPrefixes();
+		StringBuffer buf = new StringBuffer();
+		//buf.append(prefixes);
+		if (subset_code_only) {
+			buf.append("select distinct ?x_code ").append("\n");
+		} else {
+			buf.append("select distinct ?x_label ?x_code ?p0_label ?p0_value ").append("\n");
+		}
+		buf.append("from <" + named_graph + ">").append("\n");
+		buf.append("where  { ").append("\n");
+		buf.append("                ?x a owl:Class .").append("\n");
+		buf.append("                ?x :NHC0 ?x_code .").append("\n");
+		buf.append("                ?x rdfs:label ?x_label .").append("\n");
+		buf.append("                ?y a owl:Class .").append("\n");
+		buf.append("                ?y :NHC0 ?y_code .").append("\n");
+		buf.append("                ?y :NHC0 \"" + root + "\"^^xsd:string .").append("\n");
+		buf.append("                ?y rdfs:label ?y_label .").append("\n");
+		buf.append("                ?x ?p ?y .").append("\n");
+		buf.append("                ?p rdfs:label ?p_label .").append("\n");
+		buf.append("                ?p rdfs:label \"Concept_In_Subset\"^^xsd:string .").append("\n");
+		buf.append("").append("\n");
+		buf.append("                ?z a owl:Class .").append("\n");
+		buf.append("                ?z ?p1 ?x .").append("\n");
+		buf.append("                ?p1 rdfs:label \"Concept_In_Subset\"^^xsd:string .").append("\n");
+		buf.append("").append("\n");
+		buf.append("").append("\n");
+		buf.append("                ?x ?p0 ?p0_value .").append("\n");
+		buf.append("                ?p0 rdfs:label \"Extensible_List\"^^xsd:string .").append("\n");
+		buf.append("                ?p0 rdfs:label ?p0_label .").append("\n");
+		buf.append("").append("\n");
+		buf.append("}").append("\n");
+		return buf.toString();
+	}
+*/
+
+	public String construct_get_subsets(String named_graph, String root, boolean subset_code_only) {
+		StringBuffer buf = new StringBuffer();
+		if (subset_code_only) {
+			buf.append("select distinct ?x_code ?p0_value").append("\n");
+		} else {
+			buf.append("select distinct ?x_label ?x_code ?p0_label ?p0_value ").append("\n");
+		}
+		buf.append("from <" + named_graph + ">").append("\n");
+		buf.append("where  {").append("\n");
+		buf.append("                ?x a owl:Class .").append("\n");
+		buf.append("                ?x :NHC0 ?x_code .").append("\n");
+		buf.append("                ?x rdfs:label ?x_label .").append("\n");
+		buf.append("                ?y a owl:Class .").append("\n");
+		buf.append("                ?y :NHC0 ?y_code .").append("\n");
+		buf.append("                ?y :NHC0 \"" + root + "\"^^xsd:string .").append("\n");
+		buf.append("                ?y rdfs:label ?y_label .").append("\n");
+		buf.append("                ?x ?p ?y .").append("\n");
+		buf.append("                ?p rdfs:label ?p_label .").append("\n");
+		buf.append("                ?p rdfs:label \"Concept_In_Subset\"^^xsd:string .").append("\n");
+		buf.append("").append("\n");
+		buf.append("").append("\n");
+		buf.append("	OPTIONAL {").append("\n");
+		buf.append("                ?x ?p0 ?p0_value .").append("\n");
+		buf.append("                ?p0 rdfs:label \"Extensible_List\"^^xsd:string .").append("\n");
+		buf.append("                ?p0 rdfs:label ?p0_label .").append("\n");
+		buf.append("	}").append("\n");
+		buf.append("").append("\n");
+		buf.append("}").append("\n");
+		return buf.toString();
+	}
+
+	public String construct_get_concepts_in_subset(String named_graph, String code, boolean code_only) {
+        StringBuffer buf = new StringBuffer();
+        if (code_only) {
+			buf.append("select distinct ?x_code").append("\n");
+		} else {
+        	buf.append("select distinct ?x_label ?x_code ?p_label ?y_label ?y_code ").append("\n");
+		}
+        buf.append("from <" + named_graph + ">").append("\n");
+        buf.append("where  { ").append("\n");
+        buf.append("                ?x a owl:Class .").append("\n");
+        buf.append("                ?x :NHC0 ?x_code .").append("\n");
+        buf.append("                ?x rdfs:label ?x_label .").append("\n");
+        buf.append("                ?y a owl:Class .").append("\n");
+        buf.append("                ?y :NHC0 ?y_code .").append("\n");
+        buf.append("                ?y :NHC0 \"" + code + "\"^^xsd:string .").append("\n");
+        buf.append("                ?y rdfs:label ?y_label .").append("\n");
+        buf.append("                ?x ?p ?y .").append("\n");
+        buf.append("                ?p rdfs:label ?p_label .").append("\n");
+        buf.append("                ?p rdfs:label \"Concept_In_Subset\"^^xsd:string .").append("\n");
+        buf.append("}").append("\n");
+        return buf.toString();
+	}
+
+    public String construct_get_subset_member_concept_data(String named_graph, String subset_code) {
+        StringBuffer buf = new StringBuffer();
+        buf.append("select distinct ?x_label ?x_code ?p_label ?p_value ?a_prop_label ?a_target ?q1_label ?q1_value ?q2_label ?q2_value ?b_target ?b_prop_label ?q5_value ?r_label ?r_code ?q3_label ?q3_value ").append("\n");
+        buf.append("from <" + named_graph + ">").append("\n");
+        buf.append("").append("\n");
+        buf.append("where  {").append("\n");
+        //r: root
+        buf.append("                ?r a owl:Class .").append("\n");
+        buf.append("                ?r :NHC0 ?r_code .").append("\n");
+        buf.append("                ?r :NHC0 \"" + subset_code + "\"^^xsd:string .").append("\n");
+        buf.append("                ?r rdfs:label ?r_label .").append("\n");
+        buf.append("").append("\n");
+        buf.append("                ?x a owl:Class .").append("\n");
+        buf.append("                ?x :NHC0 ?x_code .").append("\n");
+        buf.append("                ?x rdfs:label ?x_label .").append("\n");
+        buf.append("").append("\n");
+        buf.append("                ?x ?p0 ?r .").append("\n");
+        buf.append("                ?p0 rdfs:label ?p0_label .").append("\n");
+        buf.append("                ?p0 rdfs:label \"Concept_In_Subset\"^^xsd:string .").append("\n");
+        buf.append(" ").append("\n");
+        buf.append("                ?x ?p ?p_value .").append("\n");
+        buf.append("                ?p rdfs:label ?p_label .").append("\n");
+        buf.append("                ?p rdfs:label \"Preferred_Name\"^^xsd:string .").append("\n");
+        buf.append("").append("\n");
+        buf.append("                ?a a owl:Axiom .").append("\n");
+        buf.append("                ?a owl:annotatedSource ?x .").append("\n");
+        buf.append("                ?a owl:annotatedProperty ?a_prop .").append("\n");
+        buf.append("                ?a owl:annotatedTarget ?a_target .").append("\n");
+        buf.append("                ?a_prop rdfs:label ?a_prop_label .").append("\n");
+        buf.append("                ?a_prop rdfs:label \"FULL_SYN\"^^xsd:string .").append("\n");
+        buf.append("").append("\n");
+        buf.append("                ?a ?q1 ?q1_value .").append("\n");
+        buf.append("                ?a ?q1 \"CDISC\"^^xsd:string .").append("\n");
+        buf.append("                ?q1 rdfs:label ?q1_label .").append("\n");
+        buf.append("                ?q1 rdfs:label \"Term Source\"^^xsd:string .").append("\n");
+        buf.append("").append("\n");
+        buf.append("                ?a ?q2 ?q2_value .").append("\n");
+        buf.append("                ?q2 rdfs:label ?q2_label .").append("\n");
+        buf.append("                ?q2 rdfs:label \"Term Type\"^^xsd:string .").append("\n");
+
+        buf.append("").append("\n");
+        buf.append("                ?b a owl:Axiom .").append("\n");
+        buf.append("                ?b owl:annotatedSource ?x .").append("\n");
+        buf.append("                ?b owl:annotatedProperty ?b_prop .").append("\n");
+        buf.append("                ?b owl:annotatedTarget ?b_target .").append("\n");
+        buf.append("                ?b_prop rdfs:label ?b_prop_label .").append("\n");
+        buf.append("                ?b_prop rdfs:label \"ALT_DEFINITION\"^^xsd:string .").append("\n");
+        buf.append("").append("\n");
+        buf.append("                ?b ?q5 ?q5_value .").append("\n");
+        buf.append("                ?b ?q5 \"CDISC\"^^xsd:string .").append("\n");
+        buf.append("                ?q5 rdfs:label ?q5_label .").append("\n");
+        buf.append("                ?q5 rdfs:label \"Definition Source\"^^xsd:string .").append("\n");
+        buf.append("").append("\n");
+
+        buf.append("                OPTIONAL{").append("\n");
+        buf.append("                ?a ?q3 ?q3_value .").append("\n");
+        buf.append("                ?q3 rdfs:label ?q3_label .").append("\n");
+        buf.append("                ?q3 rdfs:label \"Source Code\"^^xsd:string .").append("\n");
+        buf.append("                }").append("\n");
+        buf.append("}").append("\n");
+
+        return buf.toString();
+	}
+
+	public String construct_get_matched_annotated_target(String named_graph, String code, String propertyName, Vector qualifierNames, Vector qualifierValues) {
+        StringBuffer buf = new StringBuffer();
+        buf.append("select distinct ?a_target").append("\n");
+        buf.append("from <" + named_graph + ">").append("\n");
+        buf.append("where  { ").append("\n");
+        buf.append("                ?x a owl:Class .").append("\n");
+        buf.append("                ?x :NHC0 ?x_code .").append("\n");
+        buf.append("                ?x :NHC0 \"" + code + "\"^^xsd:string .").append("\n");
+        buf.append("                ?x rdfs:label ?x_label .").append("\n");
+        buf.append("").append("\n");
+        buf.append("                ?a a owl:Axiom .").append("\n");
+        buf.append("                ?a owl:annotatedSource ?x .").append("\n");
+        buf.append("                ?a owl:annotatedProperty ?p .").append("\n");
+        buf.append("                ?a owl:annotatedTarget ?a_target .").append("\n");
+        buf.append("                ?p rdfs:label ?p_label .").append("\n");
+        buf.append("                ?p rdfs:label \"" + propertyName + "\"^^xsd:string .").append("\n");
+        buf.append("                ").append("\n");
+
+        int j = 0;
+        for (int i=0; i<qualifierNames.size(); i++) {
+			String qualifierName = (String) qualifierNames.elementAt(i);
+			String qualifierValue = (String) qualifierValues.elementAt(i);
+            j++;
+			buf.append("                ?a ?q" + j + " ?q" + j + "_value .").append("\n");
+			buf.append("                ?a ?q" + j + " \"" + qualifierValue + "\"^^xsd:string .").append("\n");
+			buf.append("                ?q" + j + " rdfs:label ?q" + j + "_label .").append("\n");
+			buf.append("                ?q" + j + " rdfs:label \"" + qualifierName + "\"^^xsd:string .").append("\n");
+	    }
+        buf.append("}").append("\n");
+        return buf.toString();
+	}
+
+	public String construct_get_subset_concept_data(String named_graph, String code) {
+		StringBuffer buf = new StringBuffer();
+		buf.append("select distinct ?p1_value ?x_label ?a_target ?q1_label ?q1_value ?q2_label ?q2_value ?b_prop_label ?b_target ?p2_label ?p2_value").append("\n");
+		buf.append("from <" + named_graph + ">").append("\n");
+		buf.append("where  {").append("\n");
+		buf.append("                ?x a owl:Class .").append("\n");
+		buf.append("                ?x :NHC0 ?x_code .").append("\n");
+		buf.append("                ?x :NHC0 \"" + code + "\"^^xsd:string .").append("\n");
+		buf.append("                ?x rdfs:label ?x_label .").append("\n");
+		buf.append("").append("\n");
+		buf.append("                ?x ?p1 ?p1_value .").append("\n");
+		buf.append("                ?p1 rdfs:label ?p1_label .").append("\n");
+		buf.append("                ?p1 rdfs:label \"Extensible_List\"^^xsd:string .").append("\n");
+		buf.append("").append("\n");
+		buf.append("                ?x ?p2 ?p2_value .").append("\n");
+		buf.append("                ?p2 rdfs:label ?p2_label .").append("\n");
+		buf.append("                ?p2 rdfs:label \"Preferred_Name\"^^xsd:string .").append("\n");
+		buf.append("").append("\n");
+		buf.append("                ?a a owl:Axiom .").append("\n");
+		buf.append("                ?a owl:annotatedSource ?x .").append("\n");
+		buf.append("                ?a owl:annotatedProperty ?a_prop .").append("\n");
+		buf.append("                ?a owl:annotatedTarget ?a_target .").append("\n");
+		buf.append("                ?a_prop rdfs:label ?a_prop_label .").append("\n");
+		buf.append("                ?a_prop rdfs:label \"FULL_SYN\"^^xsd:string .").append("\n");
+		buf.append("").append("\n");
+		buf.append("                ?a ?q1 ?q1_value .").append("\n");
+		buf.append("                ?a ?q1 \"CDISC\"^^xsd:string .").append("\n");
+		buf.append("                ?q1 rdfs:label ?q1_label .").append("\n");
+		buf.append("                ?q1 rdfs:label \"Term Source\"^^xsd:string .").append("\n");
+		buf.append("").append("\n");
+		buf.append("                ?a ?q2 ?q2_value .").append("\n");
+		buf.append("                ?q2 rdfs:label ?q2_label .").append("\n");
+		buf.append("                ?q2 rdfs:label \"Term Type\"^^xsd:string .").append("\n");
+		buf.append("").append("\n");
+		buf.append("                ?b a owl:Axiom .").append("\n");
+		buf.append("                ?b owl:annotatedSource ?x .").append("\n");
+		buf.append("                ?b owl:annotatedProperty ?b_prop .").append("\n");
+		buf.append("                ?b owl:annotatedTarget ?b_target .").append("\n");
+		buf.append("                ?b_prop rdfs:label ?b_prop_label .").append("\n");
+		buf.append("                ?b_prop rdfs:label \"ALT_DEFINITION\"^^xsd:string .").append("\n");
+		buf.append("").append("\n");
+		buf.append("                ?b ?q5 ?q5_value .").append("\n");
+		buf.append("                ?b ?q5 \"CDISC\"^^xsd:string .").append("\n");
+		buf.append("                ?q5 rdfs:label ?q5_label .").append("\n");
+		buf.append("                ?q5 rdfs:label \"Definition Source\"^^xsd:string .").append("\n");
+		buf.append("}").append("\n");
+		return buf.toString();
+	}
+
 }

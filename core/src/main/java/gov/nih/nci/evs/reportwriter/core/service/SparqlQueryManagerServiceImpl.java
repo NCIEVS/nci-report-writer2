@@ -45,7 +45,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	@Autowired
 	QueryBuilderService queryBuilderService;
 
-	private RESTUtils restUtils = null;
+	public RESTUtils restUtils = null;
 
 	@PostConstruct
 	/**
@@ -516,7 +516,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 			//ex.printStackTrace();
 		}
 		return evsAssociations;
-   }
+    }
 
 	public List <EvsSupportedAssociation> getEvsSupportedAssociations(String namedGraph, String restURL) {
 		String queryPrefix = queryBuilderService.contructPrefix();
@@ -539,6 +539,104 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 			System.out.println(ex);
 		}
 		return evsSupportedAssociations;
-   }
+    }
 
+
+	public List<String> getSubsets(String named_graph, String root, String restURL) {
+		String queryPrefix = queryBuilderService.contructPrefix();
+		boolean subset_code_only = true;
+		String query = queryBuilderService.construct_get_subsets(named_graph, root, subset_code_only);
+		String json = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+		Vector v = new JSONUtils().parseJSON(json);
+		v = new ParserUtils().getResponseValues(v);
+		v = new SortUtils().quickSort(v);
+		List<String> list = new ArrayList();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+		    list.add(t);
+		}
+		return list;
+	}
+
+	public List<String> getConceptsInSubset(String named_graph, String code, String restURL) {
+		String queryPrefix = queryBuilderService.contructPrefix();
+		boolean code_only = true;
+		String query = queryBuilderService.construct_get_concepts_in_subset(named_graph, code, code_only);
+		String json = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+		Vector v = new JSONUtils().parseJSON(json);
+		v = new ParserUtils().getResponseValues(v);
+		v = new SortUtils().quickSort(v);
+		List<String> list = new ArrayList();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+		    list.add(t);
+		}
+		return list;
+	}
+
+
+    public List<String> getSubsetMemberConceptData(String named_graph, String subset_code, String restURL) {
+		String queryPrefix = queryBuilderService.contructPrefix();
+		boolean code_only = true;
+		String query = queryBuilderService.construct_get_subset_member_concept_data(named_graph, subset_code);
+		String json = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+		Vector v = new JSONUtils().parseJSON(json);
+		v = new ParserUtils().getResponseValues(v);
+		v = new SortUtils().quickSort(v);
+		List<String> list = new ArrayList();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+		    list.add(t);
+		}
+		return list;
+	}
+
+	public List<String> getMatchedAnnotatedTarget(String named_graph, String code, String propertyName, Vector qualifierNames, Vector qualifierValues, String restURL) {
+		String queryPrefix = queryBuilderService.contructPrefix();
+		String query = queryBuilderService.construct_get_matched_annotated_target(named_graph, code, propertyName, qualifierNames, qualifierValues);
+		String json = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+		Vector v = new JSONUtils().parseJSON(json);
+		v = new ParserUtils().getResponseValues(v);
+		v = new SortUtils().quickSort(v);
+		List<String> list = new ArrayList();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+		    list.add(t);
+		}
+		return list;
+	}
+
+
+    public List<String> getSubsetCconceptData(String named_graph, String code, String restURL) {
+		String queryPrefix = queryBuilderService.contructPrefix();
+		String query = queryBuilderService.construct_get_subset_concept_data(named_graph, code);
+		String json = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+		return parseJSON(json);
+	}
+
+	public List<String> parseJSON(String json) {
+		if (json == null) return null;
+		Vector v = new JSONUtils().parseJSON(json);
+		v = new ParserUtils().getResponseValues(v);
+		v = new SortUtils().quickSort(v);
+		List<String> list = new ArrayList();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+		    list.add(t);
+		}
+		return list;
+	}
+
+	public Vector executeQuery(String query, String restURL) {
+		if (restUtils == null) {
+		    System.out.println(	"ERROR: restUtils == null ");
+		} else {
+			System.out.println(	"restUtils OK");
+		}
+		String json = restUtils.runSPARQL(query, restURL);
+		Vector v = new JSONUtils().parseJSON(json);
+		v = new ParserUtils().getResponseValues(v);
+		v = new SortUtils().quickSort(v);
+		return v;
+	}
 }
