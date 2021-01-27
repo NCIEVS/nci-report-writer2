@@ -3,6 +3,7 @@ buildscript {
 		springBootVersion = '2.2.4.RELEASE'
 	}
     repositories {
+        mavenLocal()
         mavenCentral()
         maven { url "https://repo.spring.io/release" }
         maven { url "https://repo.spring.io/milestone" }
@@ -55,10 +56,11 @@ springBoot {
 
 
  repositories {
+        mavenLocal()
+        mavenCentral()
         maven { url "https://repo.spring.io/release" }
         maven { url "https://repo.spring.io/milestone" }
         maven { url "https://repo.spring.io/snapshot" }
-        mavenCentral()
     }
 
 
