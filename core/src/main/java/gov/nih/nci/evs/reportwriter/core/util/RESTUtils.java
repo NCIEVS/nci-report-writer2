@@ -1,6 +1,7 @@
 package gov.nih.nci.evs.reportwriter.core.util;
 
 import java.nio.charset.Charset;
+import java.time.Duration;
 import java.io.*;
 import java.util.*;
 import java.net.*;
@@ -54,9 +55,9 @@ public class RESTUtils {
 	public String runSPARQL(String query, String restURL) {
 		RestTemplate restTemplate = new RestTemplateBuilder().
 				rootUri(restURL).
-				basicAuthorization(username,password).
-				setReadTimeout(readTimeout).
-				setConnectTimeout(connectTimeout).
+				basicAuthentication(username,password).
+				setReadTimeout(Duration.ofSeconds(readTimeout)).
+				setConnectTimeout(Duration.ofSeconds(connectTimeout)).
 				build();
 		restTemplate.getMessageConverters().add(0,new StringHttpMessageConverter(Charset.forName("UTF-8")));
 		MultiValueMap <String,String> body = new LinkedMultiValueMap<String,String>();
