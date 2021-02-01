@@ -122,14 +122,12 @@ public class SpecialReportWriter extends ReportWriter {
 	    List<String> subsets = sparqlQueryManagerService.getSubsets(namedGraph, root, restURL);
 	    logFile.println("========subsets===== " + subsets.size());
 
-
 	    Vector subset_codes = new Vector();
 	    String subset_code = null;
 	    Vector subsets_with_extensible = new Vector();
-	    //for (int i=0; i<subsets.size(); i++) {
 		for (int i=0; i<subsets.size(); i++) {
 			String subset = subsets.get(i);
-			logFile.println("========subset===== " + subset);
+			//logFile.println("========subset===== " + subset);
 			Vector u = ParserUtils.parseData(subset, '|');
 			String subset_label = "TBD";
 			subset_code = (String) u.elementAt(0);
@@ -141,8 +139,7 @@ public class SpecialReportWriter extends ReportWriter {
 		}
         logFile.println("subsets_with_extensible: " + subsets_with_extensible.size());
         int lcv = 0;
-        //for (int i=0; i<subsets_with_extensible.size(); i++) {
-		for (int i=0; i<3; i++) {
+        for (int i=0; i<subsets_with_extensible.size(); i++) {
 			String subset = (String) subsets_with_extensible.elementAt(i);
 			lcv++;
 			logFile.println("(" + lcv + ") " + subset);
