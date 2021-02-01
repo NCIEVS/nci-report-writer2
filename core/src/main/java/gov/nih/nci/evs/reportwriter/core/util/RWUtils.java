@@ -594,6 +594,7 @@ public class RWUtils {
 	            conceptHash.put(code, assocConcept);
 			}
 			String col_property = column.getProperty();
+			String col_display = column.getDisplay();
 			List <EvsAxiom> conceptAxioms = assocConcept.getAxioms();
 
 			if (col_property.compareTo("NHC0") == 0) {
@@ -611,11 +612,10 @@ public class RWUtils {
 			} else if (col_property.compareTo("term-name") == 0 || col_property.compareTo("P382") == 0) {
 				values.addAll(getFullSynonym(column,conceptAxioms));
 
-
 			//KLO Modification 10092020
-			} else if (col_property.compareTo("subsource_code") == 0 || col_property.compareTo("P385") == 0) {
+			//KLO Modification 01312021
+			} else if (col_display.compareTo("subsource_code") == 0 || col_display.compareTo("P385") == 0) {
 				values.addAll(getFullSynonym(column,conceptAxioms));
-
 
 			} else {
 				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
@@ -717,14 +717,7 @@ public class RWUtils {
 		String attr = column.getAttr();
 		String display = column.getDisplay();
 
-		if (display.compareTo("property") == 0 && (property.compareTo("P385") == 0 || property.compareTo("subsource_code") == 0)) {
-			/*
-			for (EvsAxiom axiom: axioms) {
-			    if (axiom.getTermSource() != null && axiom.getTermSource().equals(termSource)) {
-			    	values.add(axiom.getSourceCode());
-			    }
-			}
-			*/
+		if (property.compareTo("property") == 0 && (display.compareTo("P385") == 0 || display.compareTo("subsource_code") == 0)) {
 			values = getMatchedValuesFromFullSynonyms(axioms, "sourceCode", termGroup, termSource, null, subsource);
 
 		} else if (display.compareTo("property") == 0 && (property.compareTo("P382") == 0 || property.compareTo("term-name") == 0)) {
