@@ -611,7 +611,6 @@ public class RWUtils {
 			//KLO Modification 09252020
 			} else if (col_property.compareTo("term-name") == 0 || col_property.compareTo("P382") == 0) {
 				values.addAll(getFullSynonym(column,conceptAxioms));
-
 			//KLO Modification 10092020
 			//KLO Modification 01312021
 			} else if (col_display.compareTo("subsource_code") == 0 || col_display.compareTo("P385") == 0) {
@@ -717,7 +716,22 @@ public class RWUtils {
 		String attr = column.getAttr();
 		String display = column.getDisplay();
 
-		if (property.compareTo("property") == 0 && (display.compareTo("P385") == 0 || display.compareTo("subsource_code") == 0)) {
+/*
+- columnNumber: 11
+  label: "Belongs to Variable"
+  display: "subsource_code"
+  propertyType: "Is_PCDC_AML_Permissible_Value_For_Variable"
+  property: "P385"
+  source: "PCDC"
+  group: "PT"
+  subsource: "AML"
+  attr: null
+*/
+
+		if (property.compareTo("property") == 0 && display.compareTo("subsource_code") == 0) {
+			values = getMatchedValuesFromFullSynonyms(axioms, "sourceCode", termGroup, termSource, null, subsource);
+
+		} else if (property.compareTo("P385") == 0 && display.compareTo("subsource_code") == 0) {
 			values = getMatchedValuesFromFullSynonyms(axioms, "sourceCode", termGroup, termSource, null, subsource);
 
 		} else if (display.compareTo("property") == 0 && (property.compareTo("P382") == 0 || property.compareTo("term-name") == 0)) {
