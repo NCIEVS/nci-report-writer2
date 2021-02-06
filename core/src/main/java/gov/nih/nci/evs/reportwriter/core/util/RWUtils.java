@@ -553,8 +553,8 @@ public class RWUtils {
 					String associationCode = (String) associationLabel2CodeHashMap.get(propertyType);
 					values = processAssociation(associationCode, conceptProperties, property, column, conceptHash, namedGraph, restURL);
 				} else if (roleLabel2CodeHashMap.containsKey(propertyType)) {
-					String roleCode = (String) roleLabel2CodeHashMap.get(propertyType);
-					values = processAssociation(roleCode, conceptProperties, property, column, conceptHash, namedGraph, restURL);
+					//String roleCode = (String) roleLabel2CodeHashMap.get(propertyType);
+					values = processRole(concept.getCode(), propertyType, conceptProperties, property, column, conceptHash, namedGraph, restURL);
 				}
 
 				if (values == null || values.size() == 0) {
@@ -601,6 +601,52 @@ public class RWUtils {
 	            assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
 	            assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
 	            conceptHash.put(code, assocConcept);
+			}
+			String col_property = column.getProperty();
+			String col_display = column.getDisplay();
+			List <EvsAxiom> conceptAxioms = assocConcept.getAxioms();
+
+			if (col_property.compareTo("NHC0") == 0) {
+				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
+				List <String> asso_properties = EVSUtils.getProperty("NHC0", asso_conceptProperties);
+				values.add(asso_properties.get(0));
+			} else if (col_property.compareTo("FULL_SYN") == 0 || col_property.compareTo("P90") == 0) {
+				values.addAll(getFullSynonym(column,conceptAxioms));
+			} else if (col_property.compareTo("DEFINITION") == 0 || col_property.compareTo("P97") == 0) {
+				values.addAll(getDefinition(column,conceptAxioms));
+			} else if (col_property.compareTo("ALT_DEFINITION") == 0 || col_property.compareTo("P325") == 0) {
+				values.addAll(getDefinition(column,conceptAxioms));
+
+			//KLO Modification 09252020
+			} else if (col_property.compareTo("term-name") == 0 || col_property.compareTo("P382") == 0) {
+				values.addAll(getFullSynonym(column,conceptAxioms));
+			//KLO Modification 10092020
+			//KLO Modification 01312021
+			} else if (col_display.compareTo("subsource_code") == 0 || col_display.compareTo("P385") == 0) {
+				values.addAll(getFullSynonym(column,conceptAxioms));
+
+			} else {
+				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
+				values.addAll(EVSUtils.getProperty(col_property, asso_conceptProperties));
+			}
+		}
+		return values;
+	}
+
+	public List <String> processRole(String code, String roleName, List <EvsProperty> conceptProperties,
+			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
+		List <String> values = new ArrayList <String>();
+		List<String> roleTargetCodes = sparqlQueryManagerService.getRoleTargets(namedGraph, code, roleName, restURL);
+		for (int i = 0; i < roleTargetCodes.size(); i++ ) {
+			String targetCode = roleTargetCodes.get(i);
+			EvsConcept assocConcept = null;
+			if (conceptHash.containsKey(targetCode)) {
+				assocConcept = conceptHash.get(code);
+			} else {
+	            assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
+	            assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+	            assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
+	            conceptHash.put(targetCode, assocConcept);
 			}
 			String col_property = column.getProperty();
 			String col_display = column.getDisplay();
