@@ -48,8 +48,8 @@ import gov.nih.nci.evs.reportwriter.core.model.report.ReportRow;
 import gov.nih.nci.evs.reportwriter.core.model.template.Template;
 import gov.nih.nci.evs.reportwriter.core.model.template.TemplateColumn;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedAssociation;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedRole;
 
-//import gov.nih.nci.evs.reportwriter.core.util.RWUtils;
 import gov.nih.nci.evs.reportwriter.core.util.*;
 
 @Service
@@ -82,8 +82,19 @@ public class ReportWriter {
 		rwUtils.setAssociationLabel2CodeHashMap(associationLabel2CodeHashMap);
 	}
 
+	public void setRoleLabel2CodeHashMap(String restURL, String namedGraph) {
+		HashMap associationLabel2CodeHashMap = new HashMap();
+		List<EvsSupportedRole> list = this.sparqlQueryManagerService.getEvsSupportedRoles(namedGraph, restURL);
+		for (int i=0; i<list.size(); i++) {
+			EvsSupportedRole e = list.get(i);
+			associationLabel2CodeHashMap.put(e.getName(), e.getCode());
+		}
+		rwUtils.setRoleLabel2CodeHashMap(associationLabel2CodeHashMap);
+	}
+
 	public String run_report(List codes, String templateFile, String outputFile, String conceptFile, String restURL, String namedGraph) {
 		setAssociationLabel2CodeHashMap(restURL, namedGraph);
+		setRoleLabel2CodeHashMap(restURL, namedGraph);
 		log.info("runReport using templateFile: " + templateFile);
 		log.info("restURL: " + restURL);
 		log.info("namedGraph: " + namedGraph);
@@ -236,6 +247,7 @@ public class ReportWriter {
 
 	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL, String namedGraph) {
 		setAssociationLabel2CodeHashMap(restURL, namedGraph);
+		setRoleLabel2CodeHashMap(restURL, namedGraph);
 		log.info("runReport using templateFile: " + templateFile);
 		log.info("restURL: " + restURL);
 		log.info("namedGraph: " + namedGraph);

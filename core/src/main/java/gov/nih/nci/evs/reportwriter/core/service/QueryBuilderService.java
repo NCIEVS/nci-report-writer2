@@ -38,4 +38,6 @@ public interface QueryBuilderService {
 
 	public String construct_get_subset_concept_data(String named_graph, String code);
 
+	public String constructSupportedRoleQuery(String namedGraph);
+
 }

@@ -29,6 +29,7 @@ import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAxiom;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAssociation;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedAssociation;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedRole;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsProperty;
 import gov.nih.nci.evs.reportwriter.core.model.report.Report;
 import gov.nih.nci.evs.reportwriter.core.model.report.ReportColumn;
@@ -69,6 +70,7 @@ import gov.nih.nci.evs.reportwriter.core.model.template.TemplateColumn;
  */
 public class RWUtils {
 	private HashMap associationLabel2CodeHashMap = null;
+	private HashMap roleLabel2CodeHashMap = null;
 
 	private static final Logger log = LoggerFactory.getLogger(RWUtils.class);
 
@@ -84,6 +86,10 @@ public class RWUtils {
 
 	public void setAssociationLabel2CodeHashMap(HashMap hmap) {
 		this.associationLabel2CodeHashMap = hmap;
+	}
+
+	public void setRoleLabel2CodeHashMap(HashMap hmap) {
+		this.roleLabel2CodeHashMap = hmap;
 	}
 /////////////////////////////////
 	/**
@@ -546,6 +552,9 @@ public class RWUtils {
 				} else if (associationLabel2CodeHashMap.containsKey(propertyType)) {
 					String associationCode = (String) associationLabel2CodeHashMap.get(propertyType);
 					values = processAssociation(associationCode, conceptProperties, property, column, conceptHash, namedGraph, restURL);
+				} else if (roleLabel2CodeHashMap.containsKey(propertyType)) {
+					String roleCode = (String) roleLabel2CodeHashMap.get(propertyType);
+					values = processAssociation(roleCode, conceptProperties, property, column, conceptHash, namedGraph, restURL);
 				}
 
 				if (values == null || values.size() == 0) {

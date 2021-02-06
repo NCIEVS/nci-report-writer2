@@ -413,42 +413,6 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		query.append("}").append("\n");
 		return query.toString();
 	}
-/*
-	public String construct_get_subsets(String named_graph, String root, boolean subset_code_only) {
-		//String prefixes = getPrefixes();
-		StringBuffer buf = new StringBuffer();
-		//buf.append(prefixes);
-		if (subset_code_only) {
-			buf.append("select distinct ?x_code ").append("\n");
-		} else {
-			buf.append("select distinct ?x_label ?x_code ?p0_label ?p0_value ").append("\n");
-		}
-		buf.append("from <" + named_graph + ">").append("\n");
-		buf.append("where  { ").append("\n");
-		buf.append("                ?x a owl:Class .").append("\n");
-		buf.append("                ?x :NHC0 ?x_code .").append("\n");
-		buf.append("                ?x rdfs:label ?x_label .").append("\n");
-		buf.append("                ?y a owl:Class .").append("\n");
-		buf.append("                ?y :NHC0 ?y_code .").append("\n");
-		buf.append("                ?y :NHC0 \"" + root + "\"^^xsd:string .").append("\n");
-		buf.append("                ?y rdfs:label ?y_label .").append("\n");
-		buf.append("                ?x ?p ?y .").append("\n");
-		buf.append("                ?p rdfs:label ?p_label .").append("\n");
-		buf.append("                ?p rdfs:label \"Concept_In_Subset\"^^xsd:string .").append("\n");
-		buf.append("").append("\n");
-		buf.append("                ?z a owl:Class .").append("\n");
-		buf.append("                ?z ?p1 ?x .").append("\n");
-		buf.append("                ?p1 rdfs:label \"Concept_In_Subset\"^^xsd:string .").append("\n");
-		buf.append("").append("\n");
-		buf.append("").append("\n");
-		buf.append("                ?x ?p0 ?p0_value .").append("\n");
-		buf.append("                ?p0 rdfs:label \"Extensible_List\"^^xsd:string .").append("\n");
-		buf.append("                ?p0 rdfs:label ?p0_label .").append("\n");
-		buf.append("").append("\n");
-		buf.append("}").append("\n");
-		return buf.toString();
-	}
-*/
 
 	public String construct_get_subsets(String named_graph, String root, boolean subset_code_only) {
 		StringBuffer buf = new StringBuffer();
@@ -649,4 +613,17 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		return buf.toString();
 	}
 
+	public String constructSupportedRoleQuery(String named_graph) {
+		StringBuffer buf = new StringBuffer();
+		buf.append("").append("\n");
+		buf.append("SELECT distinct ?supportedRoleName ?supportedRoleCode ").append("\n");
+		buf.append("{").append("\n");
+		buf.append("    graph <" + named_graph + "> {").append("\n");
+		buf.append("            ?p a owl:ObjectProperty.").append("\n");
+		buf.append("            ?p :NHC0 ?supportedRoleCode .").append("\n");
+		buf.append("            ?p rdfs:label ?supportedRoleName ").append("\n");
+		buf.append("    }").append("\n");
+		buf.append("}").append("\n");
+		return buf.toString();
+	}
 }

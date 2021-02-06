@@ -9,6 +9,7 @@ import gov.nih.nci.evs.reportwriter.core.model.evs.EvsProperty;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAssociation;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedAssociation;
+import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedRole;
 
 public interface SparqlQueryManagerService {
 
@@ -47,5 +48,8 @@ public interface SparqlQueryManagerService {
 	public List<String> getMatchedAnnotatedTarget(String named_graph, String code, String propertyName, Vector qualifierNames, Vector qualifierValues, String restURL);
 
 	public List<String> getSubsetCconceptData(String named_graph, String code, String restURL);
+
+	public List <EvsSupportedRole> getEvsSupportedRoles(String namedGraph, String restURL);
+
 
 }

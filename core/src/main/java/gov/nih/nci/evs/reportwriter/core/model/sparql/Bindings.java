@@ -30,6 +30,7 @@ public class Bindings {
 	////////////////////////////////////////////
 	private Property supportedAssociationName;
 	private Property supportedAssociationCode;
+
 	public Property getSupportedAssociationName() {
 		return supportedAssociationName;
 	}
@@ -42,27 +43,40 @@ public class Bindings {
 	public void setSupportedAssociationCode(Property supportedAssociationCode) {
 		this.supportedAssociationCode = supportedAssociationCode;
 	}
-	////////////////////////////////////////////
+
+	private Property supportedRoleName;
+	private Property supportedRoleCode;
+
+	public Property getSupportedRoleName() {
+		return supportedRoleName;
+	}
+	public Property getSupportedRoleCode() {
+		return supportedRoleCode;
+	}
+	public void setSupportedRoleName(Property supportedRoleName) {
+		this.supportedRoleName = supportedRoleName;
+	}
+	public void setSupportedRoleCode(Property supportedRoleCode) {
+		this.supportedRoleCode = supportedRoleCode;
+	}
 
 	public Property getSourceName() {
 		return sourceName;
 	}
-
 	public Property getSourceCode() {
 		return sourceCode;
 	}
-
 	public Property getAssociationName() {
 		return associationName;
 	}
-
 	public Property getTargetName() {
 		return targetName;
 	}
-
 	public Property getTargetCode() {
 		return targetCode;
 	}
+
+////////////////////////////////////////////
 
 	public void setSourceName(Property sourceName) {
 		this.sourceName = sourceName;
