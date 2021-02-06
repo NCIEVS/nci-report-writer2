@@ -113,10 +113,6 @@ public class RWUtils {
 	}
 
 	public void processSubset(Report reportOutput, List <EvsConcept> associatedConcepts, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns,PrintWriter logFile, String namedGraph, String restURL) {
-		//List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getEvsConceptInSubset(rootConcept.getCode(), namedGraph, restURL);
-		//log.info("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
-		//System.out.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
-		//logFile.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
 		int total = 0;
 		for (EvsConcept concept: associatedConcepts) {
 			total += 1;
@@ -212,9 +208,6 @@ public class RWUtils {
 	 * This methods supports recursion.
 	 */
 	public void processConceptSubclasses(Report reportOutput, EvsConcept parentConcept, HashMap<String,EvsConcept> conceptHash, List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile, String namedGraph, String restURL) {
-
-		System.out.println("In processConceptSubclasses ...");
-
 		if (currentLevel < maxLevel) {
 
 			if (parentConcept == null) {
@@ -259,9 +252,6 @@ public class RWUtils {
 	 * This methods supports recursion, but limited by the maxLevel parameters.
 	 */
 	public void processConceptSubclassesOnly(Report reportOutput,EvsConcept parentConcept,HashMap<String,EvsConcept> conceptHash,List <TemplateColumn> templateColumns, int currentLevel, int maxLevel, PrintWriter logFile, String namedGraph, String restURL) {
-
-		System.out.println("In processConceptSubclassesOnly ...");
-
 		if (currentLevel < maxLevel) {
 
 			if (parentConcept == null) {
@@ -553,7 +543,6 @@ public class RWUtils {
 					String associationCode = (String) associationLabel2CodeHashMap.get(propertyType);
 					values = processAssociation(associationCode, conceptProperties, property, column, conceptHash, namedGraph, restURL);
 				} else if (roleLabel2CodeHashMap.containsKey(propertyType)) {
-					//String roleCode = (String) roleLabel2CodeHashMap.get(propertyType);
 					values = processRole(concept.getCode(), propertyType, conceptProperties, property, column, conceptHash, namedGraph, restURL);
 				}
 
@@ -568,7 +557,6 @@ public class RWUtils {
 			}
 			reportOutput.getRows().add(reportRow);
 		} catch (Exception ex) {
-			//ex.printStackTrace();
 			System.out.println("ERROR: writeColumnData failed at " + concept.getLabel() + " (" + concept.getCode() + ") - column label: " + label);
 			if (parentConcept != null) {
 				System.out.println("\tparentConcept: " + parentConcept.getLabel() + "(" + parentConcept.getCode() + ")");
@@ -633,48 +621,83 @@ public class RWUtils {
 		return values;
 	}
 
+
+    public static void dumpList(String label, List list) {
+		if (list == null) return;
+		System.out.println("\n" + label + ":");
+		if (list == null) return;
+		if (list.size() == 0) {
+			System.out.println("\tNone");
+			return;
+		}
+        for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			int j = i+1;
+			System.out.println("\t(" + j + ") " + t);
+		}
+		System.out.println("\n");
+	}
+
 	public List <String> processRole(String code, String roleName, List <EvsProperty> conceptProperties,
 			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
 		List <String> values = new ArrayList <String>();
-		List<String> roleTargetCodes = sparqlQueryManagerService.getRoleTargets(namedGraph, code, roleName, restURL);
-		for (int i = 0; i < roleTargetCodes.size(); i++ ) {
-			String targetCode = roleTargetCodes.get(i);
-			EvsConcept assocConcept = null;
-			if (conceptHash.containsKey(targetCode)) {
-				assocConcept = conceptHash.get(code);
-			} else {
-	            assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
-	            assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-	            assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
-	            conceptHash.put(targetCode, assocConcept);
+
+		try {
+			List<String> roleTargetCodes = sparqlQueryManagerService.getRoleTargets(namedGraph, code, roleName, restURL);
+
+	/*
+	- columnNumber: 5
+	  label: "Disease may Have Cytogenetic Abnormality PT"
+	  display: "property"
+	  propertyType: "Disease_May_Have_Cytogenetic_Abnormality"
+	  property: "property"
+	  source: "NCI"
+	  group: "PT"
+	  subsource: null
+	  attr: null
+	*/
+			if (roleTargetCodes == null || roleTargetCodes.size() == 0) return values;
+			for (int i = 0; i < roleTargetCodes.size(); i++ ) {
+				String targetCode = roleTargetCodes.get(i);
+				EvsConcept assocConcept = null;
+				if (conceptHash.containsKey(targetCode)) {
+					assocConcept = conceptHash.get(code);
+				} else {
+					assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
+					assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
+					assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
+					conceptHash.put(targetCode, assocConcept);
+				}
+				String col_property = column.getProperty(); //target
+				String col_display = column.getDisplay();
+				List <EvsAxiom> conceptAxioms = assocConcept.getAxioms();
+
+				if (col_property.compareTo("NHC0") == 0) {
+					List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
+					List <String> asso_properties = EVSUtils.getProperty("NHC0", asso_conceptProperties);
+					values.add(asso_properties.get(0));
+				} else if (col_property.compareTo("FULL_SYN") == 0 || col_property.compareTo("P90") == 0) {
+					values.addAll(getFullSynonym(column,conceptAxioms));
+				} else if (col_property.compareTo("DEFINITION") == 0 || col_property.compareTo("P97") == 0) {
+					values.addAll(getDefinition(column,conceptAxioms));
+				} else if (col_property.compareTo("ALT_DEFINITION") == 0 || col_property.compareTo("P325") == 0) {
+					values.addAll(getDefinition(column,conceptAxioms));
+
+				//KLO Modification 09252020
+				} else if (col_property.compareTo("term-name") == 0 || col_property.compareTo("P382") == 0) {
+					values.addAll(getFullSynonym(column,conceptAxioms));
+				//KLO Modification 10092020
+				//KLO Modification 01312021
+				} else if (col_display.compareTo("subsource_code") == 0 || col_display.compareTo("P385") == 0) {
+					values.addAll(getFullSynonym(column,conceptAxioms));
+
+				} else {
+					List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
+					values.addAll(EVSUtils.getProperty(col_property, asso_conceptProperties));
+				}
 			}
-			String col_property = column.getProperty();
-			String col_display = column.getDisplay();
-			List <EvsAxiom> conceptAxioms = assocConcept.getAxioms();
+		} catch (Exception ex) {
 
-			if (col_property.compareTo("NHC0") == 0) {
-				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
-				List <String> asso_properties = EVSUtils.getProperty("NHC0", asso_conceptProperties);
-				values.add(asso_properties.get(0));
-			} else if (col_property.compareTo("FULL_SYN") == 0 || col_property.compareTo("P90") == 0) {
-				values.addAll(getFullSynonym(column,conceptAxioms));
-			} else if (col_property.compareTo("DEFINITION") == 0 || col_property.compareTo("P97") == 0) {
-				values.addAll(getDefinition(column,conceptAxioms));
-			} else if (col_property.compareTo("ALT_DEFINITION") == 0 || col_property.compareTo("P325") == 0) {
-				values.addAll(getDefinition(column,conceptAxioms));
-
-			//KLO Modification 09252020
-			} else if (col_property.compareTo("term-name") == 0 || col_property.compareTo("P382") == 0) {
-				values.addAll(getFullSynonym(column,conceptAxioms));
-			//KLO Modification 10092020
-			//KLO Modification 01312021
-			} else if (col_display.compareTo("subsource_code") == 0 || col_display.compareTo("P385") == 0) {
-				values.addAll(getFullSynonym(column,conceptAxioms));
-
-			} else {
-				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
-				values.addAll(EVSUtils.getProperty(col_property, asso_conceptProperties));
-			}
 		}
 		return values;
 	}
@@ -927,16 +950,6 @@ public class RWUtils {
 			  // Don't do anything at this time
 			}
 		}
-
-		/*
-		try {
-            ObjectMapper writer = new ObjectMapper();
-            System.out.println(writer.writerWithDefaultPrettyPrinter().writeValueAsString(axiomsKeep));
-        } catch (Exception ex){
-        	System.err.println(ex);
-        }
-        */
-
 		return values;
 	}
 
@@ -1031,7 +1044,6 @@ public class RWUtils {
 				}
 				int total = 0;
 				for (EvsConcept concept: associatedConcepts) {
-					//System.out.println(concept.getCode() + " " + concept.getLabel());
 					total += 1;
 					if (total % 100 == 0) {
 						log.info("Number of associations processed: " + total);
