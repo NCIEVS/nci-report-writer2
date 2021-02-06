@@ -51,5 +51,5 @@ public interface SparqlQueryManagerService {
 
 	public List <EvsSupportedRole> getEvsSupportedRoles(String namedGraph, String restURL);
 
-
+	public List<String> getRoleTargets(String named_graph, String code, String roleName, String restURL);
 }

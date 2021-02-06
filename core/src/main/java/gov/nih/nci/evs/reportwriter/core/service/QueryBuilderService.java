@@ -40,4 +40,6 @@ public interface QueryBuilderService {
 
 	public String constructSupportedRoleQuery(String namedGraph);
 
+	public String construct_get_role_targets(String named_graph, String code, String roleName);
+
 }

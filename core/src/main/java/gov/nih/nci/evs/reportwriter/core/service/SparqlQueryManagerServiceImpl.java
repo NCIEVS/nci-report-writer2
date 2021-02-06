@@ -637,6 +637,13 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 		return parseJSON(json);
 	}
 
+	public List<String> getRoleTargets(String named_graph, String code, String roleName, String restURL) {
+		String queryPrefix = queryBuilderService.contructPrefix();
+		String query = queryBuilderService.construct_get_role_targets(named_graph, code, roleName);
+		String json = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
+		return parseJSON(json);
+	}
+
 	public List<String> parseJSON(String json) {
 		if (json == null) return null;
 		Vector v = new JSONUtils().parseJSON(json);
