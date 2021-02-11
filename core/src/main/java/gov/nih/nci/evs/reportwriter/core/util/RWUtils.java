@@ -644,28 +644,16 @@ public class RWUtils {
 
 		try {
 			List<String> roleTargetCodes = sparqlQueryManagerService.getRoleTargets(namedGraph, code, roleName, restURL);
-
-	/*
-	- columnNumber: 5
-	  label: "Disease may Have Cytogenetic Abnormality PT"
-	  display: "property"
-	  propertyType: "Disease_May_Have_Cytogenetic_Abnormality"
-	  property: "property"
-	  source: "NCI"
-	  group: "PT"
-	  subsource: null
-	  attr: null
-	*/
 			if (roleTargetCodes == null || roleTargetCodes.size() == 0) return values;
 			for (int i = 0; i < roleTargetCodes.size(); i++ ) {
 				String targetCode = roleTargetCodes.get(i);
 				EvsConcept assocConcept = null;
 				if (conceptHash.containsKey(targetCode)) {
-					assocConcept = conceptHash.get(code);
+					assocConcept = conceptHash.get(targetCode);
 				} else {
-					assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
-					assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-					assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
+					assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(targetCode,namedGraph,restURL);
+					assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(targetCode,namedGraph,restURL));
+					assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(targetCode,namedGraph,restURL));
 					conceptHash.put(targetCode, assocConcept);
 				}
 				String col_property = column.getProperty(); //target
@@ -1039,7 +1027,6 @@ public class RWUtils {
 				List <EvsConcept> associatedConcepts = sparqlQueryManagerService.getAssociatedEvsConcepts(rootConcept.getCode(), namedGraph, restURL, associationName, sourceOf);
 				if (rootConcept != null) {
 					log.info("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
-					//System.out.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
 					logFile.println("Concept: " + rootConcept.getCode() + " Number of associations: " + associatedConcepts.size());
 				}
 				int total = 0;
@@ -1104,15 +1091,12 @@ public class RWUtils {
 				String code = (String) u.elementAt(1);
 
 				EvsConcept rootConcept = new EvsConcept();
-				//rootConcept.setCode(code);
-				//rootConcept.setLabel(name);
 				rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code, namedGraph, restURL);
 				rootConcept.setProperties(sparqlQueryManagerService.getEvsProperties(rootConcept.getCode(), namedGraph, restURL));
 				rootConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(rootConcept.getCode(), namedGraph, restURL));
 
 				List<EvsConcept> associatedConcepts = (List) root2AssociatedConceptHashMap.get(key);
 				for (EvsConcept concept: associatedConcepts) {
-					//System.out.println(concept.getCode() + " " + concept.getLabel());
 					total += 1;
 					if (total % 100 == 0) {
 						log.info("Number of associations processed: " + total);

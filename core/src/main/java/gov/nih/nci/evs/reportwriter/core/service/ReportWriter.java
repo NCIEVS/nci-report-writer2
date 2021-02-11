@@ -301,8 +301,6 @@ public class ReportWriter {
         logFile.println("Version: " + evsVersionInfo.getVersion());
         logFile.println(reportTemplate.toString());
 
-
-
         // The conceptHash is used to improve performance, especially in the cases for reports that
         // are looking for parents concepts.  By first looking in the hash for the concept, time
         // can be saved by not repeating the SPARQL queries.
