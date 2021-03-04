@@ -324,6 +324,13 @@ public class RWUtils {
 		}
 	}
 
+	public static boolean isNull(String str){
+		if (str == null) return true;
+		if (str.length() == 0) return true;
+		if (str.compareTo("null") == 0) return true;
+		return false;
+	}
+
 	/**
 	 * Populate a row of data based on the SPARQL query results and the template column definitions.
 	 *
@@ -509,19 +516,25 @@ public class RWUtils {
 						}
 					}
 				} else if (propertyType.equals("Maps_To Axiom")) {
+					String source = column.getSource();
 					List <EvsAxiom> axioms = concept.getAxioms();
 					for (EvsAxiom axiom: axioms) {
 						List <String> v = new ArrayList <String> ();
 						if (axiom.getAnnotatedProperty().equals("P375")) {
-							v.add(axiom.getAnnotatedTarget());
-							v.add(axiom.getTargetTerminology());
-							//[EVSREPORT2-36] Adding Target_Terminology_Version Qualifier
-							v.add(axiom.getTargetTerminologyVersion());
-							v.add(axiom.getRelationshipToTarget());
-							v.add(axiom.getTargetTermType());
-							v.add(axiom.getTargetCode());
-							String vv = String.join(propertySepartor, v);
-							values.add(vv);
+							boolean include = true;
+							if (!isNull(axiom.getTargetTerminology()) && axiom.getTargetTerminology().compareTo(source) != 0) {
+								include = false;
+							}
+							if (include) {
+								v.add(axiom.getAnnotatedTarget());
+								v.add(axiom.getTargetTerminology());
+								v.add(axiom.getTargetTerminologyVersion());
+								v.add(axiom.getRelationshipToTarget());
+								v.add(axiom.getTargetTermType());
+								v.add(axiom.getTargetCode());
+								String vv = String.join(propertySepartor, v);
+								values.add(vv);
+							}
 						}
 					}
 				} else if (propertyType.equals("FULL_SYN Axiom")) {
