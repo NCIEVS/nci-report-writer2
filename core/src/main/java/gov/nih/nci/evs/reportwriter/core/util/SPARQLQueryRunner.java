@@ -1,4 +1,4 @@
-package gov.nih.nci.evs.reportwriter.core.util;
+import gov.nih.nci.evs.reportwriter.core.util.*;
 
 import java.nio.charset.Charset;
 import java.time.Duration;
@@ -24,9 +24,9 @@ import org.springframework.web.client.RestTemplate;
  * Helper class using the RestTemplate to call the SPARQL endpoint using a SPARQL query.
  *
  */
-public class RESTUtils {
+public class SPARQLQueryRunner {
 
-	private static final Logger log = LoggerFactory.getLogger(RESTUtils.class);
+	private static final Logger log = LoggerFactory.getLogger(SPARQLQueryRunner.class);
 
 	private String username;
 	private String password;
@@ -34,14 +34,34 @@ public class RESTUtils {
 	private int connectTimeout;
 	gov.nih.nci.evs.reportwriter.core.util.JSONUtils jsonUtils = null;
 
-	public RESTUtils () {}
+	public SPARQLQueryRunner () {}
 
-	public RESTUtils(String username, String password,int readTimeout, int connectTimeout) {
+	public SPARQLQueryRunner(String username, String password,int readTimeout, int connectTimeout) {
 		this.username = username;
 		this.password = password;
 		this.readTimeout= readTimeout;
 		this.connectTimeout = connectTimeout;
 		this.jsonUtils = new gov.nih.nci.evs.reportwriter.core.util.JSONUtils();
+
+
+		System.out.println("****************** SPARQLQueryRunner instantiated...");
+	}
+
+    public String getPrefixes() {
+		StringBuffer buf = new StringBuffer();
+		buf.append("PREFIX :<http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#>").append("\n");
+		buf.append("PREFIX base:<http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl>").append("\n");
+		buf.append("PREFIX Thesaurus:<http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#>").append("\n");
+		buf.append("PREFIX xml:<http://www.w3.org/XML/1998/namespace>").append("\n");
+		buf.append("PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>").append("\n");
+		buf.append("PREFIX owl:<http://www.w3.org/2002/07/owl#>").append("\n");
+		buf.append("PREFIX owl2xml:<http://www.w3.org/2006/12/owl2-xml#>").append("\n");
+		buf.append("PREFIX protege:<http://protege.stanford.edu/plugins/owl/protege#>").append("\n");
+		buf.append("PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>").append("\n");
+		buf.append("PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>").append("\n");
+		buf.append("PREFIX ncicp:<http://ncicb.nci.nih.gov/xml/owl/EVS/ComplexProperties.xsd#>").append("\n");
+		buf.append("PREFIX dc:<http://purl.org/dc/elements/1.1/>").append("\n");
+		return buf.toString();
 	}
 
 
@@ -160,6 +180,13 @@ public class RESTUtils {
 		if (w == null) return null;
         w = jsonUtils.getResponseValues(w);
         return w;
+	}
+
+	public Vector run_query(String restURL, String query) {
+		String queryPrefix = getPrefixes();
+		String res = runSPARQL(queryPrefix + query, restURL);
+        Vector v = new gov.nih.nci.evs.reportwriter.core.util.JSONUtils().parseJSON(res);
+        return new gov.nih.nci.evs.reportwriter.core.util.ParserUtils().getResponseValues(v);
 	}
 
 }
