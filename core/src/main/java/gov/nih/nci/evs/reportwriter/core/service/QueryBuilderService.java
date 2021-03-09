@@ -42,4 +42,6 @@ public interface QueryBuilderService {
 
 	public String construct_get_role_targets(String named_graph, String code, String roleName);
 
+	public String construct_get_association_targets(String named_graph, String code, String associationName);
+
 }

@@ -162,4 +162,44 @@ public class RESTUtils {
         return w;
 	}
 
+/*
+	public static void main(String[] args) {
+		String username = ConfigurationController.username;
+		String password = ConfigurationController.password;
+		String serviceUrl = ConfigurationController.serviceUrl;
+		String namedGraph = ConfigurationController.namedGraph;
+		String restURL = ConfigurationController.restURL;
+		//String serviceUrl_ctrp = ConfigurationController.serviceUrl_ctrp;
+
+		//String filename = args[4];
+		//System.out.println(serviceUrl);
+		System.out.println(restURL);
+		System.out.println(namedGraph);
+		System.out.println(username);
+		System.out.println(password);
+
+		String filename = args[0];
+		System.out.println(filename);
+
+		int readTimeout = 100000;
+		int connectTimeout = 100000;
+
+		RESTUtils restUtils = new RESTUtils(username, password, readTimeout, connectTimeout);
+		String query = loadQuery(filename, false);
+		System.out.println(query);
+
+		String json = restUtils.runSPARQL(query, restURL);
+		//System.out.println(response);
+
+        gov.nih.nci.evs.reportwriter.core.util.JSONUtils jsonUtils = new gov.nih.nci.evs.reportwriter.core.util.JSONUtils();
+
+		Vector w = jsonUtils.parseJSON(json);
+        w = jsonUtils.getResponseValues(w);
+		//Vector w = new Vector();
+		//w.add(response);
+		Utils.saveToFile("response.txt", w);
+
+
+	}
+	*/
 }

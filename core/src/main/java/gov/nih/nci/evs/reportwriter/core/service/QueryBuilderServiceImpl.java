@@ -694,4 +694,26 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		buf.append("}").append("\n");
 		return buf.toString();
 	}
+
+	public String construct_get_association_targets(String named_graph, String code, String associationName) {
+		StringBuffer buf = new StringBuffer();
+		buf.append("SELECT distinct ?targetCode").append("\n");
+		buf.append("{").append("\n");
+		buf.append("    graph <" + named_graph + ">").append("\n");
+		buf.append("    {").append("\n");
+		buf.append("            ?x a owl:Class .").append("\n");
+		buf.append("            ?x rdfs:label ?sourceName .").append("\n");
+		buf.append("            ?x :NHC0 ?x_code .").append("\n");
+		buf.append("            ?x :NHC0 \"" + code + "\"^^xsd:string .").append("\n");
+		buf.append("            ?y a owl:AnnotationProperty .").append("\n");
+		buf.append("            ?x ?y ?z .").append("\n");
+		buf.append("            ?y rdfs:label ?associationName .").append("\n");
+		buf.append("            ?y rdfs:label \"" + associationName + "\"^^xsd:string .").append("\n");
+		buf.append("            ?z :NHC0 ?targetCode .").append("\n");
+		buf.append("            ?z rdfs:label ?targetName .").append("\n");
+		buf.append("    }").append("\n");
+		buf.append("}").append("\n");
+		return buf.toString();
+	}
+
 }

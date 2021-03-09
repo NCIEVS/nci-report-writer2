@@ -86,6 +86,14 @@ public class RWUtils {
 
 	public void setAssociationLabel2CodeHashMap(HashMap hmap) {
 		this.associationLabel2CodeHashMap = hmap;
+		/*
+		Iterator it = hmap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			String value = (String) hmap.get(key);
+			System.out.println(key + " --> " + value);
+		}
+		*/
 	}
 
 	public void setRoleLabel2CodeHashMap(HashMap hmap) {
@@ -349,6 +357,7 @@ public class RWUtils {
 			for (TemplateColumn column: templateColumns) {
 				label = column.getLabel();
 				String propertyType = column.getPropertyType();
+
 				String property = column.getProperty();
 				String columnString = "";
 				List <String> values = new ArrayList <String>();
@@ -553,8 +562,7 @@ public class RWUtils {
 					}
 
 				} else if (associationLabel2CodeHashMap.containsKey(propertyType)) {
-					String associationCode = (String) associationLabel2CodeHashMap.get(propertyType);
-					values = processAssociation(associationCode, conceptProperties, property, column, conceptHash, namedGraph, restURL);
+					values = processAssociation(concept.getCode(), propertyType, conceptProperties, property, column, conceptHash, namedGraph, restURL);
 				} else if (roleLabel2CodeHashMap.containsKey(propertyType)) {
 					values = processRole(concept.getCode(), propertyType, conceptProperties, property, column, conceptHash, namedGraph, restURL);
 				}
@@ -575,80 +583,6 @@ public class RWUtils {
 				System.out.println("\tparentConcept: " + parentConcept.getLabel() + "(" + parentConcept.getCode() + ")");
 		    }
 		}
-	}
-
-/*
-  - columnNumber: 7
-    label: Has_Pharmaceutical_Administration_Method Source PT
-    display: property
-    propertyType: Has_Pharmaceutical_Administration_Method
-    property: term-name
-    source: EDQM-HC
-    group:
-    subsource:
-*/
-
-	public List <String> processAssociation(String associationCode, List <EvsProperty> conceptProperties,
-			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
-		List <String> values = new ArrayList <String>();
-		List <String> properties = EVSUtils.getProperty(associationCode, conceptProperties);
-		for (int i = 0; i < properties.size(); i++ ) {
-			String code = properties.get(i).replaceAll("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#","");
-			EvsConcept assocConcept = null;
-			if (conceptHash.containsKey(code)) {
-				assocConcept = conceptHash.get(code);
-			} else {
-	            assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(code,namedGraph,restURL);
-	            assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(code,namedGraph,restURL));
-	            assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(code,namedGraph,restURL));
-	            conceptHash.put(code, assocConcept);
-			}
-			String col_property = column.getProperty();
-			String col_display = column.getDisplay();
-			List <EvsAxiom> conceptAxioms = assocConcept.getAxioms();
-
-			if (col_property.compareTo("NHC0") == 0) {
-				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
-				List <String> asso_properties = EVSUtils.getProperty("NHC0", asso_conceptProperties);
-				values.add(asso_properties.get(0));
-			} else if (col_property.compareTo("FULL_SYN") == 0 || col_property.compareTo("P90") == 0) {
-				values.addAll(getFullSynonym(column,conceptAxioms));
-			} else if (col_property.compareTo("DEFINITION") == 0 || col_property.compareTo("P97") == 0) {
-				values.addAll(getDefinition(column,conceptAxioms));
-			} else if (col_property.compareTo("ALT_DEFINITION") == 0 || col_property.compareTo("P325") == 0) {
-				values.addAll(getDefinition(column,conceptAxioms));
-
-			//KLO Modification 09252020
-			} else if (col_property.compareTo("term-name") == 0 || col_property.compareTo("P382") == 0) {
-				values.addAll(getFullSynonym(column,conceptAxioms));
-			//KLO Modification 10092020
-			//KLO Modification 01312021
-			} else if (col_display.compareTo("subsource_code") == 0 || col_display.compareTo("P385") == 0) {
-				values.addAll(getFullSynonym(column,conceptAxioms));
-
-			} else {
-				List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
-				values.addAll(EVSUtils.getProperty(col_property, asso_conceptProperties));
-			}
-		}
-		return values;
-	}
-
-
-    public static void dumpList(String label, List list) {
-		if (list == null) return;
-		System.out.println("\n" + label + ":");
-		if (list == null) return;
-		if (list.size() == 0) {
-			System.out.println("\tNone");
-			return;
-		}
-        for (int i=0; i<list.size(); i++) {
-			String t = (String) list.get(i);
-			int j = i+1;
-			System.out.println("\t(" + j + ") " + t);
-		}
-		System.out.println("\n");
 	}
 
 	public List <String> processRole(String code, String roleName, List <EvsProperty> conceptProperties,
@@ -683,12 +617,8 @@ public class RWUtils {
 					values.addAll(getDefinition(column,conceptAxioms));
 				} else if (col_property.compareTo("ALT_DEFINITION") == 0 || col_property.compareTo("P325") == 0) {
 					values.addAll(getDefinition(column,conceptAxioms));
-
-				//KLO Modification 09252020
 				} else if (col_property.compareTo("term-name") == 0 || col_property.compareTo("P382") == 0) {
 					values.addAll(getFullSynonym(column,conceptAxioms));
-				//KLO Modification 10092020
-				//KLO Modification 01312021
 				} else if (col_display.compareTo("subsource_code") == 0 || col_display.compareTo("P385") == 0) {
 					values.addAll(getFullSynonym(column,conceptAxioms));
 
@@ -701,6 +631,75 @@ public class RWUtils {
 
 		}
 		return values;
+	}
+
+//values = processAssociation(associationCode, conceptProperties, property, column, conceptHash, namedGraph, restURL);
+
+	public List <String> processAssociation(String code, String associationName, List <EvsProperty> conceptProperties,
+			String property, TemplateColumn column, HashMap<String,EvsConcept> conceptHash, String namedGraph, String restURL) {
+
+		List <String> values = new ArrayList <String>();
+
+		try {
+			List<String> associationTargetCodes = sparqlQueryManagerService.getAssociationTargets(namedGraph, code, associationName, restURL);
+			if (associationTargetCodes == null || associationTargetCodes.size() == 0) return values;
+			for (int i = 0; i < associationTargetCodes.size(); i++ ) {
+				String targetCode = associationTargetCodes.get(i);
+				EvsConcept assocConcept = null;
+				if (conceptHash.containsKey(targetCode)) {
+					assocConcept = conceptHash.get(targetCode);
+				} else {
+					assocConcept = sparqlQueryManagerService.getEvsConceptDetailShort(targetCode,namedGraph,restURL);
+					assocConcept.setProperties(sparqlQueryManagerService.getEvsProperties(targetCode,namedGraph,restURL));
+					assocConcept.setAxioms(sparqlQueryManagerService.getEvsAxioms(targetCode,namedGraph,restURL));
+					conceptHash.put(targetCode, assocConcept);
+				}
+				String col_property = column.getProperty(); //target
+				String col_display = column.getDisplay();
+				List <EvsAxiom> conceptAxioms = assocConcept.getAxioms();
+
+				if (col_property.compareTo("NHC0") == 0) {
+					List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
+					List <String> asso_properties = EVSUtils.getProperty("NHC0", asso_conceptProperties);
+  		            values.add(asso_properties.get(0));
+
+				} else if (col_property.compareTo("FULL_SYN") == 0 || col_property.compareTo("P90") == 0) {
+					values.addAll(getFullSynonym(column,conceptAxioms));
+				} else if (col_property.compareTo("DEFINITION") == 0 || col_property.compareTo("P97") == 0) {
+					values.addAll(getDefinition(column,conceptAxioms));
+				} else if (col_property.compareTo("ALT_DEFINITION") == 0 || col_property.compareTo("P325") == 0) {
+					values.addAll(getDefinition(column,conceptAxioms));
+				} else if (col_property.compareTo("term-name") == 0 || col_property.compareTo("P382") == 0) {
+					values.addAll(getFullSynonym(column,conceptAxioms));
+				} else if (col_display.compareTo("subsource_code") == 0 || col_display.compareTo("P385") == 0) {
+					values.addAll(getFullSynonym(column,conceptAxioms));
+
+				} else {
+					List <EvsProperty> asso_conceptProperties = assocConcept.getProperties();
+					values.addAll(EVSUtils.getProperty(col_property, asso_conceptProperties));
+				}
+			}
+		} catch (Exception ex) {
+
+		}
+		return values;
+	}
+
+
+    public static void dumpList(String label, List list) {
+		if (list == null) return;
+		System.out.println("\n" + label + ":");
+		if (list == null) return;
+		if (list.size() == 0) {
+			System.out.println("\tNone");
+			return;
+		}
+        for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			int j = i+1;
+			System.out.println("\t(" + j + ") " + t);
+		}
+		System.out.println("\n");
 	}
 
     public boolean compareQualifierValues(String value1, String value2) {
