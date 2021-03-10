@@ -86,14 +86,6 @@ public class RWUtils {
 
 	public void setAssociationLabel2CodeHashMap(HashMap hmap) {
 		this.associationLabel2CodeHashMap = hmap;
-		/*
-		Iterator it = hmap.keySet().iterator();
-		while (it.hasNext()) {
-			String key = (String) it.next();
-			String value = (String) hmap.get(key);
-			System.out.println(key + " --> " + value);
-		}
-		*/
 	}
 
 	public void setRoleLabel2CodeHashMap(HashMap hmap) {
@@ -357,6 +349,7 @@ public class RWUtils {
 			for (TemplateColumn column: templateColumns) {
 				label = column.getLabel();
 				String propertyType = column.getPropertyType();
+				String source = column.getSource();
 
 				String property = column.getProperty();
 				String columnString = "";
@@ -391,11 +384,7 @@ public class RWUtils {
 					values = getDefinition(column,conceptAxioms);
 				} else if (propertyType.equals("ALT_DEFINITION")) {
 					values = getDefinition(column,conceptAxioms);
-				/*
-				 * Not needed because hasDbXref is now a property only. Mar 29, 2018
-				} else if (propertyType.equals("hasDbXref")) {
-					values = getDbXref(column,conceptAxioms);
-				*/
+
 				} else if (propertyType.equals("Associated Concept Code")) {
 					if (parentConcept != null) {
 						values = EVSUtils.getProperty(property, parentConcept.getProperties());
@@ -525,15 +514,17 @@ public class RWUtils {
 						}
 					}
 				} else if (propertyType.equals("Maps_To Axiom")) {
-					String source = column.getSource();
+
 					List <EvsAxiom> axioms = concept.getAxioms();
 					for (EvsAxiom axiom: axioms) {
 						List <String> v = new ArrayList <String> ();
 						if (axiom.getAnnotatedProperty().equals("P375")) {
-							boolean include = true;
-							if (!isNull(axiom.getTargetTerminology()) && axiom.getTargetTerminology().compareTo(source) != 0) {
-								include = false;
+							boolean include = false;
+
+							if (!isNull(axiom.getTargetTerminology()) && axiom.getTargetTerminology().compareTo(source) == 0) {
+								include = true;
 							}
+
 							if (include) {
 								v.add(axiom.getAnnotatedTarget());
 								v.add(axiom.getTargetTerminology());
@@ -712,12 +703,25 @@ public class RWUtils {
 	    String termGroup, String termSource, String sourceCode, String subsourceName) {
 		ArrayList<String> values = new ArrayList<String>();
 
+/*
+- columnNumber: 4
+  label: "NCIt PT"
+  display: "property"
+  propertyType: "property"
+  property: "term-name"
+  source: "NCI"
+  group: "PT"
+  subsource: null
+  attr: null
+*/
+
 //10092020
 		if (qualifier.equals("termName")) {
 			for (EvsAxiom axiom: axioms) {
 			    boolean matched =
 			        compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
 			        compareQualifierValues(termSource, axiom.getTermSource()) &&
+			        compareQualifierValues(termGroup, axiom.getTermGroup()) &&
 			        compareQualifierValues(subsourceName, axiom.getSubsourceName());
 			    if (matched && axiom.getAnnotatedTarget() != null) {
 					values.add(axiom.getAnnotatedTarget());
@@ -739,7 +743,6 @@ public class RWUtils {
 			for (EvsAxiom axiom: axioms) {
 			    boolean matched =
 			        compareQualifierValues(termGroup, axiom.getTermGroup()) &&
-			        //compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
 			        compareQualifierValues(termSource, axiom.getTermSource()) &&
 			        compareQualifierValues(subsourceName, axiom.getSubsourceName());
 			    if (matched && axiom.getSourceCode() != null) {
@@ -752,7 +755,6 @@ public class RWUtils {
 			    boolean matched =
 			        compareQualifierValues(termGroup, axiom.getTermGroup()) &&
 			        compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
-			        //compareQualifierValues(termSource, axiom.getTermSource()) &&
 			        compareQualifierValues(subsourceName, axiom.getSubsourceName());
 
 			    if (matched && axiom.getTermSource() != null) {
@@ -765,7 +767,6 @@ public class RWUtils {
 			        compareQualifierValues(termGroup, axiom.getTermGroup()) &&
 			        compareQualifierValues(sourceCode, axiom.getSourceCode()) &&
 			        compareQualifierValues(termSource, axiom.getTermSource());
-			        //compareQualifierValues(subsourceName, axiom.getSubsourceName());
 
 			    if (matched && axiom.getSubsourceName() != null) {
 					values.add(axiom.getSubsourceName());
@@ -804,6 +805,17 @@ public class RWUtils {
   group: "PT"
   subsource: "AML"
   attr: null
+
+- columnNumber: 4
+  label: "NCIt PT"
+  display: "property"
+  propertyType: "property"
+  property: "term-name"
+  source: "NCI"
+  group: "PT"
+  subsource: null
+  attr: null
+
 */
 
 		if (property.compareTo("property") == 0 && display.compareTo("subsource_code") == 0) {
