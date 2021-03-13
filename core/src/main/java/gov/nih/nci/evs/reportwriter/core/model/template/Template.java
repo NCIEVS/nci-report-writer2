@@ -10,7 +10,7 @@ public class Template {
 	private String association;
 	private Integer level;
 	private Integer sortColumn;
-	
+
 	private List <TemplateColumn> columns;
 
 	public String getName() {
@@ -69,7 +69,7 @@ public class Template {
 	public void setColumns(List<TemplateColumn> columns) {
 		this.columns = columns;
 	}
-	
+
 	public String toString() {
 		StringBuffer str = new StringBuffer();
 		str.append("Name: " + name + "\n");
@@ -77,7 +77,7 @@ public class Template {
 		str.append("Root Concept Code: " + rootConceptCode + "\n");
 		str.append("Association: " + association + "\n");
 		str.append("Level: " + level + "\n");
-		str.append("Sort Column: " + sortColumn + "\n");
+		str.append("Sort Column: " + sortColumn);
 		return str.toString();
 	}
 }

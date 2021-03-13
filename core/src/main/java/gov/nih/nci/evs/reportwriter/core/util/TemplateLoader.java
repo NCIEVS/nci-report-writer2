@@ -234,18 +234,11 @@ public class TemplateLoader {
 
 	public void dumpTemplate(Template template) {
         System.out.println(template.toString());
+        System.out.println("columns:");
         List<TemplateColumn> list = template.getColumns();
         for (int i=0; i<list.size(); i++) {
 			TemplateColumn col = (TemplateColumn) list.get(i);
-            System.out.println("\n" + col.getColumnNumber());
-            System.out.println("" + col.getLabel());
-            System.out.println("" + col.getDisplay());
-            System.out.println("" + col.getPropertyType());
-            System.out.println("" + col.getProperty());
-            System.out.println("" + col.getSource());
-            System.out.println("" + col.getGroup());
-            System.out.println("" + col.getSubsource());
-            System.out.println("" + col.getAttr());
+			System.out.println(col.toString());
 		}
 	}
 

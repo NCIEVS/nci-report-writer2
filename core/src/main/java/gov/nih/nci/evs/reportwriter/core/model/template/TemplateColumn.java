@@ -65,4 +65,19 @@ public class TemplateColumn {
 	public void setAttr(String attr) {
 		this.attr = attr;
 	}
+
+	public String toString() {
+		StringBuffer buf = new StringBuffer();
+		buf.append("- columnNumber: " + this.columnNumber).append("\n");
+		buf.append("  label: " + this.label).append("\n");
+		buf.append("  display: " + this.display).append("\n");
+		buf.append("  label: " + this.label).append("\n");
+		buf.append("  propertyType: " + this.propertyType).append("\n");
+		buf.append("  property: " + this.property).append("\n");
+		buf.append("  source: " + this.source).append("\n");
+		buf.append("  group: " + this.group).append("\n");
+		buf.append("  subsource: " + this.subsource).append("\n");
+		buf.append("  attr: " + this.attr);
+		return buf.toString();
+	}
 }
