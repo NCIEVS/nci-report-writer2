@@ -66,7 +66,7 @@ public class TemplateColumn {
 		this.attr = attr;
 	}
 
-	public String toString() {
+	public String to_string() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("- columnNumber: " + this.columnNumber).append("\n");
 		buf.append("  label: " + this.label).append("\n");

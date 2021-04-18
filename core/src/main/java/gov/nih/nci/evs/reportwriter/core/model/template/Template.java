@@ -1,7 +1,7 @@
 package gov.nih.nci.evs.reportwriter.core.model.template;
 
-import java.util.List;
-
+import java.io.*;
+import java.util.*;
 
 public class Template {
 	private String name;
@@ -70,7 +70,41 @@ public class Template {
 		this.columns = columns;
 	}
 
-	public String toString() {
+	 public void saveToFile(String outputfile, Vector v) {
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(outputfile, "UTF-8");
+			if (v != null && v.size() > 0) {
+				for (int i=0; i<v.size(); i++) {
+					String t = (String) v.elementAt(i);
+					pw.println(t);
+				}
+		    }
+		} catch (Exception ex) {
+
+		} finally {
+			try {
+				pw.close();
+				System.out.println("Output file " + outputfile + " generated.");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	 }
+
+
+	public void save(String outputfile) {
+		Vector w = new Vector();
+        w.add(this.to_string());
+        w.add("columns:");
+        for (int i=0; i<columns.size(); i++) {
+			TemplateColumn col = (TemplateColumn) columns.get(i);
+			w.add(col.to_string());
+		}
+		saveToFile(outputfile, w);
+	}
+
+	public String to_string() {
 		StringBuffer str = new StringBuffer();
 		str.append("Name: " + name + "\n");
 		str.append("Type: " + type + "\n");
