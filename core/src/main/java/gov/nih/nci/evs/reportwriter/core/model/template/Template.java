@@ -92,15 +92,9 @@ public class Template {
 		}
 	 }
 
-
 	public void save(String outputfile) {
 		Vector w = new Vector();
         w.add(this.to_string());
-        w.add("columns:");
-        for (int i=0; i<columns.size(); i++) {
-			TemplateColumn col = (TemplateColumn) columns.get(i);
-			w.add(col.to_string());
-		}
 		saveToFile(outputfile, w);
 	}
 
