@@ -111,7 +111,12 @@ public class Template {
 		str.append("Root Concept Code: " + rootConceptCode + "\n");
 		str.append("Association: " + association + "\n");
 		str.append("Level: " + level + "\n");
-		str.append("Sort Column: " + sortColumn);
+		str.append("Sort Column: " + sortColumn + "\n");
+		str.append("columns: \n");
+        for (int i=0; i<columns.size(); i++) {
+			TemplateColumn col = (TemplateColumn) columns.get(i);
+			str.append(col.to_string() + "\n");
+		}
 		return str.toString();
 	}
 }
