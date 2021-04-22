@@ -159,6 +159,22 @@ public class RWReport2Excel {
 
 	}
 
+	public String generate(String restURL, String namedGraph, String version, String templateFile, String outputFileText) {
+		int n = templateFile.lastIndexOf(".");
+		String outputFile = templateFile.substring(0, n);
+
+        boolean exists = checkIfFileExists(templateFile);
+        if (!exists) {
+			System.out.println("Unable to find the template file - " + templateFile);
+			return "failure";
+		}
+
+		Report reportOutput = loadReport(outputFileText);
+	    return generate(restURL, namedGraph, version,
+	                    templateFile, reportOutput, outputFile);
+
+	}
+
 	public String generate(String restURL, String namedGraph, String version,
 	                       String templateFile, Report reportOutput, String outputFile) {
         /*
@@ -226,7 +242,7 @@ public class RWReport2Excel {
             final Integer sortColumn = sortColumnTemp;
             reportRows = removeDuplicates(reportRows);
 
-            Collections.sort(reportRows,(row1, row2) -> row1.getColumns().get(sortColumn).getValue().compareTo(row2.getColumns().get(sortColumn).getValue()));
+            //Collections.sort(reportRows,(row1, row2) -> row1.getColumns().get(sortColumn).getValue().compareTo(row2.getColumns().get(sortColumn).getValue()));
 
             for (ReportRow row: reportRows) {
             	excelRow = sheet.createRow(rowIndex++);
