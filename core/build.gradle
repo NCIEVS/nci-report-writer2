@@ -22,7 +22,7 @@ ext {
     /*
      * Software versions
      */
-    mysqlConnectorVersion = "5.1.37"
+    mysqlConnectorVersion = "5.1.49"
 }
 
 apply plugin:'java' 
