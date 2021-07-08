@@ -154,7 +154,7 @@ public class ReportWriter {
         String outputFileExcel = outputFile + ".xls";
         PrintWriter pw = null;
         Workbook wb = new HSSFWorkbook();
-        Sheet sheet = wb.createSheet("report");
+        Sheet sheet = wb.createSheet(evsVersionInfo.getVersion());
         sheet.createFreezePane(0, 1);
         int rowIndex = 0;
 
@@ -357,7 +357,7 @@ public class ReportWriter {
         String outputFileExcel = outputFile + ".xls";
         PrintWriter pw = null;
         Workbook wb = new HSSFWorkbook();
-        Sheet sheet = wb.createSheet("report");
+        Sheet sheet = wb.createSheet(evsVersionInfo.getVersion());
         sheet.createFreezePane(0, 1);
         int rowIndex = 0;
 
