@@ -72,6 +72,8 @@ public class NeoplasmCoreRelationships {
 
 	HashMap roleMap = null;
 
+	Vector molecularRoles = new Vector();
+
 
     public NeoplasmCoreRelationships(String value_set_ascii_file, String owlfile) {
 		this.value_set_ascii_file = value_set_ascii_file;
@@ -98,6 +100,22 @@ public class NeoplasmCoreRelationships {
 
 
 	private void initialize() {
+		/*
+		Disease_Has_Cytogenetic_Abnormality
+		Disease_Has_Molecular_Abnormality
+		Disease_May_Have_Cytogenetic_Abnormality
+		Disease_May_Have_Molecular_Abnormality
+		Disease_Mapped_To_Gene
+		Disease_Pathogenesis_Involves_Gene
+        */
+		molecularRoles = new Vector();
+		molecularRoles.add("R107");
+		molecularRoles.add("R106");
+		molecularRoles.add("R114");
+		molecularRoles.add("R89");
+		molecularRoles.add("R176");
+		molecularRoles.add("R175");
+
         scanner = new OWLScanner(owlfile);
         code_vec = get_value_set_codes(value_set_ascii_file);
         code_set = new HashSet();
@@ -106,13 +124,19 @@ public class NeoplasmCoreRelationships {
 			code_set.add(t);
 		}
 
-        System.out.println("code_vec: " + code_vec.size());
+        //System.out.println("code_vec: " + code_vec.size());
 		Vector w = scanner.extractObjectProperties(scanner.get_owl_vec());
 		objectPropertiesCode2LabelMap = new HashMap();
 		for (int i=0; i<w.size(); i++) {
 			String t = (String) w.elementAt(i);
 			Vector u = gov.nih.nci.evs.restapi.util.StringUtils.parseData(t, '|');
-			objectPropertiesCode2LabelMap.put((String) u.elementAt(0),(String) u.elementAt(1));
+			String r_code = (String) u.elementAt(0);
+			String r_label = (String) u.elementAt(1);
+			if (r_code.compareTo("R175") == 0) {
+				//Gene_Involved_In_Pathogenesis_Of_Disease
+				r_label = "Disease_Pathogenesis_Involves_Gene";
+			}
+			objectPropertiesCode2LabelMap.put(r_code, r_label);
 		}
 
         w = scanner.extractProperties(scanner.get_owl_vec(), "P108");
@@ -128,16 +152,19 @@ public class NeoplasmCoreRelationships {
 	public void getRestrictions(String outputfile) {
 		roleMap = new HashMap();
 		Vector w = scanner.extractOWLRestrictions(scanner.get_owl_vec());
-		System.out.println("w: " + w.size());
-		System.out.println("code_set: " + code_set.size());
-
 		for (int i=0; i<w.size(); i++) {
 			String t = (String) w.elementAt(i);
 			Vector u = gov.nih.nci.evs.restapi.util.StringUtils.parseData(t, '|');
 			String src = (String) u.elementAt(0);
 			String r = (String) u.elementAt(1);
 			String target = (String) u.elementAt(2);
-			if (code_set.contains(src)) {
+			if (r.compareTo("R175") == 0) {
+				String tmp = src;
+				src = target;
+				target = tmp;
+			}
+
+			if (code_set.contains(src) && molecularRoles.contains(r)) {
 				Vector v = new Vector();
 				if (roleMap.containsKey(src)) {
 					v = (Vector) roleMap.get(src);
@@ -149,7 +176,6 @@ public class NeoplasmCoreRelationships {
 			}
 		}
 		Vector w0 = new Vector();
-
 		Iterator it = roleMap.keySet().iterator();
 		while (it.hasNext()) {
 			String src = (String) it.next();
@@ -161,7 +187,6 @@ public class NeoplasmCoreRelationships {
 				String r = (String) u.elementAt(0);
 				String target = (String) u.elementAt(1);
 				String target_pt = (String) cid2PTMap.get(target);
-
 				w0.add(src_pt + "|" + src + "|" + (String) objectPropertiesCode2LabelMap.get(r) + "|" + target + "|" + target_pt);
 			}
 		}
