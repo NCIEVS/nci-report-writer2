@@ -278,24 +278,6 @@ out.println("	</style>");
   }
 
 
-//Expand all Collapse all Check all Uncheck all
-/*
-  public void printSelectAllOrNoneLinks(PrintWriter out) {
-      out.println("");
-      out.println("<div id=\"expandcontractdiv\">");
-      out.println("<a href=\"#\" onclick=\"expand_all();\" " + getTabIndex() + " >Expand all</a>");
-      out.println("&nbsp;");
-      out.println("<a href=\"#\" onclick=\"collapse_all();\" " + getTabIndex() + ">Collapse all</a>");
-      out.println("&nbsp;");
-      out.println("<a href=\"#\" onclick=\"select_all();\" " + getTabIndex() + ">Check all</a>");
-      out.println("&nbsp;");
-      out.println("<a href=\"#\" onclick=\"select_none();\" " + getTabIndex() + ">Uncheck all</a>");
-      out.println("</div>");
-      out.println("");
-  }
-*/
-
-
   public void printSelectAllOrNoneLinks(PrintWriter out) {
 	  printSelectAllOrNoneLinks(out, true);
   }
@@ -658,88 +640,6 @@ out.println("	</style>");
 		out.println("<head>");
 		out.println("<title>" + title + "</title>");
 		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
-
-
-/*
-		out.println("<script type=\"text/javascript\">");
-		out.println("	function show_hide(div_id) {");
-		out.println("		var img_id = \"IMG_\" + div_id.substring(4, div_id.length);");
-		out.println("		var img_obj = document.getElementById(img_id);");
-		out.println("		if (img_obj.getAttribute(\"src\").indexOf(\"minus\") != -1) {");
-		out.println("			document.getElementById(div_id).style.display = \"none\";");
-		out.println("		} else if (img_obj.getAttribute(\"src\").indexOf(\"plus\") != -1) {");
-		out.println("			document.getElementById(div_id).style.display = \"block\";");
-		out.println("		}");
-		out.println("		changeImage(img_id);");
-		out.println("	}");
-		out.println("	");
-		out.println("	function changeImage(img_id) {");
-		out.println("		var img_obj = document.getElementById(img_id);");
-		out.println("		if (img_obj.getAttribute(\"src\").indexOf(\"minus\") != -1) {");
-		out.println("			var s = img_obj.getAttribute(\"src\");");
-		out.println("			s = s.replace(\"minus\", \"plus\");");
-		out.println("			img_obj.setAttribute(\"src\", s);");
-		out.println("		} else if (img_obj.getAttribute(\"src\").indexOf(\"plus\") != -1) {");
-		out.println("			var s = img_obj.getAttribute(\"src\");");
-		out.println("			s = s.replace(\"plus\", \"minus\");");
-		out.println("			img_obj.setAttribute(\"src\", s);");
-		out.println("		}");
-		out.println("	}");
-		out.println("	");
-		out.println("	function show(div_id) {");
-		out.println("		var img_id = \"IMG_\" + div_id.substring(4, div_id.length);");
-		out.println("		var img_obj = document.getElementById(img_id);");
-		out.println("		if (img_obj.getAttribute(\"src\").indexOf(\"plus\") != -1) {");
-		out.println("			document.getElementById(div_id).style.display = \"block\";");
-		out.println("			changeImage(img_id);");
-		out.println("		}");
-		out.println("	}");
-		out.println("");
-		out.println("	function hide(div_id) {");
-		out.println("		var img_id = \"IMG_\" + div_id.substring(4, div_id.length);");
-		out.println("		var img_obj = document.getElementById(img_id);");
-		out.println("		if (img_obj.getAttribute(\"src\").indexOf(\"minus\") != -1) {");
-		out.println("			document.getElementById(div_id).style.display = \"none\";");
-		out.println("			changeImage(img_id);");
-		out.println("		}");
-		out.println("	}");
-		out.println("");
-		out.println("	function expand_all() {");
-		out.println("		var prefix = \"N_\";");
-		out.println("		expand_node(prefix);");
-		out.println("	}");
-		out.println("");
-		out.println("	function expand_node(prefix) {");
-		out.println("		var div = \"DIV_\";");
-		out.println("		var child_cnt = 1;");
-		out.println("		child_id = prefix.concat(child_cnt.toString());");
-		out.println("		while (document.getElementById(div.concat(child_id)) != null) {");
-		out.println("			show(div.concat(child_id));");
-		out.println("			expand_node(child_id.concat(\"_\"));");
-		out.println("			child_cnt++;");
-		out.println("			child_id = prefix.concat(child_cnt.toString());");
-		out.println("		}");
-		out.println("	}");
-		out.println("");
-		out.println("	function collapse_all() {");
-		out.println("		var divTags = document.getElementsByTagName('div');");
-		out.println("		for (var i=0;i<divTags.length;i++) {");
-		out.println("			if (divTags[i].id.indexOf(\"DIV_N_\") == 0) {");
-		out.println("				var num = divTags[i].id.substring(6, divTags[i].id.length);");
-		out.println("				if (num.indexOf(\"_\") == -1) {");
-		out.println("					hide(divTags[i].id);");
-		out.println("				}");
-		out.println("			}");
-		out.println("		}");
-		out.println("	}");
-        out.println("");
-		out.println("	function on_node_clicked(code) {");
-		out.println("	    var url = \"https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=\" + code;");
-		out.println("		window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');");
-		out.println("	}");
-        out.println("");
-		out.println("</script>");
-*/
 		writeScript(out);
 
 		out.println("</head>");
@@ -843,24 +743,6 @@ out.println("	</style>");
 		out.println("		}");
 		out.println("	}");
 		out.println("");
-		/*
-		out.println("    function expand(level) {");
-		out.println("        expand_all();");
-		out.println("        collapse_all();");
-		out.println("        var divTags = document.getElementsByTagName('div');");
-		out.println("		for (var i=0;i<divTags.length;i++) {");
-		out.println("		    var div_id = divTags[i].id;");
-		out.println("		    if (div_id.startsWith(\"DIV_N_\")) {");
-		out.println("				var img_id = \"IMG_\" + div_id.substring(4, div_id.length);");
-		out.println("				if (getLevel(div_id) <= level) {");
-		out.println("					document.getElementById(div_id).style.display = \"block\";");
-		out.println("					changeImage(img_id);");
-		out.println("				}");
-		out.println("		    }");
-		out.println("		}");
-		out.println("    }");
-	    */
-
         out.println("    function expand(level) {");
         out.println("        expand_all();");
         out.println("        collapse_all();");
@@ -878,10 +760,15 @@ out.println("	</style>");
         out.println("		       }");
         out.println("		   }");
         out.println("    }");
-
 		out.println("");
-		out.println("	function on_node_clicked(code) {");
-		out.println("	    var url = \"https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=\" + code;");
+
+		out.println("	function on_cui_clicked(code) {");
+		out.println("	    var url = \"https://ncim65.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20Metathesaurus&code=\" + code;");
+		out.println("		window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');");
+		out.println("	}");
+		out.println("");
+		out.println("	function on_cui_clicked(code) {");
+		out.println("	    var url = \"https://nciterms.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=\" + code;");
 		out.println("		window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');");
 		out.println("	}");
 		out.println("");

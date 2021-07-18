@@ -81,9 +81,15 @@ public class NeoplasmFileGenerator {
     public static String NEOPLASM_CORE_TERMINOLOGY = "Neoplasm_Core_Terminology";
     public static String NEOPLASM_CORE_RELS_NCIT_MOLECULAR = "Neoplasm_Core_Rels_NCIt_Molecular";
     public static String NEOPLASM_CORE_HIERARCHY_FILE = "Neoplasm_Core_Hierarchy.txt";
-    public static String NEOPLASM_CORE_HIERARCHY_PLUS_FILE = "Neoplasm_Core_Hierarchy_Plus.txt";
+    //public static String NEOPLASM_CORE_HIERARCHY_PLUS_FILE = "Neoplasm_Core_Hierarchy_Plus.txt";
     public static String NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_FILE = "Neoplasm_Core_Hierarchy_By_Neoplastic_Status.txt";
-    public static String NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_PLUS_FILE = "Neoplasm_Core_Hierarchy_By_Neoplastic_Status_Plus.txt";
+
+    public static String NEOPLASM_CORE_HIERARCHY_HTML = "Neoplasm_Core_Hierarchy.html";
+    //public static String NEOPLASM_CORE_HIERARCHY_PLUS_FILE = "Neoplasm_Core_Hierarchy_Plus.txt";
+    public static String NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_HTML = "Neoplasm_Core_Hierarchy_By_Neoplastic_Status.html";
+
+
+    //public static String NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_PLUS_FILE = "Neoplasm_Core_Hierarchy_By_Neoplastic_Status_Plus.txt";
 
     public static void generateHierarchyFiles(String textfile, String owlfile, String ncit_version) {
         NeoplasmHierarchyUtils util = new NeoplasmHierarchyUtils(textfile, owlfile);
@@ -92,8 +98,8 @@ public class NeoplasmFileGenerator {
         codes.add("C3263");
         Vector v = util.getASCIITree(codes, util.get_code_set());
         Utils.saveToFile(NEOPLASM_CORE_HIERARCHY_FILE, v);
-        v = util.appendNeoplasticStatus(v);
-        Utils.saveToFile(NEOPLASM_CORE_HIERARCHY_PLUS_FILE, v);
+        //v = util.appendNeoplasticStatus(v);
+        //Utils.saveToFile(NEOPLASM_CORE_HIERARCHY_PLUS_FILE, v);
         int lines_to_skip = 0;
         String title = "NCIt Neoplasm Core Hierarchy by Morphology and Site";
         Vector contents = new Vector();
@@ -107,8 +113,8 @@ public class NeoplasmFileGenerator {
         codes.add("C3646");
         v = util.getASCIITree(codes, util.get_code_set());
         Utils.saveToFile(NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_FILE, v);
-        v = util.appendNeoplasticStatus(v);
-        Utils.saveToFile(NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_PLUS_FILE, v);
+        //v = util.appendNeoplasticStatus(v);
+        //Utils.saveToFile(NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_PLUS_FILE, v);
         title = "NCIt Neoplasm Core Hierarchy by Neoplastic Status";
         contents = new Vector();
         contents.add("Malignant Neoplasm");
@@ -205,8 +211,25 @@ public class NeoplasmFileGenerator {
         ms = System.currentTimeMillis();
         System.out.println("Step 4: Generate NCI Neoplasm Hierarchy reports.");
         generateHierarchyFiles(textfile, owlfile, version);
-		System.out.println("Total NCI Neoplasm Hierarchy report generation run time (ms): " + (System.currentTimeMillis() - ms));
 
+		CUIAndStatusAppender appender = new CUIAndStatusAppender(owlfile);
+
+		String inputfile = NEOPLASM_CORE_HIERARCHY_FILE;
+		String outputfile = appender.appendCUIAndStatus(inputfile);
+		System.out.println("Output file " + outputfile + " generated.");
+
+		inputfile = NEOPLASM_CORE_HIERARCHY_HTML;
+		outputfile = appender.appendCUIAndStatus(inputfile);
+		System.out.println("Output file " + outputfile + " generated.");
+
+		inputfile = NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_FILE;
+		outputfile = appender.appendCUIAndStatus(inputfile);
+		System.out.println("Output file " + outputfile + " generated.");
+
+		inputfile = NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_HTML;
+		outputfile = appender.appendCUIAndStatus(inputfile);
+		System.out.println("Output file " + outputfile + " generated.");
+		System.out.println("Total NCI Neoplasm Hierarchy report generation run time (ms): " + (System.currentTimeMillis() - ms));
 	}
 }
 

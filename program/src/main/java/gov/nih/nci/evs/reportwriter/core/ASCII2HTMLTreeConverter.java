@@ -380,7 +380,6 @@ public class ASCII2HTMLTreeConverter {
 
     public void asciiTree2HTMLTree(String inputfile, int lines_to_skip, String outputfile) {
         set_lines_to_skip(lines_to_skip);
-        System.out.println("asciiTree2HTMLTree calling generateHTMLTree");
 		generateHTMLTree(inputfile, outputfile);
 	}
 

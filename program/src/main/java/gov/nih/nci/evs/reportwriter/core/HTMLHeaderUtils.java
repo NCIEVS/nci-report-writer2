@@ -58,6 +58,11 @@ import java.util.*;
 
 
 public class HTMLHeaderUtils {
+
+	public HTMLHeaderUtils() {
+
+	}
+
     //static String Constants.DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 
 	public static Vector readFile(String filename)
@@ -139,8 +144,7 @@ public class HTMLHeaderUtils {
 	}
 
 
-
-   public void writeScript(PrintWriter out) {
+    public void writeScript(PrintWriter out) {
 		out.println("<script type=\"text/javascript\">");
 		out.println("");
 		out.println("	function show_hide(div_id) {");
@@ -228,28 +232,37 @@ public class HTMLHeaderUtils {
 		out.println("		}");
 		out.println("	}");
 		out.println("");
-      out.println("    function expand(level) {");
-      out.println("        expand_all();");
-      out.println("        collapse_all();");
-      out.println("        var divTags = document.getElementsByTagName('div');");
-      out.println("		   for (var i=0;i<divTags.length;i++) {");
-      out.println("		       var div_id = divTags[i].id;");
-      out.println("		       if (divTags[i].id.indexOf(\"DIV_N_\") >= 0) {");
-      out.println("				   if (divTags[i].id.indexOf(\"DIV_N_\") == 0) {");
-      out.println("					   if (getLevel(div_id) <= level) {");
-      out.println("						   document.getElementById(div_id).style.display = \"block\";");
-      out.println("						   var img_id = \"IMG_\" + div_id.substring(4, div_id.length);");
-      out.println("						   changeImage(img_id);");
-      out.println("					   }");
-      out.println("				   }");
-      out.println("		       }");
-      out.println("		   }");
-      out.println("    }");
+
+		out.println("    function expand(level) {");
+		out.println("        expand_all();");
+		out.println("        collapse_all();");
+		out.println("        var divTags = document.getElementsByTagName('div');");
+		out.println("		   for (var i=0;i<divTags.length;i++) {");
+		out.println("		       var div_id = divTags[i].id;");
+		out.println("		       if (divTags[i].id.indexOf(\"DIV_N_\") >= 0) {");
+		out.println("				   if (divTags[i].id.indexOf(\"DIV_N_\") == 0) {");
+		out.println("					   if (getLevel(div_id) <= level) {");
+		out.println("						   document.getElementById(div_id).style.display = \"block\";");
+		out.println("						   var img_id = \"IMG_\" + div_id.substring(4, div_id.length);");
+		out.println("						   changeImage(img_id);");
+		out.println("					   }");
+		out.println("				   }");
+		out.println("		       }");
+		out.println("		   }");
+		out.println("    }");
+
 		out.println("");
 		out.println("	function on_node_clicked(code) {");
 		out.println("	    var url = \"https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=\" + code;");
 		out.println("		window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');");
 		out.println("	}");
+
+		out.println("	function on_cui_clicked(code) {");
+		out.println("	    var url = \"https://ncim65.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20Metathesaurus&code=\" + code;");
+		out.println("		window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');");
+		out.println("	}");
+		out.println("");
+
 		out.println("");
 		out.println("	function expand_tree() {");
 		out.println("	    var level = document.getElementById('level').value;");
@@ -268,8 +281,6 @@ public class HTMLHeaderUtils {
 		out.println("<h1>" + title + "</h1>");
 		out.println("<p>");
 
-		//NCIt Version: 16.04d (2016-06-06)
-		//out.println("<h2>" + getToday() + "</h2>");
 		if (ncit_version != null) {
 			out.println("<h2>" + "NCIt Version: " + ncit_version + " (" + getToday() + ")</h2>");
 		} else {
