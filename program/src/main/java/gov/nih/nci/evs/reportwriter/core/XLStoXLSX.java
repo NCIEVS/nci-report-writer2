@@ -2,15 +2,44 @@ package gov.nih.nci.evs.reportwriter.core.util;
 
 import java.io.*;
 import java.util.*;
+
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFHyperlink;
+import org.apache.poi.hssf.usermodel.HSSFPalette;
+import org.apache.poi.hssf.usermodel.HSSFPicture;
+import org.apache.poi.hssf.usermodel.HSSFPictureData;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFShape;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.POIXMLDocument;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFHyperlink;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 
+import org.apache.poi.common.usermodel.HyperlinkType;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFCreationHelper;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFHyperlink;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
+import org.apache.poi.ss.usermodel.Font;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -72,6 +101,50 @@ public class XLStoXLSX {
      * @throws IOException
      */
 
+    public static boolean isCode(String str) {
+		if (str == null || str.length() == 0) return false;
+		char ch = str.charAt(0);
+		if (ch != 'C') return false;
+		String s = str.substring(1, str.length());
+		try {
+			int n = Integer.parseInt(s);
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+    public static boolean isNCItCode(String str) {
+		if (str == null || str.length() == 0) return false;
+		char ch = str.charAt(0);
+		if (ch != 'C') return false;
+		String s = str.substring(1, str.length());
+		try {
+			int n = Integer.parseInt(s);
+			if (str.length() < 8)
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+		return false;
+	}
+
+	public static String getNCItHyperlink(String code) {
+        String line = "https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=" + code;
+        return line;
+    }
+
+	public static String getNCImHyperlink(String code) {
+        String line = "https://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20Metathesaurus&code=" + code;
+        return line;
+	}
+
+	public static String getSourceHyperlink(String source, String code) {
+        String line = "https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=" + source + "&code=" + code;
+        line = line.replace(" ", "%20");
+        return line;
+    }
+
     public static void run(String inputfile, String outputfile) throws IOException {
         InputStream in = new BufferedInputStream(new FileInputStream(inputfile));
         try {
@@ -81,20 +154,29 @@ public class XLStoXLSX {
                 outFn.delete();
 			}
 
-            Workbook wbOut = new XSSFWorkbook();
+            //Workbook wbOut = new XSSFWorkbook();
+			XSSFWorkbook wbOut = new XSSFWorkbook();
+			//XSSFSheet sheet = wbOut.createSheet(sheetName) ;
+			XSSFCreationHelper helper = wbOut.getCreationHelper();
+			XSSFCellStyle hlink_style = wbOut.createCellStyle();
+			XSSFFont hlink_font = wbOut.createFont();
+			hlink_font.setUnderline(Font.U_SINGLE);
+			hlink_font.setColor(HSSFColorPredefined.BLUE.getIndex());
+			hlink_style.setFont(hlink_font);
+
             int sheetCnt = wbIn.getNumberOfSheets();
             for (int i = 0; i < sheetCnt; i++) {
                 Sheet sIn = wbIn.getSheetAt(0);
-                Sheet sOut = wbOut.createSheet(sIn.getSheetName());
+                XSSFSheet sOut = wbOut.createSheet(sIn.getSheetName());
                 Iterator<Row> rowIt = sIn.rowIterator();
                 while (rowIt.hasNext()) {
                     Row rowIn = rowIt.next();
-                    Row rowOut = sOut.createRow(rowIn.getRowNum());
+                    XSSFRow rowOut = sOut.createRow(rowIn.getRowNum());
 
                     Iterator<Cell> cellIt = rowIn.cellIterator();
                     while (cellIt.hasNext()) {
                         Cell cellIn = cellIt.next();
-                        Cell cellOut = rowOut.createCell(
+                        XSSFCell cellOut = rowOut.createCell(
                                 cellIn.getColumnIndex(), cellIn.getCellType());
 
                         switch (cellIn.getCellType()) {
@@ -118,19 +200,29 @@ public class XLStoXLSX {
                             break;
 
                         case Cell.CELL_TYPE_STRING:
-                            cellOut.setCellValue(cellIn.getStringCellValue());
+
+							String value = cellIn.getStringCellValue();
+							if (!isCode(value)) {
+								cellOut.setCellValue(value);
+							} else {
+								String urlLink = value;
+								String address = getNCItHyperlink(value);
+								//cell = row.createCell(c);
+								XSSFHyperlink link = helper.createHyperlink(HyperlinkType.URL);
+								link.setAddress(address);
+								cellOut.setHyperlink(link);
+								cellOut.setCellStyle(hlink_style);
+								cellOut.setCellValue(urlLink);
+								cellOut.setCellValue(value);
+							}
+
+                            //cellOut.setCellValue(cellIn.getStringCellValue());
                             break;
                         }
-
-                        {
-                            CellStyle styleIn = cellIn.getCellStyle();
-                            CellStyle styleOut = cellOut.getCellStyle();
-                            styleOut.setDataFormat(styleIn.getDataFormat());
-                        }
+						CellStyle styleIn = cellIn.getCellStyle();
+						CellStyle styleOut = cellOut.getCellStyle();
+						styleOut.setDataFormat(styleIn.getDataFormat());
                         cellOut.setCellComment(cellIn.getCellComment());
-
-                        // HSSFCellStyle cannot be cast to XSSFCellStyle
-                        // cellOut.setCellStyle(cellIn.getCellStyle());
                     }
                 }
             }
