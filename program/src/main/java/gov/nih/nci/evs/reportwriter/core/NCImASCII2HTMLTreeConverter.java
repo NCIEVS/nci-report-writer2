@@ -28,7 +28,6 @@ public class NCImASCII2HTMLTreeConverter {
 			String line = (String) v.elementAt(i);
 		    Vector u = gov.nih.nci.evs.restapi.util.StringUtils.parseData(line, '|');
 		    localNameMap.put((String) u.elementAt(0),(String) u.elementAt(1));
-		    System.out.println((String) u.elementAt(0) + " --> " + (String) u.elementAt(1));
 		}
 	}
 

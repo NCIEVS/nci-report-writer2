@@ -81,15 +81,10 @@ public class NeoplasmFileGenerator {
     public static String NEOPLASM_CORE_TERMINOLOGY = "Neoplasm_Core_Terminology";
     public static String NEOPLASM_CORE_RELS_NCIT_MOLECULAR = "Neoplasm_Core_Rels_NCIt_Molecular";
     public static String NEOPLASM_CORE_HIERARCHY_FILE = "Neoplasm_Core_Hierarchy.txt";
-    //public static String NEOPLASM_CORE_HIERARCHY_PLUS_FILE = "Neoplasm_Core_Hierarchy_Plus.txt";
     public static String NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_FILE = "Neoplasm_Core_Hierarchy_By_Neoplastic_Status.txt";
-
     public static String NEOPLASM_CORE_HIERARCHY_HTML = "Neoplasm_Core_Hierarchy.html";
-    //public static String NEOPLASM_CORE_HIERARCHY_PLUS_FILE = "Neoplasm_Core_Hierarchy_Plus.txt";
     public static String NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_HTML = "Neoplasm_Core_Hierarchy_By_Neoplastic_Status.html";
-
-
-    //public static String NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_PLUS_FILE = "Neoplasm_Core_Hierarchy_By_Neoplastic_Status_Plus.txt";
+    public static String NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS = "Neoplasm_Core_Mappings_NCIm_Terms.xls";
 
     public static void generateHierarchyFiles(String textfile, String owlfile, String ncit_version) {
         NeoplasmHierarchyUtils util = new NeoplasmHierarchyUtils(textfile, owlfile);
@@ -230,6 +225,33 @@ public class NeoplasmFileGenerator {
 		outputfile = appender.appendCUIAndStatus(inputfile);
 		System.out.println("Output file " + outputfile + " generated.");
 		System.out.println("Total NCI Neoplasm Hierarchy report generation run time (ms): " + (System.currentTimeMillis() - ms));
-	}
+
+		if (!gov.nih.nci.evs.restapi.util.Utils.checkIfFileExists(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS)) {
+			System.out.println(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS + " does not exists.");
+
+		} else {
+			System.out.println(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS + " exists.");
+			String excelfile = NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS;
+
+			n = excelfile.lastIndexOf(".");
+
+			String xlsxfile = excelfile.substring(0, n) + ".xlsx";
+			String asciitree = excelfile.substring(0, n) + ".txt";
+			String htmlfile = excelfile.substring(0, n) + ".html";
+
+            try {
+				XLStoXLSX.run(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS, xlsxfile);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+			NCImMappingToASCIITree runner = new NCImMappingToASCIITree(excelfile, asciitree);
+			runner.generate_ascii_tree(excelfile, asciitree);
+
+			NCImASCII2HTMLTreeConverter converter = new NCImASCII2HTMLTreeConverter(asciitree);
+			converter.generate(htmlfile);
+		}
+    }
+
 }
 
