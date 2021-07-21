@@ -4,6 +4,7 @@ import gov.nih.nci.evs.reportwriter.core.util.*;
 import gov.nih.nci.evs.restapi.util.*;
 
 import java.io.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,6 +13,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+
+import java.net.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,6 +89,9 @@ public class NeoplasmFileGenerator {
     public static String NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_HTML = "Neoplasm_Core_Hierarchy_By_Neoplastic_Status.html";
     public static String NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS = "Neoplasm_Core_Mappings_NCIm_Terms.xls";
 
+    public static String NEOPLASM_FTP_SITE_URL = "https://evs.nci.nih.gov/ftp1/NCI_Thesaurus/Neoplasm/";
+
+
     public static void generateHierarchyFiles(String textfile, String owlfile, String ncit_version) {
         NeoplasmHierarchyUtils util = new NeoplasmHierarchyUtils(textfile, owlfile);
         Vector codes = new Vector();
@@ -141,6 +147,39 @@ public class NeoplasmFileGenerator {
 		}
 		//neoplasmCoreRelationships.convertToExcel(csvfile);
 	}
+
+	public static void downloadExcel(String uri) {
+		URL u;
+		InputStream is = null;
+		int n = uri.lastIndexOf("/");
+		String outputfile = null;
+		if (n != -1) {
+			outputfile = uri.substring(n+1, uri.length());
+		}
+		System.out.println(outputfile);
+		if (outputfile == null) return;
+		try {
+			u = new URL(uri);
+			is = u.openStream();
+			byte[] buffer = new byte[8 * 1024];
+			try {
+				OutputStream output = new FileOutputStream(outputfile);
+				try {
+					int bytesRead;
+					while ((bytesRead = is.read(buffer)) != -1) {
+						output.write(buffer, 0, bytesRead);
+					}
+				} finally {
+				output.close();
+				}
+			} finally {
+				is.close();
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 
  	public static void ascii2HTMLTree(String asciiTree, String ncit_version, int lines_to_skip, String title, Vector contents) {
 		ASCII2HTMLTreeConverter generator = new ASCII2HTMLTreeConverter();
@@ -228,6 +267,7 @@ public class NeoplasmFileGenerator {
 
 		if (!gov.nih.nci.evs.restapi.util.Utils.checkIfFileExists(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS)) {
 			System.out.println(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS + " does not exists.");
+			downloadExcel(NEOPLASM_FTP_SITE_URL + NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS);
 
 		} else {
 			System.out.println(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS + " exists.");
@@ -252,6 +292,5 @@ public class NeoplasmFileGenerator {
 			converter.generate(htmlfile);
 		}
     }
-
 }
 
