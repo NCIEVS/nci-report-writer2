@@ -267,30 +267,32 @@ public class NeoplasmFileGenerator {
 
 		if (!gov.nih.nci.evs.restapi.util.Utils.checkIfFileExists(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS)) {
 			System.out.println(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS + " does not exists.");
+			System.out.println("Downloading " + NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS + " ..." );
 			downloadExcel(NEOPLASM_FTP_SITE_URL + NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS);
 
 		} else {
 			System.out.println(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS + " exists.");
-			String excelfile = NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS;
-
-			n = excelfile.lastIndexOf(".");
-
-			String xlsxfile = excelfile.substring(0, n) + ".xlsx";
-			String asciitree = excelfile.substring(0, n) + ".txt";
-			String htmlfile = excelfile.substring(0, n) + ".html";
-
-            try {
-				XLStoXLSX.run(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS, xlsxfile);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-
-			NCImMappingToASCIITree runner = new NCImMappingToASCIITree(excelfile, asciitree);
-			runner.generate_ascii_tree(excelfile, asciitree);
-
-			NCImASCII2HTMLTreeConverter converter = new NCImASCII2HTMLTreeConverter(asciitree);
-			converter.generate(htmlfile);
 		}
+
+		String excelfile = NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS;
+		n = excelfile.lastIndexOf(".");
+
+		String xlsxfile = excelfile.substring(0, n) + ".xlsx";
+		String asciitree = excelfile.substring(0, n) + ".txt";
+		String htmlfile = excelfile.substring(0, n) + ".html";
+
+		try {
+			XLStoXLSX.run(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS, xlsxfile);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		NCImMappingToASCIITree runner = new NCImMappingToASCIITree(excelfile, asciitree);
+		runner.generate_ascii_tree(excelfile, asciitree);
+
+		NCImASCII2HTMLTreeConverter converter = new NCImASCII2HTMLTreeConverter(asciitree);
+		converter.generate(htmlfile);
+
     }
 }
 

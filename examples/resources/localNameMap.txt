@@ -1,0 +1,80 @@
+ICD-10|ICD-10
+HGNC.owl|HGNC
+NCIt_to_ChEBI_Mapping|NCIt_to_ChEBI_Mapping
+urn:oid:2.16.840.1.113883.6.256|RadLex
+MGEDOntology.owl|MGEDOntology.owl
+ncit|NCI_Thesaurus
+MA|MA
+Chemical Entities of Biological Interest|ChEBI
+HUGO|HGNC
+RadLex|RadLex
+zebrafish_anatomical_ontology|Zebrafish
+MDR|MedDRA
+SNOMEDCT|SNOMED Clinical Terms US Edition
+SNOMEDCT_US|SNOMED Clinical Terms US Edition
+Adult Mouse Anatomy|MA
+NCIt_to_HGNC_Mapping|NCIt_to_HGNC_Mapping
+Snomed CT|SNOMED Clinical Terms US Edition
+MGED|MGEDOntology.owl
+Gene Ontology|GO
+obib|obib
+Thesaurus.owl|NCI_Thesaurus
+CanMED|CanMED
+NDF-RT|NDFRT
+CanMED.owl|CanMED
+Zebrafish|Zebrafish
+Medical Dictionary for Regulatory Activities Terminology (MedDRA)|MedDRA
+ICD10|ICD-10
+obib.owl|obib
+UMLS_SemNet|UMLS_SemNet
+NCI Thesaurus|NCI_Thesaurus
+MEDRT|MED-RT
+purl.obolibrary.org/obo/obib.owl|obib
+MA_to_NCIt_Mapping|MA_to_NCIt_Mapping
+NCI|NCI_Thesaurus
+Nanoparticle Ontology|NPO
+ctcae5|CTCAE_v5
+mged.sourceforge.net/ontologies/MGEDOntology.owl|MGEDOntology.owl
+PDQ_2016_07_31_TO_NCI_2016_10E|PDQ_2016_07_31_TO_NCI_2016_10E
+seer.nci.nih.gov/CanMED.owl|CanMED
+ctcae5.owl|CTCAE_v5
+purl.obolibrary.org/obo/duo.owl|DUO
+HUGO Gene Nomenclature Committee Database|HGNC
+ChEBI|ChEBI
+GO_to_NCIt_Mapping|GO_to_NCIt_Mapping
+NanoParticle Ontology|NPO
+SNOMEDCT_US_2020_03_01_TO_ICD10_2016|SNOMEDCT_US_2020_03_01_TO_ICD10_2016
+SNOMEDCT_US_2020_03_01_TO_ICD10CM_2019|SNOMEDCT_US_2020_03_01_TO_ICD10CM_2019
+NDF-RT.owl|NDFRT
+SNOMED|SNOMED Clinical Terms US Edition
+evs.nci.nih.gov/ftp1/NDF-RT/NDF-RT.owl|NDFRT
+CTCAE_v5|CTCAE_v5
+RADLEX|RadLex
+chebi_ontology|ChEBI
+MGED_Ontology|MGEDOntology.owl
+Human Genome Organisation|HGNC
+MED-RT|MED-RT
+purl.bioontology.org/ontology/npo|NPO
+Thesaurus|NCI_Thesaurus
+HGNC|HGNC
+NCI MetaThesaurus|NCI Metathesaurus
+ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl|NCI_Thesaurus
+urn:lsid:bioontology.org:GO|GO
+duo.owl|DUO
+VA_NDFRT|NDFRT
+http://ncicb.nci.nih.gov/genenames.org/HGNC.owl#|HGNC
+MedDRA|MedDRA
+adult_mouse_anatomy.gxd|MA
+GO|GO
+npo|NPO
+ncicb.nci.nih.gov/genenames.org/HGNC.owl|HGNC
+ZFIN|Zebrafish
+file:////Users/safrant/git/safrant-ops-owl-applications/CTCAE_to_OWL/ctcae5.owl|CTCAE_v5
+NDFRT|NDFRT
+urn:oid:2.16.840.1.113883.3.26.1.1|NCI_Thesaurus
+gene_ontology|GO
+MGED Ontology|MGEDOntology.owl
+VA NDFRT|NDFRT
+NCI_Thesaurus|NCI_Thesaurus
+CTCAE 5.0|CTCAE_v5
+duo|DUO
