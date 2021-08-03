@@ -338,6 +338,19 @@ public class PackagingUtils {
 		}
 	}
 
+    public static void removeImagesDir(String htmlfile) {
+		Vector v = Utils.readFile(htmlfile);
+		Vector w = new Vector();
+		for (int i=0; i<v.size(); i++) {
+			String line = (String) v.elementAt(i);
+			if (line.indexOf("<img src=\"images/") != -1) {
+				line = line.replace("<img src=\"images/", "<img src=\"");
+			}
+			w.add(line);
+		}
+		Utils.saveToFile(htmlfile, w);
+	}
+
     public static void main(String[] arg) {
         run();
 	}
