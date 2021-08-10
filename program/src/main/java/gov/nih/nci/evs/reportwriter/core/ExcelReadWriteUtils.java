@@ -19,6 +19,10 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.Font;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.ss.usermodel.Row;
+
+
 import com.opencsv.CSVReader;
 import java.awt.Color;
 import java.io.*;
@@ -235,71 +239,48 @@ public class ExcelReadWriteUtils {
 		return outputfile;
 	}
 
-	public static Vector readXLSFile(String xlsfile) throws IOException
+	public static Vector readXLSFile(String xlsfile) throws IOException {
+		return readXLSFile(xlsfile, 0);
+	}
+
+	public static Vector readXLSFile(String xlsxfile, int sheetIndex) throws IOException
 	{
 		Vector w = new Vector();
-		InputStream ExcelFileToRead = new FileInputStream(xlsfile);
-		HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+		InputStream ExcelFileToRead = new FileInputStream(xlsxfile);
+		HSSFWorkbook  wb = new HSSFWorkbook(ExcelFileToRead);
 
-		HSSFSheet sheet=wb.getSheetAt(0);
+		HSSFWorkbook test = new HSSFWorkbook();
+
+		HSSFSheet sheet = wb.getSheetAt(sheetIndex);
 		HSSFRow row;
 		HSSFCell cell;
 
 		Iterator rows = sheet.rowIterator();
-
 		while (rows.hasNext())
 		{
 			StringBuffer buf = new StringBuffer();
-			row=(HSSFRow) rows.next();
-			Iterator cells = row.cellIterator();
-
-			while (cells.hasNext())
-			{
-				cell=(HSSFCell) cells.next();
-
-				if (cell.getCellType() == HSSFCell.CELL_TYPE_STRING)
-				{
-					//System.out.print(cell.getStringCellValue()+" ");
-					buf.append(cell.getStringCellValue());
-				}
-				else if(cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
-				{
-					//System.out.print(cell.getNumericCellValue()+" ");
-					buf.append(cell.getNumericCellValue());
-				}
-				else if(cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA)
-				{
-					//System.out.print(cell.getNumericCellValue()+" ");
-					buf.append(cell.getCellFormula());
-				}
-				else if(cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
-				{
-					//System.out.print(cell.getNumericCellValue()+" ");
+			row = (HSSFRow) rows.next();
+			for(int i=0; i<row.getLastCellNum(); i++) {
+				cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+				String t = getCellData(cell);
+				if (t != null) {
+					t = t.trim();
+					buf.append(t);
+				} else {
 					buf.append("");
-				}
-				else if(cell.getCellType() == HSSFCell.CELL_TYPE_ERROR)
-				{
-				    buf.append("#ERROR#");
-				}
-				else
-				{
-					//Handel Boolean
 				}
 				buf.append("\t");
 			}
-			//System.out.println();
 			String t = buf.toString();
 			t = t.substring(0, t.length()-1);
 			w.add(t);
 		}
-		return w;
+        return w;
 	}
 
 	public static String writeXLSFile(String textfile, char delim, String sheetName) throws IOException {
 		int n = textfile.lastIndexOf(".");
 		String excelFileName = textfile.substring(0, n) + ".xls";
-		//String sheetName = "Sheet1";//name of sheet
-
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet(sheetName) ;
 
@@ -325,7 +306,40 @@ public class ExcelReadWriteUtils {
 		return excelFileName;
 	}
 
+
+	private static String getCellData(Cell cell) {
+		String value = null;
+		if (cell == null) {
+			return null;
+		}
+		switch (cell.getCellType()) {
+			case HSSFCell.CELL_TYPE_STRING:
+				value = cell.getStringCellValue();
+				break;
+			case HSSFCell.CELL_TYPE_FORMULA:
+				value = cell.getCellFormula();
+				break;
+			case HSSFCell.CELL_TYPE_NUMERIC:
+				HSSFDataFormatter dataFormatter = new HSSFDataFormatter();
+				value = dataFormatter.formatCellValue(cell);
+				break;
+			case HSSFCell.CELL_TYPE_BLANK:
+				value = null;
+				break;
+			case HSSFCell.CELL_TYPE_ERROR:
+				value = "#ERROR#";
+				break;
+		}
+		return value;
+	}
+
+
 	public static Vector readXLSXFile(String xlsxfile) throws IOException
+	{
+        return readXLSXFile(xlsxfile, 0);
+	}
+
+	public static Vector readXLSXFile(String xlsxfile, int sheetIndex) throws IOException
 	{
 		Vector w = new Vector();
 		InputStream ExcelFileToRead = new FileInputStream(xlsxfile);
@@ -333,59 +347,32 @@ public class ExcelReadWriteUtils {
 
 		XSSFWorkbook test = new XSSFWorkbook();
 
-		XSSFSheet sheet = wb.getSheetAt(0);
+		XSSFSheet sheet = wb.getSheetAt(sheetIndex);
 		XSSFRow row;
 		XSSFCell cell;
 
 		Iterator rows = sheet.rowIterator();
-
 		while (rows.hasNext())
 		{
 			StringBuffer buf = new StringBuffer();
-			row=(XSSFRow) rows.next();
-			Iterator cells = row.cellIterator();
-			while (cells.hasNext())
-			{
-				cell=(XSSFCell) cells.next();
-
-				if (cell.getCellType() == HSSFCell.CELL_TYPE_STRING)
-				{
-					//System.out.print(cell.getStringCellValue()+" ");
-					buf.append(cell.getStringCellValue());
-				}
-				else if(cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
-				{
-					//System.out.print(cell.getNumericCellValue()+" ");
-					buf.append(cell.getNumericCellValue());
-				}
-				else if(cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA)
-				{
-					//System.out.print(cell.getNumericCellValue()+" ");
-					buf.append(cell.getCellFormula());
-				}
-				else if(cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
-				{
-					//System.out.print(cell.getNumericCellValue()+" ");
+			row = (XSSFRow) rows.next();
+			for(int i=0; i<row.getLastCellNum(); i++) {
+				cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+				String t = getCellData(cell);
+				if (t != null) {
+					t = t.trim();
+					buf.append(t);
+				} else {
 					buf.append("");
-				}
-				else if(cell.getCellType() == HSSFCell.CELL_TYPE_ERROR)
-				{
-				    buf.append("#ERROR#");
-				}
-				else
-				{
-					//Handel Boolean
 				}
 				buf.append("\t");
 			}
-			//System.out.println();
 			String t = buf.toString();
 			t = t.substring(0, t.length()-1);
 			w.add(t);
 		}
         return w;
 	}
-
 
 	public static String writeXLSXFile(String textfile, char delim, String sheetName) throws IOException {
 		int n = textfile.lastIndexOf(".");
@@ -505,28 +492,6 @@ public class ExcelReadWriteUtils {
 		return cell;
 	}
 
-/*
-    public static HSSFCell createHSSFCell(HSSFWorkbook wb, HSSFHyperlink link, HSSFCellStyle hlink_style,
-        HSSFSheet sheet, int rowId, int colId, String urlLink, String address) {
-
-		HSSFCreationHelper helper = wb.getCreationHelper();
-		HSSFCellStyle hlink_style = wb.createCellStyle();
-		HSSFFont hlink_font = wb.createFont();
-		hlink_font.setUnderline(Font.U_SINGLE);
-		hlink_font.setColor(HSSFColorPredefined.BLUE.getIndex());
-		hlink_style.setFont(hlink_font);
-
-
-        HSSFCell cell = sheet.createRow(rowId).createCell(colId);
-		cell.setCellValue(urlLink);
-		//HSSFHyperlink link = helper.createHyperlink(HyperlinkType.URL);
-		link.setAddress(address);
-		cell.setHyperlink(link);
-		cell.setCellStyle(hlink_style);
-		return cell;
-	}
-*/
-
     public static XSSFCell createXSSFCell(XSSFWorkbook wb, XSSFSheet sheet, int rowId, int colId, String urlLink, String address) {
 		XSSFCreationHelper helper = wb.getCreationHelper();
 		XSSFCellStyle hlink_style = wb.createCellStyle();
@@ -541,21 +506,6 @@ public class ExcelReadWriteUtils {
 		cell.setHyperlink(link);
 		cell.setCellStyle(hlink_style);
 		return cell;
-	}
-
-	public static void test(String[] args) throws IOException {
-		String code = "C12345";
-		boolean retval = isCode(code);
-		System.out.println(code + ": " + retval);
-
-		code = "A12345";
-		retval = isCode(code);
-		System.out.println(code + ": " + retval);
-
-		code = "C1234a";
-		retval = isCode(code);
-		System.out.println(code + ": " + retval);
-
 	}
 
 	public static String text2XLS(String textfile, char delim, String sheetName) throws IOException {
@@ -648,49 +598,43 @@ public class ExcelReadWriteUtils {
 		return excelFileName;
 	}
 
+
+	public static boolean fileDiff(String file1, String file2) {
+		Vector w1 = Utils.readFile(file1);
+		Vector w2 = Utils.readFile(file2);
+		if (w1.size() != w2.size()) {
+			System.out.println(file1 + ": "+ w1.size());
+			System.out.println(file2 + ": "+ w2.size());
+			return false;
+		}
+		for (int i=0; i<w1.size(); i++) {
+			String line1 = (String) w1.elementAt(i);
+			String line2 = (String) w1.elementAt(i);
+			if (line1.compareTo(line2) != 0) {
+				System.out.println(file1 + ": "+ line1);
+				System.out.println(file2 + ": "+ line1);
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static void main(String[] args) throws IOException {
-		//String textfile = "Neoplasm_Core_Terminology.txt";
-        //String excelFileName = writeXLSXFile(textfile, '\t', "21.06a");
-        //System.out.println(excelFileName + " generated.");
-        /*
-        String xlsxfile = "Neoplasm_Core_Terminology.xlsx";
-        List<String> sheetNames = getXLSXSheetNames(xlsxfile);
-        System.out.println(sheetNames.get(0));
-        */
-
-/*
-        String xlsfile = "Neoplasm_Core_Terminology.xls";
-        List<String> sheetNames = getXLSSheetNames(xlsfile);
-        System.out.println(sheetNames.get(0));
-
-        String excelFileName = writeXLSXFile(textfile, '\t', sheetNames.get(0));
-        System.out.println(excelFileName + " generated.");
-
-        String csvfile = tabDelimited2CSV(textfile);
-        System.out.println(csvfile + " generated.");
-*/
-
-		/*
-
-		Vector w = readXLSFile("Neoplasm_Core.xls");
-		saveToFile("test1.txt", w);
-
-		w = readXLSXFile("Neoplasm_Core.xlsx");
-		saveToFile("test2.txt", w);
-
-        String csvfile = tabDelimited2CSV("test2.txt");
-
-        String excelFileName = writeXLSFile("test1.txt", '\t', "Sheet1");
-        System.out.println(excelFileName + " genereated.");
-
-        excelFileName = writeXLSXFile("test2.txt", '\t', "Sheet1");
-        System.out.println(excelFileName + " genereated.");
-        */
-
-        String textfile = args[0];
         try {
-        	String xlsfile = text2XLS(textfile, '|', "21.06a");
-        	System.out.println(xlsfile + " generated.");
+        	String xlsfile = args[0];
+        	int sheetIndex = 1;
+        	Vector w = readXLSXFile(xlsfile, sheetIndex);
+        	int n = xlsfile.lastIndexOf(".");
+        	String textfile = xlsfile.substring(0, n) + "_" + sheetIndex + ".txt";
+
+        	Utils.saveToFile(textfile, w);
+
+        	String file2 = args[1];
+        	System.out.println("file2: " + file2);
+
+        	boolean retval = fileDiff(textfile, file2);
+        	System.out.println(textfile + " and" + file2 + " same? " + retval);
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
