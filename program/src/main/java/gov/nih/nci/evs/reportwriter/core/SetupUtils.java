@@ -1,10 +1,8 @@
 package gov.nih.nci.evs.reportwriter.core.util;
-
 import java.io.*;
 import java.util.*;
 import java.nio.file.*;
 import java.text.*;
-
 
 public class SetupUtils {
 
