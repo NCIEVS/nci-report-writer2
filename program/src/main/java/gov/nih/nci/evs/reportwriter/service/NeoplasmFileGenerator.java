@@ -88,9 +88,14 @@ public class NeoplasmFileGenerator {
     public static String NEOPLASM_CORE_HIERARCHY_HTML = "Neoplasm_Core_Hierarchy.html";
     public static String NEOPLASM_CORE_HIERARCHY_By_NEOPLASTIC_STATUS_HTML = "Neoplasm_Core_Hierarchy_By_Neoplastic_Status.html";
     public static String NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS = "Neoplasm_Core_Mappings_NCIm_Terms.xls";
+    public static String NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX = "Neoplasm_Core_Mappings_NCIm_Terms.xlsx";
 
     public static String NEOPLASM_FTP_SITE_URL = "https://evs.nci.nih.gov/ftp1/NCI_Thesaurus/Neoplasm/";
 
+    private static String SUMMARY_DATA_AUTHOR = "SUMMARY_DATA_AUTHOR";
+    private static String SUMMARY_DATA_KEYWORDS = "SUMMARY_DATA_KEYWORDS";
+    private static String SUMMARY_DATA_TITLE = "SUMMARY_DATA_TITLE";
+    private static String SUMMARY_DATA_SUBJECT = "SUMMARY_DATA_SUBJECT";
 
     public static void generateHierarchyFiles(String textfile, String owlfile, String ncit_version) {
         NeoplasmHierarchyUtils util = new NeoplasmHierarchyUtils(textfile, owlfile);
@@ -134,13 +139,13 @@ public class NeoplasmFileGenerator {
 
 		System.out.println("generateCSVFile...");
 		//neoplasmCoreRelationships.generateCSVFile(inputfile, csvfile);
-		String csvfile = ExcelReadWriteUtils.delimited2CSV(inputfile, '|');
+		String csvfile = gov.nih.nci.evs.reportwriter.core.util.ExcelReadWriteUtils.delimited2CSV(inputfile, '|');
 		System.out.println(csvfile + " generated.");
 
 		System.out.println("convertToExcel...");
 		try {
 			char delim = '|';
-			String excelfile = ExcelReadWriteUtils.text2XLS(inputfile, delim, sheetName);
+			String excelfile = gov.nih.nci.evs.reportwriter.core.util.ExcelReadWriteUtils.text2XLS(inputfile, delim, sheetName);
 			System.out.println(excelfile + " generated.");
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -190,6 +195,9 @@ public class NeoplasmFileGenerator {
 	}
 
 	public static void main(String[] args) {
+		boolean runReportOnly = true;
+		String version = null;
+
 		System.out.println("Step 1: Download NCI Thesaurus from the ftp site.");
 		if (!gov.nih.nci.evs.restapi.util.Utils.checkIfFileExists(NCI_THESAURUS_OWL)) {
 			gov.nih.nci.evs.reportwriter.core.util.NCItDownload.download();
@@ -198,7 +206,7 @@ public class NeoplasmFileGenerator {
 		}
 		String owlfile = NCI_THESAURUS_OWL;
 		OWLScanner scanner = new OWLScanner(owlfile);
-		String version = scanner.extractVersion();    //sheetNames.get(0);
+		version = scanner.extractVersion();    //sheetNames.get(0);
 		System.out.println("OWL version: " + version);
 		scanner.get_owl_vec().clear();
 
@@ -224,13 +232,17 @@ public class NeoplasmFileGenerator {
 			System.out.println(textfile + " exists.");
 		}
 
-		String csvfile = ExcelReadWriteUtils.tabDelimited2CSV(textfile);
+		if (runReportOnly) {
+			System.exit(0);
+		}
+
+		String csvfile = gov.nih.nci.evs.reportwriter.core.util.ExcelReadWriteUtils.tabDelimited2CSV(textfile);
 		System.out.println(csvfile + " generated.");
 
 		String xlsfile = NEOPLASM_CORE_TERMINOLOGY + ".xls";
-		List<String> sheetNames = ExcelReadWriteUtils.getXLSSheetNames(xlsfile);
+		List<String> sheetNames = gov.nih.nci.evs.reportwriter.core.util.ExcelReadWriteUtils.getXLSSheetNames(xlsfile);
 		try {
-			String excelFileName = ExcelReadWriteUtils.writeXLSXFile(textfile, '\t', sheetNames.get(0));
+			String excelFileName = gov.nih.nci.evs.reportwriter.core.util.ExcelReadWriteUtils.writeXLSXFile(textfile, '\t', sheetNames.get(0));
 			System.out.println(excelFileName + " generated.");
 			System.out.println("Total NCI Neoplasm Terminology report generation run time (ms): " + (System.currentTimeMillis() - ms));
 		} catch (Exception ex) {
@@ -291,8 +303,70 @@ public class NeoplasmFileGenerator {
 		runner.generate_ascii_tree(excelfile, asciitree);
 
 		NCImASCII2HTMLTreeConverter converter = new NCImASCII2HTMLTreeConverter(asciitree);
-		converter.generate(htmlfile);
+		converter.generate(htmlfile, version);
 
+
+		if (!gov.nih.nci.evs.restapi.util.Utils.checkIfFileExists(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX)) {
+			System.out.println(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX + " does not exists.");
+			System.out.println("Downloading " + NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX + " ..." );
+			downloadExcel(NEOPLASM_FTP_SITE_URL + NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX);
+
+		} else {
+			System.out.println(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX + " exists.");
+		}
+
+        try {
+        	xlsxfile = NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX;
+        	n = xlsxfile.lastIndexOf(".");
+        	textfile = xlsxfile.substring(0, n) + ".txt";
+			Vector v = gov.nih.nci.evs.reportwriter.core.util.ExcelReadWriteUtils.readXLSXFile(xlsxfile);
+			gov.nih.nci.evs.reportwriter.core.util.ExcelReadWriteUtils.saveToFile(textfile, v);
+
+			char delim = '\t';
+			String sheetName = xlsxfile.substring(0, n);
+			xlsfile = gov.nih.nci.evs.reportwriter.core.util.ExcelReadWriteUtils.text2XLS(textfile, delim, sheetName);
+
+			asciitree = xlsfile.substring(0, n) + ".txt";
+			htmlfile = xlsfile.substring(0, n) + ".html";
+
+			runner = new NCImMappingToASCIITree(xlsfile, asciitree);
+			runner.generate_ascii_tree(xlsfile, asciitree);
+
+			converter = new NCImASCII2HTMLTreeConverter(asciitree);
+			converter.generate(htmlfile, version);
+
+			String curr_dir = PackagingUtils.getCurrentWorkingDirectory();
+			File folder = new File(curr_dir);
+			String extension = "html";
+			List list = PackagingUtils.listFilesInFolder(folder, extension);
+			for (int i=0; i<list.size(); i++) {
+				String filename = (String) list.get(i);
+				PackagingUtils.removeImagesDir(filename);
+			}
+
+			String[] keys = new String[4];
+			keys[0] = SUMMARY_DATA_AUTHOR;
+			keys[1] = SUMMARY_DATA_KEYWORDS;
+			keys[2] = SUMMARY_DATA_TITLE;
+			keys[3] = SUMMARY_DATA_SUBJECT;
+
+			String[] values = new String[4];
+			values[0] = "NCI/EVS";
+			values[1] = "Cancer, Neoplasm";
+			values[2] = "Neoplasm Core";
+			values[3] = "Neoplasm_Core_" + version;
+
+			extension = "xlsx";
+			list = PackagingUtils.listFilesInFolder(folder, extension);
+			for (int i=0; i<list.size(); i++) {
+				String filename = (String) list.get(i);
+				System.out.println(filename);
+				XLSXMetadataUtils.setSummaryData(filename, keys, values);
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
     }
 }
 

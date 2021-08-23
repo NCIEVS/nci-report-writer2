@@ -55,15 +55,15 @@ public class NCImASCII2HTMLTreeConverter {
         return null;
 	}
 
-	public void generate(PrintWriter out) {
-		writeHeader(out);
+	public void generate(PrintWriter out, String version) {
+		writeHeader(out, version);
 
 		writeTree(out, root);
 		writeFooter(out);
 	}
 
 
-	public void writeHeader(PrintWriter out) {
+	public void writeHeader(PrintWriter out, String version) {
 		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
 		out.println("<html xmlns:c=\"http://java.sun.com/jsp/jstl/core\">");
 		out.println("<head>");
@@ -205,7 +205,7 @@ public class NCImASCII2HTMLTreeConverter {
 		out.println("<center>");
 		out.println("<h1>NCIt Neoplasm Core Mappings to NCIm Source Terms</h1>");
 		out.println("<p>");
-		out.println("<h2>NCIt Version: Core (2017-02-07)</h2>");
+		out.println("<h2>NCIt Version: " + version + "</h2>");
 		out.println("</p>");
 		out.println("</center>");
 	}
@@ -284,6 +284,11 @@ public class NCImASCII2HTMLTreeConverter {
 		String data = (String) u.elementAt(1);
 		u = gov.nih.nci.evs.restapi.util.StringUtils.parseData(parameters, ',');
 		String term_code = (String) u.elementAt(0);
+		String termcode = term_code;
+		int n = term_code.indexOf(":");
+		if (n != -1) {
+			termcode = term_code.substring(n+1, term_code.length());
+		}
 		String term_type = (String) u.elementAt(1);
 		term_type = term_type.trim();
 		String cui = (String) u.elementAt(2);
@@ -292,7 +297,9 @@ public class NCImASCII2HTMLTreeConverter {
 		text = encode(text);
       out.println("<li>");
       if (localNmMap.containsKey(src)) {
-          out.println("<img src=\"dot.gif\" id=\"IMG_N_1_" + j + "_" + k + "\" alt=\"show_hide\" onclick=\"show_hide('DIV_N_1_" + j + "_" + k + "');\" >		" + text + "&nbsp;(<a href=\"#\" onclick=\"on_source_code_clicked('" + src + "', '" + cui + "');return false;\" >" + src + ":" + term_code + "</a>, " + term_type + ", <a href=\"#\" onclick=\"on_cui_clicked('" + cui + "');return false;\" >" + cui + "</a>)");
+          out.println("<img src=\"dot.gif\" id=\"IMG_N_1_" + j + "_" + k + "\" alt=\"show_hide\" onclick=\"show_hide('DIV_N_1_" + j + "_" + k + "');\" >		" + text + "&nbsp;(<a href=\"#\" onclick=\"on_source_code_clicked('" + src + "', '" + termcode + "');return false;\" >" + term_code + "</a>, " + term_type + ", <a href=\"#\" onclick=\"on_cui_clicked('" + cui + "');return false;\" >" + cui + "</a>)");
+
+          //out.println("<img src=\"dot.gif\" id=\"IMG_N_1_" + j + "_" + k + "\" alt=\"show_hide\" onclick=\"show_hide('DIV_N_1_" + j + "_" + k + "');\" >		" + text + "&nbsp;(<a href=\"#\" onclick=\"on_source_code_clicked('" + src + "', '" + cui + "');return false;\" >" + src + ":" + term_code + "</a>, " + term_type + ", <a href=\"#\" onclick=\"on_cui_clicked('" + cui + "');return false;\" >" + cui + "</a>)");
       } else {
           out.println("<img src=\"dot.gif\" id=\"IMG_N_1_" + j + "_" + k + "\" alt=\"show_hide\" onclick=\"show_hide('DIV_N_1_" + j + "_" + k + "');\" >		" + text + "&nbsp;(" + term_code + ", " + term_type + ", <a href=\"#\" onclick=\"on_cui_clicked('" + cui + "');return false;\" >" + cui + "</a>)");
 	  }
@@ -379,12 +386,12 @@ public class NCImASCII2HTMLTreeConverter {
 		out.println("</html>");
 	}
 
-	public void generate(String outputfile) {
+	public void generate(String outputfile, String version) {
         long ms = System.currentTimeMillis();
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(outputfile, "UTF-8");
-            generate(pw);
+            generate(pw, version);
 
 		} catch (Exception ex) {
 
@@ -401,10 +408,11 @@ public class NCImASCII2HTMLTreeConverter {
 
 	public static void main(String[] args) {
 		String asciifile = args[0];
+		String version = args[1];
 		NCImASCII2HTMLTreeConverter converter = new NCImASCII2HTMLTreeConverter(asciifile);
 		int n = asciifile.lastIndexOf(".");
 		String outputfile = asciifile.substring(0, n) + ".html";
-		converter.generate(outputfile);
+		converter.generate(outputfile, version);
 	}
 }
 
