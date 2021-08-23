@@ -194,6 +194,7 @@ public class NeoplasmFileGenerator {
         generator.run(asciiTree, outputfile, lines_to_skip, title, label, ncit_version, contents);
 	}
 
+
 	public static void main(String[] args) {
 		boolean runReportOnly = true;
 		String version = null;
