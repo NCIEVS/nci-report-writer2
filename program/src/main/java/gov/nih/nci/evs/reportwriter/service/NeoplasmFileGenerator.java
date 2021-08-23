@@ -4,7 +4,6 @@ import gov.nih.nci.evs.reportwriter.core.util.*;
 import gov.nih.nci.evs.restapi.util.*;
 
 import java.io.*;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,7 +12,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-
 import java.net.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,7 +19,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
