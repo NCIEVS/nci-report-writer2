@@ -2,7 +2,9 @@ package gov.nih.nci.evs.reportwriter.core.service;
 
 import gov.nih.nci.evs.reportwriter.core.util.*;
 import gov.nih.nci.evs.restapi.util.*;
+
 import java.io.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,6 +13,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+
 import java.net.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -190,9 +194,8 @@ public class NeoplasmFileGenerator {
         generator.run(asciiTree, outputfile, lines_to_skip, title, label, ncit_version, contents);
 	}
 
-
 	public static void main(String[] args) {
-		boolean runReportOnly = true;
+		boolean runReportOnly = false;
 		String version = null;
 
 		System.out.println("Step 1: Download NCI Thesaurus from the ftp site.");
@@ -274,7 +277,7 @@ public class NeoplasmFileGenerator {
 		System.out.println("Output file " + outputfile + " generated.");
 		System.out.println("Total NCI Neoplasm Hierarchy report generation run time (ms): " + (System.currentTimeMillis() - ms));
 
-		if (!gov.nih.nci.evs.restapi.util.Utils.checkIfFileExists(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS)) {
+		if (!gov.nih.nci.evs.restapi.util.Utils.checkIfFileExists(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX)) {
 			System.out.println(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS + " does not exists.");
 			System.out.println("Downloading " + NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS + " ..." );
 			downloadExcel(NEOPLASM_FTP_SITE_URL + NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLS);
@@ -302,7 +305,6 @@ public class NeoplasmFileGenerator {
 		NCImASCII2HTMLTreeConverter converter = new NCImASCII2HTMLTreeConverter(asciitree);
 		converter.generate(htmlfile, version);
 
-
 		if (!gov.nih.nci.evs.restapi.util.Utils.checkIfFileExists(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX)) {
 			System.out.println(NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX + " does not exists.");
 			System.out.println("Downloading " + NEOPLASM_CORE_MAPPING_NCIM_TERMS_XLSX + " ..." );
@@ -321,7 +323,7 @@ public class NeoplasmFileGenerator {
 
 			char delim = '\t';
 			String sheetName = xlsxfile.substring(0, n);
-			xlsfile = gov.nih.nci.evs.reportwriter.core.util.ExcelReadWriteUtils.text2XLS(textfile, delim, sheetName);
+			xlsfile = gov.nih.nci.evs.reportwriter.core.util.ExcelReadWriteUtilsExt.text2XLS(textfile, delim, sheetName);
 
 			asciitree = xlsfile.substring(0, n) + ".txt";
 			htmlfile = xlsfile.substring(0, n) + ".html";
