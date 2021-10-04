@@ -173,10 +173,17 @@ public class AsciiToExcelFormatter extends FileFormatterBase {
 
             // Note: Special Case for CDISC STDM Terminology report.
             boolean highlight_row = false;
-            if (_specialCases_CDISC)
+            if (_specialCases_CDISC) {
+				/*
                 highlight_row =
                     extensible_col != -1
                         && v.elementAt(extensible_col).trim().length() > 0;
+                */
+                 highlight_row =
+                    extensible_col != -1
+                        && v.elementAt(extensible_col-1).trim().length() == 0;
+
+			}
 
 
             for (int i = 0; i < v.size(); i++) {
@@ -267,7 +274,7 @@ public class AsciiToExcelFormatter extends FileFormatterBase {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         String dir = "C:/apps/evs/ncireportwriter-webapp/downloads/";
         //test(dir + "CDISC_SDTM_Terminology__10.11e.txt", new int[] { 0, 1 });
 //        test(dir + "CDISC_Subset_REPORT__10.06e.txt", new int[] { 1, 3 });
@@ -283,4 +290,16 @@ System.out.println(SEPARATOR);
 
         _logger.debug("Done");
     }
+
+    public static void main(String[] args) {
+		String textfile = args[0];
+		try {
+			new AsciiToExcelFormatter().convert(textfile, "\t", textfile.replace(".txt", ".xls"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
 }
