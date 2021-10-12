@@ -166,7 +166,7 @@ public class XLStoXLSX {
 
             int sheetCnt = wbIn.getNumberOfSheets();
             for (int i = 0; i < sheetCnt; i++) {
-                Sheet sIn = wbIn.getSheetAt(0);
+                Sheet sIn = wbIn.getSheetAt(i);
                 XSSFSheet sOut = wbOut.createSheet(sIn.getSheetName());
                 Iterator<Row> rowIt = sIn.rowIterator();
                 while (rowIt.hasNext()) {
