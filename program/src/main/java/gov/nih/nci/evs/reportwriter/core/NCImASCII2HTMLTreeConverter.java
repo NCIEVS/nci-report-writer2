@@ -4,9 +4,6 @@ import gov.nih.nci.evs.restapi.util.*;
 import java.io.*;
 import java.text.*;
 import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
 
 public class NCImASCII2HTMLTreeConverter {
     String asciifile = null;

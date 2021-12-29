@@ -3,7 +3,7 @@ import gov.nih.nci.evs.restapi.util.*;
 
 
 import java.util.*;
-import org.apache.log4j.*;
+//import org.apache.log4j.*;
 
 
 /**
@@ -59,7 +59,7 @@ import org.apache.log4j.*;
 
 
 public class CSVSortComparator implements Comparator<Object> {
-    private static Logger _logger = Logger.getLogger(CSVSortComparator.class);
+    //private static Logger _logger = Logger.getLogger(CSVSortComparator.class);
     private static final int SORT_BY_NAME = 1;
     private static final int SORT_BY_CODE = 2;
     private int _sort_option = SORT_BY_NAME;
