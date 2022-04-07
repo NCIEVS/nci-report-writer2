@@ -71,7 +71,6 @@ public class TemplateColumn {
 		buf.append("- columnNumber: " + this.columnNumber).append("\n");
 		buf.append("  label: " + this.label).append("\n");
 		buf.append("  display: " + this.display).append("\n");
-		buf.append("  label: " + this.label).append("\n");
 		buf.append("  propertyType: " + this.propertyType).append("\n");
 		buf.append("  property: " + this.property).append("\n");
 		buf.append("  source: " + this.source).append("\n");
