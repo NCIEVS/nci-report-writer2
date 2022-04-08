@@ -100,12 +100,12 @@ public class Template {
 
 	public String to_string() {
 		StringBuffer str = new StringBuffer();
-		str.append("Name: " + name + "\n");
-		str.append("Type: " + type + "\n");
-		str.append("Root Concept Code: " + rootConceptCode + "\n");
-		str.append("Association: " + association + "\n");
-		str.append("Level: " + level + "\n");
-		str.append("Sort Column: " + sortColumn + "\n");
+		str.append("name: " + name + "\n");
+		str.append("type: " + type + "\n");
+		str.append("rootConceptCode: " + rootConceptCode + "\n");
+		str.append("association: " + association + "\n");
+		str.append("level: " + level + "\n");
+		str.append("sortColumn: " + sortColumn + "\n");
 		str.append("columns: \n");
         for (int i=0; i<columns.size(); i++) {
 			TemplateColumn col = (TemplateColumn) columns.get(i);
