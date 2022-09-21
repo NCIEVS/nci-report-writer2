@@ -68,22 +68,22 @@ springBoot {
 
 
 dependencies {
-    compile ('org.springframework.boot:spring-boot-starter')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile 'org.springframework.boot:spring-boot-actuator'
-    compile 'org.springframework.boot:spring-boot-devtools'
+    implementation ('org.springframework.boot:spring-boot-starter')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation 'org.springframework.boot:spring-boot-actuator'
+    implementation 'org.springframework.boot:spring-boot-devtools'
 
-    compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
-    compile "org.apache.poi:poi:3.17"
-    compile "org.apache.poi:poi-ooxml:3.17"
-    compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    compile "org.apache.poi:poi-ooxml:3.17"
+    implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
+    implementation "org.apache.poi:poi:3.17"
+    implementation "org.apache.poi:poi-ooxml:3.17"
+    implementation "mysql:mysql-connector-java:$mysqlConnectorVersion"
+    implementation "org.apache.poi:poi-ooxml:3.17"
     
     /*
      * Test Dependencies
      */
    
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 
