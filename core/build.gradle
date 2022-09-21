@@ -32,7 +32,9 @@ apply plugin: 'org.springframework.boot'
  * The dependency management plugin remains a transitive dependency of spring-boot-gradle-plugin
  * so there's no need for it to be listed as a classpath dependency in the buildscript configuration. */
 apply plugin: 'io.spring.dependency-management'
+/*
 apply plugin: 'maven'
+*/
 apply plugin: 'maven-publish'
 
 
