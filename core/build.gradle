@@ -1,6 +1,6 @@
 buildscript {
     ext {
-		springBootVersion = '2.7.1.SNAPSHOT'
+		springBootVersion = '2.7.1'
 	}
     repositories {
         mavenLocal()
@@ -8,6 +8,7 @@ buildscript {
         maven { url "https://repo.spring.io/release" }
         maven { url "https://repo.spring.io/milestone" }
         maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.maven.apache.org/maven2/org/springframework/boot/org.springframework.boot.gradle.plugin" }
     }
 
     dependencies {
