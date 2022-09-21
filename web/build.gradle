@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.1.0.RELEASE'
+		springBootVersion = '2.7.1'
 	}
     repositories {  
         mavenLocal()    
@@ -39,7 +39,9 @@ apply plugin: 'org.springframework.boot'
  * so there’s no need for it to be listed as a classpath dependency in the buildscript configuration.
  */
 apply plugin: 'io.spring.dependency-management'
+/*
 apply plugin: 'maven'
+*/
 apply plugin: 'maven-publish'
 
 
@@ -62,26 +64,26 @@ repositories {
 }
 
 dependencies {
-    compile ('org.springframework.boot:spring-boot-starter-web')
+    implementation ('org.springframework.boot:spring-boot-starter-web')
     
-    compile ('org.springframework.boot:spring-boot-starter-data-rest')
-    compile ('org.springframework.boot:spring-boot-starter-data-jpa')
-    compile 'org.springframework.boot:spring-boot-actuator'
-    compile 'org.springframework.boot:spring-boot-devtools'
-    compile 'org.springframework.boot:spring-boot-properties-migrator'
+    implementation ('org.springframework.boot:spring-boot-starter-data-rest')
+    implementation ('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation 'org.springframework.boot:spring-boot-actuator'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-properties-migrator'
     
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
     
    
-    compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    compile "gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.9-SNAPSHOT"
+    implementation "mysql:mysql-connector-java:$mysqlConnectorVersion"
+    implementation "gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.9-SNAPSHOT"
 
     /*
      * Test Dependencies
      */
    
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 
