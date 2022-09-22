@@ -310,6 +310,7 @@ public class RWReport2Excel {
 	        return style;
     }
 
+/*
     public static void main(String[] args) {
 		long ms = System.currentTimeMillis();
 		String restURL = args[0];
@@ -322,4 +323,5 @@ public class RWReport2Excel {
 	    String retval = new RWReport2Excel().generate(restURL, namedGraph, version, textOutputFile);
 	    System.out.println(retval);
 	}
+*/
 }

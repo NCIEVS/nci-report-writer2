@@ -150,11 +150,11 @@ public class ReportLoader {
 
 
 
-
+/*
     public static void main(String[] args) {
 		String textfile = args[0];
 		Report report = ReportLoader.load(textfile);
 		dumpReport(report);
 	}
-
+*/
 }
