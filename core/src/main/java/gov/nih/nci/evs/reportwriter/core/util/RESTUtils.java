@@ -188,6 +188,7 @@ public class RESTUtils {
         return w;
 	}
 
+/*
 	public static void main(String[] args) {
 		String restURL = args[0];
 		String namedGraph = args[1];
@@ -206,4 +207,5 @@ public class RESTUtils {
 		saveToFile("respons_" + filename, w);
 
 	}
+*/
 }

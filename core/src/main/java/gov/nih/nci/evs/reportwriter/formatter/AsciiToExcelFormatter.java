@@ -291,6 +291,7 @@ System.out.println(SEPARATOR);
         _logger.debug("Done");
     }
 
+/*
     public static void main(String[] args) {
 		String textfile = args[0];
 		try {
@@ -300,6 +301,6 @@ System.out.println(SEPARATOR);
 			e.printStackTrace();
 		}
 	}
-
+*/
 
 }

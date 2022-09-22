@@ -243,7 +243,7 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
             e.printStackTrace();
         }
     }
-
+/*
     public static void main(String[] args) {
         test(CDISC_SDTM_FILE, CDISC_SDTM_NCIT_COLUMNS);
         test(CDISC_SUBSET_FILE, CDISC_SUBSET_NCIT_COLUMNS);
@@ -255,4 +255,5 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
         test(SPL_FILE, SPL_NCIT_COLUMNS);
         _logger.debug("Done");
     }
+*/
 }

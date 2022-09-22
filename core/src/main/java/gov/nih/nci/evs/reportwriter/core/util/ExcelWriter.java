@@ -522,7 +522,7 @@ public class ExcelWriter {
 		return w;
 	}
 
-
+/*
     public static void main(String[] args) throws IOException, InvalidFormatException {
 		ExcelWriter writer = new ExcelWriter();
 		boolean test_mode = true;
@@ -540,4 +540,5 @@ public class ExcelWriter {
         sheetLabel_vec.add("Mapped ICDO3.1 Morphology PT Terminology");
         writer.writeToXSSF(datafile_vec, "test1.xlsx", delim, sheetLabel_vec, headerColor);
 	}
+*/
 }

@@ -116,6 +116,7 @@ public class ReportWriterRunner {
 		return list;
 	}
 
+/*
 	public static void main(String[] args) {
 		long ms = System.currentTimeMillis();
 		String templateFile = args[0];
@@ -143,5 +144,5 @@ public class ReportWriterRunner {
 		System.out.println(str);
 		System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
 	}
-
+*/
 }

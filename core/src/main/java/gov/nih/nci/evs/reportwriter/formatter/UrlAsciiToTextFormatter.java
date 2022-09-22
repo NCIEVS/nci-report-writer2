@@ -55,6 +55,7 @@ public class UrlAsciiToTextFormatter extends AsciiToTextFormatter implements
         }
     }
 
+/*
     public static void main(String[] args) {
         test(CDISC_SDTM_REPORT_URL, CDISC_SDTM_NCIT_COLUMNS);
         // test(dir + "CDISC_Subset_REPORT__10.06e.txt", new int[] { 1, 3 });
@@ -67,4 +68,5 @@ public class UrlAsciiToTextFormatter extends AsciiToTextFormatter implements
         // new int[] { 1, 3 });
         _logger.debug("Done");
     }
+*/
 }
