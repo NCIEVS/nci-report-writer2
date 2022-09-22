@@ -221,6 +221,7 @@ public class PCDCPostProcessor {
 		System.out.println("Number of concepts in_vs_data but not in_row_data: " + knt);
 	}
 
+/*
     public static void main(String[] args) {
 		long ms = System.currentTimeMillis();
         String rw2textfile = args[0]; // "pcdc_aml_terminology.txt";
@@ -232,4 +233,5 @@ public class PCDCPostProcessor {
         Vector v = test.convertRowData(rw2textfile, ordered_file);
         ReportLoader.saveToFile(sorted_rw2textfile, v);
     }
+*/
 }

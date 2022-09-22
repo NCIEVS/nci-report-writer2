@@ -242,6 +242,7 @@ public class TemplateLoader {
 		}
 	}
 
+/*
     public static void main(String[] args) {
 		TemplateLoader test = new TemplateLoader();
 		String templateFile = "v2_PCDC_EWS_Terminology-Task-598.template";
@@ -249,6 +250,7 @@ public class TemplateLoader {
 		Template template = test.load(templateFile);
 		test.dumpTemplate(template);
 	}
+*/
 }
 
 

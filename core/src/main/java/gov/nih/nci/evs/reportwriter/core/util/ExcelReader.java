@@ -288,7 +288,7 @@ public class ExcelReader {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(date);
 	}
-
+/*
     public static void main(String[] args) throws IOException, InvalidFormatException {
         String excelfile = args[0];
         System.out.println(excelfile);
@@ -298,4 +298,5 @@ public class ExcelReader {
         String textfile = excelfile.substring(0, n) + "_" + getToday() + ".txt";
         saveToFile(textfile, w);
     }
+*/
 }
