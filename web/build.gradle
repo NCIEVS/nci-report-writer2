@@ -128,5 +128,5 @@ task zipFile(type: Zip) {
 
 zipFile.dependsOn = [ bootWar ]
 build.dependsOn = [ test, bootWar, zipFile ]
-install.dependsOn = [ bootWar, zipFile ]
+publish.dependsOn = [ bootWar, zipFile ]
 
