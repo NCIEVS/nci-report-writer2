@@ -1,7 +1,7 @@
 package gov.nih.nci.evs.reportwriter.web.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @Configuration
-@EnableConfigurationProperties({ResourceProperties.class})
+@EnableConfigurationProperties({WebProperties.Resources.class})
 public class StaticResourcesConfiguration extends WebMvcConfigurerAdapter {
 
     static final String[] STATIC_RESOURCES = new String[]{
@@ -33,7 +33,7 @@ public class StaticResourcesConfiguration extends WebMvcConfigurerAdapter {
     };
 
     @Autowired
-    private ResourceProperties resourceProperties = new ResourceProperties();
+    private WebProperties.Resources resourceProperties = new WebProperties.Resources();
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
