@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @Configuration
-@EnableConfigurationProperties({WebProperties.Resources.class})
+@EnableConfigurationProperties({ResourceWebPropertiesConfig.class})
 public class StaticResourcesConfiguration extends WebMvcConfigurerAdapter {
 
     static final String[] STATIC_RESOURCES = new String[]{
