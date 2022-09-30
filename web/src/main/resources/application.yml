@@ -43,7 +43,7 @@ spring:
             use-new-id-generator-mappings: true
     mvc:
       pathmatch:
-        matching-stratergy:ant_path_matcher
+        matching-strategy: ANT_PATH_MATCHER
 #
 # Server Properties
 #
