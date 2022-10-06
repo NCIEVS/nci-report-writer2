@@ -141,7 +141,6 @@ export class AllReportTaskStatusComponent implements OnInit {
       this.document.location.hostname +
       ":" +
       this.document.location.port +
-      "/" +
       getBaseLocation() +
       "/reportwriter/";
     //this.detailedReportPath = "http://localhost:8080/reportwriter/";
@@ -213,7 +212,7 @@ export class AllReportTaskStatusComponent implements OnInit {
     console.log("task - " + JSON.stringify(task));
     this.showprocessReportUrl = false;
     this.displayProcessingType = true;
-    
+
   }
 
   closeDialog(event){
