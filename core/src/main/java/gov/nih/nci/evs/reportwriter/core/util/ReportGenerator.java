@@ -269,8 +269,8 @@ public class ReportGenerator {
 	        return style;
     }
 
-	public EvsVersionInfo getEvsVersionInfo(String restURL,String namedGraph) {
-		return new ReportWriterRunner().getEvsVersionInfo(namedGraph, restURL);
+	public EvsVersionInfo getEvsVersionInfo(String restURL) {
+		return new ReportWriterRunner().getEvsVersionInfo(restURL);
 	}
 
 	public static void main(String[] args) {

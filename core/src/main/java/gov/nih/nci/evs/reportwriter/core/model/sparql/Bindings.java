@@ -106,6 +106,10 @@ public class Bindings {
 	private Property date;
 	private Property comment;
 
+	private Property graphName;
+
+	private Property source;
+
 	public Property getConceptCode() {
 		return conceptCode;
 	}
@@ -266,6 +270,22 @@ public class Bindings {
 
 	public void setNamedGraph(Property namedGraph) {
 		this.namedGraph = namedGraph;
+	}
+
+	public Property getGraphName() {
+		return graphName;
+	}
+
+	public void setGraphName(Property graphName) {
+		this.graphName = graphName;
+	}
+
+	public Property getSource() {
+		return source;
+	}
+
+	public void setSource(Property source) {
+		this.source = source;
 	}
 
 	@Override

@@ -469,9 +469,9 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 *
 	 * @return EvsVersionInfo instance.
 	 */
-	public EvsVersionInfo getEvsVersionInfo(String namedGraph, String restURL) {
+	public EvsVersionInfo getEvsVersionInfo(String restURL) {
 		String queryPrefix = queryBuilderService.contructPrefix();
-		String query = queryBuilderService.constructVersionInfoQuery(namedGraph);
+		String query = queryBuilderService.constructVersionInfoQuery();
 		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -483,6 +483,8 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 				evsVersionInfo.setVersion(b.getVersion().getValue());
 				evsVersionInfo.setDate(b.getDate().getValue());
 				evsVersionInfo.setComment(b.getComment().getValue());
+				evsVersionInfo.setGraphName(b.getGraphName().getValue());
+				evsVersionInfo.setSource(b.getSource().getValue());
 			}
 		} catch (Exception ex) {
 			System.out.println("Bad News Exception");

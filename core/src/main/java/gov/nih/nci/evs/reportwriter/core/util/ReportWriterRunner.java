@@ -75,9 +75,9 @@ public class ReportWriterRunner {
     QueryBuilderServiceImpl queryBuilderService = new QueryBuilderServiceImpl();
     RESTUtils restUtils = new RESTUtils();
 
-	public EvsVersionInfo getEvsVersionInfo(String namedGraph, String restURL) {
+	public EvsVersionInfo getEvsVersionInfo(String restURL) {
 		String queryPrefix = queryBuilderService.contructPrefix();
-		String query = queryBuilderService.constructVersionInfoQuery(namedGraph);
+		String query = queryBuilderService.constructVersionInfoQuery();
 		String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
 		ObjectMapper mapper = new ObjectMapper();

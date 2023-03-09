@@ -25,10 +25,6 @@
     display: inline-block;
 }
 
-
-.ui-datatable-data>tr>td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 150px;
+.btn-space {
+    margin-right: 5px;
 }
