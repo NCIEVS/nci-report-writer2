@@ -126,10 +126,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		String namedGraph = "";
 		String databaseUrl = "";
 		if (databaseType.equalsIgnoreCase("monthly")) {
-			namedGraph = stardogProperties.getMonthlyGraphName();
 			databaseUrl = stardogProperties.getMonthlyQueryUrl();
 		} else {
-			namedGraph = stardogProperties.getWeeklyGraphName();
 			databaseUrl = stardogProperties.getWeeklyQueryUrl();
 		}
 		log.debug("namedGraph - " + namedGraph);
@@ -245,7 +243,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		String outputDirectoryName = outputDirectory + "/" + lastDigit + "/" + reportName;
 		try {
 			Path path = Paths.get(outputDirectoryName);
-			Files.createDirectory(path);
+			Files.createDirectories(path);
 		} catch (IOException ex) {
 
 		}
