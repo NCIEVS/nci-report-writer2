@@ -29,7 +29,7 @@ public interface SparqlQueryManagerService {
 
 	public List <EvsConcept> getEvsConceptInSubset(String conceptCode, String namedGraph, String restURL);
 
-	public EvsVersionInfo getEvsVersionInfo(String namedGraph, String restURL);
+	public EvsVersionInfo getEvsVersionInfo(String restURL);
 
 	public List <String> getNamedGraphs(String restURL);
 

@@ -212,18 +212,17 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 	/**
 	 * Return the SPARQL VersionInfo Query
 	 *
-	 * @param namedGraph Named graph.
 	 * @return SPARQL Version Info query
 	 */
-	public String constructVersionInfoQuery(String namedGraph) {
+	public String constructVersionInfoQuery() {
 		StringBuffer query = new StringBuffer();
-		query.append("SELECT ?version ?date ?comment\n");
-		query.append("{ GRAPH <" + namedGraph + ">");
+		query.append("SELECT distinct ?version ?date ?comment ?source ?graphName  where {\n");
+		query.append("graph ?graphName ");
 		query.append("	{\n");
-        query.append("    ?o a owl:Ontology .\n");
-		query.append("    ?o owl:versionInfo ?version .\n");
-        query.append("    ?o dc:date ?date .\n");
-        query.append("    ?o rdfs:comment ?comment\n");
+        query.append("    ?source a owl:Ontology .\n");
+		query.append("    ?source owl:versionInfo ?version .\n");
+        query.append("    ?source dc:date ?date .\n");
+        query.append("    ?source rdfs:comment ?comment\n");
 		query.append("  }\n");
 		query.append("}\n");
 

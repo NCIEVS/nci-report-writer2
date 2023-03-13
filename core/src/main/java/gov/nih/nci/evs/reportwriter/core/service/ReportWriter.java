@@ -124,7 +124,7 @@ public class ReportWriter {
         logFile.println("Template Information");
         logFile.println("********************************");
 
-        EvsVersionInfo evsVersionInfo = getEvsVersionInfo(restURL, namedGraph);
+        EvsVersionInfo evsVersionInfo = getEvsVersionInfo(restURL);
         logFile.println("Version: " + evsVersionInfo.getVersion());
         logFile.println(reportTemplate.toString());
 
@@ -245,12 +245,13 @@ public class ReportWriter {
 		return "success";
 	}
 
-	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL, String namedGraph) {
-		setAssociationLabel2CodeHashMap(restURL, namedGraph);
-		setRoleLabel2CodeHashMap(restURL, namedGraph);
+	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL) {
+		EvsVersionInfo versionInfo = getEvsVersionInfo(restURL);
+		setAssociationLabel2CodeHashMap(restURL, versionInfo.getGraphName());
+		setRoleLabel2CodeHashMap(restURL, versionInfo.getGraphName());
 		log.info("runReport using templateFile: " + templateFile);
 		log.info("restURL: " + restURL);
-		log.info("namedGraph: " + namedGraph);
+		log.info("namedGraph: " + versionInfo.getGraphName());
 
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         Template reportTemplate = null;
@@ -269,7 +270,7 @@ public class ReportWriter {
 			} else {
 				String datafile = reportTemplate.getType();
 				List codes = ReportWriterRunner.readFile(datafile);
-				return run_report(codes, templateFile, outputFile, conceptFile, restURL, namedGraph);
+				return run_report(codes, templateFile, outputFile, conceptFile, restURL, versionInfo.getGraphName());
 			}
 			log.info("rootConceptCode: " + rootConceptCode);
 
@@ -282,7 +283,7 @@ public class ReportWriter {
         }
 
         if (isCDISCReport(reportTemplate)) {
-			return new SpecialReportWriter(sparqlQueryManagerService).runSpecialReport(templateFile, outputFile, conceptFile, restURL, namedGraph);
+			return new SpecialReportWriter(sparqlQueryManagerService).runSpecialReport(templateFile, outputFile, conceptFile, restURL, versionInfo.getGraphName());
 		}
 
         log.info("Template Information");
@@ -297,8 +298,7 @@ public class ReportWriter {
         logFile.println("Template Information");
         logFile.println("********************************");
 
-        EvsVersionInfo evsVersionInfo = getEvsVersionInfo(restURL, namedGraph);
-        logFile.println("Version: " + evsVersionInfo.getVersion());
+        logFile.println("Version: " + versionInfo.getVersion());
         logFile.println(reportTemplate.toString());
 
         // The conceptHash is used to improve performance, especially in the cases for reports that
@@ -322,7 +322,7 @@ public class ReportWriter {
         	System.out.println("(*) rootConceptCode: " + rootConceptCode);
             EvsConcept rootConcept = null;
             if (rootConceptCode != null) {
-            	rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, namedGraph, restURL);
+            	rootConcept = sparqlQueryManagerService.getEvsConceptDetailShort(rootConceptCode, versionInfo.getGraphName(), restURL);
 			}
 			System.out.println("(*) rootConceptLabel: " + rootConcept.getLabel());
 
@@ -332,19 +332,19 @@ public class ReportWriter {
                 //rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph, restURL);
                 //rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
 
-                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph, restURL);
+                rwUtils.processConceptInSubset(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, versionInfo.getGraphName(), restURL);
                 if (maxLevel > 1) {
-                	rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,namedGraph,restURL);
+                	rwUtils.processConceptSubclasses(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile,versionInfo.getGraphName(),restURL);
 			    }
 
         	} else if (reportTemplate.getAssociation().equals("Subclass") && sourceOf) {
-                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, namedGraph,restURL);
+                rwUtils.processConceptSubclassesOnly(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), currentLevel, maxLevel, logFile, versionInfo.getGraphName(),restURL);
         	} else {
-                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, namedGraph, restURL, associationName, sourceOf);
+                rwUtils.processAssociatedConcepts(reportOutput, rootConcept, conceptHash, reportTemplate.getColumns(), logFile, versionInfo.getGraphName(), restURL, associationName, sourceOf);
         	}
 
         } else if (templateType.equals("ConceptList")) {
-            rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,namedGraph,restURL);
+            rwUtils.processConceptList(reportOutput, conceptHash, reportTemplate.getColumns(), conceptFile,logFile,versionInfo.getGraphName(),restURL);
         } else {
         	System.err.println("Invalid Template Type: " + templateType);
         	return "failure";
@@ -357,7 +357,7 @@ public class ReportWriter {
         String outputFileExcel = outputFile + ".xls";
         PrintWriter pw = null;
         Workbook wb = new HSSFWorkbook();
-        Sheet sheet = wb.createSheet(evsVersionInfo.getVersion());
+        Sheet sheet = wb.createSheet(versionInfo.getVersion());
         sheet.createFreezePane(0, 1);
         int rowIndex = 0;
 
@@ -374,10 +374,10 @@ public class ReportWriter {
 			// Added May 10, 2018  to output the OWL version information
 		   	Row excelRow = sheet.createRow(rowIndex++);
          	Cell versionCell = excelRow.createCell(0);
-	        versionCell.setCellValue("Version: " + evsVersionInfo.getVersion());
+	        versionCell.setCellValue("Version: " + versionInfo.getVersion());
 	        versionCell.setCellStyle(headerStyle);
          	Cell graphCell = excelRow.createCell(1);
-	        graphCell.setCellValue("NamedGraph: " + namedGraph);
+	        graphCell.setCellValue("NamedGraph: " + versionInfo.getGraphName());
 	        graphCell.setCellStyle(headerStyle);
 	        Cell databaseCell = excelRow.createCell(2);
 	        databaseCell.setCellValue("REST URL: " + restURL);
@@ -479,13 +479,13 @@ public class ReportWriter {
 	        return style;
     }
 
-	public EvsVersionInfo getEvsVersionInfo(String restURL,String namedGraph) {
+	public EvsVersionInfo getEvsVersionInfo(String restURL) {
 		if (sparqlQueryManagerService == null) {
 			log.info("sparqlQueryManagerService == null???");
 			System.out.println("sparqlQueryManagerService == null???");
 		} else {
 			System.out.println("Calling sparqlQueryManagerService getEvsVersionInfo...");
-			return sparqlQueryManagerService.getEvsVersionInfo(namedGraph,restURL);
+			return sparqlQueryManagerService.getEvsVersionInfo(restURL);
 		}
 		return null;
 	}

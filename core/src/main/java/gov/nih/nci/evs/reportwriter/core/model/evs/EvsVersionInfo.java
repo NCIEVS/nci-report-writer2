@@ -4,6 +4,8 @@ public class EvsVersionInfo {
 	String version;
 	String date;
 	String comment;
+	String graphName;
+	String source;
 	public String getVersion() {
 		return version;
 	}
@@ -23,4 +25,19 @@ public class EvsVersionInfo {
 		this.comment = comment;
 	}
 
+	public String getGraphName() {
+		return graphName;
+	}
+
+	public void setGraphName(String graph) {
+		this.graphName = graph;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
 }

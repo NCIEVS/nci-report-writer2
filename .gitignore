@@ -13,3 +13,4 @@ build/
 web/src/main/resources/static/
 core/bin/main
 web/bin
+.idea

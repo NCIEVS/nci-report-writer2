@@ -126,31 +126,25 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		String namedGraph = "";
 		String databaseUrl = "";
 		if (databaseType.equalsIgnoreCase("monthly")) {
-			namedGraph = stardogProperties.getMonthlyGraphName();
 			databaseUrl = stardogProperties.getMonthlyQueryUrl();
 		} else {
-			namedGraph = stardogProperties.getWeeklyGraphName();
 			databaseUrl = stardogProperties.getWeeklyQueryUrl();
 		}
 		log.debug("namedGraph - " + namedGraph);
 		log.debug("databaseUrl - " + databaseUrl);
-		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl, namedGraph);
+		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl);
 		return evsVersionInfo;
 	}
 
 	public ReportTask createReportTask(ReportTemplate reportTemplate, String databaseType) {
-		String namedGraph = "";
 		String databaseUrl = "";
 		if (databaseType.equalsIgnoreCase("monthly")) {
-			namedGraph = stardogProperties.getMonthlyGraphName();
 			databaseUrl = stardogProperties.getMonthlyQueryUrl();
 		} else {
-			namedGraph = stardogProperties.getWeeklyGraphName();
 			databaseUrl = stardogProperties.getWeeklyQueryUrl();
 		}
-		log.debug("namedGraph - " + namedGraph);
 		log.debug("databaseUrl - " + databaseUrl);
-		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl, namedGraph);
+		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl);
 		ReportTask reportTask = new ReportTask();
 		reportTask.setStatus("Pending");
 		reportTask.setReportTemplate(reportTemplate);
@@ -159,7 +153,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		reportTask.setCreatedBy("system");
 		reportTask.setLastUpdatedBy("system");
 		reportTask.setVersion(evsVersionInfo.getVersion());
-		reportTask.setGraphName(namedGraph);
+		reportTask.setGraphName(evsVersionInfo.getGraphName());
 		reportTask.setDatabaseUrl(databaseUrl);
 		reportTask.setDatabaseType(databaseType);
 		ReportTask reportTaskRet = save(reportTask);
@@ -230,7 +224,6 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 
 	@Async
 	public void runReport(ReportTask reportTask) {
-		String namedGraph = reportTask.getGraphName();
 		String databaseUrl = reportTask.getDatabaseUrl();
 		int reportTemplateId = reportTask.getReportTemplate().getId();
 		ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateId);
@@ -250,7 +243,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		String outputDirectoryName = outputDirectory + "/" + lastDigit + "/" + reportName;
 		try {
 			Path path = Paths.get(outputDirectoryName);
-			Files.createDirectory(path);
+			Files.createDirectories(path);
 		} catch (IOException ex) {
 
 		}
@@ -303,8 +296,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 			reportTask.setDateLastUpdated(LocalDateTime.now());
 			reportTask.setStatus("Started");
 			save(reportTask);
-			String status = reportWriter.runReport(templateFileName, reportName, conceptListFileName, databaseUrl,
-					namedGraph);
+			String status = reportWriter.runReport(templateFileName, reportName, conceptListFileName, databaseUrl);
 			reportTask.setDateCompleted(LocalDateTime.now());
 			reportTask.setDateLastUpdated(LocalDateTime.now());
 			if (status.equals("success")) {

@@ -44,6 +44,16 @@ group = "gov.nih.nci.evs.reportwriter.core"
 version = "1.0.9-SNAPSHOT"
 sourceCompatibility = 1.8
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
 
 bootJar {
     enabled = false;
