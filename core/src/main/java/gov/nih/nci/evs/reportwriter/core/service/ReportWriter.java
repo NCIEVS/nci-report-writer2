@@ -245,9 +245,20 @@ public class ReportWriter {
 		return "success";
 	}
 
+    //KLO, 01082024
 	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL) {
+		return runReport(templateFile, outputFile, conceptFile, restURL, null);
+	}
+
+	public String runReport(String templateFile, String outputFile, String conceptFile, String restURL, String namedGraph) {
 		EvsVersionInfo versionInfo = getEvsVersionInfo(restURL);
-		setAssociationLabel2CodeHashMap(restURL, versionInfo.getGraphName());
+		//KLO, 01082024
+		//setAssociationLabel2CodeHashMap(restURL, versionInfo.getGraphName());
+		if (namedGraph != null) {
+			setAssociationLabel2CodeHashMap(restURL, namedGraph);
+		} else {
+			setAssociationLabel2CodeHashMap(restURL, versionInfo.getGraphName());
+		}
 		setRoleLabel2CodeHashMap(restURL, versionInfo.getGraphName());
 		log.info("runReport using templateFile: " + templateFile);
 		log.info("restURL: " + restURL);
