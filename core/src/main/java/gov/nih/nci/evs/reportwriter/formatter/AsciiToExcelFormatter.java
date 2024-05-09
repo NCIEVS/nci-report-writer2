@@ -64,7 +64,7 @@ public class AsciiToExcelFormatter extends FileFormatterBase {
             int maxTokenLen = getMaxTokenLength(heading);
             if (maxTokenLen > maxCellLen) {
                 maxCellLen = maxTokenLen;
-                maxChars.setElementAt(new Integer(maxCellLen), i);
+                maxChars.setElementAt(Integer.valueOf(maxCellLen), i);
             }
             if (maxCellLen < MAX_CODE_WIDTH) {
                 Vector<String> tokens = parseData(heading, " ");

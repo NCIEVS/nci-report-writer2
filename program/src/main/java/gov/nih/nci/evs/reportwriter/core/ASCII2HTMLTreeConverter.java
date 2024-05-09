@@ -1,6 +1,5 @@
 package gov.nih.nci.evs.reportwriter.core.util;
 
-
 import java.io.*;
 import java.sql.*;
 import java.text.*;
@@ -153,7 +152,7 @@ public class ASCII2HTMLTreeConverter {
 			int j=i+1;
 			String t = (String) v.elementAt(i);
 			int n = getLevel(t);
-			String level = new Integer(n).toString();
+			String level = Integer.valueOf(n).toString();
 			if (maxLevel < n) {
 				maxLevel = n;
 			}

@@ -85,7 +85,7 @@ public abstract class FileFormatterBase {
         String line = br.readLine();
         Vector<String> v = parseData(line, delimiter);
         for (int i = 0; i < v.size(); i++)
-            maxChars.add(new Integer(0));
+            maxChars.add(Integer.valueOf(0));
 
         while (true) {
             line = br.readLine();
@@ -99,7 +99,7 @@ public abstract class FileFormatterBase {
                 int numChar = s.length();
                 int maxChar = maxChars.elementAt(k);
                 if (maxChar < numChar) {
-                    maxChars.setElementAt(new Integer(numChar), k);
+                    maxChars.setElementAt(Integer.valueOf(numChar), k);
                 }
             }
         }

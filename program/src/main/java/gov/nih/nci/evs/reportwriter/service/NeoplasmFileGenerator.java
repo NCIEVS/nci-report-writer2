@@ -187,7 +187,7 @@ public class NeoplasmFileGenerator {
 
 
  	public static void ascii2HTMLTree(String asciiTree, String ncit_version, int lines_to_skip, String title, Vector contents) {
-		ASCII2HTMLTreeConverter generator = new ASCII2HTMLTreeConverter();
+		gov.nih.nci.evs.reportwriter.core.util.ASCII2HTMLTreeConverter generator = new gov.nih.nci.evs.reportwriter.core.util.ASCII2HTMLTreeConverter();
 		int n = asciiTree.lastIndexOf(".");
         String outputfile = asciiTree.substring(0, n) + ".html";
         String label = title;

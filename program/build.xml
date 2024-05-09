@@ -1,5 +1,4 @@
 <project name="projectname" default="build" basedir=".">
-    <import file="C:/lib_util/build-junitpdfreport.xml"/>
  
     <property file="build.properties" />
   
@@ -9,7 +8,7 @@
     <property name="test.reports" value="reports" />
       
     <path id="classpath">
-        <fileset dir="../core/extlib">
+        <fileset dir="./extlib">
             <include name="**/*.jar" />
         </fileset>    
         <fileset dir="../core/lib">
@@ -18,10 +17,10 @@
     </path>   
 
     <path id="classpath2">
-        <fileset dir="../core/extlib">
+        <fileset dir="./extlib">
             <include name="**/*.jar" />
         </fileset>    
-        <fileset dir="../core/lib">
+        <fileset dir="..core/lib">
             <include name="**/*.jar" />
         </fileset>
         <fileset dir=".">
