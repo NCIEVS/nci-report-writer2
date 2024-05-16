@@ -1,21 +1,26 @@
 buildscript {
+    ext {
+                springBootVersion = '2.7.1'
+        }
     repositories {
-        mavenLocal() 
-        jcenter()
-        mavenCentral() 
+        mavenLocal()
+        mavenCentral()
         maven { url "https://repo.spring.io/release" }
         maven { url "https://repo.spring.io/milestone" }
         maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.maven.apache.org/maven2/org/springframework/boot/org.springframework.boot.gradle.plugin" }
     }
 
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
     }
+
 }
 
 apply plugin: 'org.springframework.boot'
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven-publish'
 
 group = "gov.nih.nci.evs.reportwriter.program"
 version = '1.0.9.RELEASE'
@@ -23,13 +28,12 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 springBoot {
-	backupSource = false
+    mainClass = "gov.nih.nci.evs.reportwriter.progam.ReportWriterProgramApplication"
 }
 
 repositories {
     mavenLocal()
     mavenCentral() 
-    jcenter()
     maven { url "https://repo.spring.io/release" }
     maven { url "https://repo.spring.io/milestone" }
     maven { url "https://repo.spring.io/snapshot" }
@@ -37,20 +41,23 @@ repositories {
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter')
-	compile('org.springframework.boot:spring-boot-starter-web')
 
-	compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
-	compile 'commons-cli:commons-cli:1.4'
-	compile "org.apache.poi:poi:3.17"
-	compile "org.apache.poi:poi-ooxml:3.17"
+    implementation ('org.springframework.boot:spring-boot-starter')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation 'org.springframework.boot:spring-boot-actuator'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+	implementation 'gov.nih.nci.evs.restapi:evsrestapi-util:1.0.0'
+	implementation 'commons-cli:commons-cli:1.4'
+    implementation "org.apache.poi:poi:3.17"
+    implementation "org.apache.poi:poi-ooxml:3.17"
+    implementation 'com.opencsv:opencsv:5.9'
 	
-    compile('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.9-SNAPSHOT')	
+    implementation('gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.9-SNAPSHOT')	
 
     /*
      * Test Dependencies
     */
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
 jar {
@@ -87,11 +94,10 @@ task zipFile(type: Zip) {
     }
 }
 
-task bootJar
-bootJar.dependsOn = [jar, bootRepackage]
+bootJar.dependsOn = [jar]
 zipFile.dependsOn = [ bootJar ]
 build.dependsOn = [ test, bootJar, zipFile ]
-install.dependsOn = [ bootJar, zipFile ]
+publish.dependsOn = [ bootJar, zipFile ]
 
 /*
  * Wrapper task

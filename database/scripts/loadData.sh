@@ -13,7 +13,7 @@ USER=$2
 PASSWORD=$3
 DATABASE=$4
 
-CMD="mysql --local_infile -h $HOST -u $USER -p$PASSWORD $DATABASE"
+CMD="mysql --local_infile=1 -h $HOST -u $USER -p$PASSWORD $DATABASE"
 
 echo "Loading lk_association"
 $CMD < ../load/lk_association.load
