@@ -28,7 +28,7 @@ public class Application  extends SpringBootServletInitializer {
 	
 	
     public static void main(String[] args) {
-    	log.info("In main methid of SpringApplication*****");
+    	log.info("In main method of SpringApplication*****");
         SpringApplication.run(Application.class, args);
     }
 
@@ -40,7 +40,7 @@ public class Application  extends SpringBootServletInitializer {
     
     @Bean
     public Executor asyncExecutor() {
-    	log.info("In asyncExecutor methid of SpringApplication****");
+    	log.info("In asyncExecutor method of SpringApplication****");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(5);
         executor.setMaxPoolSize(5);

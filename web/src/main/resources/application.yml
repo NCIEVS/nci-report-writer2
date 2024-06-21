@@ -84,7 +84,7 @@ gov:
            outputDirectory: ${RW_OUTPUT_DIRECTORY:/tmp/output}
          stardog:         
            monthlyQueryUrl: ${STARDOG_MONTHLY_QUERY_URL:http://localhost:5820/NCIT2/query}
-           weeklyQueryUrl: ${STARDOG_WEEKLY_QUERY_URL:http://localhost:5820/NCIT2/query}
+           weeklyQueryUrl: ${STARDOG_WEEKLY_QUERY_URL:http://localhost:5820/CTRP/query}
            username: ${STARDOG_USERNAME:admin}
            password: ${STARDOG_PASSWORD:admin}     
            readTimeout: ${STARDOG_READ_TIMEOUT:10000}
