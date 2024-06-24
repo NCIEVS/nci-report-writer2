@@ -223,6 +223,7 @@ public class QueryBuilderServiceImpl implements QueryBuilderService {
 		query.append("    ?source owl:versionInfo ?version .\n");
         query.append("    ?source dc:date ?date .\n");
         query.append("    ?source rdfs:comment ?comment\n");
+		query.append("    FILTER regex(str(?source), \".*Thesaurus.*\")\n");
 		query.append("  }\n");
 		query.append("}\n");
 
