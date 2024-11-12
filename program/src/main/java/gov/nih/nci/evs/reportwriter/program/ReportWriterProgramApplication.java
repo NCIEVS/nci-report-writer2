@@ -1,4 +1,4 @@
-package gov.nih.nci.evs.reportwriter.progam;
+package gov.nih.nci.evs.reportwriter.program;
 
 
 import java.util.Date;
@@ -84,9 +84,9 @@ public class ReportWriterProgramApplication {
 
 		try {
 			CommandLine cmdLine = parser.parse(options, args);
-			String templateFileName = (String) cmdLine.getParsedOptionValue("templateFile"); 
-			String outputFileName = (String) cmdLine.getParsedOptionValue("outputFile"); 
-			String conceptFileName = (String) cmdLine.getParsedOptionValue("conceptFile"); 
+			String templateFileName = (String) cmdLine.getParsedOptionValue("templateFile");
+			String outputFileName = (String) cmdLine.getParsedOptionValue("outputFile");
+			String conceptFileName = (String) cmdLine.getParsedOptionValue("conceptFile");
 			String namedGraph = (String) cmdLine.getParsedOptionValue("namedGraph");
 			String restURL = (String) cmdLine.getParsedOptionValue("restURL");
 			app.start(templateFileName,outputFileName,conceptFileName,restURL, namedGraph);
@@ -99,7 +99,7 @@ public class ReportWriterProgramApplication {
 
 	/**
 	 * Starts the main processing after input options have been verified.
-	 * 
+	 *
 	 * @param templateFileName Name of the template file to process
 	 * @param outputFileName Name of the output file
 	 * @param conceptFileName Name of the file containing concept codes (optional)
