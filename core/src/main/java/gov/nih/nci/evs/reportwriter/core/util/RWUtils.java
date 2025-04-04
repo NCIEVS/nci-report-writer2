@@ -560,6 +560,7 @@ public class RWUtils {
 
 				if (values == null || values.size() == 0) {
 				} else {
+					Collections.sort(values);
 					columnString = String.join(contentSepartor, values);
 				}
 
