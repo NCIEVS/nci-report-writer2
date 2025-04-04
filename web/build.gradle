@@ -47,7 +47,7 @@ apply plugin: 'maven-publish'
 
 
 group = "gov.nih.nci.evs.reportwriter.web"
-version = "1.0.9.RELEASE"
+version = "1.0.12.RELEASE"
 sourceCompatibility = 1.8
 
 
@@ -86,6 +86,8 @@ dependencies {
      */
    
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.awaitility:awaitility:4.2.2'
 }
 
 
@@ -127,6 +129,9 @@ task zipFile(type: Zip) {
     }
 }
 
+test {
+    useJUnitPlatform()
+}
 
 zipFile.dependsOn = [ bootWar ]
 build.dependsOn = [ test, bootWar, zipFile ]
