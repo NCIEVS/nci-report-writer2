@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "copyAll": "cp -r dist/* ../src/main/resources/static/"
+    "copyAll": "cp -r dist/* ../web/src/main/resources/static/"
   },
   "browserify-shim": {
     "angular": {

@@ -4,7 +4,7 @@ SPARQL-based Report Writer query and reporting tool.
 # Overview
 The ReportWriter SPARQL application is a prototype for creating reports
 using a SPARQL endpoint. This version was written in Java and was tested
-against a Stardog triple store.
+against a Stardog/Jena triple store.
 
 This repository has several parts:
 
@@ -113,4 +113,4 @@ are located in the templates directory.
 
 The runReportWriter.sh script in the bin directory is an example of
 setting the environment variables to run against a locally installed
-version of Stardog.
+version of Stardog/Jena.

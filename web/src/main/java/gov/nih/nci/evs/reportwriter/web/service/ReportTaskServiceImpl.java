@@ -42,7 +42,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.core.properties.CoreProperties;
-import gov.nih.nci.evs.reportwriter.core.properties.StardogProperties;
+import gov.nih.nci.evs.reportwriter.core.properties.GraphdbProperties;
 import gov.nih.nci.evs.reportwriter.core.service.ReportWriter;
 import gov.nih.nci.evs.reportwriter.web.exception.InvalidInputParameterException;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTask;
@@ -76,7 +76,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 	CoreProperties coreProperties;
 
 	@Autowired
-	StardogProperties stardogProperties;
+	GraphdbProperties graphdbProperties;
 
 	@Autowired
 	ReportWriter reportWriter;
@@ -126,9 +126,9 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 		String namedGraph = "";
 		String databaseUrl = "";
 		if (databaseType.equalsIgnoreCase("monthly")) {
-			databaseUrl = stardogProperties.getMonthlyQueryUrl();
+			databaseUrl = graphdbProperties.getMonthlyQueryUrl();
 		} else {
-			databaseUrl = stardogProperties.getWeeklyQueryUrl();
+			databaseUrl = graphdbProperties.getWeeklyQueryUrl();
 		}
 		log.debug("namedGraph - " + namedGraph);
 		log.debug("databaseUrl - " + databaseUrl);
@@ -139,9 +139,9 @@ public class ReportTaskServiceImpl implements ReportTaskService {
 	public ReportTask createReportTask(ReportTemplate reportTemplate, String databaseType) {
 		String databaseUrl = "";
 		if (databaseType.equalsIgnoreCase("monthly")) {
-			databaseUrl = stardogProperties.getMonthlyQueryUrl();
+			databaseUrl = graphdbProperties.getMonthlyQueryUrl();
 		} else {
-			databaseUrl = stardogProperties.getWeeklyQueryUrl();
+			databaseUrl = graphdbProperties.getWeeklyQueryUrl();
 		}
 		log.debug("databaseUrl - " + databaseUrl);
 		EvsVersionInfo evsVersionInfo = reportWriter.getEvsVersionInfo(databaseUrl);

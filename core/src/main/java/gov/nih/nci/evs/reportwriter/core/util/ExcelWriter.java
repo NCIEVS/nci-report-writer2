@@ -10,11 +10,15 @@ import java.io.*;
 import java.util.*;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+// Add to ExcelWriter.java and ExcelReader.java
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+
+// Add to AsciiToExcelFormatter.java
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.CellType;
 
 
 public class ExcelWriter {
@@ -340,11 +344,11 @@ public class ExcelWriter {
     public static CellStyle cloneStyleFrom(CellStyle style_clone, CellStyle style) {
 		style_clone.cloneStyleFrom(style);
 
-		int code = style.getAlignment();
-		HorizontalAlignment ha = HorizontalAlignment.forInt(code);
+		HorizontalAlignment ha = style.getAlignment();
 		style_clone.setAlignment(ha);
 
-		short style_code = style.getBorderBottom();
+		BorderStyle borderStyle = style.getBorderBottom();
+		short style_code = borderStyle.getCode();
 		style_clone.setBorderBottom(BorderStyle.valueOf(style_code));
 
 		style_code = style.getFillBackgroundColor();
@@ -353,7 +357,8 @@ public class ExcelWriter {
 		style_code = style.getFillForegroundColor();
 		style_clone.setFillForegroundColor(style_code);
 
-		style_code = style.getFillPattern();
+		FillPatternType fillPattern = style.getFillPattern();
+		style_code = fillPattern.getCode();
 		style_clone.setFillPattern(FillPatternType.forInt(style_code));
         return style_clone;
 	}
@@ -393,7 +398,7 @@ public class ExcelWriter {
 							cell = row_clone.createCell(colIndex);
 							style_clone = cloneStyleFrom(style_clone, style);
 							cell.setCellStyle(style_clone);
-							switch (c.getCellTypeEnum()) {
+							switch (c.getCellType()) {
 								case STRING:
 									cell.setCellValue(c.getRichStringCellValue().getString());
 									break;

@@ -1,0 +1,3 @@
+rootProject.name = 'nci-report-writer2'
+include 'core', 'web', 'frontend'
+// include 'program'  // Commented out due to missing evsrestapi dependency

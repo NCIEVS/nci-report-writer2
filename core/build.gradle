@@ -1,6 +1,6 @@
 buildscript {
     ext {
-		springBootVersion = '2.7.1'
+		springBootVersion = '3.3.11'
 	}
     repositories {
         mavenLocal()
@@ -41,19 +41,19 @@ apply plugin: 'maven-publish'
 
 
 group = "gov.nih.nci.evs.reportwriter.core"
-version = "1.0.9-SNAPSHOT"
-sourceCompatibility = 1.8
+version = "2.0.3-SNAPSHOT"
+sourceCompatibility = 17
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        mavenLocal()
-    }
-}
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.java
+//        }
+//    }
+//    repositories {
+//        mavenLocal()
+//    }
+//}
 
 bootJar {
     enabled = false;
@@ -84,10 +84,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-devtools'
 
     implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
-    implementation "org.apache.poi:poi:3.17"
-    implementation "org.apache.poi:poi-ooxml:3.17"
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+    implementation "org.apache.poi:poi:5.2.3"
+    implementation "org.apache.poi:poi-ooxml:5.2.3"
     implementation "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    implementation "org.apache.poi:poi-ooxml:3.17"
+    implementation "org.apache.poi:poi-ooxml:5.2.3"
     
     /*
      * Test Dependencies

@@ -3,10 +3,10 @@ package gov.nih.nci.evs.reportwriter.web.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.List;
 

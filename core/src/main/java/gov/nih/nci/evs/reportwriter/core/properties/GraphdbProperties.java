@@ -3,10 +3,10 @@ package gov.nih.nci.evs.reportwriter.core.properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StardogProperties {
+public class GraphdbProperties {
 	
 	/** The logger. */
-    private static final Logger log = LoggerFactory.getLogger(StardogProperties.class);
+    private static final Logger log = LoggerFactory.getLogger(GraphdbProperties.class);
 
 
     private String username;
