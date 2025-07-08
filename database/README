@@ -1,120 +1,21 @@
-To create and empty reportwriter database follow the steps below. For this
-example assume the database name is "rw".
-
-1) Drop existing database, log into mysql from the command line.
-
-   drop database rw;
-
-2) Create new database, log into mysql from the command line
-
-   create database rw character set utf8;
-
-3) Use mysql to load the schema definitions, the input file are in
-   the "schema" directory.
-
-   mysql -u root -pPASSWORD rw < create_tables.ddl
-   mysql -u root -pPASSWORD rw < create_indexes.ddl
-   mysql -u root -pPASSWORD rw < create_foreign_keys.ddl
-
-4) Load in the content for the lookup tables. The script is in the
-   "scripts" directory.
-
-   loadData.sh localhost root PASSWORD rw
-
-The changes below are for History purposes. The scripts above should
-have been modified to contain these changes.
-=======================================================================
-
-For May 14 changes, added column to the report_task table:
-
-  ALTER TABLE report_task
-  ADD column version VARCHAR(20) AFTER last_updated_by;
-
-For May 31 - 2018 - Added rows to lk_source
-
-insert into lk_source(name,description) values ("CDISC-GLOSS","CDISC-GLOSS");
-insert into lk_source(name,description) values ("CTCAE 3.0","CTCAE 3.0");
-insert into lk_source(name,description) values ("CTCAE 5.0","CTCAE 5.0");
-insert into lk_source(name,description) values ("CTRP","CTRP");
-insert into lk_source(name,description) values ("EDQM-HC","EDQM-HC");
-insert into lk_source(name,description) values ("HGNC","HGNC");
-insert into lk_source(name,description) values ("PI-RADS","PI-RADS");
+To create areportwriter database follow the steps below. For this
+example assume the database name is "reportwriter".
 
 
-For June 19 - 2018 - Added rows to lk_source
-insert into lk_source(name,description) values ("SPL","SPL");
+1) Create new database
 
+   docker run --name mysql-container \
+   -e MYSQL_ROOT_PASSWORD=$RW_API_DATASOURCE_PASSWORD \
+   -e MYSQL_DATABASE=reportwriter \
+   -p 3312:3306 \
+   -d mysql:8
 
-For June 19 - 2018 - Added rows to lk_subsource
-insert into lk_subsource(name,description) values ("UNII","CDRH");
+2) Use mysql to load the data.
 
-For July 11th 2018 changes, added column to the report_task table:
+   docker exec -i mysql-container mysql -u$RW_API_DATASOURCE_USERNAME -p$RW_API_DATASOURCE_PASSWORD reportwriter < /path/to/your/init.sql
 
-  ALTER TABLE report_task
-  ADD column graph_name VARCHAR(2000);
+3) Make a test query to the new database.
 
-For July 24th 2018 changes, added column to the report_task table:
-
-  ALTER TABLE report_task
-  ADD column database_url VARCHAR(2000);
-
- ALTER TABLE report_task
-  ADD column database_type VARCHAR(200);
-
-For August 30th changes, added column to report_template_column,
-  created new table lk_attr
-  
-  ALTER TABLE report_template_column
-  ADD column attr VARCHAR(255); 
-
-insert into lk_attr(name,description) values("CDRH","CDRH");
-insert into lk_attr(name,description) values("CDRH-GUDID","CDRH-GUDID");
-insert into lk_attr(name,description) values("eCTD","eCTD");
-insert into lk_attr(name,description) values("eManu","eManu");
-insert into lk_attr(name,description) values("ICSR","ICSR");
-insert into lk_attr(name,description) values("Stability","Stability");
-
-For Sept 14th changes, add INC as lk_source
-insert into lk_source(name,description) values ("INC","INC");
-
-Changes to be made -Oct 16th 2018
-ALTER TABLE report_template MODIFY association varchar(255) null;
-ALTER TABLE report_template MODIFY root_concept_code varchar(255) null;
-
-For Feb 12 - 2019 - Added row to lk_subsource
-insert into lk_subsource(name,description) values ("PQCMC","PQCMC");
-
-For March 1st - 2019 Added row to lk_source
-insert into lk_source(name, description) values("CPTAC","CPTAC");
-
-For March 14th - 2019 Added row to lk_source
-insert into lk_source(name, description) values("PQCMC","PQCMC");
-
-
-For April 23rd - 2019 Added two rows to lk_source
-insert into lk_source(name, description) values("BRIDG 3.0.3","BRIDG 3.0.3");
-insert into lk_source(name, description) values("BRIDG 5.3","BRIDG 5.3");
-
-For June 7th -2019 Added two rows to  lk_property_type
-
-insert into lk_property_type (name, description) values ('Maps_To Axiom', 'Maps_To Axiom');
-insert into lk_property_type (name, description) values ('FULL_SYN Axiom', 'FULL_SYN Axiom');
-
-
-For June 11 -2019 Add a row to lk_source
-insert into lk_source(name, description) values ("CBDD","CBDD");
-
-For July 9 - 2019 Add 6 rows to lk_property_type
-insert into lk_property_type (name, description) values ("Pharmaceutical_Administration_Method", "Pharmaceutical_Administration_Method");
-
-insert into lk_property_type (name, description) values ("Pharmaceutical_State_Of_Matter", "Pharmaceutical_State_Of_Matter");
-
-insert into lk_property_type (name, description) values ("Pharmaceutical_Intended_Site", "Pharmaceutical_Intended_Site");
-
-insert into lk_property_type (name, description) values ("Pharmaceutical_Release_Characteristics", "Pharmaceutical_Release_Characteristics");
-
-insert into lk_property_type (name, description) values ("Pharmaceutical_Basic_Dose_Form", "Pharmaceutical_Basic_Dose_Form");
-
-insert into lk_property_type (name, description) values ("Pharmaceutical_Transformation", "Pharmaceutical_Transformation");
+   docker exec -it mysql-container mysql -u$RW_API_DATASOURCE_USERNAME -p$RW_API_DATASOURCE_PASSWORD -D reportwriter -e "SELECT * FROM lk_source LIMIT 10;"
 
 

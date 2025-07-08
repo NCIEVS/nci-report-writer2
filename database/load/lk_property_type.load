@@ -1,8 +1,0 @@
-LOAD DATA LOCAL INFILE "../data/lk_property_type.txt"
-    into table lk_property_type
-    fields terminated by '~@~'
-    lines terminated by '~@@~\n'
-    (
-        name,
-        description
-    );

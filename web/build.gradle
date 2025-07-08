@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '3.3.11'
+		springBootVersion = '3.4.5'
 	}
     repositories {  
         mavenLocal()    
@@ -80,7 +80,6 @@ dependencies {
 
 
     implementation "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    //implementation "gov.nih.nci.evs.reportwriter.core:reportwriter-core:2.3.0-SNAPSHOT"
     implementation project(':core')
 
     /*
@@ -101,8 +100,6 @@ jar {
     }
 }
  
-//frontend:build will be run before the processResources
-//processResources.dependsOn('frontend:build')
 
 
 test {
@@ -114,6 +111,7 @@ test {
 
     
 }
+
 
 task zipFile(type: Zip) {
     def zipFileRootDirectory = "${project.name}-${project.version}"
@@ -139,3 +137,7 @@ zipFile.dependsOn = [ bootWar ]
 build.dependsOn = [ test, bootWar, zipFile ]
 publish.dependsOn = [ bootWar, zipFile ]
 
+
+dependencyLocking {
+    lockAllConfigurations()
+}
