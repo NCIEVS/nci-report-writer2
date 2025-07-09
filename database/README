@@ -1,8 +1,8 @@
-To create areportwriter database follow the steps below. For this
+To create a reportwriter database follow the steps below. For this
 example assume the database name is "reportwriter".
 
 
-1) Create new database
+1) Create new database (using port forwarding to rarely used port 3312)
 
    docker run --name mysql-container \
    -e MYSQL_ROOT_PASSWORD=$RW_API_DATASOURCE_PASSWORD \

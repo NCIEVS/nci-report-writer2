@@ -47,7 +47,7 @@ apply plugin: 'maven-publish'
 
 
 group = "gov.nih.nci.evs.reportwriter.web"
-version = "2.0.3-SNAPSHOT"
+version = "2.3.0-SNAPSHOT"
 sourceCompatibility = 17
 
 
