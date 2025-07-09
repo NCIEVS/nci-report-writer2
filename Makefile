@@ -25,13 +25,13 @@ clean:
 build: build-core build-web build-frontend
 
 build-core:
-	./gradlew :core:clean :core:build -x test
+	./gradlew :core:clean :core:build
 
 build-web: build-core
-	./gradlew :web:clean :web:build -x test
+	./gradlew :web:clean :web:build
 
 build-frontend:
-	./gradlew :frontend:clean :frontend:build -x test
+	./gradlew :frontend:clean :frontend:build
 
 # build the frontend (cleans web static resources first)
 frontend:
