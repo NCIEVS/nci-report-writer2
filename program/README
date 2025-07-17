@@ -1,5 +1,0 @@
-This project requires an additional evsrestapi-util.jar file installed as a maven dependency.
-That jar file is in a local extlib directory and must be installed as follows:
-
-mvn install:install-file -Dfile=extlib/evsrestapi-util.jar -DgroupId=gov.nih.nci.evs.restapi -DartifactId=evsrestapi-util -Dversion=1.0.0
-

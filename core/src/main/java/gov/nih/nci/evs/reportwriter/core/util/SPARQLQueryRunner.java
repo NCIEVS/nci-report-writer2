@@ -12,6 +12,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -73,12 +74,15 @@ public class SPARQLQueryRunner {
 	 * @return SPARQL results.
 	 */
 	public String runSPARQL(String query, String restURL) {
-		RestTemplate restTemplate = new RestTemplateBuilder().
-				rootUri(restURL).
-				basicAuthentication(username,password).
-				setReadTimeout(Duration.ofSeconds(readTimeout)).
-				setConnectTimeout(Duration.ofSeconds(connectTimeout)).
-				build();
+		SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+		requestFactory.setConnectTimeout((int) Duration.ofSeconds(connectTimeout).toMillis());
+		requestFactory.setReadTimeout((int) Duration.ofSeconds(readTimeout).toMillis());
+
+		RestTemplate restTemplate = new RestTemplateBuilder()
+				.requestFactory(() -> requestFactory) // Supply the configured factory
+				.rootUri(restURL)
+				.basicAuthentication(username, password)
+				.build();
 		restTemplate.getMessageConverters().add(0,new StringHttpMessageConverter(Charset.forName("UTF-8")));
 		MultiValueMap <String,String> body = new LinkedMultiValueMap<String,String>();
 		body.add("query", query);

@@ -11,15 +11,12 @@ package gov.nih.nci.evs.reportwriter.formatter;
 import java.io.*;
 import java.util.*;
 
+import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.*;
-
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
 
 //import gov.nih.nci.evs.utils.*;
 
@@ -118,10 +115,10 @@ public class AsciiToExcelFormatter extends FileFormatterBase {
         font.setBold(true);
         toprow.setFont(font);
         if (extensible_col == -1) {
-        	toprow.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+        	toprow.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
 		} else {
 			//toprow.setFillForegroundColor(HSSFColor.YELLOW.index);
-			toprow.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
+			toprow.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
 		}
 
         //toprow.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
@@ -193,7 +190,7 @@ public class AsciiToExcelFormatter extends FileFormatterBase {
                 } else if (a[i].equals(Boolean.TRUE)) {
 
                     wc.setCellStyle(cs);
-                    wc.setCellType(HSSFCell.CELL_TYPE_STRING);
+                    wc.setCellType(CellType.STRING);
 
                     if (highlight_row)
                         wc.setCellStyle(highlightedrow);

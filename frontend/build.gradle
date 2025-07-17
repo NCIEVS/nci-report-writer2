@@ -1,0 +1,22 @@
+plugins {
+  id "com.github.node-gradle.node" version "3.1.1"
+}
+
+version '0.0.1'
+
+node {
+  version = '16.20.2'
+  npmVersion = '8.19.4'
+  download = true
+  workDir = file("${project.buildDir}/node")
+  nodeModulesDir = file("${project.projectDir}")
+}
+// Create a task to run npm build:prod
+task npmBuild(type: NpmTask) {
+  args = ['run', 'build:prod']
+}
+
+// Make the standard build task depend on our npm build
+build.dependsOn(npmBuild)
+npmBuild.dependsOn(npmInstall)
+

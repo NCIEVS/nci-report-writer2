@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedAssociation;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedRole;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Bindings;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Sparql;
-import gov.nih.nci.evs.reportwriter.core.properties.StardogProperties;
+import gov.nih.nci.evs.reportwriter.core.properties.GraphdbProperties;
 import gov.nih.nci.evs.reportwriter.core.util.EVSUtils;
 import gov.nih.nci.evs.reportwriter.core.util.RESTUtils;
 
@@ -41,7 +41,7 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	private static final Logger log = LoggerFactory.getLogger(QueryBuilderServiceImpl.class);
 
 	@Autowired
-	StardogProperties stardogProperties;
+	GraphdbProperties graphdbProperties;
 
 	@Autowired
 	QueryBuilderService queryBuilderService;
@@ -53,8 +53,8 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
 	 * Construct a RESTUtils class based on environment variables
 	 */
 	public void postInit() {
-		restUtils = new RESTUtils(stardogProperties.getUsername(),
-				stardogProperties.getPassword(),stardogProperties.getReadTimeout(),stardogProperties.getConnectTimeout());
+		restUtils = new RESTUtils(graphdbProperties.getUsername(),
+				graphdbProperties.getPassword(),graphdbProperties.getReadTimeout(),graphdbProperties.getConnectTimeout());
 	}
 
 //KLO

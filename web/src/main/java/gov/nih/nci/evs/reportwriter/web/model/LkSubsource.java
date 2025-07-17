@@ -1,7 +1,11 @@
 package gov.nih.nci.evs.reportwriter.web.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
 
 

@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableConfigurationProperties({ResourceWebPropertiesConfig.class})
-public class StaticResourcesConfiguration extends WebMvcConfigurerAdapter {
+public class StaticResourcesConfiguration implements WebMvcConfigurer {
 
     static final String[] STATIC_RESOURCES = new String[]{
         "/**/*.css",

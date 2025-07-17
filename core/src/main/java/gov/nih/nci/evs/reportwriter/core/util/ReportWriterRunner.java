@@ -54,7 +54,6 @@ import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAxiom;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsProperty;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Bindings;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Sparql;
-import gov.nih.nci.evs.reportwriter.core.properties.StardogProperties;
 import gov.nih.nci.evs.reportwriter.core.util.EVSUtils;
 import gov.nih.nci.evs.reportwriter.core.util.RESTUtils;
 

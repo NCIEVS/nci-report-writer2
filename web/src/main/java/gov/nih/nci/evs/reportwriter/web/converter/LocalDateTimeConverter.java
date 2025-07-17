@@ -1,11 +1,14 @@
 package gov.nih.nci.evs.reportwriter.web.converter;
 
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
- 
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Converter(autoApply = true)
-public class LocalDateTimeConverter implements AttributeConverter<java.time.LocalDateTime, java.sql.Timestamp> {
+public class LocalDateTimeConverter implements AttributeConverter<LocalDateTime, Timestamp> {
   
     @Override
     public java.sql.Timestamp convertToDatabaseColumn(java.time.LocalDateTime attribute) {

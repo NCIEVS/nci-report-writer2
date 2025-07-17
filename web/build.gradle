@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.7.1'
+		springBootVersion = '3.4.5'
 	}
     repositories {  
         mavenLocal()    
@@ -47,8 +47,8 @@ apply plugin: 'maven-publish'
 
 
 group = "gov.nih.nci.evs.reportwriter.web"
-version = "1.0.13.RELEASE"
-sourceCompatibility = 1.8
+version = "2.3.0-SNAPSHOT"
+sourceCompatibility = 17
 
 
 springBoot {
@@ -68,18 +68,19 @@ dependencies {
     
     implementation ('org.springframework.boot:spring-boot-starter-data-rest')
     implementation ('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
     implementation 'org.springframework.boot:spring-boot-actuator'
     implementation 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-properties-migrator'
     
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.3'
 
 
 
 
     implementation "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    implementation "gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.9-SNAPSHOT"
+    implementation project(':core')
 
     /*
      * Test Dependencies
@@ -99,8 +100,6 @@ jar {
     }
 }
  
-//frontend:build will be run before the processResources
-processResources.dependsOn('frontend:build')
 
 
 test {
@@ -112,6 +111,7 @@ test {
 
     
 }
+
 
 task zipFile(type: Zip) {
     def zipFileRootDirectory = "${project.name}-${project.version}"
@@ -137,3 +137,7 @@ zipFile.dependsOn = [ bootWar ]
 build.dependsOn = [ test, bootWar, zipFile ]
 publish.dependsOn = [ bootWar, zipFile ]
 
+
+dependencyLocking {
+    lockAllConfigurations()
+}

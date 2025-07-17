@@ -136,7 +136,7 @@ public class ExcelReader {
 	}
 
     private static void printCellValue(Cell cell) {
-        switch (cell.getCellTypeEnum()) {
+        switch (cell.getCellType()) {
             case BOOLEAN:
                 System.out.print(cell.getBooleanCellValue());
                 break;
@@ -163,7 +163,7 @@ public class ExcelReader {
     }
 
     private static String getCellValue(Cell cell) {
-        switch (cell.getCellTypeEnum()) {
+        switch (cell.getCellType()) {
             case BOOLEAN:
                 System.out.print(cell.getBooleanCellValue());
                 Boolean bool_obj = cell.getBooleanCellValue();

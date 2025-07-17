@@ -1,9 +1,9 @@
 package gov.nih.nci.evs.reportwriter.web.model;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import javax.persistence.*;
 
 
 /**

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import gov.nih.nci.evs.reportwriter.core.properties.CoreProperties;
-import gov.nih.nci.evs.reportwriter.core.properties.StardogProperties;
+import gov.nih.nci.evs.reportwriter.core.properties.GraphdbProperties;
 
 @Configuration
 @EnableConfigurationProperties
@@ -26,9 +26,9 @@ public class CorePropertiesConfiguration {
 	}
 
 	@Bean
-	@ConfigurationProperties(prefix = "gov.nih.nci.evs.reportwriter.stardog", ignoreUnknownFields = false)
-	StardogProperties stardogProperties() {
-		return new StardogProperties();
+	@ConfigurationProperties(prefix = "gov.nih.nci.evs.reportwriter.graphdb", ignoreUnknownFields = false)
+	GraphdbProperties graphdbProperties() {
+		return new GraphdbProperties();
 	}
 
 }
