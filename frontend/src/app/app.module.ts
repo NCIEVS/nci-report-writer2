@@ -86,7 +86,7 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
     BrowserAnimationsModule,
     TableModule,
     SharedModule,
-    NgbModule.forRoot(),
+    NgbModule,
     DialogModule,
     ButtonModule,
     AppRoutingModule,

@@ -11,7 +11,6 @@ import { ViewChild } from "@angular/core";
 import { Table } from "primeng/table";
 import { InputText } from "primeng/inputtext";
 import { ElementRef } from "@angular/core";
-import { forEach } from "@angular/router/src/utils/collection";
 
 import { Lookup } from "./../../model/lookup";
 import { RunReportTemplateInfo } from "./../../model/runReportTemplateInfo";
@@ -25,9 +24,9 @@ import { FileUploadModule, FileUpload } from "primeng/primeng";
 })
 export class ReportTemplateComponent implements OnInit {
   //@ViewChild("dtTemplate") dataTable: DataTable;
-  @ViewChild("dtTemplates")
+  @ViewChild("dtTemplates", { static: false })
   table: Table;
-  @ViewChild("fileUpload")
+  @ViewChild("fileUpload", { static: false })
   fileUpload: FileUpload;
 
   constructor(
