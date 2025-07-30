@@ -177,7 +177,8 @@
 
     <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425"></p-confirmDialog>
 </div>
-<p-dialog header="Select Processing Type" [(visible)]="displayProcessingType" [width]="900" (onHide)="cancelSelectProcessTask()" (onClick)="closeDialog($event)">
+<!-- width = 900 -->
+<p-dialog header="Select Processing Type" [(visible)]="displayProcessingType" (onHide)="cancelSelectProcessTask()" (onClick)="closeDialog($event)">
     <div class="">
         <form class="form-horizontal" #processingTypeForm="ngForm" (ngSubmit)="onSubmitProcessType();">
             <div class="form-group">

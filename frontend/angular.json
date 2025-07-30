@@ -11,6 +11,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
+            "aot": true,
                         "outputPath": "dist",
                         "index": "src/index.html",
                         "main": "src/main.ts",
@@ -23,7 +24,6 @@
                             "node_modules/font-awesome/css/font-awesome.min.css",
                             "node_modules/ngx-toastr/toastr.css",
                             "node_modules/primeicons/primeicons.css",
-                            "node_modules/primeng/resources/themes/omega/theme.css",
                             "node_modules/primeng/resources/primeng.min.css",
                             "node_modules/bootstrap/dist/css/bootstrap.min.css",
                             "src/assets/bootstrap-angularUI.custom.css",
@@ -37,6 +37,13 @@
                     },
                     "configurations": {
                         "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "10mb",
+                  "maximumError": "20mb"
+                }
+              ],
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
@@ -84,7 +91,6 @@
                         "styles": [
                             "node_modules/font-awesome/css/font-awesome.min.css",
                             "node_modules/primeicons/primeicons.css",
-                            "node_modules/primeng/resources/themes/omega/theme.css",
                             "node_modules/primeng/resources/primeng.min.css",
                             "node_modules/bootstrap/dist/css/bootstrap.min.css",
                             "src/assets/bootstrap-angularUI.custom.css",
@@ -140,7 +146,7 @@
     "schematics": {
         "@schematics/angular:component": {
             "prefix": "app",
-            "styleext": "css"
+            "style": "css"
         },
         "@schematics/angular:directive": {
             "prefix": "app"

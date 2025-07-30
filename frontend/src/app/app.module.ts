@@ -9,18 +9,19 @@ import {
 
 import { AppComponent } from "./app.component";
 
-import { MultiSelectModule } from "primeng/primeng";
-import { DropdownModule } from "primeng/primeng";
-import { SharedModule } from "primeng/primeng";
-import { DialogModule } from "primeng/primeng";
-import { ButtonModule } from "primeng/primeng";
-import { MenubarModule, MenuItem } from "primeng/primeng";
-import { ConfirmDialogModule, ConfirmationService } from "primeng/primeng";
-import { SplitButtonModule } from "primeng/primeng";
-import { TooltipModule } from "primeng/primeng";
-import { BlockUIModule } from "primeng/primeng";
-import { ProgressBarModule } from "primeng/primeng";
-import { ProgressSpinnerModule } from "primeng/primeng";
+import { MultiSelectModule } from "primeng/multiselect";
+import { DropdownModule } from "primeng/dropdown";
+// import { SharedModule } from "primeng/primeng";
+import { DialogModule } from "primeng/dialog";
+import { ButtonModule } from "primeng/button";
+import { MenubarModule } from "primeng/menubar";
+import { MenuItem } from "primeng/api";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { SplitButtonModule } from "primeng/splitbutton";
+import { TooltipModule } from "primeng/tooltip";
+import { BlockUIModule } from "primeng/blockui";
+import { ProgressBarModule } from "primeng/progressbar";
+import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { TableModule } from "primeng/table";
 import { InputTextModule } from "primeng/inputtext";
 import { FileUploadModule } from "primeng/fileupload";
@@ -85,7 +86,7 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
     FormsModule,
     BrowserAnimationsModule,
     TableModule,
-    SharedModule,
+    // SharedModule,
     NgbModule,
     DialogModule,
     ButtonModule,

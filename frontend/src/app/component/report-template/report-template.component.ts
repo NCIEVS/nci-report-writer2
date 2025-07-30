@@ -15,7 +15,7 @@ import { ElementRef } from "@angular/core";
 import { Lookup } from "./../../model/lookup";
 import { RunReportTemplateInfo } from "./../../model/runReportTemplateInfo";
 
-import { FileUploadModule, FileUpload } from "primeng/primeng";
+import { FileUploadModule, FileUpload } from "primeng/fileupload";
 
 @Component({
   selector: "app-report-template",
@@ -24,9 +24,9 @@ import { FileUploadModule, FileUpload } from "primeng/primeng";
 })
 export class ReportTemplateComponent implements OnInit {
   //@ViewChild("dtTemplate") dataTable: DataTable;
-  @ViewChild("dtTemplates", { static: false })
+  @ViewChild("dtTemplates")
   table: Table;
-  @ViewChild("fileUpload", { static: false })
+  @ViewChild("fileUpload")
   fileUpload: FileUpload;
 
   constructor(
