@@ -1,10 +1,15 @@
   .navbar {
     min-height: 32px;
+    background-color: #101010;
+  }
+  
+  .nav {
+    display: inline-block;
   }
   
   .navbar-nav .main-site-logo {
     width: 24px;
-    border-radius: 25%;
+    /* border-radius: 25%; */
   }
   
   .navbar-inverse .navbar-nav > li > a {
@@ -59,7 +64,7 @@
   .navbar-inverse .navbar-nav > li > a:hover {
     color: #fff ;
     background-color: #000000;
-    border-radius: 10px;
+    /* border-radius: 10px; */
   }
   
   a.dropdown-toggle {
