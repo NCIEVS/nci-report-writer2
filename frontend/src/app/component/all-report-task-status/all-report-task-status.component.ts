@@ -18,7 +18,7 @@ import { Table } from "primeng/table";
   providers: [ConfirmationService]
 })
 export class AllReportTaskStatusComponent implements OnInit {
-  @ViewChild("dtTasks") table: Table;
+  @ViewChild("dtTasks", { static: false }) table: Table;
 
   tasks: Task[];
   taskStatuses: Lookup[];
@@ -159,7 +159,7 @@ export class AllReportTaskStatusComponent implements OnInit {
         this.table.filters.global != undefined &&
         this.table.filters.global != null
       ) {
-        this.table.filterGlobal(this.table.filters.global.value, "contains");
+        this.table.filterGlobal(this.table.filters.value, "contains");
       }
     }
     const globalfilters = localStorage.getItem("globalfilters-task");
