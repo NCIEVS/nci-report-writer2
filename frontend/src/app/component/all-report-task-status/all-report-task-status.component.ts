@@ -18,7 +18,7 @@ import { Table } from "primeng/table";
   providers: [ConfirmationService]
 })
 export class AllReportTaskStatusComponent implements OnInit {
-  @ViewChild("dtTasks", { static: false }) table: Table;
+  @ViewChild("dtTasks", { static: true }) table: Table;
 
   tasks: Task[];
   taskStatuses: Lookup[];
