@@ -19,28 +19,28 @@ FULL_VERSION            := v$(APP_VERSION)-g$(GIT_VERSION)
 
 # consider also "docker save..." and "docker load..." to avoid registry.
 clean:
-	./gradlew :web:clean
+	gradlew :web:clean
 
 # Build the library without tests
 build: build-core build-web build-frontend
 
 build-core:
-	./gradlew :core:clean :core:build
+	gradlew :core:clean :core:build
 
 build-web: build-core
-	./gradlew :web:clean :web:build
+	gradlew :web:clean :web:build
 
 build-frontend:
-	./gradlew :frontend:clean :frontend:build
+	gradlew :frontend:clean :frontend:build
 
 # build the frontend (cleans web static resources first)
 frontend:
 	rm -rf web/src/main/resources/static/*
-	./gradlew :frontend:build
+	gradlew :frontend:build
 
 # Run the web application
 run:
-	./gradlew :web:bootRun
+	gradlew :web:bootRun
 
 # Run frontend in development mode (if needed)
 run-frontend-dev:
@@ -69,13 +69,13 @@ version:
 scan:
 	trivy fs frontend/package-lock.json --format template -o report.html --template "@config/trivy/html.tpl"
 	grep CRITICAL report.html
-	./gradlew :web:dependencies --write-locks
+	gradlew :web:dependencies --write-locks
 	trivy fs web/gradle.lockfile --format template -o reportJava.html --template "@config/trivy/html.tpl"
 	grep CRITICAL reportJava.html
 	/bin/rm -rf web/gradle.lockfile
 
 scanJava:
-	./gradlew :web:dependencies --write-locks
+	gradlew :web:dependencies --write-locks
 	trivy fs web/gradle.lockfile --format template -o reportJava.html --template "@config/trivy/html.tpl"
 	grep CRITICAL reportJava.html
 	/bin/rm -rf web/gradle.lockfile
