@@ -18,9 +18,10 @@ import { RunReportTemplateInfo } from "./../../model/runReportTemplateInfo";
 import { FileUploadModule, FileUpload } from "primeng/fileupload";
 
 @Component({
-  selector: "app-report-template",
-  templateUrl: "./report-template.component.html",
-  styleUrls: ["./report-template.component.css"]
+    selector: "app-report-template",
+    templateUrl: "./report-template.component.html",
+    styleUrls: ["./report-template.component.css"],
+    standalone: false
 })
 export class ReportTemplateComponent implements OnInit {
   //@ViewChild("dtTemplate") dataTable: DataTable;

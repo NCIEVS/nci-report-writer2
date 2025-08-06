@@ -12,10 +12,11 @@ import { ViewChild } from "@angular/core";
 import { Table } from "primeng/table";
 
 @Component({
-  selector: "app-all-report-task-status",
-  templateUrl: "./all-report-task-status.component.html",
-  styleUrls: ["./all-report-task-status.component.css"],
-  providers: [ConfirmationService]
+    selector: "app-all-report-task-status",
+    templateUrl: "./all-report-task-status.component.html",
+    styleUrls: ["./all-report-task-status.component.css"],
+    providers: [ConfirmationService],
+    standalone: false
 })
 export class AllReportTaskStatusComponent implements OnInit {
   @ViewChild("dtTasks", { static: true }) table: Table;
