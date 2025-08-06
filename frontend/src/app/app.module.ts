@@ -49,7 +49,7 @@ import { GlobalErrorHandler } from "./service/GlobalErrorHandler";
 import { LoaderService } from "./service/loader.service";
 import { HttpService } from "./service/http.interceptor";
 
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { ReportTemplateViewComponent } from "./component/report-template-view/report-template-view.component";
@@ -65,81 +65,75 @@ import { APP_BASE_HREF } from "@angular/common";
 import { getBaseLocation } from "./service/common-functions";
 import { CloneTemplateComponent } from "./component/clone-template/clone-template.component";
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    CreateTemplateComponent,
-    ReportTemplateComponent,
-    ReportTemplateViewComponent,
-    AllReportTaskStatusComponent,
-    ReportTaskOutputComponent,
-    ReportwriterHomeComponent,
-    HeaderComponent,
-    FooterComponent,
-    LoaderComponent,
-    CloneTemplateComponent
-  ],
-  imports: [
-    BrowserModule,
-    MultiSelectModule,
-    DropdownModule,
-    FormsModule,
-    BrowserAnimationsModule,
-    TableModule,
-    // SharedModule,
-    NgbModule,
-    DialogModule,
-    ButtonModule,
-    AppRoutingModule,
-    MenubarModule,
-    HttpClientModule,
-    ConfirmDialogModule,
-    SplitButtonModule,
-    TooltipModule,
-    BlockUIModule,
-    ProgressBarModule,
-    ProgressSpinnerModule,
-    InputTextModule,
-    FileUploadModule,
-    ToastModule,
-    InputMaskModule,
-    ToastrModule.forRoot({
-      timeOut: 10000,
-      positionClass: "toast-top-right",
-      preventDuplicates: true,
-      maxOpened: 5,
-      autoDismiss: true,
-      newestOnTop: true
-    })
-  ],
-  providers: [
-    LookupvaluesTemplateService,
-    LookupvaluesTemplaterowService,
-    ReportTemplateService,
-    ReportTaskService,
-    LoaderService,
-    MessageService,
-    ToastrService,
-    GlobalErrorHandler,
-    {
-      provide: ErrorHandler,
-      useClass: GlobalErrorHandler
-    },
-    Location,
-    {
-      provide: LocationStrategy,
-      useClass: PathLocationStrategy
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpService,
-      multi: true
-    },
-    {
-      provide: APP_BASE_HREF,
-      useFactory: getBaseLocation
-    }
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        CreateTemplateComponent,
+        ReportTemplateComponent,
+        ReportTemplateViewComponent,
+        AllReportTaskStatusComponent,
+        ReportTaskOutputComponent,
+        ReportwriterHomeComponent,
+        HeaderComponent,
+        FooterComponent,
+        LoaderComponent,
+        CloneTemplateComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        MultiSelectModule,
+        DropdownModule,
+        FormsModule,
+        BrowserAnimationsModule,
+        TableModule,
+        // SharedModule,
+        NgbModule,
+        DialogModule,
+        ButtonModule,
+        AppRoutingModule,
+        MenubarModule,
+        ConfirmDialogModule,
+        SplitButtonModule,
+        TooltipModule,
+        BlockUIModule,
+        ProgressBarModule,
+        ProgressSpinnerModule,
+        InputTextModule,
+        FileUploadModule,
+        ToastModule,
+        InputMaskModule,
+        ToastrModule.forRoot({
+            timeOut: 10000,
+            positionClass: "toast-top-right",
+            preventDuplicates: true,
+            maxOpened: 5,
+            autoDismiss: true,
+            newestOnTop: true
+        })], providers: [
+        LookupvaluesTemplateService,
+        LookupvaluesTemplaterowService,
+        ReportTemplateService,
+        ReportTaskService,
+        LoaderService,
+        MessageService,
+        ToastrService,
+        GlobalErrorHandler,
+        {
+            provide: ErrorHandler,
+            useClass: GlobalErrorHandler
+        },
+        Location,
+        {
+            provide: LocationStrategy,
+            useClass: PathLocationStrategy
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpService,
+            multi: true
+        },
+        {
+            provide: APP_BASE_HREF,
+            useFactory: getBaseLocation
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {}
