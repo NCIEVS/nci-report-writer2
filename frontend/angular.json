@@ -16,7 +16,7 @@
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "tsConfig": "src/tsconfig.app.json",
-                        "polyfills": "src/polyfills.ts",
+                        "polyfills": ["zone.js"],
                         "assets": [
                             "src/assets"
                         ],
@@ -62,18 +62,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "NCI_Report_Writer:build"
+                      "buildTarget": "NCI_Report_Writer:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "NCI_Report_Writer:build:production"
+                          "buildTarget": "NCI_Report_Writer:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "NCI_Report_Writer:build"
+                      "buildTarget": "NCI_Report_Writer:build"
                     }
                 },
                 "test": {
@@ -81,7 +81,7 @@
                     "options": {
                         "main": "src/test.ts",
                         "karmaConfig": "./karma.conf.js",
-                        "polyfills": "src/polyfills.ts",
+                        "polyfills": ["zone.js"],
                         "tsConfig": "src/tsconfig.spec.json",
                         "scripts": [
                             "node_modules/jquery/dist/jquery.min.js",
