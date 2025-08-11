@@ -10,7 +10,6 @@ import { ReportwriterHomeComponent } from './component/reportwriter-home/reportw
 import { CloneTemplateComponent } from './component/clone-template/clone-template.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'createTemplate/:id',  component: CreateTemplateComponent }, 
   { path: 'createTemplate',  component: CreateTemplateComponent }, 
   { path: 'reportTemplate',     component: ReportTemplateComponent },
@@ -20,11 +19,11 @@ const routes: Routes = [
   { path: 'home',     component: ReportwriterHomeComponent },
   { path: 'cloneTemplate/:id',  component: CloneTemplateComponent },
   { path: 'cloneTemplate',  component: CloneTemplateComponent },
-  
+  { path: '', redirectTo: '/home', pathMatch: 'full' }  
 ];
  
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
+  imports: [ RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'}) ],
   exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

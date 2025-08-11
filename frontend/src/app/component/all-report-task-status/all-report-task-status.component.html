@@ -79,20 +79,20 @@
             </tr>
             <tr>
                 <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <input *ngSwitchCase="'id'" pInputText type="text" style="width:100%" (input)="
-              dtTasks.filter(
-                $event.target.value,
-                col.field,
-                col.filterMatchMode
-              )
-            ">
-                    <input *ngSwitchCase="'reportTemplateName'" pInputText type="text" style="width:100%" (input)="
-              dtTasks.filter(
-                $event.target.value,
-                col.field,
-                col.filterMatchMode
-              )
-            ">
+                <input *ngSwitchCase="'id'" pInputText type="text" style="width:100%" (input)="
+                    dtTasks.filter(
+                        $event.target.value,
+                        col.field,
+                        col.filterMatchMode
+                    )
+                ">
+                <input *ngSwitchCase="'reportTemplateName'" pInputText type="text" style="width:100%" (input)="
+                    dtTasks.filter(
+                        $event.target.value,
+                        col.field,
+                        col.filterMatchMode
+                    )
+                ">
                     <p-dropdown *ngSwitchCase="'status'" [options]="taskStatuses" [style]="{ width: '100%' }"
                         (onChange)="dtTasks.filter($event.value, col.field, 'equals')"></p-dropdown>
                     <input *ngSwitchCase="'dateCreated'" pInputText type="text" style="width:100%" (input)="
