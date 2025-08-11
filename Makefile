@@ -38,6 +38,9 @@ frontend:
 
 # Run the web application
 run:
+	cd web; java -jar build/libs/web-*war
+
+runfrontend:
 	cd frontend; npm start
 
 releasetag:

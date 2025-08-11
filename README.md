@@ -24,8 +24,7 @@ The web application uses the **core** to generate the reports.
 All the projects in this repository, require that environment variables be set
 for your environment, before building jar files. These environment variables
 override default variables set in the application.yml file. These variables are 
-in a reportWriter.sh program in the config directory. Alternatively, they can be added
-to a .bashrc file for initialization. Below is an example, 
+in a reportWriter.sh program in the config directory. Alternatively, they can be added to a .bashrc file for initialization. Below is an example, 
 but most of the content should be replaced
 with content appropriate for your environment:
 
@@ -50,28 +49,44 @@ export RW_API_DATASOURCE_PASSWORD="MYSQL_PASSWORD"
 
 # Building the database
 
-Follow the instructions in the README in the database folder.
+Follow the instructions in the README in the database/ folder.
 
-# Building the code
-
+# Building the server code
 
 ```
-
 make build
-
 ```
-
 
 In the web/build/libs directory the web-2.3.0-SNAPSHOT.war file
 should now exist. 
 
-# Running the code
+# Building the frontend code
 
+```
+make frontend
+```
+
+In the frontend/dist directory, there should now be static files from the build.
+
+
+# Running the server
+
+This launches the war file
 
 ```
 make run
+```
+
+# Running the frontend
+
+This launches the app on localhost:4200
 
 ```
+make runfrontend
+
+```
+
+
 Open a web browser to http://localhost:8080/ncreportwriter to view the application.
 
 
