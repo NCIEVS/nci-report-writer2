@@ -16,18 +16,10 @@ buildscript {
     }
 }
 
-
-
-/*
- * Extra Properties
- */
+// properties
 ext {
-    /*
-     * Software versions
-     */
+    // software version
     mysqlConnectorVersion = "5.1.49"
-  
-
 }
 
 apply plugin: 'java'
@@ -39,14 +31,9 @@ apply plugin: 'org.springframework.boot'
  * so there’s no need for it to be listed as a classpath dependency in the buildscript configuration.
  */
 apply plugin: 'io.spring.dependency-management'
-/*
-apply plugin: 'maven'
-*/
 apply plugin: 'maven-publish'
 
-
-
-group = "gov.nih.nci.evs.reportwriter.web"
+group = "gov.nih.nci.evs.reportwriter"
 version = "2.3.0-SNAPSHOT"
 sourceCompatibility = 17
 
@@ -91,28 +78,19 @@ dependencies {
     testImplementation 'org.awaitility:awaitility:4.2.2'
 }
 
-
-
-jar {
-    from('frontend/dist') {
-        //Public is a default supported Spring Boot resources directory.
-        into 'public'
-    }
+bootWar {
+    archivesBaseName = 'nci-report-writer'
 }
- 
-
 
 test {
     /*
      * Configure gradle to show standard out and standard error
      * of the test JVM(s) on the console
      */
-    testLogging.showStandardStreams = true
-
-    
+    testLogging.showStandardStreams = true   
 }
 
-
+// Archive zip file
 task zipFile(type: Zip) {
     def zipFileRootDirectory = "${project.name}-${project.version}"
 

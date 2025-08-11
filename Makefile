@@ -22,29 +22,26 @@ clean:
 	./gradlew :web:clean
 
 # Build the library without tests
-build: build-core build-web build-frontend
+build: build-core build-web
 
 build-core:
-	gradlew :core:clean :core:build
+	./gradlew :core:clean :core:build -x test
 
 build-web: build-core
-	gradlew :web:clean :web:build
+	./gradlew :web:clean :web:build -x test
 
-build-frontend:
-	gradlew :frontend:clean :frontend:build
+# build the 
 
-# build the frontend (cleans web static resources first)
 frontend:
-	rm -rf web/src/main/resources/static/*
-	gradlew :frontend:build
+	/bin/rm -rf web/src/main/resources/static/*
+	cd frontend; ./gradlew build
 
 # Run the web application
 run:
-	gradlew :web:bootRun
+	cd web; java -jar build/libs/web-*war
 
-# Run frontend in development mode (if needed)
-run-frontend-dev:
-	cd frontend && npm start
+runfrontend:
+	cd frontend; npm start
 
 releasetag:
 	git tag -a "${VERSION}-RC-`/bin/date +%Y-%m-%d`" -m "Release ${VERSION}-RC-`/bin/date +%Y-%m-%d`"
