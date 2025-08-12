@@ -38,7 +38,7 @@ frontend:
 
 # Run the web application
 run:
-	cd web; java -jar build/libs/web-*war
+	cd web; java -jar build/libs/nci-report-writer-*war
 
 runfrontend:
 	cd frontend; npm start
