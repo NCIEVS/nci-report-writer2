@@ -238,16 +238,21 @@ export class ReportTemplateComponent implements OnInit {
         );
       }
 
-      this.table.filters = this.filterObject;
+      if (this.table.filters) {
+        this.table.filters = this.filterObject;
+      }
     } else {
       this.filterObject = {};
       this.filterObject.status = {};
       this.filterObject.status.value = "Active";
       this.selectedStatus = "Active";
       this.filterObject.status.matchMode = "equals";
-      this.table.filters = this.filterObject;
       this.selectedStatus = this.filterObject.status.value;
-      this.table.filter(this.selectedStatus, "status", "equals");
+      console.log("setting filters??")
+      if (this.table?.filters) {
+        this.table.filters = this.filterObject;
+        this.table.filter(this.selectedStatus, "status", "equals");
+      }
     }
 
     const globalfilters = localStorage.getItem("globalfilters-template");
