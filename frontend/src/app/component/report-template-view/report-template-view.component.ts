@@ -7,9 +7,10 @@ import { TemplateRow } from './../../model/template-row';
 import { Template } from './../../model/template';
 
 @Component({
-  selector: 'app-report-template-view',
-  templateUrl: './report-template-view.component.html',
-  styleUrls: ['./report-template-view.component.css']
+    selector: 'app-report-template-view',
+    templateUrl: './report-template-view.component.html',
+    styleUrls: ['./report-template-view.component.css'],
+    standalone: false
 })
 export class ReportTemplateViewComponent implements OnInit {
   templateId:number;

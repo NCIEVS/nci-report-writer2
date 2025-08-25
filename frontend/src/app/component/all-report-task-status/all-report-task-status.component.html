@@ -79,20 +79,20 @@
             </tr>
             <tr>
                 <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <input *ngSwitchCase="'id'" pInputText type="text" style="width:100%" (input)="
-              dtTasks.filter(
-                $event.target.value,
-                col.field,
-                col.filterMatchMode
-              )
-            ">
-                    <input *ngSwitchCase="'reportTemplateName'" pInputText type="text" style="width:100%" (input)="
-              dtTasks.filter(
-                $event.target.value,
-                col.field,
-                col.filterMatchMode
-              )
-            ">
+                <input *ngSwitchCase="'id'" pInputText type="text" style="width:100%" (input)="
+                    dtTasks.filter(
+                        $event.target.value,
+                        col.field,
+                        col.filterMatchMode
+                    )
+                ">
+                <input *ngSwitchCase="'reportTemplateName'" pInputText type="text" style="width:100%" (input)="
+                    dtTasks.filter(
+                        $event.target.value,
+                        col.field,
+                        col.filterMatchMode
+                    )
+                ">
                     <p-dropdown *ngSwitchCase="'status'" [options]="taskStatuses" [style]="{ width: '100%' }"
                         (onChange)="dtTasks.filter($event.value, col.field, 'equals')"></p-dropdown>
                     <input *ngSwitchCase="'dateCreated'" pInputText type="text" style="width:100%" (input)="
@@ -177,7 +177,8 @@
 
     <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425"></p-confirmDialog>
 </div>
-<p-dialog header="Select Processing Type" [(visible)]="displayProcessingType" [width]="900" (onHide)="cancelSelectProcessTask()" (onClick)="closeDialog($event)">
+<!-- width = 900 -->
+<p-dialog header="Select Processing Type" [(visible)]="displayProcessingType" (onHide)="cancelSelectProcessTask()" (onClick)="closeDialog($event)">
     <div class="">
         <form class="form-horizontal" #processingTypeForm="ngForm" (ngSubmit)="onSubmitProcessType();">
             <div class="form-group">

@@ -7,9 +7,10 @@ import { Template } from './../../model/template';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-clone-template',
-  templateUrl: './clone-template.component.html',
-  styleUrls: ['./clone-template.component.css']
+    selector: 'app-clone-template',
+    templateUrl: './clone-template.component.html',
+    styleUrls: ['./clone-template.component.css'],
+    standalone: false
 })
 export class CloneTemplateComponent implements OnInit {
   templateId: number;
