@@ -23,7 +23,7 @@ export class HttpService implements HttpInterceptor {
     //console.log("url - " + url);
 
     req = req.clone({
-      url: url + req.url
+      url: req.url,
     });
     // start our loader here
     this.loaderService.showLoader();
