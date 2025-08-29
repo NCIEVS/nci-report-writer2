@@ -44,7 +44,7 @@ export GRAPHDB_CONNECT_TIMEOUT="10000"
 export RW_BIN_DIRECTORY="/tmp/bin"
 export RW_TEMPLATE_DIRECTORY="/tmp/templates"
 export RW_OUTPUT_DIRECTORY="/tmp/output"
-export RW_API_DATASOURCE_URL="jdbc:mysql://localhost:3312/reportwriter?useSSL=false"
+export RW_API_DATASOURCE_URL="jdbc:mysql://localhost:3312/reportwriter?useSSL=false&allowPublicKeyRetrieval=true"
 export RW_API_DATASOURCE_USERNAME="MYSQL_USERNAME"
 export RW_API_DATASOURCE_PASSWORD="MYSQL_PASSWORD"
 ```
@@ -96,6 +96,6 @@ make runfrontend
 ```
 
 
-Open a web browser to http://localhost:8080/ncreportwriter to view the application.
+Open a web browser to http://localhost:8080/ncreportwriter/home to view the application.
 
 
