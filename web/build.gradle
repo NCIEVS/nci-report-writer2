@@ -92,7 +92,8 @@ test {
 
 // Archive zip file
 task zipFile(type: Zip) {
-    def zipFileRootDirectory = "${project.name}-${project.version}"
+    // explicit override of ${project.name} which resolves to "web" due to subproject gradle setup
+    def zipFileRootDirectory = "nci-report-writer-${project.version}"
 
     from('src/main/bin') {
         fileMode = 0755
