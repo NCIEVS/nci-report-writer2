@@ -11,17 +11,17 @@ import { ViewChild } from "@angular/core";
 import { Table } from "primeng/table";
 import { InputText } from "primeng/inputtext";
 import { ElementRef } from "@angular/core";
-import { forEach } from "@angular/router/src/utils/collection";
 
 import { Lookup } from "./../../model/lookup";
 import { RunReportTemplateInfo } from "./../../model/runReportTemplateInfo";
 
-import { FileUploadModule, FileUpload } from "primeng/primeng";
+import { FileUploadModule, FileUpload } from "primeng/fileupload";
 
 @Component({
-  selector: "app-report-template",
-  templateUrl: "./report-template.component.html",
-  styleUrls: ["./report-template.component.css"]
+    selector: "app-report-template",
+    templateUrl: "./report-template.component.html",
+    styleUrls: ["./report-template.component.css"],
+    standalone: false
 })
 export class ReportTemplateComponent implements OnInit {
   //@ViewChild("dtTemplate") dataTable: DataTable;
@@ -238,16 +238,21 @@ export class ReportTemplateComponent implements OnInit {
         );
       }
 
-      this.table.filters = this.filterObject;
+      if (this.table.filters) {
+        this.table.filters = this.filterObject;
+      }
     } else {
       this.filterObject = {};
       this.filterObject.status = {};
       this.filterObject.status.value = "Active";
       this.selectedStatus = "Active";
       this.filterObject.status.matchMode = "equals";
-      this.table.filters = this.filterObject;
       this.selectedStatus = this.filterObject.status.value;
-      this.table.filter(this.selectedStatus, "status", "equals");
+      console.log("setting filters??")
+      if (this.table?.filters) {
+        this.table.filters = this.filterObject;
+        this.table.filter(this.selectedStatus, "status", "equals");
+      }
     }
 
     const globalfilters = localStorage.getItem("globalfilters-template");

@@ -8,7 +8,8 @@ import { LoaderService } from './../../service/loader.service';
 @Component({
     selector: 'angular-loader',
     templateUrl: 'loader.component.html',
-    styleUrls: ['loader.component.css']
+    styleUrls: ['loader.component.css'],
+    standalone: false
 })
 export class LoaderComponent implements OnDestroy {
     show: boolean;

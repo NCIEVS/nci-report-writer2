@@ -8,9 +8,10 @@ import { Lookup } from '../../model/lookup';
 import { Task } from '../../model/task';
 
 @Component({
-  selector: 'app-report-task-output',
-  templateUrl: './report-task-output.component.html',
-  styleUrls: ['./report-task-output.component.css']
+    selector: 'app-report-task-output',
+    templateUrl: './report-task-output.component.html',
+    styleUrls: ['./report-task-output.component.css'],
+    standalone: false
 })
 export class ReportTaskOutputComponent implements OnInit {
   taskId:number;

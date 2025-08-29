@@ -12,13 +12,14 @@ import { ViewChild } from "@angular/core";
 import { Table } from "primeng/table";
 
 @Component({
-  selector: "app-all-report-task-status",
-  templateUrl: "./all-report-task-status.component.html",
-  styleUrls: ["./all-report-task-status.component.css"],
-  providers: [ConfirmationService]
+    selector: "app-all-report-task-status",
+    templateUrl: "./all-report-task-status.component.html",
+    styleUrls: ["./all-report-task-status.component.css"],
+    providers: [ConfirmationService],
+    standalone: false
 })
 export class AllReportTaskStatusComponent implements OnInit {
-  @ViewChild("dtTasks") table: Table;
+  @ViewChild("dtTasks", { static: true }) table: Table;
 
   tasks: Task[];
   taskStatuses: Lookup[];
@@ -159,7 +160,7 @@ export class AllReportTaskStatusComponent implements OnInit {
         this.table.filters.global != undefined &&
         this.table.filters.global != null
       ) {
-        this.table.filterGlobal(this.table.filters.global.value, "contains");
+        this.table.filterGlobal(this.table.filters.value, "contains");
       }
     }
     const globalfilters = localStorage.getItem("globalfilters-task");

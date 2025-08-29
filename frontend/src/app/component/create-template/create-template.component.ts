@@ -13,9 +13,10 @@ import { ActivatedRoute } from '@angular/router';
 import {Dropdown} from 'primeng/dropdown';
 
 @Component({
-  selector: 'app-create-template',
-  templateUrl: './create-template.component.html',
-  styleUrls: ['./create-template.component.css']
+    selector: 'app-create-template',
+    templateUrl: './create-template.component.html',
+    styleUrls: ['./create-template.component.css'],
+    standalone: false
 })
 export class CreateTemplateComponent implements OnInit {
   templateId: number;
