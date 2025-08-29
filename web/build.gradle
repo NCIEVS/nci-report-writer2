@@ -34,7 +34,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven-publish'
 
 group = "gov.nih.nci.evs.reportwriter"
-version = "2.3.0-RELEASE"
+version = "2.3.0.RELEASE"
 sourceCompatibility = 17
 
 

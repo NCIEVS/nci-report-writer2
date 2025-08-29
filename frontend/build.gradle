@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "gov.nih.nci.evs.reportwriter"
-version = "2.3.0-RELEASE"
+version = "2.3.0.RELEASE"
 
 node {
   version = '16.20.2'
