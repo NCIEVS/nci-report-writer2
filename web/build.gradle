@@ -79,7 +79,7 @@ dependencies {
 }
 
 bootWar {
-    archivesBaseName = 'nci-report-writer'
+    archivesBaseName = 'ncireportwriter2'
 }
 
 test {
@@ -93,7 +93,7 @@ test {
 // Archive zip file
 task zipFile(type: Zip) {
     // explicit override of ${project.name} which resolves to "web" due to subproject gradle setup
-    def zipFileRootDirectory = "nci-report-writer-${project.version}"
+    def zipFileRootDirectory = "ncireportwriter2-${project.version}"
 
     from('src/main/bin') {
         fileMode = 0755

@@ -14,7 +14,8 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 USER=`id | sed -e 's/^[^(]*(\([^(]*\)).*$/\1/'`
 APP_NAME=`basename $0`
 APP_USER=tomcath
-APP_HOME=/local/content
+## TODO: "tomcat" will need to be removed
+APP_HOME=/local/content/tomcat
 if
   [ "$USER" != "" ]
 then
