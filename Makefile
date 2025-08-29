@@ -4,8 +4,8 @@ SERVICE                 := reportwriter
 #######################################################################
 #                 OVERRIDE THIS TO MATCH YOUR PROJECT                 #
 #######################################################################
-APP_VERSION             := $(shell echo `grep "^version =" web/build.gradle | sed 's/version = //'`)
-VERSION                 := $(shell echo `grep "^version =" web/build.gradle | sed 's/version = //; s/.RELEASE//'`)
+APP_VERSION             := $(shell echo `grep "^version =" build.gradle | sed 's/version = //'`)
+VERSION                 := $(shell echo `grep "^version =" build.gradle | sed 's/version = //; s/.RELEASE//'`)
 
 # Builds should be repeatable, therefore we need a method to reference the git
 # sha where a version came from.
@@ -19,26 +19,21 @@ FULL_VERSION            := v$(APP_VERSION)-g$(GIT_VERSION)
 
 # consider also "docker save..." and "docker load..." to avoid registry.
 clean:
-	./gradlew :web:clean
+	./gradlew clean
 
-# Build the library without tests
-build: build-core build-web
-
-build-core:
-	./gradlew :core:clean :core:build -x test
-
-build-web: build-core
-	./gradlew :web:clean :web:build -x test
+# Build the application without tests
+build:
+	./gradlew clean build -x test
 
 # build the 
 
 frontend:
-	/bin/rm -rf web/src/main/resources/static/*
+	/bin/rm -rf src/main/resources/static/*
 	cd frontend; ./gradlew build
 
 # Run the web application
 run:
-	cd web; java -jar build/libs/nci-report-writer-*war
+	java -jar build/libs/nci-report-writer-*war
 
 runfrontend:
 	cd frontend; npm start
@@ -66,9 +61,9 @@ version:
 scan:
 	trivy fs frontend/package-lock.json --format template -o report.html --template "@config/trivy/html.tpl"
 	grep CRITICAL report.html
-	cd web; ./gradlew dependencies --write-locks
-	trivy fs web/gradle.lockfile --format template -o reportJava.html --template "@config/trivy/html.tpl"
+	./gradlew dependencies --write-locks
+	trivy fs gradle.lockfile --format template -o reportJava.html --template "@config/trivy/html.tpl"
 	grep CRITICAL reportJava.html
-	/bin/rm -rf web/gradle.lockfile
+	/bin/rm -rf gradle.lockfile
 
 .PHONY: frontend

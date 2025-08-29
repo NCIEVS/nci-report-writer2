@@ -1,21 +1,121 @@
-plugins {
-    id 'java'
-}
+buildscript {
+	ext {
+		springBootVersion = '3.4.5'
+	}
+    repositories {  
+        mavenLocal()    
+        mavenCentral() 
+        maven { url "https://repo.spring.io/release" }
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://repo.spring.io/snapshot" }
+       
+    }
 
-allprojects {
-    group = 'gov.nih.nci.evs.reportwriter'
-    version = '2.3.0-SNAPSHOT'
-
-    repositories {
-        mavenCentral()
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
     }
 }
 
-subprojects {
-    apply plugin: 'java'
+// properties
+ext {
+    // software version
+    mysqlConnectorVersion = "8.4.0"
+}
 
-    java {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'war'
+apply plugin: 'org.springframework.boot'
+/*
+ * The dependency management plugin remains a transitive dependency of spring-boot-gradle-plugin
+ * so there’s no need for it to be listed as a classpath dependency in the buildscript configuration.
+ */
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven-publish'
+
+group = "gov.nih.nci.evs.reportwriter"
+version = "2.3.0-SNAPSHOT"
+sourceCompatibility = 17
+
+
+springBoot {
+    buildInfo()          // generate file META-INF/build-info.properties during the build
+}
+
+repositories {
+    mavenLocal()  
+    mavenCentral() 
+    maven { url "https://repo.spring.io/release" }
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "https://repo.spring.io/snapshot" }
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    
+    implementation "org.springframework.boot:spring-boot-starter-data-rest"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "jakarta.servlet:jakarta.servlet-api:6.0.0"
+    implementation "org.springframework.boot:spring-boot-actuator"
+    implementation "org.springframework.boot:spring-boot-devtools"
+    implementation "org.springframework.boot:spring-boot-properties-migrator"
+    
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.3"
+
+    // tomcat override
+    implementation "org.apache.tomcat.embed:tomcat-embed-core:10.1.44"
+    implementation "com.mysql:mysql-connector-j:$mysqlConnectorVersion"
+    
+    // Dependencies moved from core module
+    implementation "org.apache.poi:poi:5.4.1"
+    implementation "org.apache.poi:poi-ooxml:5.4.1"
+    implementation "jakarta.annotation:jakarta.annotation-api:2.1.1"
+
+    // test dependencies
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "org.awaitility:awaitility:4.2.2"
+}
+
+bootWar {
+    archivesBaseName = 'nci-report-writer'
+}
+
+test {
+    /*
+     * Configure gradle to show standard out and standard error
+     * of the test JVM(s) on the console
+     */
+    testLogging.showStandardStreams = true   
+}
+
+// Archive zip file
+task zipFile(type: Zip) {
+    def zipFileRootDirectory = "${project.name}-${project.version}"
+
+    from('src/main/bin') {
+        fileMode = 0755
+        into "$zipFileRootDirectory/bin"
     }
+    from("$buildDir/libs") {
+        include '*.war'
+        into "$zipFileRootDirectory/lib"
+    }
+    rename { String fileName ->
+        fileName.replace("-${project.version}", "")
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+zipFile.dependsOn = [ bootWar ]
+build.dependsOn = [ test, bootWar, zipFile ]
+publish.dependsOn = [ bootWar, zipFile ]
+
+
+dependencyLocking {
+    lockAllConfigurations()
 }
