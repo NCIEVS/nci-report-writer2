@@ -34,13 +34,13 @@ jobs:
     # Run Gradle lockfile updates
     - name: Run Gradle dependencies
       run: |
-        cd web; ./gradlew dependencies --write-locks
+        ./gradlew dependencies --write-locks
 
     # Scan the backend gradle.lockfile
     - name: Run Trivy scan for gradle.lockfile
       id: trivy-scan-java
       run: |
-        trivy fs web/gradle.lockfile --format json --output reportJava.json
+        trivy fs gradle.lockfile --format json --output reportJava.json
       env:
         TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db
@@ -65,4 +65,5 @@ jobs:
     # Clean up lockfile after scan
     - name: Clean up
       run: |
-        /bin/rm -rf web/gradle.lockfile
+        /bin/rm -rf gradle.lockfile
+
