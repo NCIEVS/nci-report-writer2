@@ -23,7 +23,7 @@ ext {
     /*
      * Software versions
      */
-    mysqlConnectorVersion = "5.1.49"
+    mysqlConnectorVersion = "8.4.0"
 }
 
 apply plugin:'java' 
@@ -65,22 +65,19 @@ springBoot {
 
 
 dependencies {
-    implementation ('org.springframework.boot:spring-boot-starter')
-    implementation('org.springframework.boot:spring-boot-starter-web')
-    implementation 'org.springframework.boot:spring-boot-actuator'
-    implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-actuator"
+    implementation "org.springframework.boot:spring-boot-devtools"
 
-    implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
-    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
-    implementation "org.apache.poi:poi:5.2.3"
-    implementation "org.apache.poi:poi-ooxml:5.2.3"
-    implementation "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    implementation "org.apache.poi:poi-ooxml:5.2.3"
-    
-    /*
-     * Test Dependencies
-     */
-   
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
+    implementation "jakarta.annotation:jakarta.annotation-api:2.1.1"
+    implementation "org.apache.poi:poi:5.4.1"
+    implementation "org.apache.poi:poi-ooxml:5.4.1"
+    implementation "com.mysql:mysql-connector-j:$mysqlConnectorVersion"
+    implementation "org.apache.poi:poi-ooxml:5.4.1"
+
+    //
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

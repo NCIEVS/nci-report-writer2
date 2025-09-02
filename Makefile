@@ -66,13 +66,7 @@ version:
 scan:
 	trivy fs frontend/package-lock.json --format template -o report.html --template "@config/trivy/html.tpl"
 	grep CRITICAL report.html
-	gradlew :web:dependencies --write-locks
-	trivy fs web/gradle.lockfile --format template -o reportJava.html --template "@config/trivy/html.tpl"
-	grep CRITICAL reportJava.html
-	/bin/rm -rf web/gradle.lockfile
-
-scanJava:
-	gradlew :web:dependencies --write-locks
+	cd web; ./gradlew dependencies --write-locks
 	trivy fs web/gradle.lockfile --format template -o reportJava.html --template "@config/trivy/html.tpl"
 	grep CRITICAL reportJava.html
 	/bin/rm -rf web/gradle.lockfile
