@@ -55,7 +55,6 @@ export class ReportTaskOutputComponent implements OnInit {
         currentPageRows = this.reportData.length;
       }
       this.pageinationcount = 'Showing ' +  currentpageCount + ' to ' + currentPageRows + ' of ' + this.reportData.length;
-
     
     });
   }
