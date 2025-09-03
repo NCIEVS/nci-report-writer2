@@ -11,7 +11,9 @@
     "test:watch": "jest --watch",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "copyAll": "cp -r dist/* ../web/src/main/resources/static/"
+    "copyAll": "cp -r dist/* ../web/src/main/resources/static/",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "browserify-shim": {
     "angular": {
@@ -44,6 +46,7 @@
     "bootstrap": "^4.5.0",
     "chart.js": "^4.5.0",
     "core-js": "^2.5.7",
+    "cypress": "^14.5.4",
     "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",
     "ngx-toastr": "^16.2.0",
@@ -62,6 +65,7 @@
     "@angular/cli": "^19.2.15",
     "@angular/compiler-cli": "^19.2.14",
     "@angular/language-service": "^19.2.14",
+    "@cypress/schematic": "^4.1.2",
     "@types/jest": "^29.5.14",
     "@types/node": "^12.11.1",
     "browserify": "^15.1.0",
@@ -71,6 +75,7 @@
     "jest-preset-angular": "^14.6.1",
     "ts-node": "~3.2.0",
     "tslint": "~6.1.0",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "cypress": "15.1.0"
   }
 }
