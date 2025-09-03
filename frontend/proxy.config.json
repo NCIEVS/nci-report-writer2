@@ -1,6 +1,6 @@
 {
-    "/reportwriter/*": {
-        "target": "http://localhost:8080",
+    "/reportwriter/**": {
+        "target": "http://localhost:8080/ncreportwriter",
         "secure": false,
         "logLevel": "debug"
     }
