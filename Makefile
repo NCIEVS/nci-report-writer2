@@ -19,16 +19,11 @@ FULL_VERSION            := v$(APP_VERSION)-g$(GIT_VERSION)
 
 # consider also "docker save..." and "docker load..." to avoid registry.
 clean:
-	./gradlew :web:clean
+	cd web; ./gradlew clean
 
 # Build the library without tests
-build: build-core build-web
-
-build-core:
-	./gradlew :core:clean :core:build -x test
-
-build-web: build-core
-	./gradlew :web:clean :web:build -x test
+build:
+	cd web; ./gradlew clean build -x test
 
 # build the 
 

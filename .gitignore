@@ -14,3 +14,5 @@ build/
 core/bin/main
 web/bin
 .idea
+/report.html
+/reportJava.html

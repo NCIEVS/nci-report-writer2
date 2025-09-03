@@ -12,7 +12,7 @@ spring:
     #
     datasource:
         driverClassName: com.mysql.jdbc.Driver
-        url: ${RW_API_DATASOURCE_URL:jdbc:mysql://localhost/rw?useSSL=false}
+        url: ${RW_API_DATASOURCE_URL:jdbc:mysql://localhost/rw?useSSL=false&allowPublicKeyRetrieval=true}
         username: ${RW_API_DATASOURCE_USERNAME:root}
         password: ${RW_API_DATASOURCE_PASSWORD:root}
         tomcat:
