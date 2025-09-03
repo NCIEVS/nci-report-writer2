@@ -9,9 +9,6 @@ on:
 jobs:
   run-jest-tests:
     runs-on: ubuntu-latest
-    defaults:
-      run: 
-        working_directory: ./frontend
     steps:
       - name: Checkout Code
         uses: actions/checkout@v5
@@ -20,8 +17,10 @@ jobs:
         with:
           node-version: '19' #set the project Angular version
       - name: Install Dependencies
-        run: npm install
+        run: 
+          cd frontend 
+          npm install
       - name: Build Application
-        run: make build # change to command that builds the project
+        run: make frontend # change to command that builds the project
       - name: Run Jest Tests
         run: make test # change to command that tests the project

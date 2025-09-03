@@ -56,6 +56,9 @@ tag: frontend
 	git tag -a "v`/bin/date +%Y-%m-%d`-${APP_VERSION}" -m "Release `/bin/date +%Y-%m-%d`"
 	git push origin "v`/bin/date +%Y-%m-%d`-${APP_VERSION}"
 
+test: 
+	cd frontend; npm run test
+
 rmtag:
 	git tag -d "v`/bin/date +%Y-%m-%d`-${APP_VERSION}"
 	git push origin --delete "v`/bin/date +%Y-%m-%d`-${APP_VERSION}"
