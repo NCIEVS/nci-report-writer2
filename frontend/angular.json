@@ -15,7 +15,7 @@
                         "outputPath": "dist",
                         "index": "src/index.html",
                         "main": "src/main.ts",
-                        "tsConfig": "src/tsconfig.app.json",
+                        "tsConfig": "./tsconfig.app.json",
                         "polyfills": ["zone.js"],
                         "assets": [
                             "src/assets"
@@ -76,7 +76,10 @@
                     }
                 },
                 "test": {
-                    
+                    "builder": "@angular-devkit/build-angular:jest",
+                    "options": {
+                        "tsConfig": "./tsconfig.spec.json"
+                    }
                 },
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",

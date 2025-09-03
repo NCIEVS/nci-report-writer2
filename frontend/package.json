@@ -7,7 +7,8 @@
     "start": "ng serve --proxy-config proxy.config.json",
     "build": "ng build && npm run copyAll",
     "build:prod": "ng build --configuration production --base-href /ncreportwriter/ && npm run copyAll",
-    "test": "ng test",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "copyAll": "cp -r dist/* ../web/src/main/resources/static/"
@@ -56,14 +57,18 @@
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
+    "@angular-builders/jest": "^19.0.1",
     "@angular-devkit/build-angular": "^19.2.15",
     "@angular/cli": "^19.2.15",
     "@angular/compiler-cli": "^19.2.14",
     "@angular/language-service": "^19.2.14",
+    "@types/jest": "^29.5.14",
     "@types/node": "^12.11.1",
     "browserify": "^15.1.0",
     "browserify-shim": "^3.8.14",
     "codelyzer": "^6.0.2",
+    "jest": "^29.7.0",
+    "jest-preset-angular": "^14.6.1",
     "ts-node": "~3.2.0",
     "tslint": "~6.1.0",
     "typescript": "5.8.3"
