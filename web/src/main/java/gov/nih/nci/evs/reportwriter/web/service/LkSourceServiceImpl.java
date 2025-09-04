@@ -10,12 +10,12 @@ import gov.nih.nci.evs.reportwriter.web.repository.LkSourceRepository;
 
 @Service
 public class LkSourceServiceImpl implements LkSourceService {
-	@Autowired
-	LkSourceRepository lkSourceRepository;
-	
-	public List <LkSource> findAll() {
-		
-		return (List) lkSourceRepository.findAll();
-	}
+  @Autowired LkSourceRepository lkSourceRepository;
 
+  /* see superclass */
+  @Override
+  public List<LkSource> findAll() {
+
+    return (List<LkSource>) lkSourceRepository.findAll();
+  }
 }

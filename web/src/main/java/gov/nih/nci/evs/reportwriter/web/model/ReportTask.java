@@ -3,11 +3,19 @@ package gov.nih.nci.evs.reportwriter.web.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Date;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 /**
  * The persistent class for the report_task database table.
@@ -45,7 +53,7 @@ public class ReportTask implements Serializable {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(final Integer id) {
 		this.id = id;
 	}
 
@@ -55,7 +63,7 @@ public class ReportTask implements Serializable {
 		return this.dateCompleted;
 	}
 
-	public void setDateCompleted(LocalDateTime dateCompleted) {
+	public void setDateCompleted(final LocalDateTime dateCompleted) {
 		this.dateCompleted = dateCompleted;
 	}
 
@@ -65,7 +73,7 @@ public class ReportTask implements Serializable {
 		return this.dateCreated;
 	}
 
-	public void setDateCreated(LocalDateTime dateCreated) {
+	public void setDateCreated(final LocalDateTime dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
@@ -75,7 +83,7 @@ public class ReportTask implements Serializable {
 		return this.dateStarted;
 	}
 
-	public void setDateStarted(LocalDateTime dateStarted) {
+	public void setDateStarted(final LocalDateTime dateStarted) {
 		this.dateStarted = dateStarted;
 	}
 
@@ -84,7 +92,7 @@ public class ReportTask implements Serializable {
 		return this.dateLastUpdated;
 	}
 
-	public void setDateLastUpdated(LocalDateTime dateLastUpdated) {
+	public void setDateLastUpdated(final LocalDateTime dateLastUpdated) {
 		this.dateLastUpdated = dateLastUpdated;
 	}
 
@@ -101,7 +109,7 @@ public class ReportTask implements Serializable {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(final String createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -109,7 +117,7 @@ public class ReportTask implements Serializable {
 		return lastUpdatedBy;
 	}
 
-	public void setLastUpdatedBy(String lastUpdatedBy) {
+	public void setLastUpdatedBy(final String lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
@@ -121,7 +129,7 @@ public class ReportTask implements Serializable {
 		return this.reportTemplate;
 	}
 
-	public void setReportTemplate(ReportTemplate reportTemplate) {
+	public void setReportTemplate(final ReportTemplate reportTemplate) {
 		this.reportTemplate = reportTemplate;
 	}
 
@@ -130,7 +138,7 @@ public class ReportTask implements Serializable {
 		return this.status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(final String status) {
 		this.status = status;
 	}
 	
@@ -138,7 +146,7 @@ public class ReportTask implements Serializable {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(final String version) {
 		this.version = version;
 	}
 	
@@ -147,7 +155,7 @@ public class ReportTask implements Serializable {
 		return graphName;
 	}
 
-	public void setGraphName(String graphName) {
+	public void setGraphName(final String graphName) {
 		this.graphName = graphName;
 	}
 
@@ -156,7 +164,7 @@ public class ReportTask implements Serializable {
 		return databaseUrl;
 	}
 
-	public void setDatabaseUrl(String databaseUrl) {
+	public void setDatabaseUrl(final String databaseUrl) {
 		this.databaseUrl = databaseUrl;
 	}
 
@@ -165,7 +173,7 @@ public class ReportTask implements Serializable {
 		return databaseType;
 	}
 
-	public void setDatabaseType(String databaseType) {
+	public void setDatabaseType(final String databaseType) {
 		this.databaseType = databaseType;
 	}
 

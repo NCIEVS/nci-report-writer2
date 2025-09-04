@@ -4,7 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import gov.nih.nci.evs.reportwriter.web.model.LkGroup;
 
-
-public interface LkGroupRepository extends CrudRepository<LkGroup, String>{
-
+/** The Interface LkGroupRepository. */
+public interface LkGroupRepository extends CrudRepository<LkGroup, String> {
+  //  n/a
 }

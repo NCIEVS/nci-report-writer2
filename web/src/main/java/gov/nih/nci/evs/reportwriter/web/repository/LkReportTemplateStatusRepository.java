@@ -4,7 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import gov.nih.nci.evs.reportwriter.web.model.LkReportTemplateStatus;
 
-
-public interface LkReportTemplateStatusRepository extends CrudRepository<LkReportTemplateStatus, String>{
-
+/** The Interface LkReportTemplateStatusRepository. */
+public interface LkReportTemplateStatusRepository
+    extends CrudRepository<LkReportTemplateStatus, String> {
+  // n/a
 }

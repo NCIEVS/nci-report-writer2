@@ -2,34 +2,69 @@ package gov.nih.nci.evs.reportwriter.web.support;
 
 import java.io.InputStream;
 
+/** The Class FileUI. */
 public class FileUI implements java.io.Serializable {
 
-	private String filePath;
-	private InputStream rawFileStream;
-	private String fileName;
+  /** The file path. */
+  private String filePath;
 
-	public String getFileName() {
-		return fileName;
-	}
+  /** The raw file stream. */
+  private InputStream rawFileStream;
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+  /** The file name. */
+  private String fileName;
 
-	public InputStream getRawFileStream() {
-		return rawFileStream;
-	}
+  /**
+   * Gets the file name.
+   *
+   * @return the file name
+   */
+  public String getFileName() {
+    return fileName;
+  }
 
-	public void setRawFileStream(InputStream rawFileStream) {
-		this.rawFileStream = rawFileStream;
-	}
+  /**
+   * Sets the file name.
+   *
+   * @param fileName the new file name
+   */
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
 
-	public String getFilePath() {
-		return filePath;
-	}
+  /**
+   * Gets the raw file stream.
+   *
+   * @return the raw file stream
+   */
+  public InputStream getRawFileStream() {
+    return rawFileStream;
+  }
 
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
+  /**
+   * Sets the raw file stream.
+   *
+   * @param rawFileStream the new raw file stream
+   */
+  public void setRawFileStream(InputStream rawFileStream) {
+    this.rawFileStream = rawFileStream;
+  }
 
+  /**
+   * Gets the file path.
+   *
+   * @return the file path
+   */
+  public String getFilePath() {
+    return filePath;
+  }
+
+  /**
+   * Sets the file path.
+   *
+   * @param filePath the new file path
+   */
+  public void setFilePath(String filePath) {
+    this.filePath = filePath;
+  }
 }

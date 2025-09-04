@@ -8,14 +8,17 @@ import org.springframework.stereotype.Service;
 import gov.nih.nci.evs.reportwriter.web.model.LkAssociation;
 import gov.nih.nci.evs.reportwriter.web.repository.LkAssociationRepository;
 
+/** The Class LkAssociationServiceImpl. */
 @Service
 public class LkAssociationServiceImpl implements LkAssociationService {
-	@Autowired
-	LkAssociationRepository lkAssocationRepository;
-	
-	public List <LkAssociation> findAll() {
-		
-		return (List) lkAssocationRepository.findAll();
-	}
 
+  /** The lk assocation repository. */
+  @Autowired LkAssociationRepository lkAssocationRepository;
+
+  /* see superclass */
+  @Override
+  public List<LkAssociation> findAll() {
+
+    return (List<LkAssociation>) lkAssocationRepository.findAll();
+  }
 }

@@ -2,13 +2,21 @@ package gov.nih.nci.evs.reportwriter.web.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 
-import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 /**
  * The persistent class for the report_template database table.
@@ -46,7 +54,7 @@ public class ReportTemplate implements Serializable {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(final Integer id) {
 		this.id = id;
 	}
 
@@ -55,7 +63,7 @@ public class ReportTemplate implements Serializable {
 		return this.level;
 	}
 
-	public void setLevel(Integer level) {
+	public void setLevel(final Integer level) {
 		this.level = level;
 	}
 
@@ -64,7 +72,7 @@ public class ReportTemplate implements Serializable {
 		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -73,7 +81,7 @@ public class ReportTemplate implements Serializable {
 		return this.rootConceptCode;
 	}
 
-	public void setRootConceptCode(String rootConceptCode) {
+	public void setRootConceptCode(final String rootConceptCode) {
 		this.rootConceptCode = rootConceptCode;
 	}
 
@@ -82,7 +90,7 @@ public class ReportTemplate implements Serializable {
 		return this.sortColumn;
 	}
 
-	public void setSortColumn(Integer sortColumn) {
+	public void setSortColumn(final Integer sortColumn) {
 		this.sortColumn = sortColumn;
 	}
 
@@ -91,7 +99,7 @@ public class ReportTemplate implements Serializable {
 		return this.status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(final String status) {
 		this.status = status;
 	}
 
@@ -100,7 +108,7 @@ public class ReportTemplate implements Serializable {
 		return this.type;
 	}
 
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -109,7 +117,7 @@ public class ReportTemplate implements Serializable {
 		return this.association;
 	}
 
-	public void setAssociation(String association) {
+	public void setAssociation(final String association) {
 		this.association = association;
 	}
 
@@ -121,7 +129,7 @@ public class ReportTemplate implements Serializable {
 		return this.columns;
 	}
 
-	public void setColumns(List<ReportTemplateColumn> columns) {
+	public void setColumns(final List<ReportTemplateColumn> columns) {
 		this.columns = columns;
 
 	}
@@ -133,7 +141,7 @@ public class ReportTemplate implements Serializable {
 		return this.tasks;
 	}
 
-	public void setTasks(List<ReportTask> tasks) {
+	public void setTasks(final List<ReportTask> tasks) {
 		this.tasks = tasks;
 
 	}
@@ -145,11 +153,11 @@ public class ReportTemplate implements Serializable {
 		return this.reportTemplateConceptLists;
 	}
 
-	public void setReportTemplateConceptLists(List<ReportTemplateConceptList> reportTemplateConceptLists) {
+	public void setReportTemplateConceptLists(final List<ReportTemplateConceptList> reportTemplateConceptLists) {
 		this.reportTemplateConceptLists = reportTemplateConceptLists;
 	}
 
-	public ReportTemplateConceptList addReportTemplateConceptList(ReportTemplateConceptList reportTemplateConceptList) {
+	public ReportTemplateConceptList addReportTemplateConceptList(final ReportTemplateConceptList reportTemplateConceptList) {
 		getReportTemplateConceptLists().add(reportTemplateConceptList);
 		reportTemplateConceptList.setReportTemplate(this);
 
@@ -157,7 +165,7 @@ public class ReportTemplate implements Serializable {
 	}
 
 	public ReportTemplateConceptList removeReportTemplateConceptList(
-			ReportTemplateConceptList reportTemplateConceptList) {
+			final ReportTemplateConceptList reportTemplateConceptList) {
 		getReportTemplateConceptLists().remove(reportTemplateConceptList);
 		reportTemplateConceptList.setReportTemplate(null);
 
@@ -169,7 +177,7 @@ public class ReportTemplate implements Serializable {
 		return dateCreated;
 	}
 
-	public void setDateCreated(LocalDateTime dateCreated) {
+	public void setDateCreated(final LocalDateTime dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
@@ -178,7 +186,7 @@ public class ReportTemplate implements Serializable {
 		return dateLastUpdated;
 	}
 
-	public void setDateLastUpdated(LocalDateTime dateLastUpdated) {
+	public void setDateLastUpdated(final LocalDateTime dateLastUpdated) {
 		this.dateLastUpdated = dateLastUpdated;
 	}
 
@@ -187,7 +195,7 @@ public class ReportTemplate implements Serializable {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(final String createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -196,7 +204,7 @@ public class ReportTemplate implements Serializable {
 		return lastUpdatedBy;
 	}
 
-	public void setLastUpdatedBy(String lastUpdatedBy) {
+	public void setLastUpdatedBy(final String lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
