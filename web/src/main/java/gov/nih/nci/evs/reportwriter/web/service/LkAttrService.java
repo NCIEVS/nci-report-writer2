@@ -4,8 +4,13 @@ import java.util.List;
 
 import gov.nih.nci.evs.reportwriter.web.model.LkAttr;
 
-
+/** The Interface LkAttrService. */
 public interface LkAttrService {
-	public List <LkAttr> findAll();
 
+  /**
+   * Find all.
+   *
+   * @return the list
+   */
+  public List<LkAttr> findAll();
 }

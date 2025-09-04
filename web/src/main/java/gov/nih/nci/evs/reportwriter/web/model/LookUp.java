@@ -5,9 +5,9 @@ public class LookUp {
 	String label;
 	String value;
 	
-	public LookUp() {};
+	public LookUp() {}
 	
-	public LookUp(String label, String value) {
+	public LookUp(final String label, final String value) {
 		this.label = label;
 		this.value = value;
 	}
@@ -16,7 +16,7 @@ public class LookUp {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(final String label) {
 		this.label = label;
 	}
 
@@ -24,7 +24,7 @@ public class LookUp {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(final String value) {
 		this.value = value;
 	}
 	

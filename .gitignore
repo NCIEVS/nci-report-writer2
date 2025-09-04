@@ -16,3 +16,4 @@ web/bin
 **/dist
 **/node_modules
 **/.angular
+/.gradle/

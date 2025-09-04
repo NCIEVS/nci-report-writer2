@@ -8,15 +8,14 @@ import org.springframework.stereotype.Service;
 import gov.nih.nci.evs.reportwriter.web.model.LkAttr;
 import gov.nih.nci.evs.reportwriter.web.repository.LkAttrRepository;
 
-
 @Service
 public class LkAttrServiceImpl implements LkAttrService {
-	@Autowired
-	LkAttrRepository lkAttrRepository;
-	
-	public List <LkAttr> findAll() {
-		
-		return (List) lkAttrRepository.findAll();
-	}
+  @Autowired LkAttrRepository lkAttrRepository;
 
+  /* see superclass */
+  @Override
+  public List<LkAttr> findAll() {
+
+    return (List<LkAttr>) lkAttrRepository.findAll();
+  }
 }

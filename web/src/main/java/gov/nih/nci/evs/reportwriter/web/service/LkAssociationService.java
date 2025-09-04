@@ -4,7 +4,13 @@ import java.util.List;
 
 import gov.nih.nci.evs.reportwriter.web.model.LkAssociation;
 
+/** The Interface LkAssociationService. */
 public interface LkAssociationService {
-	public List <LkAssociation> findAll();
 
+  /**
+   * Find all.
+   *
+   * @return the list
+   */
+  public List<LkAssociation> findAll();
 }

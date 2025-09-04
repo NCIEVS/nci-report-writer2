@@ -4,7 +4,13 @@ import java.util.List;
 
 import gov.nih.nci.evs.reportwriter.web.model.LkSubsource;
 
+/** The Interface LkSubsourceService. */
 public interface LkSubsourceService {
-	public List <LkSubsource> findAll();
 
+  /**
+   * Find all.
+   *
+   * @return the list
+   */
+  public List<LkSubsource> findAll();
 }

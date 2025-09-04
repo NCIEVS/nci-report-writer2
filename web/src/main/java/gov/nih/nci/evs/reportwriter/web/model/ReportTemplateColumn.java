@@ -5,7 +5,18 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 
 /**
@@ -48,7 +59,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(final Integer id) {
 		this.id = id;
 	}
 
@@ -58,7 +69,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.columnNumber;
 	}
 
-	public void setColumnNumber(Integer columnNumber) {
+	public void setColumnNumber(final Integer columnNumber) {
 		this.columnNumber = columnNumber;
 	}
 
@@ -67,7 +78,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(final String label) {
 		this.label = label;
 	}
 
@@ -80,7 +91,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.reportTemplate;
 	}
 
-	public void setReportTemplate(ReportTemplate reportTemplate) {
+	public void setReportTemplate(final ReportTemplate reportTemplate) {
 		this.reportTemplate = reportTemplate;
 	}
 
@@ -90,7 +101,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.display;
 	}
 
-	public void setDisplay(String display) {
+	public void setDisplay(final String display) {
 		this.display = display;
 	}
 
@@ -100,7 +111,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.propertyType;
 	}
 
-	public void setPropertyType(String propertyType) {
+	public void setPropertyType(final String propertyType) {
 		this.propertyType = propertyType;
 	}
 
@@ -110,7 +121,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.property;
 	}
 
-	public void setProperty(String property) {
+	public void setProperty(final String property) {
 		this.property = property;
 	}
 
@@ -120,7 +131,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.source;
 	}
 
-	public void setSource(String source) {
+	public void setSource(final String source) {
 		this.source = source;
 	}
 
@@ -130,7 +141,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.group;
 	}
 
-	public void setGroup(String group) {
+	public void setGroup(final String group) {
 		this.group = group;
 	}
 
@@ -140,7 +151,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.subsource;
 	}
 
-	public void setSubsource(String subsource) {
+	public void setSubsource(final String subsource) {
 		this.subsource = subsource;
 	}
 
@@ -149,7 +160,7 @@ public class ReportTemplateColumn implements Serializable {
 		return this.attr;
 	}
 
-	public void setAttr(String attr) {
+	public void setAttr(final String attr) {
 		this.attr = attr;
 	}
 
@@ -159,7 +170,7 @@ public class ReportTemplateColumn implements Serializable {
 		return dateCreated;
 	}
 
-	public void setDateCreated(LocalDateTime dateCreated) {
+	public void setDateCreated(final LocalDateTime dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
@@ -168,7 +179,7 @@ public class ReportTemplateColumn implements Serializable {
 		return dateLastUpdated;
 	}
 
-	public void setDateLastUpdated(LocalDateTime dateLastUpdated) {
+	public void setDateLastUpdated(final LocalDateTime dateLastUpdated) {
 		this.dateLastUpdated = dateLastUpdated;
 	}
 
@@ -177,7 +188,7 @@ public class ReportTemplateColumn implements Serializable {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(final String createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -186,7 +197,7 @@ public class ReportTemplateColumn implements Serializable {
 		return lastUpdatedBy;
 	}
 
-	public void setLastUpdatedBy(String lastUpdatedBy) {
+	public void setLastUpdatedBy(final String lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 	

@@ -10,12 +10,12 @@ import gov.nih.nci.evs.reportwriter.web.repository.LkSubsourceRepository;
 
 @Service
 public class LkSubsourceServiceImpl implements LkSubsourceService {
-	@Autowired
-	LkSubsourceRepository lkSubsourceRepository;
-	
-	public List <LkSubsource> findAll() {
-		
-		return (List) lkSubsourceRepository.findAll();
-	}
+  @Autowired LkSubsourceRepository lkSubsourceRepository;
 
+  /* see superclass */
+  @Override
+  public List<LkSubsource> findAll() {
+
+    return (List<LkSubsource>) lkSubsourceRepository.findAll();
+  }
 }
