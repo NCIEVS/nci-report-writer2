@@ -1,2 +1,0 @@
-rootProject.name = 'nci-report-writer2'
-include 'core', 'web'
