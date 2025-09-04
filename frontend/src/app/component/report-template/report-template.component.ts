@@ -248,7 +248,6 @@ export class ReportTemplateComponent implements OnInit {
       this.selectedStatus = "Active";
       this.filterObject.status.matchMode = "equals";
       this.selectedStatus = this.filterObject.status.value;
-      console.log("setting filters??")
       if (this.table?.filters) {
         this.table.filters = this.filterObject;
         this.table.filter(this.selectedStatus, "status", "equals");
