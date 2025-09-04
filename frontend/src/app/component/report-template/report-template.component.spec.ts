@@ -1,14 +1,35 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ReportTemplateComponent } from './report-template.component';
+
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { ReportTemplateService } from '../../service/report-template.service';
+import { LookupvaluesTemplateService } from '../../service/lookupvalues-template.service';
+import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+import { FormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
 
 describe('ReportTemplateComponent', () => {
   let component: ReportTemplateComponent;
   let fixture: ComponentFixture<ReportTemplateComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReportTemplateComponent ]
+      declarations: [ ReportTemplateComponent ],
+      imports: [
+        TableModule,
+        DialogModule,
+        DropdownModule,
+        FormsModule
+      ],
+      providers: [
+        ReportTemplateService,
+        LookupvaluesTemplateService,
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     })
     .compileComponents();
   }));
