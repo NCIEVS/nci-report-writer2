@@ -35,9 +35,11 @@ export LOGGING_LEVEL_ORG_SPRINGFRAMEWORK="ERROR"
 export LOGGING_LEVEL_GOV_NIH_NCI_EVS_RW="INFO"
 export GRAPHDB_USERNAME="GRAPHDB_USERNAME"
 export GRAPHDB_PASSWORD="GRAPHDB_PASSWORD"
-export GRAPHDB_URL="http://localhost:5820/NCIT2"
-export GRAPHDB_QUERY_URL="http://localhost:5820/NCIT2/query"
-export GRAPHDB_GRAPH_NAME="http://NCI_T"
+export GRAPHDB_URL="http://localhost:3030/NCIT2"
+export GRAPHDB_MONTHLY_QUERY_URL="http://localhost:3030/NCIT2/query"
+export GRAPHDB_MONTHLY_GRAPH_NAME="http://NCI_T"
+export GRAPHDB_WEEKLY_QUERY_URL="http://localhost:3030/NCIT2/query"
+export GRAPHDB_WEEKLY_GRAPH_NAME="http://NCI_T"
 export GRAPHDB_OWL_FILENAME="Thesaurus.owl"
 export GRAPHDB_READ_TIMEOUT="10000"
 export GRAPHDB_CONNECT_TIMEOUT="10000"
@@ -81,7 +83,7 @@ make run
 To confirm that the server is running, run 
 
 ```
-curl http://localhost:8080/ncreportwriter/reportwriter/
+curl http://localhost:8080/ncireportwriter2/reportwriter/
 ```
 
 It should contain the content "Welcome to ReportWriter".
