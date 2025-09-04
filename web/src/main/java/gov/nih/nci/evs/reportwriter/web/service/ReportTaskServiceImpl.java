@@ -367,6 +367,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
     log.info("outputDirectory - " + outputDirectory);
     String lastDigitofId = id.substring(id.length() - 1);
     log.info("lastDigitofId - " + lastDigitofId);
+    checkId(id);
     String filePath =
         outputDirectory + "/" + lastDigitofId + "/Task-" + id + "/Task-" + id + "." + fileType;
     log.info("filePath - " + filePath);
@@ -399,6 +400,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
     log.info("outputDirectory - " + outputDirectory);
     String lastDigitofId = id.substring(id.length() - 1);
     log.info("lastDigitofId - " + lastDigitofId);
+    checkId(id);
     String filePath =
         outputDirectory + "/" + lastDigitofId + "/Task-" + id + "/Task-" + id + "." + fileType;
     String convertedfilePath =
@@ -500,6 +502,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
     log.info("filePath - " + convertedfilePath);
     fileUI.setFilePath(convertedfilePath);
     ReportTemplateUI reportTemplateUI = getReportNameByTaskId(Integer.valueOf(id));
+    checkId(id);
     String fileName =
         reportTemplateUI.getName() + "-Task-" + id + "-" + type + "-" + column + "." + fileType;
     // String fileName = "Task-" + id + "." + fileType;
@@ -535,6 +538,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
     log.info("outputDirectory - " + outputDirectory);
     String lastDigitofId = id.substring(id.length() - 1);
     log.info("lastDigitofId - " + lastDigitofId);
+    checkId(id);
     String filePath =
         outputDirectory + "/" + lastDigitofId + "/Task-" + id + "/Task-" + id + ".txt";
     log.info("filePath - " + filePath);
@@ -586,5 +590,17 @@ public class ReportTaskServiceImpl implements ReportTaskService {
     reportTaskOutput.setHeader(header);
     reportTaskOutput.setData(data);
     return reportTaskOutput;
+  }
+
+  /**
+   * Check id. This was added (and used) to satisfy CodeQL.
+   *
+   * @param id the id
+   * @throws Exception the exception
+   */
+  private void checkId(final String id) throws FileNotFoundException {
+    if (id.contains("/")) {
+      throw new FileNotFoundException("Invalid id characters = " + id);
+    }
   }
 }
