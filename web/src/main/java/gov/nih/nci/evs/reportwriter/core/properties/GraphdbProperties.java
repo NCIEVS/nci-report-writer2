@@ -3,67 +3,136 @@ package gov.nih.nci.evs.reportwriter.core.properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/** The Class GraphdbProperties. */
 public class GraphdbProperties {
-	
-	/** The logger. */
-    private static final Logger log = LoggerFactory.getLogger(GraphdbProperties.class);
 
+  /** The logger. */
+  @SuppressWarnings("unused")
+  private static final Logger log = LoggerFactory.getLogger(GraphdbProperties.class);
 
-    private String username;
-    private String password;
-    private String monthlyQueryUrl;
-    private String weeklyQueryUrl;
-    private int readTimeout;
-    private int connectTimeout;
+  /** The username. */
+  private String username;
 
-	public String getUsername() {
-		return username;
-	}
+  /** The password. */
+  private String password;
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  /** The monthly query url. */
+  private String monthlyQueryUrl;
 
-	public String getPassword() {
-		return password;
-	}
+  /** The weekly query url. */
+  private String weeklyQueryUrl;
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+  /** The read timeout. */
+  private int readTimeout;
 
-	
+  /** The connect timeout. */
+  private int connectTimeout;
 
-	public int getReadTimeout() {
-		return readTimeout;
-	}
+  /**
+   * Gets the username.
+   *
+   * @return the username
+   */
+  public String getUsername() {
+    return username;
+  }
 
-	public void setReadTimeout(int readTimeout) {
-		this.readTimeout = readTimeout;
-	}
+  /**
+   * Sets the username.
+   *
+   * @param username the new username
+   */
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-	public int getConnectTimeout() {
-		return connectTimeout;
-	}
+  /**
+   * Gets the password.
+   *
+   * @return the password
+   */
+  public String getPassword() {
+    return password;
+  }
 
-	public void setConnectTimeout(int connectTimeout) {
-		this.connectTimeout = connectTimeout;
-	}
+  /**
+   * Sets the password.
+   *
+   * @param password the new password
+   */
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-	public String getMonthlyQueryUrl() {
-		return monthlyQueryUrl;
-	}
+  /**
+   * Gets the read timeout.
+   *
+   * @return the read timeout
+   */
+  public int getReadTimeout() {
+    return readTimeout;
+  }
 
-	public void setMonthlyQueryUrl(String monthlyQueryUrl) {
-		this.monthlyQueryUrl = monthlyQueryUrl;
-	}
+  /**
+   * Sets the read timeout.
+   *
+   * @param readTimeout the new read timeout
+   */
+  public void setReadTimeout(int readTimeout) {
+    this.readTimeout = readTimeout;
+  }
 
-	public String getWeeklyQueryUrl() {
-		return weeklyQueryUrl;
-	}
+  /**
+   * Gets the connect timeout.
+   *
+   * @return the connect timeout
+   */
+  public int getConnectTimeout() {
+    return connectTimeout;
+  }
 
-	public void setWeeklyQueryUrl(String weeklyQueryUrl) {
-		this.weeklyQueryUrl = weeklyQueryUrl;
-	}
-	
+  /**
+   * Sets the connect timeout.
+   *
+   * @param connectTimeout the new connect timeout
+   */
+  public void setConnectTimeout(int connectTimeout) {
+    this.connectTimeout = connectTimeout;
+  }
+
+  /**
+   * Gets the monthly query url.
+   *
+   * @return the monthly query url
+   */
+  public String getMonthlyQueryUrl() {
+    return monthlyQueryUrl;
+  }
+
+  /**
+   * Sets the monthly query url.
+   *
+   * @param monthlyQueryUrl the new monthly query url
+   */
+  public void setMonthlyQueryUrl(String monthlyQueryUrl) {
+    this.monthlyQueryUrl = monthlyQueryUrl;
+  }
+
+  /**
+   * Gets the weekly query url.
+   *
+   * @return the weekly query url
+   */
+  public String getWeeklyQueryUrl() {
+    return weeklyQueryUrl;
+  }
+
+  /**
+   * Sets the weekly query url.
+   *
+   * @param weeklyQueryUrl the new weekly query url
+   */
+  public void setWeeklyQueryUrl(String weeklyQueryUrl) {
+    this.weeklyQueryUrl = weeklyQueryUrl;
+  }
 }

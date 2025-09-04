@@ -7,25 +7,32 @@
 
 package gov.nih.nci.evs.reportwriter.formatter;
 
-/**
- * 
- */
+/** */
 
 /**
  * @author EVS Team (David Yee)
  * @version 1.0
  */
-
 public interface TabFormatterInterface {
-    public String getFilename();
-    public void setTab(String tab);
-    public String write(String text) throws Exception;
-    public void writeln(String text) throws Exception;
-    public void writeln() throws Exception;
-    public String indent();
-    public String undent();
-    public void writeln_indent(String text) throws Exception;
-    public void writeln_undent(String text) throws Exception;
-    public void writeln_normal(String text) throws Exception;
-    public void writeln_inden1(String text) throws Exception;
+  public String getFilename();
+
+  public void setTab(String tab);
+
+  public String write(String text) throws Exception;
+
+  public void writeln(String text) throws Exception;
+
+  public void writeln() throws Exception;
+
+  public String indent();
+
+  public String undent();
+
+  public void writeln_indent(String text) throws Exception;
+
+  public void writeln_undent(String text) throws Exception;
+
+  public void writeln_normal(String text) throws Exception;
+
+  public void writeln_inden1(String text) throws Exception;
 }

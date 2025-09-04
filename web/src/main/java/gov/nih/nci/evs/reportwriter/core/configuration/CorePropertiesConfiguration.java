@@ -13,22 +13,25 @@ import gov.nih.nci.evs.reportwriter.core.properties.GraphdbProperties;
 @Configuration
 @EnableConfigurationProperties
 public class CorePropertiesConfiguration {
-	private static final Logger log = LoggerFactory.getLogger(CorePropertiesConfiguration.class);
-	
-	public CorePropertiesConfiguration() {
-		log.info("Creating instance of class ReportPropertiesConfiguration");
-	}
-	
-	@Bean
-	@ConfigurationProperties(prefix = "gov.nih.nci.evs.reportwriter.core", ignoreUnknownFields = false)
-	CoreProperties coreProperties() {
-		return new CoreProperties();
-	}
+  private static final Logger log = LoggerFactory.getLogger(CorePropertiesConfiguration.class);
 
-	@Bean
-	@ConfigurationProperties(prefix = "gov.nih.nci.evs.reportwriter.graphdb", ignoreUnknownFields = false)
-	GraphdbProperties graphdbProperties() {
-		return new GraphdbProperties();
-	}
+  public CorePropertiesConfiguration() {
+    log.info("Creating instance of class ReportPropertiesConfiguration");
+  }
 
+  @Bean
+  @ConfigurationProperties(
+      prefix = "gov.nih.nci.evs.reportwriter.core",
+      ignoreUnknownFields = false)
+  CoreProperties coreProperties() {
+    return new CoreProperties();
+  }
+
+  @Bean
+  @ConfigurationProperties(
+      prefix = "gov.nih.nci.evs.reportwriter.graphdb",
+      ignoreUnknownFields = false)
+  GraphdbProperties graphdbProperties() {
+    return new GraphdbProperties();
+  }
 }

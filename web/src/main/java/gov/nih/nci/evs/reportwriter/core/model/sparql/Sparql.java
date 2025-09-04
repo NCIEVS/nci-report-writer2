@@ -1,34 +1,29 @@
 package gov.nih.nci.evs.reportwriter.core.model.sparql;
 
 public class Sparql {
-	
-    private Results results;
 
-    private Head head;
+  private Results results;
 
-    public Results getResults ()
-    {
-        return results;
-    }
+  private Head head;
 
-    public void setResults (Results results)
-    {
-        this.results = results;
-    }
+  public Results getResults() {
+    return results;
+  }
 
-    public Head getHead ()
-    {
-        return head;
-    }
+  public void setResults(Results results) {
+    this.results = results;
+  }
 
-    public void setHead (Head head)
-    {
-        this.head = head;
-    }
+  public Head getHead() {
+    return head;
+  }
 
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [results = "+results+", head = "+head+"]";
-    }
+  public void setHead(Head head) {
+    this.head = head;
+  }
+
+  @Override
+  public String toString() {
+    return "ClassPojo [results = " + results + ", head = " + head + "]";
+  }
 }

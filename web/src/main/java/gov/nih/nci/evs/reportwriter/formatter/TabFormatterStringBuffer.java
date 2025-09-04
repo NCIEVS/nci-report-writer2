@@ -7,29 +7,26 @@
 
 package gov.nih.nci.evs.reportwriter.formatter;
 
-/**
- * 
- */
+/** */
 
 /**
  * @author EVS Team (David Yee)
  * @version 1.0
  */
-
 public class TabFormatterStringBuffer extends TabFormatterBase {
-    private StringBuffer _buffer = new StringBuffer();
-    
-    public TabFormatterStringBuffer(String filename) {
-        super(filename);
-    }
+  private StringBuffer _buffer = new StringBuffer();
 
-    public String write(String text) throws Exception {
-        text = super.write(text);
-        _buffer.append(text);
-        return text;
-    }
-    
-    public String toString() {
-        return _buffer.toString();
-    }
+  public TabFormatterStringBuffer(String filename) {
+    super(filename);
+  }
+
+  public String write(String text) throws Exception {
+    text = super.write(text);
+    _buffer.append(text);
+    return text;
+  }
+
+  public String toString() {
+    return _buffer.toString();
+  }
 }

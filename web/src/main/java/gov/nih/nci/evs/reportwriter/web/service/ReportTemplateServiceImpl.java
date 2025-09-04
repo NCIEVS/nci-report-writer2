@@ -38,8 +38,7 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
   @Override
   public List<ReportTemplateUI> findAll() {
 
-    List<ReportTemplate> reportTemplates =
-        reportTemplateRepository.findAllOrderByIdDesc();
+    List<ReportTemplate> reportTemplates = reportTemplateRepository.findAllOrderByIdDesc();
 
     List<ReportTemplateUI> reportTemplateUIs = new ArrayList<ReportTemplateUI>();
 

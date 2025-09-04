@@ -7,11 +7,9 @@ import org.springframework.data.repository.query.Param;
 
 import gov.nih.nci.evs.reportwriter.web.model.ReportTask;
 
+public interface ReportTaskRepository extends CrudRepository<ReportTask, Integer> {
 
-public interface ReportTaskRepository extends CrudRepository<ReportTask, Integer>{
-	
-	List<ReportTask> findByStatusNot(@Param("status") String status);
-	
-	List<ReportTask> findByStatus(@Param("status") String status);
+  List<ReportTask> findByStatusNot(@Param("status") String status);
 
+  List<ReportTask> findByStatus(@Param("status") String status);
 }

@@ -1,44 +1,67 @@
 package gov.nih.nci.evs.reportwriter.core.model.evs;
 
-import java.io.*;
-import java.util.*;
-import java.net.*;
+/** The Class EvsSupportedAssociation. */
+public class EvsSupportedAssociation {
 
-public class EvsSupportedAssociation
-{
+  /** The name. */
+  // Variable declaration
+  private String name;
 
-// Variable declaration
-	private String name;
-	private String code;
+  /** The code. */
+  private String code;
 
-// Default constructor
-	public EvsSupportedAssociation() {
-	}
+  /** Instantiates a new evs supported association. */
+  // Default constructor
+  public EvsSupportedAssociation() {}
 
-// Constructor
-	public EvsSupportedAssociation(
-		String name,
-		String code) {
+  /**
+   * Instantiates a new evs supported association.
+   *
+   * @param name the name
+   * @param code the code
+   */
+  // Constructor
+  public EvsSupportedAssociation(String name, String code) {
 
-		this.name = name;
-		this.code = code;
-	}
+    this.name = name;
+    this.code = code;
+  }
 
-// Set methods
-	public void setName(String name) {
-		this.name = name;
-	}
+  /**
+   * Sets the name.
+   *
+   * @param name the new name
+   */
+  // Set methods
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+  /**
+   * Sets the code.
+   *
+   * @param code the new code
+   */
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-// Get methods
-	public String getName() {
-		return this.name;
-	}
+  /**
+   * Gets the name.
+   *
+   * @return the name
+   */
+  // Get methods
+  public String getName() {
+    return this.name;
+  }
 
-	public String getCode() {
-		return this.code;
-	}
+  /**
+   * Gets the code.
+   *
+   * @return the code
+   */
+  public String getCode() {
+    return this.code;
+  }
 }
