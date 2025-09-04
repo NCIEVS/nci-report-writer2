@@ -4,23 +4,18 @@ SPARQL-based Report Writer query and reporting tool.
 # Overview
 The ReportWriter SPARQL application is a prototype for creating reports
 using a SPARQL endpoint. This version was written in Java and was tested
-against a Stardog/Jena triple store.
+against a Jena triple store.
 
 This repository has several parts:
 
-1. core: This is Java code that generates a report based on
-a YAML configuration template. This is library code that is used
-by **web** application.
+1. web/: Contains the complete Java application source code, combining both the report generation engine and the web interface into a single module. The
+application generates reports based on YAML configuration templates and provides a web interface for managing templates and viewing results.
+2. database/: Contains the init.sql database dump file used for populating the project MySQL database. There is a simple README file contained in this directory that outlines the steps for building a new database.
+3. examples/: Contains sample templates in YAML format that demonstrate various report configurations.
+4. frontend/: Contains the Angular web application that provides the user interface for building new report templates, running existing reports, and viewing completed reports.
 
-2. database: Contains the init.sql database dump file used for populating 
-the project mysql database. There is a simple README file contained in this 
-directory, that outlines the steps for building a new database.
-
-3. examples: Contains sample templates in YAML format.
-
-4. web: This is a Web application that can be used to build
-new report templates, run existing reports, and view completed reports.
-The web application uses the **core** to generate the reports.
+# Architecture
+The application uses a Spring Boot backend with JPA for database access and REST endpoints for the frontend. The core report generation functionality uses SPARQL queries against triple stores to extract data and format it according to configurable templates.
 
 # Building with Gradle
 All the projects in this repository, require that environment variables be set
@@ -46,7 +41,7 @@ export GRAPHDB_CONNECT_TIMEOUT="10000"
 export RW_BIN_DIRECTORY="/tmp/bin"
 export RW_TEMPLATE_DIRECTORY="/tmp/templates"
 export RW_OUTPUT_DIRECTORY="/tmp/output"
-export RW_API_DATASOURCE_URL="jdbc:mysql://localhost:3312/reportwriter?useSSL=false"
+export RW_API_DATASOURCE_URL="jdbc:mysql://localhost:3312/reportwriter?useSSL=false&allowPublicKeyRetrieval=true"
 export RW_API_DATASOURCE_USERNAME="MYSQL_USERNAME"
 export RW_API_DATASOURCE_PASSWORD="MYSQL_PASSWORD"
 ```
@@ -61,7 +56,7 @@ Follow the instructions in the README in the database/ folder.
 make build
 ```
 
-In the web/build/libs directory the web-2.3.0-SNAPSHOT.war file should now exist.
+In the web/build/libs directory the nci-report-writer-{version}-SNAPSHOT.war file should now exist.
 
 # Building the frontend code
 
@@ -98,6 +93,6 @@ make runfrontend
 ```
 
 
-Open a web browser to http://localhost:8080/ncreportwriter to view the application.
+Open a web browser to http://localhost:4200/ncreportwriter/home to view the application.
 
 
