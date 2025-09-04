@@ -368,8 +368,8 @@ public class ReportTaskServiceImpl implements ReportTaskService {
     String lastDigitofId = id.substring(id.length() - 1);
     log.info("lastDigitofId - " + lastDigitofId);
     checkId(id);
-    String filePath =
-        outputDirectory + "/" + lastDigitofId + "/Task-" + id + "/Task-" + id + "." + fileType;
+    String fn = "Task-" + id + "." + fileType;
+    String filePath = outputDirectory + "/" + lastDigitofId + "/Task-" + id + "/" + fn;
     log.info("filePath - " + filePath);
     fileUI.setFilePath(filePath);
     ReportTemplateUI reportTemplateUI = getReportNameByTaskId(Integer.valueOf(id));
