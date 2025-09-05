@@ -599,8 +599,13 @@ public class ReportTaskServiceImpl implements ReportTaskService {
    * @throws Exception the exception
    */
   private void checkId(final String id) throws FileNotFoundException {
-    if (id.contains("/")) {
+    // Disallow path traversal and any non-alphanumeric, non-_/- chars
+    if (id.contains("/") || id.contains("\\") || id.contains("..")) {
       throw new FileNotFoundException("Invalid id characters = " + id);
+    }
+    // Allow only alphanumeric, dash, underscore
+    if (!id.matches("^[A-Za-z0-9_-]+$")) {
+      throw new FileNotFoundException("Invalid id format = " + id);
     }
   }
 }
