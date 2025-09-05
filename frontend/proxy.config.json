@@ -1,5 +1,5 @@
 {
-    "/reportwriter/**": {
+    "/ncireportwriter2/**": {
         "target": "http://localhost:8080/ncireportwriter2",
         "secure": false,
         "logLevel": "debug"
