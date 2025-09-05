@@ -1,10 +1,7 @@
 {
-  "/reportwriter/**": {
-    "target": "http://nciws-d2020-c.nci.nih.gov:8080",
-    "secure": false,
-    "logLevel": "debug",
-    "pathRewrite": {
-      "^/reportwriter": "/ncireportwriter2/reportwriter"
+    "/reportwriter/**": {
+        "target": "http://localhost:8080/ncireportwriter2/reportwriter",
+        "secure": false,
+        "logLevel": "debug"
     }
-  }
 }
