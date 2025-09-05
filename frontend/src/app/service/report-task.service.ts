@@ -11,6 +11,7 @@ import {Template} from './../model/template';
 
 import { Observable, of, throwError } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
+import { getBaseLocation } from "./common-functions";
 
 @Injectable()
 export class ReportTaskService {
@@ -18,12 +19,12 @@ export class ReportTaskService {
   constructor(private http: HttpClient) { }
 
 
-  
 
-  getReportTasks(): Observable<Task[]> {    
+
+  getReportTasks(): Observable<Task[]> {
     //return of(this.statuses);
-   
-    return this.http.get<Task[]>("/reportwriter/reporttasks").pipe(
+
+    return this.http.get<Task[]>(getBaseLocation()+"/reportwriter/reporttasks").pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -37,10 +38,10 @@ export class ReportTaskService {
 
   }
 
-  getReportNameByTaskId(taskId): Observable<Template> {    
+  getReportNameByTaskId(taskId): Observable<Template> {
     //return of(this.statuses);
     console.log("calling getReportTask - service method - " + taskId );
-    return this.http.get<Template>("/reportwriter/reportNameByTaskId/" + taskId).pipe(
+    return this.http.get<Template>(getBaseLocation()+"/reportwriter/reportNameByTaskId/" + taskId).pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -55,7 +56,7 @@ export class ReportTaskService {
   }
 
   deleteReportTask(taskId):Observable<Task>{
-    return this.http.get<Task>("/reportwriter/deleteReportTask/" + taskId).pipe(
+    return this.http.get<Task>(getBaseLocation()+"/reportwriter/deleteReportTask/" + taskId).pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -69,7 +70,7 @@ export class ReportTaskService {
   }
 
   getXLSReport(taskId){
-    return this.http.get("/reportwriter/getXLSReport/" + taskId).pipe(
+    return this.http.get(getBaseLocation()+"/reportwriter/getXLSReport/" + taskId).pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -82,10 +83,10 @@ export class ReportTaskService {
     );
   }
 
-  getTaskStatuses(): Observable<Lookup[]> {  
-    
+  getTaskStatuses(): Observable<Lookup[]> {
+
      //return of(this.groups);
-     return this.http.get<Lookup[]>("/reportwriter/lkreportstatus").pipe(
+     return this.http.get<Lookup[]>(getBaseLocation()+"/reportwriter/lkreportstatus").pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -98,10 +99,10 @@ export class ReportTaskService {
     );
    }
 
-   getReportTaskData(taskId): Observable<ReportTaskOutput> {  
-    
+   getReportTaskData(taskId): Observable<ReportTaskOutput> {
+
      //return of(this.groups);
-     return this.http.get<ReportTaskOutput>("/reportwriter/getReportTaskData/" + taskId).pipe(
+     return this.http.get<ReportTaskOutput>(getBaseLocation()+"/reportwriter/getReportTaskData/" + taskId).pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -115,5 +116,5 @@ export class ReportTaskService {
    }
 
 
-    
+
 }

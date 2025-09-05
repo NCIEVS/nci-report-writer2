@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { Observable, of, throwError } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
+import { getBaseLocation } from "./common-functions";
 
 @Injectable()
 export class LookupvaluesTemplaterowService {
@@ -40,7 +41,7 @@ export class LookupvaluesTemplaterowService {
 
   getDisplays(): Observable<Lookup[]> {
     //return of(this.displays);
-    return this.http.get<Lookup[]>("/reportwriter/lkdisplay").pipe(
+    return this.http.get<Lookup[]>(getBaseLocation()+"/reportwriter/lkdisplay").pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -55,7 +56,7 @@ export class LookupvaluesTemplaterowService {
 
   getPropertyTypes(): Observable<Lookup[]> {
     //return of(this.propertyTypes);
-    return this.http.get<Lookup[]>("/reportwriter/lkpropertytype").pipe(
+    return this.http.get<Lookup[]>(getBaseLocation()+"/reportwriter/lkpropertytype").pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -70,7 +71,7 @@ export class LookupvaluesTemplaterowService {
 
   getPropertyTargets(): Observable<Lookup[]> {
     //return of(this.propertyTargets);
-    return this.http.get<Lookup[]>("/reportwriter/lkproperty").pipe(
+    return this.http.get<Lookup[]>(getBaseLocation()+"/reportwriter/lkproperty").pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -85,7 +86,7 @@ export class LookupvaluesTemplaterowService {
 
   getSources(): Observable<Lookup[]> {
     //return of(this.sources);
-    return this.http.get<Lookup[]>("/reportwriter/lksource").pipe(
+    return this.http.get<Lookup[]>(getBaseLocation()+"/reportwriter/lksource").pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -100,7 +101,7 @@ export class LookupvaluesTemplaterowService {
 
   getGroups(): Observable<Lookup[]> {
     //return of(this.groups);
-    return this.http.get<Lookup[]>("/reportwriter/lkgroup").pipe(
+    return this.http.get<Lookup[]>(getBaseLocation()+"/reportwriter/lkgroup").pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -115,7 +116,7 @@ export class LookupvaluesTemplaterowService {
 
   getSubsources(): Observable<Lookup[]> {
     //return of(this.subsources);
-    return this.http.get<Lookup[]>("/reportwriter/lksubsource").pipe(
+    return this.http.get<Lookup[]>(getBaseLocation()+"/reportwriter/lksubsource").pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",
@@ -129,7 +130,7 @@ export class LookupvaluesTemplaterowService {
   }
 
   getAttrs(): Observable<Lookup[]> {
-    return this.http.get<Lookup[]>("/reportwriter/lkattr").pipe(
+    return this.http.get<Lookup[]>(getBaseLocation()+"/reportwriter/lkattr").pipe(
       catchError(err => {
         console.log(
           "Handling error locally and rethrowing it...",

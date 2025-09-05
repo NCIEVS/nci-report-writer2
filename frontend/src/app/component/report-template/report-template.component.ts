@@ -38,7 +38,7 @@ export class ReportTemplateComponent implements OnInit {
     this.getMonthlyVersionInfo();
 
     this.getWeeklyVersionInfo();
-    
+
   }
 
   templates: Template[];
@@ -56,7 +56,7 @@ export class ReportTemplateComponent implements OnInit {
 
   statuses: Lookup[];
   evsVersionInfo : EvsVersionInfo;
-  
+
 
   selectedStatus: string;
   selectedName: string;
@@ -79,7 +79,7 @@ export class ReportTemplateComponent implements OnInit {
   runReportTemplateInfo: RunReportTemplateInfo = null;
   cols: any[];
   showFileUpload: boolean = false;
-  uploadUrl: string = "/reportwriter/uploadConceptList";
+  uploadUrl: string = getBaseLocation()+"/reportwriter/uploadConceptList";
 
   onFilter(e) {
     //saving the filters
@@ -165,8 +165,8 @@ export class ReportTemplateComponent implements OnInit {
     ];
 
     this.getReportTemplates();
-   
-    
+
+
 
     console.log(
       "In ReportTemplateComponent - ngOnInit - " +

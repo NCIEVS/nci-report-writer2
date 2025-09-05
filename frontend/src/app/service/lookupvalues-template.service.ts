@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http
 
 import { Observable, of, throwError } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
+import { getBaseLocation } from "./common-functions";
 
 @Injectable()
 export class LookupvaluesTemplateService {
@@ -30,7 +31,7 @@ export class LookupvaluesTemplateService {
   constructor(private http: HttpClient) {}
 
   getTypes(): Observable<Lookup[]> {
-    this.url = "/reportwriter/lkreporttemplatetype";
+    this.url = getBaseLocation()+"/reportwriter/lkreporttemplatetype";
     //return of(this.types);
     return this.http.get<Lookup[]>(this.url).pipe(
       catchError(err => {
@@ -46,7 +47,7 @@ export class LookupvaluesTemplateService {
   }
 
   getAssociations(): Observable<Lookup[]> {
-    this.url = "/reportwriter/lkassociation";
+    this.url = getBaseLocation()+"/reportwriter/lkassociation";
     //return of(this.associations);
     return this.http.get<Lookup[]>(this.url).pipe(
       catchError(err => {
@@ -63,7 +64,7 @@ export class LookupvaluesTemplateService {
 
   getStatuses(): Observable<Lookup[]> {
     //return of(this.statuses);
-    this.url = "/reportwriter/lkreporttemplatestatus";
+    this.url = getBaseLocation()+"/reportwriter/lkreporttemplatestatus";
     return this.http.get<Lookup[]>(this.url).pipe(
       catchError(err => {
         console.log(
@@ -78,7 +79,7 @@ export class LookupvaluesTemplateService {
   }
 
   getVersionInfo(databaseType):Observable<EvsVersionInfo> {
-    this.url = "/reportwriter/versionInfo/"  + databaseType;
+    this.url = getBaseLocation()+"/reportwriter/versionInfo/"  + databaseType;
     return this.http.get<EvsVersionInfo>(this.url).pipe(
       catchError(err => {
         console.log(

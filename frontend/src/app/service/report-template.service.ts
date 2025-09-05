@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import {Template} from './../model/template';
 import {RunReportTemplateInfo} from './../model/runReportTemplateInfo';
+import { getBaseLocation } from "./common-functions";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -20,7 +21,7 @@ export class ReportTemplateService {
 
     /** POST: add a new template to the server */
     addReportTemplate (template: Template): Observable<Template> {
-      this.url = "/reportwriter/createTemplate";
+      this.url = getBaseLocation()+"/reportwriter/createTemplate";
       console.log("addReportTemplate ----- " + JSON.stringify(template));
       return this.http.post<Template>(this.url, template, httpOptions)
       .pipe(
@@ -38,7 +39,7 @@ export class ReportTemplateService {
 
     /** POST: save changes to the template to the server */
     saveReportTemplate (template: Template): Observable<Template> {
-      this.url = "/reportwriter/saveTemplate";
+      this.url = getBaseLocation()+"/reportwriter/saveTemplate";
       console.log("saveReportTemplate ----- " + JSON.stringify(template));
       return this.http.post<Template>(this.url, template, httpOptions) .pipe(
         catchError(err => {
@@ -55,7 +56,7 @@ export class ReportTemplateService {
 
 
     runReportTemplates(runReportTemplateInfo: RunReportTemplateInfo): Observable<Task[]>{
-      this.url = "/reportwriter/runReportTemplates";
+      this.url = getBaseLocation()+"/reportwriter/runReportTemplates";
       return this.http.post<Task[]>( this.url, runReportTemplateInfo, httpOptions)
       .pipe(
         catchError(err => {
@@ -68,11 +69,11 @@ export class ReportTemplateService {
           return throwError(err);
         })
       );
-      
+
     }
 
     runReportTemplateConceptList(formData: FormData): Observable<Task[]>{
-      this.url = "/reportwriter/uploadConceptList";
+      this.url = getBaseLocation()+"/reportwriter/uploadConceptList";
       return this.http.post<Task[]>( this.url, formData)
       .pipe(
         catchError(err => {
@@ -85,12 +86,12 @@ export class ReportTemplateService {
           return throwError(err);
         })
       );
-      
+
     }
 
     cloneTemplate(template:Template):  Observable<Template>{
       console.log("cloneTemplate ----- " + JSON.stringify(template));
-      return this.http.post<Template>("/reportwriter/cloneTemplate" ,template, httpOptions)
+      return this.http.post<Template>(getBaseLocation()+"/reportwriter/cloneTemplate" ,template, httpOptions)
       .pipe(
         catchError(err => {
           console.log(
@@ -104,9 +105,9 @@ export class ReportTemplateService {
       );
     }
 
-    getReportTemplates(): Observable<Template[]> {    
+    getReportTemplates(): Observable<Template[]> {
       //return of(this.statuses);
-      this.url = "/reportwriter/reporttemplates";
+      this.url = getBaseLocation()+"/reportwriter/reporttemplates";
       return this.http.get<Template[]>(this.url)
       .pipe(
         catchError(err => {
@@ -119,12 +120,12 @@ export class ReportTemplateService {
           return throwError(err);
         })
       );
-  
+
     }
 
-    getReportTemplate(reportTemplateId): Observable<Template> {    
+    getReportTemplate(reportTemplateId): Observable<Template> {
       //return of(this.statuses);
-      this.url = "/reportwriter/reporttemplate/" + reportTemplateId;
+      this.url = getBaseLocation()+"/reportwriter/reporttemplate/" + reportTemplateId;
       return this.http.get<Template>(this.url).pipe(
         catchError(err => {
           console.log(
@@ -136,10 +137,10 @@ export class ReportTemplateService {
           return throwError(err);
         })
       );
-    
-  
+
+
     }
 
-    
+
 
 }
