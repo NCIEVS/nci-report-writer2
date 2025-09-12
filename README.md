@@ -56,7 +56,7 @@ Follow the instructions in the README in the database/ folder.
 make build
 ```
 
-In the web/build/libs directory the nci-report-writer-{version}-SNAPSHOT.war file should now exist.
+In the web/build/libs directory the ncireportwriter2-{version}-SNAPSHOT.war file should now exist.
 
 # Building the frontend code
 

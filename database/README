@@ -8,7 +8,7 @@ example assume the database name is "reportwriter".
    -e MYSQL_ROOT_PASSWORD=$RW_API_DATASOURCE_PASSWORD \
    -e MYSQL_DATABASE=reportwriter \
    -p 3312:3306 \
-   -d mysql:8
+   -d mysql:8.4
 
 2) Use mysql to load the data.
 
