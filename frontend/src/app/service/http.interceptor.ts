@@ -6,6 +6,7 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse } fr
 import { LoaderService } from "./loader.service";
 import { getBaseLocation } from "./common-functions";
 import { map, takeUntil, tap } from "rxjs/operators";
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class HttpService implements HttpInterceptor {
@@ -16,14 +17,14 @@ export class HttpService implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     //Use the below two lines of code for a war file
-    const url = getBaseLocation();
+    const url = environment.production ? getBaseLocation() : '';
     //console.log("url - " + url);
     //Use the below two lines of code for a jar file
     //const url = "";
     //console.log("url - " + url);
 
     req = req.clone({
-      url: req.url,
+      url: url + req.url,
     });
     // start our loader here
     this.loaderService.showLoader();
@@ -40,7 +41,7 @@ export class HttpService implements HttpInterceptor {
         error => {
           // if any error (not for just HttpResponse) we stop our loader bar
           this.loaderService.hideLoader();
-          console.log(" http interceptor - error status- " + error.status + ", error message - " + error.message);         
+          console.log(" http interceptor - error status- " + error.status + ", error message - " + error.message);
           throw error;
         }
       )
