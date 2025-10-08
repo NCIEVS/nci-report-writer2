@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
@@ -50,7 +51,9 @@ public class StaticResourcesConfiguration implements WebMvcConfigurer {
     registry
         .addResourceHandler(STATIC_RESOURCES)
         .addResourceLocations(resourceProperties.getStaticLocations())
-        .setCachePeriod(cachePeriod);
+        .setCachePeriod(cachePeriod)
+        .resourceChain(true);
+
 
     // Create mapping to index.html for Angular HTML5 mode.
     String[] indexLocations = getIndexLocations();
@@ -79,4 +82,17 @@ public class StaticResourcesConfiguration implements WebMvcConfigurer {
         .map((location) -> location + "index.html")
         .toArray(String[]::new);
   }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        // This view controller is the key to solving your problem.
+        // It is a clean way to tell Spring to forward any path that doesn't
+        // match a static resource or an API endpoint to the index.html file.
+        registry.addViewController("/{path:[^\\.]*}").setViewName("forward:/index.html");
+
+        // Add a second view controller to catch any multi-level paths that do not contain a period.
+        registry
+                .addViewController("/{path:[^\\.]*}/**/{path2:[^\\.]*}")
+                .setViewName("forward:/index.html");
+    }
 }
