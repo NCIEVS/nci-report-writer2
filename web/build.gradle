@@ -64,7 +64,7 @@ dependencies {
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.3"
 
     // tomcat override
-    implementation "org.apache.tomcat.embed:tomcat-embed-core:10.1.44"
+    // implementation "org.apache.tomcat.embed:tomcat-embed-core:10.1.44"
     implementation "com.mysql:mysql-connector-j:$mysqlConnectorVersion"
     
     // Apache POI for Excel processing
