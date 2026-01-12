@@ -44,6 +44,7 @@
     "@angular/router": "^19.2.17",
     "@fullcalendar/core": "^6.1.18",
     "@ng-bootstrap/ng-bootstrap": "^18.0.0",
+    "@primeng/themes": "^21.0.1",
     "bootstrap": "^4.5.0",
     "chart.js": "^4.5.0",
     "core-js": "^2.5.7",

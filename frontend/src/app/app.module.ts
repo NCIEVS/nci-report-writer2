@@ -9,6 +9,9 @@ import {
 
 import { AppComponent } from "./app.component";
 
+import { providePrimeNG } from 'primeng/config';
+import EvsTheme from "./evs-theme";
+
 import { MultiSelectModule } from "primeng/multiselect";
 import { DropdownModule } from "primeng/dropdown";
 // import { SharedModule } from "primeng/primeng";
@@ -134,6 +137,14 @@ import { CloneTemplateComponent } from "./component/clone-template/clone-templat
             provide: APP_BASE_HREF,
             useFactory: getBaseLocation
         },
+        providePrimeNG({
+            theme: {
+                preset: EvsTheme,
+                options: {
+                    darkModeSelector: false
+                }
+            }
+        }),
         provideHttpClient(withInterceptorsFromDi())
     ] })
 export class AppModule {}
