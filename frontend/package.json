@@ -79,5 +79,12 @@
     "ts-node": "~3.2.0",
     "tslint": "~6.1.0",
     "typescript": "5.8.3"
+  },
+  "overrides": {
+    "webpack": "^5.94.0",
+    "tar": "^7.5.9",
+    "ajv": "^8.18.0",
+    "minimatch": "^10.2.3",
+    "rollup": "^4.59.0"
   }
 }
