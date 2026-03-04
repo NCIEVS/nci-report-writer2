@@ -52,7 +52,6 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",
     "ngx-toastr": "^16.2.0",
-    "npm": "^11.11.0",
     "popper.js": "^1.14.4",
     "primeicons": "^6.0.1",
     "primeng": "^19.1.4",
@@ -84,7 +83,8 @@
     "webpack": "^5.94.0",
     "tar": "^7.5.9",
     "ajv": "^8.18.0",
-    "minimatch": "^10.2.3",
-    "rollup": "^4.59.0"
+    "rollup": "^4.59.0",
+    "serialize-javascript": "^7.0.3",
+    "minimatch": "^10.2.3"
   }
 }
