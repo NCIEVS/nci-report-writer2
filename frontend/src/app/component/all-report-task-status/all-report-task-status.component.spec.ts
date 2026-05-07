@@ -10,7 +10,7 @@ import { TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 
 describe('AllReportTaskStatusComponent', () => {
   let component: AllReportTaskStatusComponent;
@@ -24,7 +24,7 @@ describe('AllReportTaskStatusComponent', () => {
         ConfirmDialogModule,
         DialogModule,
         FormsModule,
-        DropdownModule
+        SelectModule
       ],
       providers: [
         ReportTaskService,

@@ -29,7 +29,7 @@
             <label for="type" class="col-sm-2 control-label">Type <span class="required-field">*</span></label>
             <div class="col-sm-4">
 
-                <p-dropdown [style]="{'width':'100%'}" [options]="types" (onChange)="onChangeType($event)" [(ngModel)]="template.type" id="type" name="type" #type="ngModel" placeholder="Select a type" required></p-dropdown>
+                <p-select [style]="{'width':'100%'}" [options]="types" (onChange)="onChangeType($event)" [(ngModel)]="template.type" id="type" name="type" #type="ngModel" placeholder="Select a type" required></p-select>
                 <div [hidden]="type.valid || type.pristine">
                     <span class="form-error-message">Type is required</span>
                 </div>
@@ -38,7 +38,7 @@
             <label for="association" class="col-sm-2 control-label" *ngIf="!conceptList">Association Name <span class="required-field">*</span></label>
             <div class="col-sm-4" *ngIf="!conceptList">
 
-                <p-dropdown [style]="{'width':'100%'}" [options]="associations" [(ngModel)]="template.association" id="association" name="association" placeholder="Select a value" #association="ngModel" required></p-dropdown>
+                <p-select [style]="{'width':'100%'}" [options]="associations" [(ngModel)]="template.association" id="association" name="association" placeholder="Select a value" #association="ngModel" required></p-select>
                 <div [hidden]="association.valid || association.pristine">
                     <span class="form-error-message">Association Name is required</span>
                 </div>
@@ -66,7 +66,7 @@
             <label for="status" class="col-sm-2 control-label">Status <span class="required-field">*</span></label>
             <div class="col-sm-4">
 
-                <p-dropdown [style]="{'width':'100%'}" [options]="statuses" placeholder="Select a status" [(ngModel)]="template.status" id="status" #status="ngModel" name="status" required></p-dropdown>
+                <p-select [style]="{'width':'100%'}" [options]="statuses" placeholder="Select a status" [(ngModel)]="template.status" id="status" #status="ngModel" name="status" required></p-select>
                 <div [hidden]="status.valid || status.pristine">
                     <span class="form-error-message">Status is required</span>
                 </div>
@@ -92,41 +92,41 @@
             <p-column field="label" header="Label" [editable]="true"></p-column>
             <p-column field="display" header="Display" [editable]="true">
                 <ng-template let-col let-templateRow="rowData" pTemplate="editor">
-                    <p-dropdown [(ngModel)]="templateRow[col.field]" name="display" [ngModelOptions]="{standalone: true}" [options]="displays" [autoWidth]="false" [style]="{'width':'95%'}" required="true" appendTo="body"></p-dropdown>
+                    <p-select [(ngModel)]="templateRow[col.field]" name="display" [ngModelOptions]="{standalone: true}" [options]="displays" [style]="{'width':'95%'}" required="true" appendTo="body"></p-select>
                 </ng-template>
             </p-column>
             <p-column field="propertyType" header="Property Type" [editable]="true" [style]="{'width':'170px'}">
                 <ng-template let-col let-templateRow="rowData" pTemplate="editor">
-                    <p-dropdown [filter]="true" [(ngModel)]="templateRow[col.field]" name="propertyType" [ngModelOptions]="{standalone: true}" [options]="propertyTypes" [autoWidth]="false" [style]="{'width':'95%'}" required="true" appendTo="body"></p-dropdown>
+                    <p-select [filter]="true" [(ngModel)]="templateRow[col.field]" name="propertyType" [ngModelOptions]="{standalone: true}" [options]="propertyTypes" [style]="{'width':'95%'}" required="true" appendTo="body"></p-select>
                 </ng-template>
             </p-column>
             <p-column field="property" header="Property Target" [editable]="true" [style]="{'width':'270px'}">
                 <ng-template let-col let-templateRow="rowData" pTemplate="editor">
-                    <p-dropdown [filter]="true" [(ngModel)]="templateRow[col.field]" name="propertyTarget" [ngModelOptions]="{standalone: true}" [options]="propertyTargets" [autoWidth]="false" [style]="{'width':'95%'}" required="true" appendTo="body"></p-dropdown>
+                    <p-select [filter]="true" [(ngModel)]="templateRow[col.field]" name="propertyTarget" [ngModelOptions]="{standalone: true}" [options]="propertyTargets" [style]="{'width':'95%'}" required="true" appendTo="body"></p-select>
                 </ng-template>
             </p-column>
 
             <p-column field="source" header="Source" [editable]="true" [style]="{'width':'100px'}">
                 <ng-template let-col let-templateRow="rowData" pTemplate="editor">
-                    <p-dropdown [filter]="true" [(ngModel)]="templateRow[col.field]" name="source" [ngModelOptions]="{standalone: true}" [options]="sources" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                    <p-select [filter]="true" [(ngModel)]="templateRow[col.field]" name="source" [ngModelOptions]="{standalone: true}" [options]="sources" [style]="{'width':'95%'}" appendTo="body"></p-select>
                 </ng-template>
             </p-column>
 
             <p-column field="group" header="Group" [editable]="true" [style]="{'width':'60px'}">
                 <ng-template let-col let-templateRow="rowData" pTemplate="editor">
-                    <p-dropdown [filter]="true" [filter]="true" [(ngModel)]="templateRow[col.field]" [options]="groups" name="group" [autoWidth]="false" [ngModelOptions]="{standalone: true}" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                    <p-select [filter]="true" [filter]="true" [(ngModel)]="templateRow[col.field]" [options]="groups" name="group" [ngModelOptions]="{standalone: true}" [style]="{'width':'95%'}" appendTo="body"></p-select>
                 </ng-template>
             </p-column>
 
             <p-column field="subsource" header="Subsource" [editable]="true">
                 <ng-template let-col let-templateRow="rowData" pTemplate="editor">
-                    <p-dropdown [filter]="true" [(ngModel)]="templateRow[col.field]" name="subsource" [ngModelOptions]="{standalone: true}" [options]="subsources" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                    <p-select [filter]="true" [(ngModel)]="templateRow[col.field]" name="subsource" [ngModelOptions]="{standalone: true}" [options]="subsources" [style]="{'width':'95%'}" appendTo="body"></p-select>
                 </ng-template>
             </p-column>
 
             <p-column field="attr" header="Attr" [editable]="true">
                 <ng-template let-col let-templateRow="rowData" pTemplate="editor">
-                    <p-dropdown [filter]="true" [(ngModel)]="templateRow[col.field]" name="attr" [ngModelOptions]="{standalone: true}" [options]="attrs" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                    <p-select [filter]="true" [(ngModel)]="templateRow[col.field]" name="attr" [ngModelOptions]="{standalone: true}" [options]="attrs" [style]="{'width':'95%'}" appendTo="body"></p-select>
                 </ng-template>
             </p-column>
         </p-dataTable>-->
@@ -165,7 +165,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [(ngModel)]="rowData.display" name="display" [ngModelOptions]="{standalone: true}" [options]="displays" [autoWidth]="false" [style]="{'width':'95%'}" required="true" appendTo="body"></p-dropdown>
+                                <p-select [(ngModel)]="rowData.display" name="display" [ngModelOptions]="{standalone: true}" [options]="displays" [style]="{'width':'95%'}" required="true" appendTo="body"></p-select>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.display}}
@@ -175,7 +175,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [(ngModel)]="rowData.propertyType" name="propertyType" [ngModelOptions]="{standalone: true}" [options]="propertyTypes" [autoWidth]="false" [style]="{'width':'95%'}" required="true" appendTo="body"></p-dropdown>
+                                <p-select [(ngModel)]="rowData.propertyType" name="propertyType" [ngModelOptions]="{standalone: true}" [options]="propertyTypes" [style]="{'width':'95%'}" required="true" appendTo="body"></p-select>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.propertyType}}
@@ -186,7 +186,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [(ngModel)]="rowData.property" name="property" [ngModelOptions]="{standalone: true}" [options]="propertyTargets" [autoWidth]="false" [style]="{'width':'95%'}" required="true" appendTo="body"></p-dropdown>
+                                <p-select [(ngModel)]="rowData.property" name="property" [ngModelOptions]="{standalone: true}" [options]="propertyTargets" [style]="{'width':'95%'}" required="true" appendTo="body"></p-select>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.property}}
@@ -196,7 +196,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [(ngModel)]="rowData.source" name="source" [ngModelOptions]="{standalone: true}" [options]="sources" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                                <p-select [(ngModel)]="rowData.source" name="source" [ngModelOptions]="{standalone: true}" [options]="sources" [style]="{'width':'95%'}" appendTo="body"></p-select>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.source}}
@@ -206,7 +206,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [(ngModel)]="rowData.group" name="group" [options]="groups" [autoWidth]="false" [ngModelOptions]="{standalone: true}" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                                <p-select [(ngModel)]="rowData.group" name="group" [options]="groups" [ngModelOptions]="{standalone: true}" [style]="{'width':'95%'}" appendTo="body"></p-select>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.group}}
@@ -216,7 +216,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [(ngModel)]="rowData.subsource" name="subsource" [ngModelOptions]="{standalone: true}" [options]="subsources" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                                <p-select [(ngModel)]="rowData.subsource" name="subsource" [ngModelOptions]="{standalone: true}" [options]="subsources" [style]="{'width':'95%'}" appendTo="body"></p-select>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.subsource}}
@@ -226,7 +226,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [(ngModel)]="rowData.attr" name="attr" [ngModelOptions]="{standalone: true}" [options]="attrs" [autoWidth]="false" [style]="{'width':'95%'}" appendTo="body"></p-dropdown>
+                                <p-select [(ngModel)]="rowData.attr" name="attr" [ngModelOptions]="{standalone: true}" [options]="attrs" [style]="{'width':'95%'}" appendTo="body"></p-select>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.attr}}
@@ -281,7 +281,7 @@
                 <label for="type" class="col-sm-3 control-label">Display <span class="required-field">*</span></label>
                 <div class="col-sm-8">
 
-                    <p-dropdown appendTo="body" [style]="{'width':'250px'}" [options]="displays" [(ngModel)]="templateRowUI.display" id="display" name="display" #display="ngModel" placeholder="Select a display" required></p-dropdown>
+                    <p-select appendTo="body" [style]="{'width':'250px'}" [options]="displays" [(ngModel)]="templateRowUI.display" id="display" name="display" #display="ngModel" placeholder="Select a display" required></p-select>
                     <div [hidden]="display.valid || display.pristine">
                         <span class="form-error-message">Display is required</span>
                     </div>
@@ -291,8 +291,8 @@
                 <label for="type" class="col-sm-3 control-label">Property Type <span class="required-field">*</span></label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" #pt appendTo="body" [style]="{'width':'250px'}" [options]="propertyTypes" (onChange)="clearFilter(pt)" [(ngModel)]="templateRowUI.propertyType" id="propertyType" name="propertyType" #propertyType="ngModel" placeholder="Select a Property Type"
-                        required></p-dropdown>
+                    <p-select [filter]="true" #pt appendTo="body" [style]="{'width':'250px'}" [options]="propertyTypes" (onChange)="clearFilter(pt)" [(ngModel)]="templateRowUI.propertyType" id="propertyType" name="propertyType" #propertyType="ngModel" placeholder="Select a Property Type"
+                        required></p-select>
                     <div [hidden]="propertyType.valid || propertyType.pristine">
                         <span class="form-error-message">Property Type is required</span>
                     </div>
@@ -302,8 +302,8 @@
                 <label for="type" class="col-sm-3 control-label">Property Target <span class="required-field">*</span></label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" #pTarget appendTo="body" [style]="{'width':'250px'}" [options]="propertyTargets" (onChange)="clearFilter(pTarget)" [(ngModel)]="templateRowUI.property" id="propertyTarget" name="propertyTarget" #propertyTarget="ngModel" placeholder="Select a Property Target"
-                        required></p-dropdown>
+                    <p-select [filter]="true" #pTarget appendTo="body" [style]="{'width':'250px'}" [options]="propertyTargets" (onChange)="clearFilter(pTarget)" [(ngModel)]="templateRowUI.property" id="propertyTarget" name="propertyTarget" #propertyTarget="ngModel" placeholder="Select a Property Target"
+                        required></p-select>
                     <div [hidden]="propertyTarget.valid || propertyTarget.pristine">
                         <span class="form-error-message">Property Target is required</span>
                     </div>
@@ -313,7 +313,7 @@
                 <label for="type" class="col-sm-3 control-label">Source:</label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" #source appendTo="body" [style]="{'width':'250px'}" [options]="sources" (onChange)="clearFilter(source)" [(ngModel)]="templateRowUI.source" id="source" name="source" placeholder="Select a Source"></p-dropdown>
+                    <p-select [filter]="true" #source appendTo="body" [style]="{'width':'250px'}" [options]="sources" (onChange)="clearFilter(source)" [(ngModel)]="templateRowUI.source" id="source" name="source" placeholder="Select a Source"></p-select>
 
                 </div>
             </div>
@@ -321,7 +321,7 @@
                 <label for="type" class="col-sm-3 control-label">Group:</label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" #group appendTo="body" [style]="{'width':'250px'}" [options]="groups" (onChange)="clearFilter(group)" [(ngModel)]="templateRowUI.group" id="group" name="group" placeholder="Select a Group"></p-dropdown>
+                    <p-select [filter]="true" #group appendTo="body" [style]="{'width':'250px'}" [options]="groups" (onChange)="clearFilter(group)" [(ngModel)]="templateRowUI.group" id="group" name="group" placeholder="Select a Group"></p-select>
 
                 </div>
             </div>
@@ -329,7 +329,7 @@
                 <label for="type" class="col-sm-3 control-label">Subsource:</label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" #subsource appendTo="body" [style]="{'width':'250px'}" [options]="subsources" (onChange)="clearFilter(subsource)" [(ngModel)]="templateRowUI.subsource" id="subsource" name="subsource" placeholder="Select a Subsource"></p-dropdown>
+                    <p-select [filter]="true" #subsource appendTo="body" [style]="{'width':'250px'}" [options]="subsources" (onChange)="clearFilter(subsource)" [(ngModel)]="templateRowUI.subsource" id="subsource" name="subsource" placeholder="Select a Subsource"></p-select>
 
                 </div>
             </div>
@@ -337,7 +337,7 @@
                 <label for="type" class="col-sm-3 control-label">Attr:</label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" #attr appendTo="body" [style]="{'width':'250px'}" [options]="attrs" (onChange)="clearFilter(attr)" [(ngModel)]="templateRowUI.attr" id="attr" name="attr" placeholder="Select a Attr"></p-dropdown>
+                    <p-select [filter]="true" #attr appendTo="body" [style]="{'width':'250px'}" [options]="attrs" (onChange)="clearFilter(attr)" [(ngModel)]="templateRowUI.attr" id="attr" name="attr" placeholder="Select a Attr"></p-select>
 
                 </div>
             </div>
