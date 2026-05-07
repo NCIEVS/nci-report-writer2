@@ -13,7 +13,7 @@ import { providePrimeNG } from 'primeng/config';
 import EvsTheme from "./evs-theme";
 
 import { MultiSelectModule } from "primeng/multiselect";
-import { DropdownModule } from "primeng/dropdown";
+import { SelectModule } from "primeng/select";
 // import { SharedModule } from "primeng/primeng";
 import { DialogModule } from "primeng/dialog";
 import { ButtonModule } from "primeng/button";
@@ -68,83 +68,93 @@ import { APP_BASE_HREF } from "@angular/common";
 import { getBaseLocation } from "./service/common-functions";
 import { CloneTemplateComponent } from "./component/clone-template/clone-template.component";
 
-@NgModule({ declarations: [
-        AppComponent,
-        CreateTemplateComponent,
-        ReportTemplateComponent,
-        ReportTemplateViewComponent,
-        AllReportTaskStatusComponent,
-        ReportTaskOutputComponent,
-        ReportwriterHomeComponent,
-        HeaderComponent,
-        FooterComponent,
-        LoaderComponent,
-        CloneTemplateComponent
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        MultiSelectModule,
-        DropdownModule,
-        FormsModule,
-        BrowserAnimationsModule,
-        TableModule,
-        // SharedModule,
-        NgbModule,
-        DialogModule,
-        ButtonModule,
-        AppRoutingModule,
-        MenubarModule,
-        ConfirmDialogModule,
-        SplitButtonModule,
-        TooltipModule,
-        BlockUIModule,
-        ProgressBarModule,
-        ProgressSpinnerModule,
-        InputTextModule,
-        FileUploadModule,
-        ToastModule,
-        InputMaskModule,
-        ToastrModule.forRoot({
-            timeOut: 10000,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            maxOpened: 5,
-            autoDismiss: true,
-            newestOnTop: true
-        })], providers: [
-        LookupvaluesTemplateService,
-        LookupvaluesTemplaterowService,
-        ReportTemplateService,
-        ReportTaskService,
-        LoaderService,
-        MessageService,
-        ToastrService,
-        GlobalErrorHandler,
-        {
-            provide: ErrorHandler,
-            useClass: GlobalErrorHandler
-        },
-        Location,
-        {
-            provide: LocationStrategy,
-            useClass: PathLocationStrategy
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: HttpService,
-            multi: true
-        },
-        {
-            provide: APP_BASE_HREF,
-            useFactory: getBaseLocation
-        },
-        providePrimeNG({
-            theme: {
-                preset: EvsTheme,
-                options: {
-                    darkModeSelector: false
+@NgModule(
+    { 
+        declarations: [
+            AppComponent,
+            CreateTemplateComponent,
+            ReportTemplateComponent,
+            ReportTemplateViewComponent,
+            AllReportTaskStatusComponent,
+            ReportTaskOutputComponent,
+            ReportwriterHomeComponent,
+            HeaderComponent,
+            FooterComponent,
+            LoaderComponent,
+            CloneTemplateComponent
+        ],
+        bootstrap: [
+            AppComponent
+        ], 
+        imports: [
+            BrowserModule,
+            MultiSelectModule,
+            SelectModule,
+            FormsModule,
+            BrowserAnimationsModule,
+            TableModule,
+            // SharedModule,
+            NgbModule,
+            DialogModule,
+            ButtonModule,
+            AppRoutingModule,
+            MenubarModule,
+            ConfirmDialogModule,
+            SplitButtonModule,
+            TooltipModule,
+            BlockUIModule,
+            ProgressBarModule,
+            ProgressSpinnerModule,
+            InputTextModule,
+            FileUploadModule,
+            ToastModule,
+            InputMaskModule,
+            ToastrModule.forRoot({
+                timeOut: 10000,
+                positionClass: "toast-top-right",
+                preventDuplicates: true,
+                maxOpened: 5,
+                autoDismiss: true,
+                newestOnTop: true
+            })
+        ], 
+        providers: [
+            LookupvaluesTemplateService,
+            LookupvaluesTemplaterowService,
+            ReportTemplateService,
+            ReportTaskService,
+            LoaderService,
+            MessageService,
+            ToastrService,
+            GlobalErrorHandler,
+            {
+                provide: ErrorHandler,
+                useClass: GlobalErrorHandler
+            },
+            Location,
+            {
+                provide: LocationStrategy,
+                useClass: PathLocationStrategy
+            },
+            {
+                provide: HTTP_INTERCEPTORS,
+                useClass: HttpService,
+                multi: true
+            },
+            {
+                provide: APP_BASE_HREF,
+                useFactory: getBaseLocation
+            },
+            providePrimeNG({
+                theme: {
+                    preset: EvsTheme,
+                    options: {
+                        darkModeSelector: false
+                    }
                 }
-            }
-        }),
-        provideHttpClient(withInterceptorsFromDi())
-    ] })
+            }),
+            provideHttpClient(withInterceptorsFromDi())
+        ] 
+    }
+)
 export class AppModule {}
