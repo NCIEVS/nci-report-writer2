@@ -8,14 +8,17 @@ import org.springframework.stereotype.Service;
 import gov.nih.nci.evs.reportwriter.web.model.LkReportTemplateType;
 import gov.nih.nci.evs.reportwriter.web.repository.LkReportTemplateTypeRepository;
 
+/** The Class LkReportTemplateTypeServiceImpl. */
 @Service
 public class LkReportTemplateTypeServiceImpl implements LkReportTemplateTypeService {
-	@Autowired
-	LkReportTemplateTypeRepository lkReportTemplateTypeRepository;
-	
-	public List <LkReportTemplateType> findAll() {
-		
-		return (List) lkReportTemplateTypeRepository.findAll();
-	}
 
+  /** The lk report template type repository. */
+  @Autowired LkReportTemplateTypeRepository lkReportTemplateTypeRepository;
+
+  /* see superclass */
+  @Override
+  public List<LkReportTemplateType> findAll() {
+
+    return (List<LkReportTemplateType>) lkReportTemplateTypeRepository.findAll();
+  }
 }

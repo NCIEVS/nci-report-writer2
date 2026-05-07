@@ -1,70 +1,90 @@
 package gov.nih.nci.evs.reportwriter.web.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
-/**
- * The persistent class for the lk_report_template_status database table.
- * 
- */
+/** The persistent class for the lk_report_template_status database table. */
 @Entity
-@Table(name="lk_report_template_status")
-@NamedQuery(name="LkReportTemplateStatus.findAll", query="SELECT l FROM LkReportTemplateStatus l")
+@Table(name = "lk_report_template_status")
+@NamedQuery(
+    name = "LkReportTemplateStatus.findAll",
+    query = "SELECT l FROM LkReportTemplateStatus l")
 public class LkReportTemplateStatus implements LkGeneric, Serializable {
-	private static final long serialVersionUID = 1L;
-	private String name;
-	private String description;
-	private List<ReportTemplate> reportTemplates;
 
-	public LkReportTemplateStatus() {
-	}
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = 1L;
 
+  /** The name. */
+  private String name;
 
-	@Id
-	public String getName() {
-		return this.name;
-	}
+  /** The description. */
+  private String description;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  /** The report templates. */
+  // private List<ReportTemplate> reportTemplates;
 
+  /** Instantiates a new lk report template status. */
+  public LkReportTemplateStatus() {}
 
-	public String getDescription() {
-		return this.description;
-	}
+  /* see superclass */
+  @Override
+  @Id
+  public String getName() {
+    return this.name;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  /**
+   * Sets the name.
+   *
+   * @param name the new name
+   */
+  public void setName(final String name) {
+    this.name = name;
+  }
 
+  /* see superclass */
+  @Override
+  public String getDescription() {
+    return this.description;
+  }
 
-	/*
-	//bi-directional many-to-one association to ReportTemplate
-	@OneToMany(mappedBy="lkReportTemplateStatus")
-	public List<ReportTemplate> getReportTemplates() {
-		return this.reportTemplates;
-	}
+  /**
+   * Sets the description.
+   *
+   * @param description the new description
+   */
+  public void setDescription(final String description) {
+    this.description = description;
+  }
 
-	public void setReportTemplates(List<ReportTemplate> reportTemplates) {
-		this.reportTemplates = reportTemplates;
-	}
+  /*
+  //bi-directional many-to-one association to ReportTemplate
+  @OneToMany(mappedBy="lkReportTemplateStatus")
+  public List<ReportTemplate> getReportTemplates() {
+  	return this.reportTemplates;
+  }
 
-	public ReportTemplate addReportTemplate(ReportTemplate reportTemplate) {
-		getReportTemplates().add(reportTemplate);
-		reportTemplate.setLkReportTemplateStatus(this);
+  public void setReportTemplates(List<ReportTemplate> reportTemplates) {
+  	this.reportTemplates = reportTemplates;
+  }
 
-		return reportTemplate;
-	}
+  public ReportTemplate addReportTemplate(ReportTemplate reportTemplate) {
+  	getReportTemplates().add(reportTemplate);
+  	reportTemplate.setLkReportTemplateStatus(this);
 
-	public ReportTemplate removeReportTemplate(ReportTemplate reportTemplate) {
-		getReportTemplates().remove(reportTemplate);
-		reportTemplate.setLkReportTemplateStatus(null);
+  	return reportTemplate;
+  }
 
-		return reportTemplate;
-	}
-	*/
+  public ReportTemplate removeReportTemplate(ReportTemplate reportTemplate) {
+  	getReportTemplates().remove(reportTemplate);
+  	reportTemplate.setLkReportTemplateStatus(null);
+
+  	return reportTemplate;
+  }
+  */
 
 }

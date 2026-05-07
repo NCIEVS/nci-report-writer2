@@ -2,202 +2,210 @@ package gov.nih.nci.evs.reportwriter.web.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import javax.persistence.*;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
-/**
- * The persistent class for the report_template database table.
- * 
- */
+/** The persistent class for the report_template database table. */
 @Entity
 @Table(name = "report_template")
-@NamedQuery(name = "ReportTemplate.findAllOrderByIdDesc", query = "SELECT r FROM ReportTemplate r order by r.id desc")
+@NamedQuery(
+    name = "ReportTemplate.findAllOrderByIdDesc",
+    query = "SELECT r FROM ReportTemplate r order by r.id desc")
 @JsonFilter("yamlFilter")
 public class ReportTemplate implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private Integer id;
-	private Integer level;
-	private String name;
-	private String rootConceptCode;
-	private Integer sortColumn;
-	private String status;
-	private String type;
-	private String association;
-	private List<ReportTemplateColumn> columns;
-	private List<ReportTemplateConceptList> reportTemplateConceptLists;
-	private List<ReportTask> tasks;
-	private LocalDateTime dateCreated;
-	private LocalDateTime dateLastUpdated;
-	private String createdBy;
-	private String lastUpdatedBy;
+  private static final long serialVersionUID = 1L;
+  private Integer id;
+  private Integer level;
+  private String name;
+  private String rootConceptCode;
+  private Integer sortColumn;
+  private String status;
+  private String type;
+  private String association;
+  private List<ReportTemplateColumn> columns;
+  private List<ReportTemplateConceptList> reportTemplateConceptLists;
+  private List<ReportTask> tasks;
+  private LocalDateTime dateCreated;
+  private LocalDateTime dateLastUpdated;
+  private String createdBy;
+  private String lastUpdatedBy;
 
-	public ReportTemplate() {
-	}
+  public ReportTemplate() {}
 
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public Integer getId() {
-		return this.id;
-	}
+  @Id
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public Integer getId() {
+    return this.id;
+  }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  public void setId(final Integer id) {
+    this.id = id;
+  }
 
-	@Column(name = "level")
-	public Integer getLevel() {
-		return this.level;
-	}
+  @Column(name = "level")
+  public Integer getLevel() {
+    return this.level;
+  }
 
-	public void setLevel(Integer level) {
-		this.level = level;
-	}
+  public void setLevel(final Integer level) {
+    this.level = level;
+  }
 
-	@Column(name = "name")
-	public String getName() {
-		return this.name;
-	}
+  @Column(name = "name")
+  public String getName() {
+    return this.name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(final String name) {
+    this.name = name;
+  }
 
-	@Column(name = "root_concept_code")
-	public String getRootConceptCode() {
-		return this.rootConceptCode;
-	}
+  @Column(name = "root_concept_code")
+  public String getRootConceptCode() {
+    return this.rootConceptCode;
+  }
 
-	public void setRootConceptCode(String rootConceptCode) {
-		this.rootConceptCode = rootConceptCode;
-	}
+  public void setRootConceptCode(final String rootConceptCode) {
+    this.rootConceptCode = rootConceptCode;
+  }
 
-	@Column(name = "sort_column")
-	public Integer getSortColumn() {
-		return this.sortColumn;
-	}
+  @Column(name = "sort_column")
+  public Integer getSortColumn() {
+    return this.sortColumn;
+  }
 
-	public void setSortColumn(Integer sortColumn) {
-		this.sortColumn = sortColumn;
-	}
+  public void setSortColumn(final Integer sortColumn) {
+    this.sortColumn = sortColumn;
+  }
 
-	@Column(name = "status")
-	public String getStatus() {
-		return this.status;
-	}
+  @Column(name = "status")
+  public String getStatus() {
+    return this.status;
+  }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+  public void setStatus(final String status) {
+    this.status = status;
+  }
 
-	@Column(name = "type")
-	public String getType() {
-		return this.type;
-	}
+  @Column(name = "type")
+  public String getType() {
+    return this.type;
+  }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+  public void setType(final String type) {
+    this.type = type;
+  }
 
-	@Column(name = "association")
-	public String getAssociation() {
-		return this.association;
-	}
+  @Column(name = "association")
+  public String getAssociation() {
+    return this.association;
+  }
 
-	public void setAssociation(String association) {
-		this.association = association;
-	}
+  public void setAssociation(final String association) {
+    this.association = association;
+  }
 
-	// bi-directional many-to-one association to ReportTemplateColumn
+  // bi-directional many-to-one association to ReportTemplateColumn
 
-	@OneToMany(mappedBy = "reportTemplate", fetch = FetchType.EAGER, cascade = {
-			CascadeType.ALL }, orphanRemoval = true)
-	public List<ReportTemplateColumn> getColumns() {
-		return this.columns;
-	}
+  @OneToMany(
+      mappedBy = "reportTemplate",
+      fetch = FetchType.EAGER,
+      cascade = {CascadeType.ALL},
+      orphanRemoval = true)
+  public List<ReportTemplateColumn> getColumns() {
+    return this.columns;
+  }
 
-	public void setColumns(List<ReportTemplateColumn> columns) {
-		this.columns = columns;
+  public void setColumns(final List<ReportTemplateColumn> columns) {
+    this.columns = columns;
+  }
 
-	}
+  // bi-directional many-to-one association to ReportTask
+  @JsonIgnore
+  @OneToMany(mappedBy = "reportTemplate", fetch = FetchType.LAZY)
+  public List<ReportTask> getTasks() {
+    return this.tasks;
+  }
 
-	// bi-directional many-to-one association to ReportTask
-	@JsonIgnore
-	@OneToMany(mappedBy = "reportTemplate", fetch = FetchType.LAZY)
-	public List<ReportTask> getTasks() {
-		return this.tasks;
-	}
+  public void setTasks(final List<ReportTask> tasks) {
+    this.tasks = tasks;
+  }
 
-	public void setTasks(List<ReportTask> tasks) {
-		this.tasks = tasks;
+  // bi-directional many-to-one association to ReportTemplateConceptList
+  @JsonIgnore
+  @OneToMany(mappedBy = "reportTemplate")
+  public List<ReportTemplateConceptList> getReportTemplateConceptLists() {
+    return this.reportTemplateConceptLists;
+  }
 
-	}
+  public void setReportTemplateConceptLists(
+      final List<ReportTemplateConceptList> reportTemplateConceptLists) {
+    this.reportTemplateConceptLists = reportTemplateConceptLists;
+  }
 
-	// bi-directional many-to-one association to ReportTemplateConceptList
-	@JsonIgnore
-	@OneToMany(mappedBy = "reportTemplate")
-	public List<ReportTemplateConceptList> getReportTemplateConceptLists() {
-		return this.reportTemplateConceptLists;
-	}
+  public ReportTemplateConceptList addReportTemplateConceptList(
+      final ReportTemplateConceptList reportTemplateConceptList) {
+    getReportTemplateConceptLists().add(reportTemplateConceptList);
+    reportTemplateConceptList.setReportTemplate(this);
 
-	public void setReportTemplateConceptLists(List<ReportTemplateConceptList> reportTemplateConceptLists) {
-		this.reportTemplateConceptLists = reportTemplateConceptLists;
-	}
+    return reportTemplateConceptList;
+  }
 
-	public ReportTemplateConceptList addReportTemplateConceptList(ReportTemplateConceptList reportTemplateConceptList) {
-		getReportTemplateConceptLists().add(reportTemplateConceptList);
-		reportTemplateConceptList.setReportTemplate(this);
+  public ReportTemplateConceptList removeReportTemplateConceptList(
+      final ReportTemplateConceptList reportTemplateConceptList) {
+    getReportTemplateConceptLists().remove(reportTemplateConceptList);
+    reportTemplateConceptList.setReportTemplate(null);
 
-		return reportTemplateConceptList;
-	}
+    return reportTemplateConceptList;
+  }
 
-	public ReportTemplateConceptList removeReportTemplateConceptList(
-			ReportTemplateConceptList reportTemplateConceptList) {
-		getReportTemplateConceptLists().remove(reportTemplateConceptList);
-		reportTemplateConceptList.setReportTemplate(null);
+  @JsonIgnore
+  public LocalDateTime getDateCreated() {
+    return dateCreated;
+  }
 
-		return reportTemplateConceptList;
-	}
+  public void setDateCreated(final LocalDateTime dateCreated) {
+    this.dateCreated = dateCreated;
+  }
 
-	@JsonIgnore
-	public LocalDateTime getDateCreated() {
-		return dateCreated;
-	}
+  @JsonIgnore
+  public LocalDateTime getDateLastUpdated() {
+    return dateLastUpdated;
+  }
 
-	public void setDateCreated(LocalDateTime dateCreated) {
-		this.dateCreated = dateCreated;
-	}
+  public void setDateLastUpdated(final LocalDateTime dateLastUpdated) {
+    this.dateLastUpdated = dateLastUpdated;
+  }
 
-	@JsonIgnore
-	public LocalDateTime getDateLastUpdated() {
-		return dateLastUpdated;
-	}
+  @JsonIgnore
+  public String getCreatedBy() {
+    return createdBy;
+  }
 
-	public void setDateLastUpdated(LocalDateTime dateLastUpdated) {
-		this.dateLastUpdated = dateLastUpdated;
-	}
+  public void setCreatedBy(final String createdBy) {
+    this.createdBy = createdBy;
+  }
 
-	@JsonIgnore
-	public String getCreatedBy() {
-		return createdBy;
-	}
+  @JsonIgnore
+  public String getLastUpdatedBy() {
+    return lastUpdatedBy;
+  }
 
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	@JsonIgnore
-	public String getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(String lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
+  public void setLastUpdatedBy(final String lastUpdatedBy) {
+    this.lastUpdatedBy = lastUpdatedBy;
+  }
 }

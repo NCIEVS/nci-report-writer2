@@ -4,7 +4,13 @@ import java.util.List;
 
 import gov.nih.nci.evs.reportwriter.web.model.LkGroup;
 
+/** The Interface LkGroupService. */
 public interface LkGroupService {
-	public List <LkGroup> findAll();
 
+  /**
+   * Find all.
+   *
+   * @return the list
+   */
+  public List<LkGroup> findAll();
 }

@@ -12,7 +12,7 @@ spring:
     #
     datasource:
         driverClassName: com.mysql.jdbc.Driver
-        url: ${RW_API_DATASOURCE_URL:jdbc:mysql://localhost/rw}
+        url: ${RW_API_DATASOURCE_URL:jdbc:mysql://localhost/rw?useSSL=false&allowPublicKeyRetrieval=true}
         username: ${RW_API_DATASOURCE_USERNAME:root}
         password: ${RW_API_DATASOURCE_PASSWORD:root}
         tomcat:
@@ -39,8 +39,8 @@ spring:
     #
     jpa:
         show-sql: ${RW_API_JPA_SHOW_SQL:false}
-        hibernate:
-            use-new-id-generator-mappings: true
+        # hibernate:
+        #     use-new-id-generator-mappings: true
     mvc:
       pathmatch:
         matching-strategy: ANT_PATH_MATCHER
@@ -49,7 +49,7 @@ spring:
 #
 server:
     port: ${RW_API_SERVER_PORT:8080}
-    servlet.context-path: ${RW_CONTEXT_PATH:/ncreportwriter}
+    servlet.context-path: ${RW_CONTEXT_PATH:/ncireportwriter2}
 
 #
 # Management Properties
@@ -82,7 +82,7 @@ gov:
          core:
            templateDirectory: ${RW_TEMPLATE_DIRECTORY:/tmp/templates}
            outputDirectory: ${RW_OUTPUT_DIRECTORY:/tmp/output}
-         stardog:         
+         graphdb:
            monthlyQueryUrl: ${GRAPHDB_MONTHLY_QUERY_URL:http://localhost:3030/NCIT2/query}
            weeklyQueryUrl: ${GRAPHDB_WEEKLY_QUERY_URL:http://localhost:3030/CTRP/query}
            username: ${GRAPHDB_USERNAME:admin}

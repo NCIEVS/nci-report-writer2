@@ -1,0 +1,90 @@
+{
+  "name": "NCI_Report_Writer",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --proxy-config proxy.config.json",
+    "build": "ng build && npm run copyAll",
+    "build:prod": "ng build --configuration production --base-href /ncireportwriter2/ && npm run copyAll",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "ng lint",
+    "e2e": "ng e2e",
+    "copyAll": "cp -r dist/* ../web/src/main/resources/static/",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
+  },
+  "browserify-shim": {
+    "angular": {
+      "exports": "angular"
+    },
+    "angular-local-storage": {
+      "exports": "angular.module('LocalStorageModule').name"
+    }
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular-devkit/core": "^19.2.18",
+    "@angular-devkit/schematics": "^19.2.18",
+    "@angular/animations": "^19.2.18",
+    "@angular/cdk": "^19.2.19",
+    "@angular/common": "^19.2.18",
+    "@angular/compiler": "^19.2.18",
+    "@angular/core": "^19.2.18",
+    "@angular/forms": "^19.2.18",
+    "@angular/localize": "^19.2.18",
+    "@angular/platform-browser": "^19.2.18",
+    "@angular/platform-browser-dynamic": "^19.2.18",
+    "@angular/router": "^19.2.18",
+    "@fullcalendar/core": "^6.1.18",
+    "@ng-bootstrap/ng-bootstrap": "^18.0.0",
+    "@primeng/themes": "^21.0.1",
+    "bootstrap": "^4.5.0",
+    "chart.js": "^4.5.0",
+    "core-js": "^2.5.7",
+    "cypress": "^14.5.4",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.6.0",
+    "ngx-toastr": "^16.2.0",
+    "popper.js": "^1.14.4",
+    "primeicons": "^6.0.1",
+    "primeng": "^19.1.4",
+    "quill": "^2.0.3",
+    "rxjs": "^7.4.0",
+    "tslib": "^2.0.0",
+    "zone.js": "~0.15.1"
+  },
+  "devDependencies": {
+    "@angular-builders/jest": "^19.0.1",
+    "@angular-devkit/build-angular": "^19.2.19",
+    "@angular/cli": "^19.2.18",
+    "@angular/compiler-cli": "^19.2.18",
+    "@angular/language-service": "^19.2.18",
+    "@cypress/schematic": "^4.1.2",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^12.11.1",
+    "browserify": "^15.1.0",
+    "browserify-shim": "^3.8.14",
+    "codelyzer": "^6.0.2",
+    "cypress": "15.1.0",
+    "jest": "^29.7.0",
+    "jest-preset-angular": "^14.6.1",
+    "ts-node": "~3.2.0",
+    "tslint": "~6.1.0",
+    "typescript": "5.8.3"
+  },
+  "overrides": {
+    "webpack": "^5.94.0",
+    "tar": "^7.5.9",
+    "ajv": "^8.18.0",
+    "rollup": "^4.59.0",
+    "serialize-javascript": "^7.0.3",
+    "minimatch": "^10.2.3"
+  }
+}

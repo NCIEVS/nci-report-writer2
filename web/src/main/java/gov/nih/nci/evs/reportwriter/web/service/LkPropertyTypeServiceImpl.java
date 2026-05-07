@@ -10,12 +10,12 @@ import gov.nih.nci.evs.reportwriter.web.repository.LkPropertyTypeRepository;
 
 @Service
 public class LkPropertyTypeServiceImpl implements LkPropertyTypeService {
-	@Autowired
-	LkPropertyTypeRepository lkPropertyTypeRepository;
-	
-	public List <LkPropertyType> findAll() {
-		
-		return (List) lkPropertyTypeRepository.findAll();
-	}
+  @Autowired LkPropertyTypeRepository lkPropertyTypeRepository;
 
+  /* see superclass */
+  @Override
+  public List<LkPropertyType> findAll() {
+
+    return (List<LkPropertyType>) lkPropertyTypeRepository.findAll();
+  }
 }

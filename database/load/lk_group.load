@@ -1,8 +1,0 @@
-LOAD DATA LOCAL INFILE "../data/lk_group.txt"
-    into table lk_group
-    fields terminated by '~@~'
-    lines terminated by '~@@~\n'
-    (
-        name,
-        description
-    );

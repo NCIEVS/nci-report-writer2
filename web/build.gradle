@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.7.1'
+		springBootVersion = '3.5.13'
 	}
     repositories {  
         mavenLocal()    
@@ -16,18 +16,10 @@ buildscript {
     }
 }
 
-
-
-/*
- * Extra Properties
- */
+// properties
 ext {
-    /*
-     * Software versions
-     */
-    mysqlConnectorVersion = "5.1.49"
-  
-
+    // software version
+    mysqlConnectorVersion = "8.4.0"
 }
 
 apply plugin: 'java'
@@ -39,16 +31,11 @@ apply plugin: 'org.springframework.boot'
  * so there’s no need for it to be listed as a classpath dependency in the buildscript configuration.
  */
 apply plugin: 'io.spring.dependency-management'
-/*
-apply plugin: 'maven'
-*/
 apply plugin: 'maven-publish'
 
-
-
-group = "gov.nih.nci.evs.reportwriter.web"
-version = "1.0.13.RELEASE"
-sourceCompatibility = 1.8
+group = "gov.nih.nci.evs.reportwriter"
+version = "2.4.0.RELEASE"
+sourceCompatibility = 17
 
 
 springBoot {
@@ -64,57 +51,48 @@ repositories {
 }
 
 dependencies {
-    implementation ('org.springframework.boot:spring-boot-starter-web')
+    implementation "org.springframework.boot:spring-boot-starter-web"
     
-    implementation ('org.springframework.boot:spring-boot-starter-data-rest')
-    implementation ('org.springframework.boot:spring-boot-starter-data-jpa')
-    implementation 'org.springframework.boot:spring-boot-actuator'
-    implementation 'org.springframework.boot:spring-boot-devtools'
-    implementation 'org.springframework.boot:spring-boot-properties-migrator'
+    implementation "org.springframework.boot:spring-boot-starter-data-rest"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-actuator"
+    implementation "org.springframework.boot:spring-boot-devtools"
+    implementation "org.springframework.boot:spring-boot-properties-migrator"
     
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3'
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
 
+    // tomcat override
+    // implementation "org.apache.tomcat.embed:tomcat-embed-core:10.1.44"
+    implementation "com.mysql:mysql-connector-j:$mysqlConnectorVersion"
+    
+    // Apache POI for Excel processing
+    implementation "org.apache.poi:poi:5.2.5"
+    implementation "org.apache.poi:poi-ooxml:5.2.5"
+    implementation "org.apache.poi:poi-scratchpad:5.2.5"
 
-
-
-    implementation "mysql:mysql-connector-java:$mysqlConnectorVersion"
-    implementation "gov.nih.nci.evs.reportwriter.core:reportwriter-core:1.0.9-SNAPSHOT"
-
-    /*
-     * Test Dependencies
-     */
-   
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'org.awaitility:awaitility:4.2.2'
+    // test dependencies
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "org.awaitility:awaitility:4.2.2"
 }
 
-
-
-jar {
-    from('frontend/dist') {
-        //Public is a default supported Spring Boot resources directory.
-        into 'public'
-    }
+bootWar {
+    archivesBaseName = 'ncireportwriter2'
 }
- 
-//frontend:build will be run before the processResources
-processResources.dependsOn('frontend:build')
-
 
 test {
     /*
      * Configure gradle to show standard out and standard error
      * of the test JVM(s) on the console
      */
-    testLogging.showStandardStreams = true
-
-    
+    testLogging.showStandardStreams = true   
 }
 
+// Archive zip file
 task zipFile(type: Zip) {
-    def zipFileRootDirectory = "${project.name}-${project.version}"
+    // explicit override of ${project.name} which resolves to "web" due to subproject gradle setup
+    def zipFileRootDirectory = "ncireportwriter2-${project.version}"
 
     from('src/main/bin') {
         fileMode = 0755
@@ -137,3 +115,7 @@ zipFile.dependsOn = [ bootWar ]
 build.dependsOn = [ test, bootWar, zipFile ]
 publish.dependsOn = [ bootWar, zipFile ]
 
+
+dependencyLocking {
+    lockAllConfigurations()
+}

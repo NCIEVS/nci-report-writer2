@@ -1,70 +1,94 @@
 package gov.nih.nci.evs.reportwriter.web.model;
 
-
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
 
-/**
- * The persistent class for the lk_property database table.
- * 
- */
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+
+/** The persistent class for the lk_property database table. */
 @Entity
-@Table(name="lk_property")
-@NamedQuery(name="LkProperty.findAll", query="SELECT l FROM LkProperty l")
+@Table(name = "lk_property")
+@NamedQuery(name = "LkProperty.findAll", query = "SELECT l FROM LkProperty l")
 public class LkProperty implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private String code;
-	private String label;
-	private List<ReportTemplateColumn> reportTemplateColumns;
 
-	public LkProperty() {
-	}
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = 1L;
 
+  /** The code. */
+  private String code;
 
-	@Id
-	public String getCode() {
-		return this.code;
-	}
+  /** The label. */
+  private String label;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+  /** The report template columns. */
+  //  private List<ReportTemplateColumn> reportTemplateColumns;
 
+  /** Instantiates a new lk property. */
+  public LkProperty() {}
 
-	public String getLabel() {
-		return this.label;
-	}
+  /**
+   * Gets the code.
+   *
+   * @return the code
+   */
+  @Id
+  public String getCode() {
+    return this.code;
+  }
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
+  /**
+   * Sets the code.
+   *
+   * @param code the new code
+   */
+  public void setCode(final String code) {
+    this.code = code;
+  }
 
+  /**
+   * Gets the label.
+   *
+   * @return the label
+   */
+  public String getLabel() {
+    return this.label;
+  }
 
-	/*
-	//bi-directional many-to-one association to ReportTemplateColumn
-	@OneToMany(mappedBy="lkProperty")
-	public List<ReportTemplateColumn> getReportTemplateColumns() {
-		return this.reportTemplateColumns;
-	}
+  /**
+   * Sets the label.
+   *
+   * @param label the new label
+   */
+  public void setLabel(final String label) {
+    this.label = label;
+  }
 
-	public void setReportTemplateColumns(List<ReportTemplateColumn> reportTemplateColumns) {
-		this.reportTemplateColumns = reportTemplateColumns;
-	}
+  /*
+  //bi-directional many-to-one association to ReportTemplateColumn
+  @OneToMany(mappedBy="lkProperty")
+  public List<ReportTemplateColumn> getReportTemplateColumns() {
+  	return this.reportTemplateColumns;
+  }
 
-	public ReportTemplateColumn addReportTemplateColumn(ReportTemplateColumn reportTemplateColumn) {
-		getReportTemplateColumns().add(reportTemplateColumn);
-		reportTemplateColumn.setLkProperty(this);
+  public void setReportTemplateColumns(List<ReportTemplateColumn> reportTemplateColumns) {
+  	this.reportTemplateColumns = reportTemplateColumns;
+  }
 
-		return reportTemplateColumn;
-	}
+  public ReportTemplateColumn addReportTemplateColumn(ReportTemplateColumn reportTemplateColumn) {
+  	getReportTemplateColumns().add(reportTemplateColumn);
+  	reportTemplateColumn.setLkProperty(this);
 
-	public ReportTemplateColumn removeReportTemplateColumn(ReportTemplateColumn reportTemplateColumn) {
-		getReportTemplateColumns().remove(reportTemplateColumn);
-		reportTemplateColumn.setLkProperty(null);
+  	return reportTemplateColumn;
+  }
 
-		return reportTemplateColumn;
-	}
-	*/
+  public ReportTemplateColumn removeReportTemplateColumn(ReportTemplateColumn reportTemplateColumn) {
+  	getReportTemplateColumns().remove(reportTemplateColumn);
+  	reportTemplateColumn.setLkProperty(null);
+
+  	return reportTemplateColumn;
+  }
+  */
 
 }

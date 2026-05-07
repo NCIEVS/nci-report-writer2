@@ -10,8 +10,12 @@ setenv.sh
 */.settings/*
 build/
 *.log
-web/src/main/resources/static/
 core/bin/main
 web/bin
 .idea
-config/reportWriter.sh
+/report.html
+/reportJava.html
+**/dist
+**/node_modules
+**/.angular
+/.gradle/

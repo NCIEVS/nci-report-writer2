@@ -1,0 +1,26 @@
+plugins {
+  id "com.github.node-gradle.node" version "3.1.1"
+}
+
+group = "gov.nih.nci.evs.reportwriter"
+version = "2.4.0.RELEASE"
+
+node {
+  version = '22.14.0'
+  npmVersion = '10.9.2'
+  download = true
+  workDir = file("${project.buildDir}/node")
+  nodeModulesDir = file("${project.projectDir}")
+}
+
+// Create a task to run npm build:prod
+task npmBuild(type: NpmTask) {
+  args = ['run', 'build:prod']
+}
+
+// Copy the distribution up to the static folder to complete the build
+task build(type: Copy, dependsOn: npmBuild) {
+    from 'dist'
+    into '../web/src/main/resources/static'
+}
+

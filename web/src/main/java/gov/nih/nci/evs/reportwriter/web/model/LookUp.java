@@ -2,31 +2,29 @@ package gov.nih.nci.evs.reportwriter.web.model;
 
 public class LookUp {
 
-	String label;
-	String value;
-	
-	public LookUp() {};
-	
-	public LookUp(String label, String value) {
-		this.label = label;
-		this.value = value;
-	}
+  String label;
+  String value;
 
-	public String getLabel() {
-		return label;
-	}
+  public LookUp() {}
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
+  public LookUp(final String label, final String value) {
+    this.label = label;
+    this.value = value;
+  }
 
-	public String getValue() {
-		return value;
-	}
+  public String getLabel() {
+    return label;
+  }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-	
-	
+  public void setLabel(final String label) {
+    this.label = label;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public void setValue(final String value) {
+    this.value = value;
+  }
 }

@@ -4,7 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import gov.nih.nci.evs.reportwriter.web.model.LkAttr;
 
-
-public interface LkAttrRepository extends CrudRepository<LkAttr, String>{
-
+/** The Interface LkAttrRepository. */
+public interface LkAttrRepository extends CrudRepository<LkAttr, String> {
+  // n/a
 }

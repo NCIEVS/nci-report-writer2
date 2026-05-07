@@ -7,9 +7,9 @@ import org.springframework.data.repository.query.Param;
 
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateConceptList;
 
+public interface ReportTemplateConceptListRepository
+    extends CrudRepository<ReportTemplateConceptList, String> {
 
-public interface ReportTemplateConceptListRepository extends CrudRepository<ReportTemplateConceptList, String>{
-	
-	List<ReportTemplateConceptList> getReportTemplateConceptListsByReportTemplateId(@Param("reportTemplateId") Integer reportTemplateId);
-
+  List<ReportTemplateConceptList> getReportTemplateConceptListsByReportTemplateId(
+      @Param("reportTemplateId") Integer reportTemplateId);
 }

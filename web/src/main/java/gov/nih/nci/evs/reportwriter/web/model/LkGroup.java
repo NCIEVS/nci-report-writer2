@@ -1,70 +1,88 @@
 package gov.nih.nci.evs.reportwriter.web.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
-/**
- * The persistent class for the lk_group database table.
- * 
- */
+/** The persistent class for the lk_group database table. */
 @Entity
-@Table(name="lk_group")
-@NamedQuery(name="LkGroup.findAll", query="SELECT l FROM LkGroup l")
+@Table(name = "lk_group")
+@NamedQuery(name = "LkGroup.findAll", query = "SELECT l FROM LkGroup l")
 public class LkGroup implements LkGeneric, Serializable {
-	private static final long serialVersionUID = 1L;
-	private String name;
-	private String description;
-	private List<ReportTemplateColumn> reportTemplateColumns;
 
-	public LkGroup() {
-	}
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = 1L;
 
+  /** The name. */
+  private String name;
 
-	@Id
-	public String getName() {
-		return this.name;
-	}
+  /** The description. */
+  private String description;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  /** The report template columns. */
+  //  private List<ReportTemplateColumn> reportTemplateColumns;
 
+  /** Instantiates a new lk group. */
+  public LkGroup() {}
 
-	public String getDescription() {
-		return this.description;
-	}
+  /* see superclass */
+  @Override
+  @Id
+  public String getName() {
+    return this.name;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  /**
+   * Sets the name.
+   *
+   * @param name the new name
+   */
+  public void setName(final String name) {
+    this.name = name;
+  }
 
+  /* see superclass */
+  @Override
+  public String getDescription() {
+    return this.description;
+  }
 
-	/*
-	//bi-directional many-to-one association to ReportTemplateColumn
-	@OneToMany(mappedBy="lkGroup")
-	public List<ReportTemplateColumn> getReportTemplateColumns() {
-		return this.reportTemplateColumns;
-	}
+  /**
+   * Sets the description.
+   *
+   * @param description the new description
+   */
+  public void setDescription(final String description) {
+    this.description = description;
+  }
 
-	public void setReportTemplateColumns(List<ReportTemplateColumn> reportTemplateColumns) {
-		this.reportTemplateColumns = reportTemplateColumns;
-	}
+  /*
+  //bi-directional many-to-one association to ReportTemplateColumn
+  @OneToMany(mappedBy="lkGroup")
+  public List<ReportTemplateColumn> getReportTemplateColumns() {
+  	return this.reportTemplateColumns;
+  }
 
-	public ReportTemplateColumn addReportTemplateColumn(ReportTemplateColumn reportTemplateColumn) {
-		getReportTemplateColumns().add(reportTemplateColumn);
-		reportTemplateColumn.setLkGroup(this);
+  public void setReportTemplateColumns(List<ReportTemplateColumn> reportTemplateColumns) {
+  	this.reportTemplateColumns = reportTemplateColumns;
+  }
 
-		return reportTemplateColumn;
-	}
+  public ReportTemplateColumn addReportTemplateColumn(ReportTemplateColumn reportTemplateColumn) {
+  	getReportTemplateColumns().add(reportTemplateColumn);
+  	reportTemplateColumn.setLkGroup(this);
 
-	public ReportTemplateColumn removeReportTemplateColumn(ReportTemplateColumn reportTemplateColumn) {
-		getReportTemplateColumns().remove(reportTemplateColumn);
-		reportTemplateColumn.setLkGroup(null);
+  	return reportTemplateColumn;
+  }
 
-		return reportTemplateColumn;
-	}
-	*/
+  public ReportTemplateColumn removeReportTemplateColumn(ReportTemplateColumn reportTemplateColumn) {
+  	getReportTemplateColumns().remove(reportTemplateColumn);
+  	reportTemplateColumn.setLkGroup(null);
+
+  	return reportTemplateColumn;
+  }
+  */
 
 }

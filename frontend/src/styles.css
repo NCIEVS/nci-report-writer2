@@ -1,0 +1,219 @@
+body {
+    font-size: 14px;
+}
+
+.page-header {
+    margin-bottom: 20px;
+}
+
+.p-component:disabled {
+    --p-disabled-opacity: .35;
+}
+
+.ui-g-2 {
+    font-weight: 700;
+}
+
+.ui-g-4 {
+    margin-bottom: 10px;
+}
+
+.p-datatable table{
+    table-layout: fixed;
+}
+
+table {
+    max-width: 100%;
+    display: table;
+    border-collapse: collapse;
+}
+
+th {
+    padding: .30em !important;
+    --p-datatable-header-cell-border-color: #d2d2d2;
+}
+
+.p-datatable-table {
+    width: 940px;
+    display: table;
+    border-collapse: collapse;
+}
+
+.p-datatable-tbody > tr > td {
+    --p-datatable-body-cell-border-color: #d2d2d2;
+    --p-datatable-body-cell-padding: .30em;
+    overflow-wrap: break-word;
+}
+
+.p-datatable-thead > tr > th {
+    --p-datatable-header-cell-background: #f6f7f9;
+    border-color: #d3d5d8;
+    padding: 3.5px 7px;
+}
+
+.p-datatable-sortable-column:hover {
+    --p-datatable-header-cell-hover-background: #d3d5d8;
+    background-color: #d3d5d8;
+}
+
+.p-datatable-thead > tr > th.p-datatable-column-sorted {
+    --p-datatable-header-cell-selected-background: #186ba0;
+    --p-datatable-header-cell-selected-color: #fff;
+}
+
+.p-datatable-tbody > tr > td {
+    vertical-align: middle;
+}
+
+.p-select-list-container {
+    background-color: white !important;
+    border-radius: 3px;
+    border: 1px solid #d5d5d5;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.3);
+    padding: .4em;
+}
+
+.p-select-option {
+    --p-select-option-padding: .125em .25em;
+    border-radius: 3px;
+}
+
+.p-select-option:hover {
+    /* --p-select-option-padding: .125em .25em; */
+    --p-select-option-focus-background: #eee;
+    border-radius: 3px;
+    background-color: #eee;
+}
+
+.p-button {
+    --p-button-primary-background: #2399e5;
+    --p-button-primary-border-color: #2399e5;
+    --p-button-border-radius: 3px;
+    --p-button-padding-y: 3.5px;
+    --p-button-padding-x: 14px;
+    --p-button-primary-color: #fff;
+    transition: background-color .2s;
+}
+
+.p-button:hover {
+    background-color: #1f89ce !important; 
+    border: 1px solid #1f89ce !important;
+    color: #fff !important;
+}
+
+.p-button-icon-only.p-button-rounded {
+    min-height: 14px;
+    --p-button-icon-only-width: 14px;
+}
+
+.p-dialog {
+    width: 850px;
+    min-width: 150px;
+    min-height: 150px;
+    background-color: white !important;
+    border: 1px solid #d5d5d5;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.3) !important;
+    --p-dialog-content-padding: 21px 14px;
+}
+
+.p-dialog-header {
+    color: #337ab7;
+    font-weight: 700;
+    font-size: 1.25em;
+    padding: 1em 1.5em !important;
+    border-bottom: 1px solid #ccc !important;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    padding: 6px 12px;
+}
+
+.p-inputtext {
+    --p-inputtext-border-color: #ccc;
+    --p-inputtext-background: #fff;
+    --p-inputtext-border-radius: 3px;
+    --p-inputtext-padding-y: 6px;
+    --p-inputtext-padding-x: 12px;
+}
+
+.input-group-addon {
+    vertical-align: middle;
+    padding: 6px 12px;
+    background-color: #eee;
+    color: #555;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 5px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+input::placeholder {
+    color: #959595;
+}
+
+.p-checkbox {
+    --p-checkbox-width: 1.125em;
+    --p-checkbox-height: 1.125em;
+    background-color: #fff;
+    border: 1px solid #d6d6d6;
+    border-radius: 2px;
+}
+
+.p-checkbox:hover {
+    background-color: #eee;
+    border: 1px solid silver;
+    color: #212121;
+}
+
+label {
+    /* width: max-content; */
+    text-align: right;
+    font-weight: 700;
+}
+
+.form-group {
+    display: flex;
+    align-items: end;
+    margin-bottom: 15px;
+}
+
+.p-dropdown {
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    padding: .30em;
+    background-color: #fff;
+}
+
+.p-select {
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    padding: .30em;
+    background-color: #fff;
+}
+
+.p-paginator > button {
+    padding: .25em !important;
+    border: 1px solid #eee !important;
+    margin: 0px 3px;
+}
+
+.p-paginator > .p-paginator-pages > button {
+    padding: .25em !important;
+    border: 1px solid #eee !important;
+    margin: 0px 3px;
+}
+
+.p-paginator > p-select > .p-select-label {
+    padding: .25em !important;
+    border: 1px solid #eee !important;
+    border-right: none;
+    margin: 0 0 0 3px;
+}
+
+.p-paginator > p-select > .p-select-dropdown {
+    padding: .25em !important;
+    border: 1px solid #eee !important;
+    margin: 0 3px 0 0;
+}
