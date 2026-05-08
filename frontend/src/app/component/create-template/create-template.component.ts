@@ -10,7 +10,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { ActivatedRoute } from '@angular/router';
 
-import {Dropdown} from 'primeng/dropdown';
+import { Select } from 'primeng/select';
 
 @Component({
     selector: 'app-create-template',
@@ -166,9 +166,9 @@ arraymove(arr, fromIndex, toIndex) {
   }
 
 
-  clearFilter(dropdown: Dropdown){
-    console.log("in dropdown");
-    dropdown.resetFilter();
+  clearFilter(select: Select){
+    console.log("in select");
+    select.resetFilter();
   }
 
   cancelAddRow(): void {

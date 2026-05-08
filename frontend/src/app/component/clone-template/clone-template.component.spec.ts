@@ -6,7 +6,7 @@ import { provideHttpClientTesting, HttpTestingController } from '@angular/common
 import { provideRouter } from '@angular/router';
 import { ReportTemplateService } from '../../service/report-template.service';
 import { ButtonModule } from 'primeng/button';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 
 describe('CloneTemplateComponent', () => {
@@ -19,8 +19,8 @@ describe('CloneTemplateComponent', () => {
       declarations: [ CloneTemplateComponent ],
       imports: [
         ButtonModule,
-        DropdownModule,
-        FormsModule
+        FormsModule,
+        SelectModule
       ],
       providers: [
         ReportTemplateService,
