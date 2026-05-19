@@ -199,10 +199,10 @@ export class ReportTemplateComponent implements OnInit {
         this.filterObject.status.value = "Active";
         this.filterObject.status.matchMode = "equals";
         this.selectedStatus = "Active";
-        this.table.filter(this.filterObject.status.value, "status", "equals");
+        this.table?.filter(this.filterObject.status.value, "status", "equals");
       } else {
         this.selectedStatus = this.filterObject.status.value;
-        this.table.filter(this.selectedStatus, "status", "equals");
+        this.table?.filter(this.selectedStatus, "status", "equals");
       }
 
       if (
@@ -210,12 +210,12 @@ export class ReportTemplateComponent implements OnInit {
         this.filterObject.name != null
       ) {
         this.selectedName = this.filterObject.name.value;
-        this.table.filter(this.selectedName, "name", "contains");
+        this.table?.filter(this.selectedName, "name", "contains");
       }
 
       if (this.filterObject.id != undefined && this.filterObject.id != null) {
         this.selectedId = this.filterObject.id.value;
-        this.table.filter(this.selectedId, "id", "contains");
+        this.table?.filter(this.selectedId, "id", "contains");
       }
 
       if (
@@ -223,7 +223,7 @@ export class ReportTemplateComponent implements OnInit {
         this.filterObject.dateCreated != null
       ) {
         this.selectedDateCreated = this.filterObject.dateCreated.value;
-        this.table.filter(this.selectedDateCreated, "dateCreated", "contains");
+        this.table?.filter(this.selectedDateCreated, "dateCreated", "contains");
       }
 
       if (
@@ -231,7 +231,7 @@ export class ReportTemplateComponent implements OnInit {
         this.filterObject.dateLastUpdated != null
       ) {
         this.selectedDateUpdated = this.filterObject.dateLastUpdated.value;
-        this.table.filter(
+        this.table?.filter(
           this.selectedDateUpdated,
           "dateLastUpdated",
           "contains"

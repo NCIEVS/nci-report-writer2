@@ -64,8 +64,8 @@ export class AllReportTaskStatusComponent implements OnInit {
     if (!(this.globalFilter == null || this.globalFilter == undefined)) {
       localStorage.setItem("globalfilters-task", this.globalFilter);
     }
-    console.log("filters - " + JSON.stringify(this.table.filters));
-    localStorage.setItem("filters-task", JSON.stringify(this.table.filters));
+    console.log("filters - " + JSON.stringify(this.table?.filters));
+    localStorage.setItem("filters-task", JSON.stringify(this.table?.filters));
   }
 
   ngOnInit() {
