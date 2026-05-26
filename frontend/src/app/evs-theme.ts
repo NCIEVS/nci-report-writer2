@@ -24,7 +24,8 @@ const EvsTheme = definePreset(Lara, {
                 paddingY: '.325rem',
                 label: {
                     fontWeight: '400'
-                }
+                },
+                iconOnlyWidth: '1.75rem'
             }
         },
         datatable: {
