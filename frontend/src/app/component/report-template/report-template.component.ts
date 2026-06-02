@@ -188,7 +188,7 @@ export class ReportTemplateComponent implements OnInit {
         this.filterObject.global != undefined &&
         this.filterObject.global != null
       ) {
-        this.table.filterGlobal(this.filterObject.global.value, "contains");
+        this.table?.filterGlobal(this.filterObject.global.value, "contains");
       }
 
       if (
