@@ -19,7 +19,9 @@ buildscript {
 // properties
 ext {
     // software version
+    jacksonVersion = "2.21.4"
     mysqlConnectorVersion = "8.4.0"
+    tomcatVersion = "10.1.55"
 }
 
 apply plugin: 'java'
@@ -60,10 +62,20 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-properties-migrator"
     
     implementation "org.springframework.boot:spring-boot-starter-tomcat"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
+    // Security override: Spring Boot 3.5.14 currently resolves Jackson 2.21.2,
+    // which Trivy flags for high-severity jackson-core and jackson-databind CVEs.
+    // Keep the Jackson family pinned to a fixed patch release until the Boot BOM catches up.
+    implementation "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
 
-    // tomcat override
-    implementation "org.apache.tomcat.embed:tomcat-embed-core:10.1.54"
+    // Security override: Spring Boot 3.5.14 currently resolves embedded Tomcat 10.1.54,
+    // which Trivy flags for high/critical tomcat-embed-core CVEs.
+    // Pin the embedded Tomcat modules together so the servlet container stays version-aligned.
+    implementation "org.apache.tomcat.embed:tomcat-embed-core:$tomcatVersion"
+    implementation "org.apache.tomcat.embed:tomcat-embed-el:$tomcatVersion"
+    implementation "org.apache.tomcat.embed:tomcat-embed-websocket:$tomcatVersion"
+    implementation "org.apache.tomcat:tomcat-annotations-api:$tomcatVersion"
     implementation "com.mysql:mysql-connector-j:$mysqlConnectorVersion"
     
     // Apache POI for Excel processing
