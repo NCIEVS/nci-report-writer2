@@ -1,0 +1,6 @@
+# The image only needs the executable WAR produced by `make docker`.
+*
+!Dockerfile
+!build/
+!build/libs/
+!build/libs/ncireportwriter2-*.war
