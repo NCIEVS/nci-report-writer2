@@ -19,3 +19,5 @@ web/bin
 **/node_modules
 **/.angular
 /.gradle/
+/report-docker.html
+/trivy_image_report.json
