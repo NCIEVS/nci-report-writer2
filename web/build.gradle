@@ -39,6 +39,9 @@ group = "gov.nih.nci.evs.reportwriter"
 version = "2.5.0.RELEASE"
 sourceCompatibility = 17
 
+// Override Boot BOM Spring Framework version to fix CVE-2026-41850 (spring-expression),
+// CVE-2026-41842 / CVE-2026-41845 (spring-webmvc) (HIGH)
+ext['spring-framework.version'] = '6.2.19'
 
 springBoot {
     buildInfo()          // generate file META-INF/build-info.properties during the build
@@ -60,6 +63,14 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-actuator"
     implementation "org.springframework.boot:spring-boot-devtools"
     implementation "org.springframework.boot:spring-boot-properties-migrator"
+
+    // Security override: Spring Boot 3.5.14 resolves Spring HATEOAS 2.5.2,
+    // which Trivy flags for CVE-2026-41006 and CVE-2026-41007.
+    implementation "org.springframework.hateoas:spring-hateoas:2.5.3"
+
+    // Security override: Spring Data Commons 3.5.13
+    implementation "org.springframework.data:spring-data-commons:3.5.13"
+
     
     implementation "org.springframework.boot:spring-boot-starter-tomcat"
     // Security override: Spring Boot 3.5.14 currently resolves Jackson 2.21.2,
