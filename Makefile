@@ -58,6 +58,7 @@ run:
 # the Dockerfile, or this Makefile is newer than the build stamp.
 $(DOCKER_BUILD_STAMP): Makefile web/Dockerfile $(WEB_DOCKER_INPUTS)
 	$(DOCKER) build --platform "$(DOCKER_PLATFORM)" --file web/Dockerfile --tag "$(DOCKER_IMAGE)" web
+	mkdir -p "$(dir $@)"
 	touch "$@"
 
 # Reuse a current image. If it was removed outside Make, rebuild it on demand.
