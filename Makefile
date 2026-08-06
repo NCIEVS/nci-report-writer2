@@ -16,6 +16,7 @@ GIT_BRANCH           ?=
 FULL_VERSION            := v$(APP_VERSION)-g$(GIT_VERSION)
 DOCKER_TAG              := $(shell grep "^version =" web/build.gradle | sed 's/version = //; s/"//g; s/.RELEASE//')
 DOCKER_IMAGE            ?= $(SERVICE):$(DOCKER_TAG)
+DOCKER_PLATFORM         ?= linux/amd64
 DOCKER_PORT             ?= 8080
 MYSQL_PORT              ?= 3306
 GRAPH_DB_PORT           ?= 3030
@@ -33,7 +34,7 @@ DOCKER                  ?= docker
 WEB_GRADLEW             ?= java -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain
 endif
 
-.PHONY: build docker scandocker rundocker
+.PHONY: build docker dockerpush scandocker rundocker
 
 # consider also "docker save..." and "docker load..." to avoid registry.
 clean:
@@ -53,16 +54,19 @@ frontend:
 run:
 	cd web; java -jar build/libs/ncireportwriter2-*war
 
-# Build the executable Spring Boot WAR and Docker image only when an application
-# input, the Dockerfile, or this Makefile is newer than the build stamp.
+# Build the application and image in Docker only when an application input,
+# the Dockerfile, or this Makefile is newer than the build stamp.
 $(DOCKER_BUILD_STAMP): Makefile web/Dockerfile $(WEB_DOCKER_INPUTS)
-	cd web; $(WEB_GRADLEW) clean build -x test
-	$(DOCKER) build --file web/Dockerfile --tag "$(DOCKER_IMAGE)" web
+	$(DOCKER) build --platform "$(DOCKER_PLATFORM)" --file web/Dockerfile --tag "$(DOCKER_IMAGE)" web
 	touch "$@"
 
 # Reuse a current image. If it was removed outside Make, rebuild it on demand.
 docker: $(DOCKER_BUILD_STAMP)
 	@$(DOCKER) image inspect "$(DOCKER_IMAGE)" > /dev/null 2>&1 || { rm -f "$(DOCKER_BUILD_STAMP)"; $(MAKE) --no-print-directory "$(DOCKER_BUILD_STAMP)"; }
+
+# Push the platform-specific image built by `make docker`.
+dockerpush: docker
+	$(DOCKER) push --platform "$(DOCKER_PLATFORM)" "$(DOCKER_IMAGE)"
 
 # Report HIGH and CRITICAL image vulnerabilities and write the complete HTML report.
 scandocker: docker

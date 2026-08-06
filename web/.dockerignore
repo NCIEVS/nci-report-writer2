@@ -1,6 +1,6 @@
-# The image only needs the executable WAR produced by `make docker`.
+# Send only the files needed for the in-container Gradle build.
 *
 !Dockerfile
-!build/
-!build/libs/
-!build/libs/ncireportwriter2-*.war
+!build.gradle
+!src/
+!src/**
