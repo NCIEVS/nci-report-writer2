@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '3.5.14'
+		springBootVersion = '3.5.16'
 	}
     repositories {  
         mavenLocal()    
@@ -62,8 +62,8 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-tomcat"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
 
-    // tomcat override
-    implementation "org.apache.tomcat.embed:tomcat-embed-core:10.1.54"
+    // tomcat override - 10.1.55 fixes CVE-2026-41293/43512/43515 (CRITICAL) and CVE-2026-41284/42498/43513 (HIGH)
+    implementation "org.apache.tomcat.embed:tomcat-embed-core:10.1.55"
     implementation "com.mysql:mysql-connector-j:$mysqlConnectorVersion"
     
     // Apache POI for Excel processing
