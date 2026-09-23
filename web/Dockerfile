@@ -3,7 +3,7 @@ FROM gradle:8.14.2-jdk17 AS gradle-build
 
 WORKDIR /workspace
 
-COPY --chown=gradle:gradle build.gradle ./
+COPY --chown=gradle:gradle build.gradle settings.gradle ./
 
 COPY --chown=gradle:gradle src/main ./src/main
 RUN gradle --no-daemon bootWar -x test -x javadoc

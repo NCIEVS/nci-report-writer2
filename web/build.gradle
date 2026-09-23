@@ -71,6 +71,10 @@ dependencies {
     // Security override: Spring Data Commons 3.5.13
     implementation "org.springframework.data:spring-data-commons:3.5.13"
 
+    // Security override: Spring Boot 3.5.14 resolves Spring Data REST Core 4.5.11,
+    // which Trivy flags for CVE-2026-41728 and CVE-2026-41729.
+    implementation "org.springframework.data:spring-data-rest-core:4.5.12"
+
     
     implementation "org.springframework.boot:spring-boot-starter-tomcat"
     // Security override: Spring Boot 3.5.14 currently resolves Jackson 2.21.2,
