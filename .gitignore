@@ -21,3 +21,4 @@ web/bin
 /.gradle/
 /report-docker.html
 /trivy_image_report.json
+/scan.tar

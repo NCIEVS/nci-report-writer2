@@ -1,16 +1,12 @@
-# Build the application in the container so an image build does not depend on
-# a locally installed JDK, Gradle distribution, or locally produced WAR.
+# Build the deployable WAR in an isolated Linux Gradle environment.
 FROM gradle:8.14.2-jdk17 AS gradle-build
 
 WORKDIR /workspace
 
-# Keep the dependency descriptor separate from application sources so Docker
-# can reuse the dependency layer when only source files change.
-COPY build.gradle ./
-RUN gradle dependencies --no-daemon
+COPY --chown=gradle:gradle build.gradle ./
 
-COPY src ./src
-RUN gradle clean bootWar -x test --no-daemon
+COPY --chown=gradle:gradle src/main ./src/main
+RUN gradle --no-daemon bootWar -x test -x javadoc
 
 FROM eclipse-temurin:17-jre-jammy
 

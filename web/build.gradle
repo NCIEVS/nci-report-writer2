@@ -21,7 +21,7 @@ ext {
     // software version
     jacksonVersion = "2.21.4"
     mysqlConnectorVersion = "8.4.0"
-    tomcatVersion = "10.1.55"
+    tomcatVersion = "10.1.60"
 }
 
 apply plugin: 'java'
