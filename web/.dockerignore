@@ -1,0 +1,7 @@
+# Send only the files needed for the in-container Gradle build.
+*
+!Dockerfile
+!build.gradle
+!settings.gradle
+!src/
+!src/**

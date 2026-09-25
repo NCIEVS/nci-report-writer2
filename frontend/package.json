@@ -31,6 +31,7 @@
     "@angular/router": "^20.3.28",
     "@fullcalendar/core": "^6.1.18",
     "@ng-bootstrap/ng-bootstrap": "^19.0.1",
+    "@popperjs/core": "2.11.8",
     "@primeng/themes": "^21.0.1",
     "bootstrap": "^4.5.0",
     "chart.js": "^4.5.0",
