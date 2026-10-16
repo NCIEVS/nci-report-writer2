@@ -21,9 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.ser.std.SimpleFilterProvider;
 
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.web.model.LkGeneric;
@@ -283,7 +284,7 @@ public class ReportWriterController {
    *
    * @param databaseType the database type
    * @return the evs version info
-   * @throws JsonProcessingException the json processing exception
+   * @throws JacksonException the json processing exception
    */
   // Get all Templates
   @RequestMapping(
@@ -291,7 +292,7 @@ public class ReportWriterController {
       method = RequestMethod.GET,
       produces = "application/json")
   public @ResponseBody EvsVersionInfo versionInfo(@PathVariable String databaseType)
-      throws JsonProcessingException {
+      throws JacksonException {
     return reportTaskService.getVersionInfo(databaseType);
   }
 
@@ -300,7 +301,7 @@ public class ReportWriterController {
    *
    * @param reportTemplate the report template
    * @return the string
-   * @throws JsonProcessingException the json processing exception
+   * @throws JacksonException the json processing exception
    */
   // Creating a new Template
   @RequestMapping(
@@ -309,7 +310,7 @@ public class ReportWriterController {
       consumes = "application/json",
       produces = "application/json")
   public @ResponseBody String createTemplate(@RequestBody final ReportTemplateUI reportTemplate)
-      throws JsonProcessingException {
+      throws JacksonException {
 
     log.info(reportTemplate.getName());
     log.info(reportTemplate.getStatus());
@@ -323,7 +324,7 @@ public class ReportWriterController {
 
     SimpleFilterProvider filter = new SimpleFilterProvider();
     filter.setFailOnUnknownId(false);
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = JsonMapper.builder().configureForJackson2().build();
     String reportTemplateRetStr = mapper.writer(filter).writeValueAsString(reportTemplateRet);
 
     // log.info("test - " + reportTemplateRetStr);
@@ -336,7 +337,7 @@ public class ReportWriterController {
    *
    * @param reportTemplate the report template
    * @return the string
-   * @throws JsonProcessingException the json processing exception
+   * @throws JacksonException the json processing exception
    */
   // Creating a new Template
   @RequestMapping(
@@ -345,7 +346,7 @@ public class ReportWriterController {
       consumes = "application/json",
       produces = "application/json")
   public @ResponseBody String saveTemplate(@RequestBody final ReportTemplateUI reportTemplate)
-      throws JsonProcessingException {
+      throws JacksonException {
 
     log.info("Id **- " + reportTemplate.getId());
     log.info(reportTemplate.getName());
@@ -359,7 +360,7 @@ public class ReportWriterController {
 
     SimpleFilterProvider filter = new SimpleFilterProvider();
     filter.setFailOnUnknownId(false);
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = JsonMapper.builder().configureForJackson2().build();
     String reportTemplateRetStr = mapper.writer(filter).writeValueAsString(reportTemplateRet);
 
     // log.info("test - " + reportTemplateRetStr);
@@ -372,7 +373,7 @@ public class ReportWriterController {
    *
    * @param reportTemplate the report template
    * @return the string
-   * @throws JsonProcessingException the json processing exception
+   * @throws JacksonException the json processing exception
    */
   // Creating a new Template
   @RequestMapping(
@@ -381,7 +382,7 @@ public class ReportWriterController {
       consumes = "application/json",
       produces = "application/json")
   public @ResponseBody String cloneTemplate(@RequestBody final ReportTemplateUI reportTemplate)
-      throws JsonProcessingException {
+      throws JacksonException {
 
     log.info("Id **- " + reportTemplate.getId());
     log.info(reportTemplate.getName());
@@ -395,7 +396,7 @@ public class ReportWriterController {
 
     SimpleFilterProvider filter = new SimpleFilterProvider();
     filter.setFailOnUnknownId(false);
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = JsonMapper.builder().configureForJackson2().build();
     String reportTemplateRetStr = mapper.writer(filter).writeValueAsString(reportTemplateRet);
 
     // log.info("test - " + reportTemplateRetStr);
@@ -407,19 +408,19 @@ public class ReportWriterController {
    * Reporttemplates.
    *
    * @return the string
-   * @throws JsonProcessingException the json processing exception
+   * @throws JacksonException the json processing exception
    */
   // Get all Templates
   @RequestMapping(
       value = "/reporttemplates",
       method = RequestMethod.GET,
       produces = "application/json")
-  public @ResponseBody String reporttemplates() throws JsonProcessingException {
+  public @ResponseBody String reporttemplates() throws JacksonException {
     List<ReportTemplateUI> reportTemplates = reportTemplateService.findAll();
 
     SimpleFilterProvider filter = new SimpleFilterProvider();
     filter.setFailOnUnknownId(false);
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = JsonMapper.builder().configureForJackson2().build();
     String reportTemplatesStr = mapper.writer(filter).writeValueAsString(reportTemplates);
 
     // log.info("test - " + reportTemplatesStr);
@@ -432,7 +433,7 @@ public class ReportWriterController {
    *
    * @param reportTemplateId the report template id
    * @return the string
-   * @throws JsonProcessingException the json processing exception
+   * @throws JacksonException the json processing exception
    */
   // Get all Templates
   @RequestMapping(
@@ -440,12 +441,12 @@ public class ReportWriterController {
       method = RequestMethod.GET,
       produces = "application/json")
   public @ResponseBody String reporttemplates(@PathVariable Integer reportTemplateId)
-      throws JsonProcessingException {
+      throws JacksonException {
     ReportTemplate reportTemplate = reportTemplateService.findOne(reportTemplateId);
 
     SimpleFilterProvider filter = new SimpleFilterProvider();
     filter.setFailOnUnknownId(false);
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = JsonMapper.builder().configureForJackson2().build();
     String reportTemplateStr = mapper.writer(filter).writeValueAsString(reportTemplate);
 
     log.info("reportTemplateStr ---- " + reportTemplateStr);
@@ -682,7 +683,7 @@ public class ReportWriterController {
    *
    * @param runReportTemplateInfo the run report template info
    * @return the array list
-   * @throws JsonProcessingException the json processing exception
+   * @throws JacksonException the json processing exception
    */
   @RequestMapping(
       method = RequestMethod.POST,
@@ -691,7 +692,7 @@ public class ReportWriterController {
       produces = "application/json")
   public @ResponseBody ArrayList<ReportTaskUI> runReportTemplates(
       @RequestBody final RunReportTemplateInfo runReportTemplateInfo)
-      throws JsonProcessingException {
+      throws JacksonException {
     log.debug("Database Type- " + runReportTemplateInfo.getDatbaseType());
     List<ReportTemplateUI> reportTemplates = runReportTemplateInfo.getReportTemplates();
     ArrayList<ReportTaskUI> reportTasks = new ArrayList<ReportTaskUI>();

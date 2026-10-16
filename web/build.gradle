@@ -1,13 +1,13 @@
 buildscript {
 	ext {
-		springBootVersion = '3.5.16'
+		springBootVersion = '4.1.1'
 	}
     repositories {  
         mavenLocal()    
         mavenCentral() 
-        maven { url "https://repo.spring.io/release" }
-        maven { url "https://repo.spring.io/milestone" }
-        maven { url "https://repo.spring.io/snapshot" }
+        maven { url = "https://repo.spring.io/release" }
+        maven { url = "https://repo.spring.io/milestone" }
+        maven { url = "https://repo.spring.io/snapshot" }
        
     }
 
@@ -33,37 +33,59 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven-publish'
 
+// Patch the complete dependency families until Boot's BOM includes these fixes.
+// Trivy: CVE-2026-65182/65905/68525 (Tomcat), CVE-2026-89407/89425/91776/91777 (Jackson).
+ext['tomcat.version'] = '11.0.25'
+ext['jackson-bom.version'] = '3.1.7'
+
 group = "gov.nih.nci.evs.reportwriter"
 version = "2.5.0.RELEASE"
-sourceCompatibility = 17
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
 
 
 springBoot {
     buildInfo()          // generate file META-INF/build-info.properties during the build
 }
 
+// Use the build toolchain rather than java on PATH.
+def reportWriterLauncher = javaToolchains.launcherFor(java.toolchain)
+tasks.register('runWar', Exec) {
+    description = 'Builds and runs the executable WAR using Java 25.'
+    group = 'application'
+    dependsOn tasks.named('bootWar')
+    doFirst {
+        commandLine reportWriterLauncher.get().executablePath.asFile.absolutePath,
+            '-jar', tasks.named('bootWar').get().archiveFile.get().asFile.absolutePath
+    }
+}
+
 repositories {
     mavenLocal()  
     mavenCentral() 
-    maven { url "https://repo.spring.io/release" }
-    maven { url "https://repo.spring.io/milestone" }
-    maven { url "https://repo.spring.io/snapshot" }
+    maven { url = "https://repo.spring.io/release" }
+    maven { url = "https://repo.spring.io/milestone" }
+    maven { url = "https://repo.spring.io/snapshot" }
 }
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-webmvc"
+    implementation "org.springframework.boot:spring-boot-starter-restclient"
     
     implementation "org.springframework.boot:spring-boot-starter-data-rest"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    implementation "org.springframework.boot:spring-boot-actuator"
-    implementation "org.springframework.boot:spring-boot-devtools"
-    implementation "org.springframework.boot:spring-boot-properties-migrator"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
     
     implementation "org.springframework.boot:spring-boot-starter-tomcat"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
-
-    // tomcat override - 10.1.55 fixes CVE-2026-41293/43512/43515 (CRITICAL) and CVE-2026-41284/42498/43513 (HIGH)
-    implementation "org.apache.tomcat.embed:tomcat-embed-core:10.1.55"
+    implementation "tools.jackson.dataformat:jackson-dataformat-yaml"
     implementation "com.mysql:mysql-connector-j:$mysqlConnectorVersion"
     
     // Apache POI for Excel processing
@@ -72,21 +94,22 @@ dependencies {
     implementation "org.apache.poi:poi-scratchpad:5.2.5"
 
     // test dependencies
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "org.springframework.boot:spring-boot-starter-webmvc-test"
+    testImplementation "org.springframework.boot:spring-boot-starter-data-jpa-test"
+    testImplementation "org.springframework.boot:spring-boot-resttestclient"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testRuntimeOnly "com.h2database:h2"
     testImplementation "org.awaitility:awaitility:4.2.2"
 }
 
-bootWar {
-    archivesBaseName = 'ncireportwriter2'
+base {
+    archivesName = 'ncireportwriter2'
 }
 
 test {
-    /*
-     * Configure gradle to show standard out and standard error
-     * of the test JVM(s) on the console
-     */
-    testLogging.showStandardStreams = true   
+    useJUnitPlatform()
+    exclude '**/*IT.class'
+    testLogging.showStandardStreams = true
 }
 
 // Archive zip file
@@ -95,11 +118,10 @@ task zipFile(type: Zip) {
     def zipFileRootDirectory = "ncireportwriter2-${project.version}"
 
     from('src/main/bin') {
-        fileMode = 0755
+        filePermissions { unix('755') }
         into "$zipFileRootDirectory/bin"
     }
-    from("$buildDir/libs") {
-        include '*.war'
+    from(tasks.named('bootWar').flatMap { it.archiveFile }) {
         into "$zipFileRootDirectory/lib"
     }
     rename { String fileName ->
@@ -107,12 +129,36 @@ task zipFile(type: Zip) {
     }
 }
 
-test {
+tasks.register('integrationTest', Test) {
+    description = 'Runs report generation against configured MySQL and SPARQL services.'
+    group = 'verification'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
     useJUnitPlatform()
+    include '**/*IT.class'
+    // Always query the live services.
+    outputs.upToDateWhen { false }
+    shouldRunAfter test
+    doFirst {
+        if (!System.getenv('RW_TEST_TEMPLATE_ID')) {
+            throw new GradleException('Set RW_TEST_TEMPLATE_ID to a template in the integration test database.')
+        }
+    }
 }
 
-zipFile.dependsOn = [ bootWar ]
-build.dependsOn = [ test, bootWar, zipFile ]
+tasks.register('legacyEncodingTest', Test) {
+    description = 'Checks report formats with a Windows-1252 JVM default charset.'
+    group = 'verification'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    include '**/ReportFormatsTest.class'
+    systemProperty 'file.encoding', 'windows-1252'
+    shouldRunAfter test
+}
+
+check.dependsOn legacyEncodingTest
+build.dependsOn zipFile
 publish.dependsOn = [ bootWar, zipFile ]
 
 

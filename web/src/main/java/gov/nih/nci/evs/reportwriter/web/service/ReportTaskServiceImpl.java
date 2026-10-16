@@ -33,11 +33,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ser.FilterProvider;
+import tools.jackson.databind.ser.std.SimpleBeanPropertyFilter;
+import tools.jackson.databind.ser.std.SimpleFilterProvider;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.core.properties.CoreProperties;
@@ -270,7 +270,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
      * These properties are not needed the ReportTemplate YAML file. They will be
      * filtered out when generating the file.
      */
-    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+    ObjectMapper mapper = YAMLMapper.builder().configureForJackson2().build();
     Set<String> ignoreProperties = new HashSet<String>();
     ignoreProperties.add("reportTemplateConceptLists");
     ignoreProperties.add("id");

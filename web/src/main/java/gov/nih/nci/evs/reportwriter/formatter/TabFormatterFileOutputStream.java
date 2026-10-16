@@ -8,6 +8,7 @@
 package gov.nih.nci.evs.reportwriter.formatter;
 
 import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 
 /** */
 
@@ -29,7 +30,7 @@ public class TabFormatterFileOutputStream extends TabFormatterBase {
 
   public String write(String text) throws Exception {
     text = super.write(text);
-    _out.write(text.getBytes());
+    _out.write(text.getBytes(StandardCharsets.UTF_8));
     return text;
   }
 }

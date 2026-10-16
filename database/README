@@ -1,21 +1,46 @@
-To create a reportwriter database follow the steps below. For this
-example assume the database name is "reportwriter".
+Report Writer uses MySQL for templates and task history. Terminology data is
+read separately from the configured SPARQL endpoint.
 
+Run these Bash commands from the repository root. The example uses database
+reportwriter on local port 3312. Set the credentials in the same shell used
+for make run:
 
-1) Create new database (using port forwarding to rarely used port 3312)
+    export RW_API_DATASOURCE_URL='jdbc:mysql://127.0.0.1:3312/reportwriter?useSSL=false&allowPublicKeyRetrieval=true'
+    export RW_API_DATASOURCE_USERNAME=root
+    read -rsp 'MySQL password: ' RW_API_DATASOURCE_PASSWORD
+    echo
+    export RW_API_DATASOURCE_PASSWORD
 
-   docker run --name mysql-container \
-   -e MYSQL_ROOT_PASSWORD=$RW_API_DATASOURCE_PASSWORD \
-   -e MYSQL_DATABASE=reportwriter \
-   -p 3312:3306 \
-   -d mysql:8.4
+Existing database
+-----------------
+Use its actual credentials and port. If the existing container is named
+reportwriter-mysql, start it with:
 
-2) Use mysql to load the data.
+    docker start reportwriter-mysql
 
-   docker exec -i mysql-container mysql -u$RW_API_DATASOURCE_USERNAME -p$RW_API_DATASOURCE_PASSWORD reportwriter < /path/to/your/init.sql
+Do not import init.sql into a database you want to keep: it drops and recreates
+the tables. Starting an existing container preserves its data.
 
-3) Make a test query to the new database.
+New local database
+------------------
+Create a container only if you do not already have a Report Writer database:
 
-   docker exec -it mysql-container mysql -u$RW_API_DATASOURCE_USERNAME -p$RW_API_DATASOURCE_PASSWORD -D reportwriter -e "SELECT * FROM lk_source LIMIT 10;"
+    docker run --name reportwriter-mysql \
+      -e MYSQL_ROOT_PASSWORD="$RW_API_DATASOURCE_PASSWORD" \
+      -e MYSQL_DATABASE=reportwriter \
+      -p 127.0.0.1:3312:3306 -d mysql:8.4
 
+Wait for MySQL to report ready for connections in docker logs reportwriter-mysql,
+then import the schema and templates once:
 
+    docker exec -i -e MYSQL_PWD="$RW_API_DATASOURCE_PASSWORD" \
+      reportwriter-mysql mysql -uroot reportwriter < database/init.sql
+
+Verify the database
+-------------------
+    docker exec -e MYSQL_PWD="$RW_API_DATASOURCE_PASSWORD" \
+      reportwriter-mysql mysql -u"$RW_API_DATASOURCE_USERNAME" -D reportwriter \
+      -e 'SELECT COUNT(*) AS templates FROM report_template;'
+
+Run make run from the configured shell and open
+http://localhost:8080/ncireportwriter2/.

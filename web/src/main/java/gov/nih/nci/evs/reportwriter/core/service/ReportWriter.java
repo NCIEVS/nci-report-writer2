@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsConcept;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsSupportedAssociation;
@@ -96,7 +96,7 @@ public class ReportWriter {
     log.info("restURL: " + restURL);
     log.info("namedGraph: " + namedGraph);
 
-    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+    ObjectMapper mapper = YAMLMapper.builder().configureForJackson2().build();
     Template reportTemplate = null;
     PrintWriter logFile = null;
     try {
@@ -288,7 +288,7 @@ public class ReportWriter {
     log.info("restURL: " + restURL);
     log.info("namedGraph: " + versionInfo.getGraphName());
 
-    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+    ObjectMapper mapper = YAMLMapper.builder().configureForJackson2().build();
     Template reportTemplate = null;
     PrintWriter logFile = null;
     try {

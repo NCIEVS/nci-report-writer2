@@ -19,3 +19,4 @@ web/bin
 **/node_modules
 **/.angular
 /.gradle/
+report-docker.html

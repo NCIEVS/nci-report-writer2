@@ -21,11 +21,11 @@ FULL_VERSION            := v$(APP_VERSION)-g$(GIT_VERSION)
 clean:
 	cd web; ./gradlew clean
 
-# Build the library without tests
+# Package the backend, skipping default tests but retaining encoding checks
 build:
 	cd web; ./gradlew clean build -x test
 
-# build the 
+# build the
 
 frontend:
 	/bin/rm -rf web/src/main/resources/static/*
@@ -33,7 +33,7 @@ frontend:
 
 # Run the web application
 run:
-	cd web; java -jar build/libs/ncireportwriter2-*war
+	cd web; ./gradlew runWar
 
 runfrontend:
 	cd frontend; npm start
@@ -51,8 +51,14 @@ tag: frontend
 	git tag -a "v`/bin/date +%Y-%m-%d`-${APP_VERSION}" -m "Release `/bin/date +%Y-%m-%d`"
 	git push origin "v`/bin/date +%Y-%m-%d`-${APP_VERSION}"
 
-test: 
+test:
 	cd frontend; npm run test
+
+testjava:
+	cd web; ./gradlew check
+
+integrationtest:
+	cd web; ./gradlew integrationTest
 
 rmtag:
 	git tag -d "v`/bin/date +%Y-%m-%d`-${APP_VERSION}"

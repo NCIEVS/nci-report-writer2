@@ -1,5 +1,5 @@
 plugins {
-  id "com.github.node-gradle.node" version "3.1.1"
+  id "com.github.node-gradle.node" version "7.1.0"
 }
 
 group = "gov.nih.nci.evs.reportwriter"
@@ -10,7 +10,7 @@ node {
   npmVersion = '10.9.2'
   download = true
   workDir = file("${project.buildDir}/node")
-  nodeModulesDir = file("${project.projectDir}")
+  nodeProjectDir = file("${project.projectDir}")
 }
 
 // Create a task to run npm build:prod

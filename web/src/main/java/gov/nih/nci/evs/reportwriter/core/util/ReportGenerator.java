@@ -26,8 +26,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.core.model.report.Report;
@@ -88,7 +88,7 @@ public class ReportGenerator {
     log.info("restURL: " + restURL);
     log.info("namedGraph: " + namedGraph);
 
-    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+    ObjectMapper mapper = YAMLMapper.builder().configureForJackson2().build();
     Template reportTemplate = null;
     PrintWriter logFile = null;
     try {
