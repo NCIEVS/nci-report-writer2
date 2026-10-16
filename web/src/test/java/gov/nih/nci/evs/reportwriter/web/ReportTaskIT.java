@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -79,12 +78,12 @@ public class ReportTaskIT {
     assertEquals(HttpStatus.OK, reportTasksResponse.getStatusCode());
     ArrayList<ReportTaskUI> tasks = reportTasksResponse.getBody();
     assertEquals(1, tasks.size());
+    int taskId = tasks.getFirst().getId();
     await()
         .atMost(5, TimeUnit.MINUTES)
         .pollDelay(1, TimeUnit.SECONDS)
         .pollInterval(1, TimeUnit.SECONDS)
-        .until(() -> completed(tasks));
-    int taskId = tasks.getFirst().getId();
+        .until(() -> completed(taskId));
     byte[] text = download("getTxtReport", taskId);
     assertTrue(
         new String(text, StandardCharsets.UTF_8).lines().filter(line -> !line.isBlank()).count() > 1,
@@ -113,9 +112,7 @@ public class ReportTaskIT {
     return response.getBody();
   }
 
-  private boolean completed(ArrayList<ReportTaskUI> reportTaskUIs) {
-    List<Integer> taskIds =
-        reportTaskUIs.stream().map(ReportTaskUI::getId).collect(Collectors.toList());
+  private boolean completed(int taskId) {
     ResponseEntity<ArrayList<ReportTaskUI>> response =
         restTemplate.exchange(
             String.format("http://localhost:%d/ncireportwriter2/reportwriter/reporttasks", port),
@@ -123,20 +120,12 @@ public class ReportTaskIT {
             null,
             new ParameterizedTypeReference<ArrayList<ReportTaskUI>>() {});
     assertEquals(HttpStatus.OK, response.getStatusCode());
-    List<ReportTaskUI> filteredTasks =
+    ReportTaskUI task =
         response.getBody().stream()
-            .filter(task -> taskIds.contains(task.getId()))
-            .collect(Collectors.toList());
-    assertEquals(taskIds.size(), filteredTasks.size());
-    filteredTasks.forEach(task -> assertNotEquals("Failed", task.getStatus(),
-        "Report generation failed for task " + task.getId()));
-    List<ReportTaskUI> completedTasks =
-        filteredTasks.stream()
-            .filter(task -> "Completed".equals(task.getStatus())
-                && StringUtils.hasText(task.getDateCompleted()))
-            .collect(Collectors.toList());
-    completedTasks.forEach(
-        task -> System.out.println(task.getId() + " " + task.getDateCompleted()));
-    return taskIds.size() == completedTasks.size();
+            .filter(candidate -> candidate.getId() == taskId)
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("Report task not found: " + taskId));
+    assertNotEquals("Failed", task.getStatus(), "Report generation failed for task " + taskId);
+    return "Completed".equals(task.getStatus()) && StringUtils.hasText(task.getDateCompleted());
   }
 }

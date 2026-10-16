@@ -291,7 +291,7 @@ public class ReportTaskServiceImpl implements ReportTaskService {
     try {
       String str = mapper.writer(filters).writeValueAsString(reportTemplate);
       String templateFileName = outputDirectoryName + "/" + reportTemplateName;
-      try (BufferedWriter writer = new BufferedWriter(new FileWriter(templateFileName)); ) {
+      try (BufferedWriter writer = new BufferedWriter(new FileWriter(templateFileName, ENCODING)); ) {
         writer.write(str);
       }
 
