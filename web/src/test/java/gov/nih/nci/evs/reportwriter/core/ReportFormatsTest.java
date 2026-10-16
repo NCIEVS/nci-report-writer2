@@ -4,25 +4,32 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import tools.jackson.databind.ser.std.SimpleBeanPropertyFilter;
-import tools.jackson.databind.ser.std.SimpleFilterProvider;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import gov.nih.nci.evs.reportwriter.core.model.template.Template;
+import gov.nih.nci.evs.reportwriter.core.properties.CoreProperties;
+import gov.nih.nci.evs.reportwriter.core.service.ReportWriter;
 import gov.nih.nci.evs.reportwriter.formatter.AsciiToExcelFormatter;
 import gov.nih.nci.evs.reportwriter.formatter.AsciiToTextFormatter;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplate;
 import gov.nih.nci.evs.reportwriter.web.model.ReportTemplateColumn;
+import gov.nih.nci.evs.reportwriter.web.model.ReportTask;
+import gov.nih.nci.evs.reportwriter.web.repository.ReportTaskRepository;
+import gov.nih.nci.evs.reportwriter.web.service.ReportTaskServiceImpl;
+import gov.nih.nci.evs.reportwriter.web.service.ReportTemplateService;
 
 class ReportFormatsTest {
   @TempDir Path directory;
@@ -43,9 +50,9 @@ class ReportFormatsTest {
     }
   }
 
-  /** Verifies that filtered template YAML omits persistence fields and preserves report data. */
+  /** Checks the service's exported template file preserves report data and omits persistence fields. */
   @Test
-  void filteredYamlRoundTripsIntoReportEngineModel() {
+  void exportedYamlRoundTripsIntoReportEngineModel() throws Exception {
     ReportTemplate template = new ReportTemplate();
     template.setId(123);
     template.setName("Café report");
@@ -61,14 +68,34 @@ class ReportFormatsTest {
     column.setDisplay("code");
     column.setReportTemplate(template);
     template.setColumns(List.of(column));
-    var mapper = YAMLMapper.builder().configureForJackson2().build();
-    var filters = new SimpleFilterProvider().addFilter("yamlFilter",
-        SimpleBeanPropertyFilter.serializeAllExcept(Set.of("id", "status")));
-    String yaml = mapper.writer(filters).writeValueAsString(template);
+    ReportTask task = new ReportTask();
+    task.setId(789);
+    task.setReportTemplate(template);
+    task.setDatabaseUrl("http://unused.example/query");
+    CoreProperties properties = new CoreProperties();
+    properties.setOutputDirectory(directory.toString());
+    ReportTemplateService templates = mock(ReportTemplateService.class);
+    ReportWriter writer = mock(ReportWriter.class);
+    ReportTaskServiceImpl service = new ReportTaskServiceImpl();
+    ReflectionTestUtils.setField(service, "coreProperties", properties);
+    ReflectionTestUtils.setField(service, "reportTemplateService", templates);
+    ReflectionTestUtils.setField(service, "reportTaskRepository", mock(ReportTaskRepository.class));
+    ReflectionTestUtils.setField(service, "reportWriter", writer);
+    when(templates.findOne(123)).thenReturn(template);
+    String reportName = directory + "/9/Task-789/Task-789";
+    String templateFile = reportName + ".template";
+    when(writer.runReport(templateFile, reportName, "", task.getDatabaseUrl())).thenReturn("success");
+
+    service.runReport(task);
+
+    verify(writer).runReport(templateFile, reportName, "", task.getDatabaseUrl());
+    assertEquals("Completed", task.getStatus());
+    String yaml = Files.readString(Path.of(templateFile));
     assertFalse(yaml.contains("id:"));
     assertFalse(yaml.contains("status:"));
     assertFalse(yaml.contains("reportTemplate:"));
-    Template parsed = mapper.readValue(yaml, Template.class);
+    Template parsed = YAMLMapper.builder().configureForJackson2().build()
+        .readValue(yaml, Template.class);
     assertEquals("Café report", parsed.getName());
     assertEquals("C123", parsed.getRootConceptCode());
     assertEquals("Code", parsed.getColumns().getFirst().getLabel());
