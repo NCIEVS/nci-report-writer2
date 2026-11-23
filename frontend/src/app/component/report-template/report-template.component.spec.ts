@@ -9,7 +9,7 @@ import { LookupvaluesTemplateService } from '../../service/lookupvalues-template
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 
 describe('ReportTemplateComponent', () => {
   let component: ReportTemplateComponent;
@@ -21,7 +21,7 @@ describe('ReportTemplateComponent', () => {
       imports: [
         TableModule,
         DialogModule,
-        DropdownModule,
+        SelectModule,
         FormsModule
       ],
       providers: [

@@ -48,7 +48,7 @@
        
         <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [style]="{'width':'10%'}">
             <ng-template pTemplate="filter" let-col>
-                <p-dropdown [options]="statuses" [(ngModel)]="selectedStatus" [style]="{'width':'100%'}" (onChange)="dtTemplate.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                <p-select [options]="statuses" [(ngModel)]="selectedStatus" [style]="{'width':'100%'}" (onChange)="dtTemplate.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-select>
             </ng-template>
         </p-column>
 
@@ -59,7 +59,7 @@
     </p-dataTable>-->
 
     <p-table #dtTemplates sortMode="multiple" [columns]="cols" [value]="templates" [(selection)]="selectedTemplates"
-        (onRowSelect)="onRowSelect($event)" (onFilter)="onFilter($event)" [responsive]="true" [rows]="20" 
+        (onRowSelect)="onRowSelect($event)" (onFilter)="onFilter($event)" [rows]="20" 
         [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50]" [totalRecords]="totalRecordsCount" 
         (onPage)="onPageChange($event)" [alwaysShowPaginator]="true" selectionMode="multiple"  showGridlines="true">
 
@@ -91,7 +91,7 @@
                     <input *ngSwitchCase="'id'" [(ngModel)]="selectedId" pInputText type="text" style="width:100%" (input)="dtTemplates.filter($event.target.value, col.field, col.filterMatchMode)">
                     <input *ngSwitchCase="'dateCreated'" [(ngModel)]="selectedDateCreated" pInputText type="text" style="width:100%" (input)="dtTemplates.filter($event.target.value, col.field, col.filterMatchMode)">
                     <input *ngSwitchCase="'dateLastUpdated'" [(ngModel)]="selectedDateUpdated" pInputText type="text" style="width:100%" (input)="dtTemplates.filter($event.target.value, col.field, col.filterMatchMode)">
-                    <p-dropdown *ngSwitchCase="'status'" [(ngModel)]="selectedStatus" [options]="statuses" [style]="{'width':'100%'}" (onChange)="dtTemplates.filter($event.value, col.field, 'equals')"></p-dropdown>
+                    <p-select *ngSwitchCase="'status'" [(ngModel)]="selectedStatus" [options]="statuses" [style]="{'width':'100%'}" (onChange)="dtTemplates.filter($event.value, col.field, 'equals')"></p-select>
                 </th>
             </tr>
         </ng-template>
@@ -125,7 +125,7 @@
                 <label for="type" class="col-sm-3 control-label">Database Type<span class="required-field">*</span></label>
                 <div class="col-sm-8">
 
-                    <p-dropdown [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="databaseTypes" [(ngModel)]="selectedDatabasetype" id="databaseType" name="databaseType" #databaseType="ngModel" placeholder="Select a Database Type" required></p-dropdown>
+                    <p-select [filter]="true" appendTo="body" [style]="{'width':'250px'}" [options]="databaseTypes" [(ngModel)]="selectedDatabasetype" id="databaseType" name="databaseType" #databaseType="ngModel" placeholder="Select a Database Type" required></p-select>
                     <div [hidden]="databaseType.valid || databaseType.pristine">
                         <span class="form-error-message">Database Type is required</span>
                     </div>

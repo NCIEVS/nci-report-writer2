@@ -11,7 +11,7 @@ import { ReportTemplateService } from '../../service/report-template.service';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 
 describe('CreateTemplateComponent', () => {
@@ -24,9 +24,9 @@ describe('CreateTemplateComponent', () => {
       imports: [
         ButtonModule,
         DialogModule,
-        DropdownModule,
         FormsModule,
-        TableModule
+        TableModule,
+        SelectModule
       ],
       providers: [
         LookupvaluesTemplateService,
