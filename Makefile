@@ -101,16 +101,21 @@ version:
 	@echo $(APP_VERSION)
 
 # Scan frontend and backend dependencies. Full HTML reports are written to report.html (frontend)
-# and reportJava.html (backend); fails if either has HIGH or CRITICAL vulnerabilities (.trivyignore applies).
+# and reportJava.html (backend). Fails if either has HIGH or CRITICAL vulnerabilities (.trivyignore
+# applies) or if a scan could not run.
 scan:
-	@status=0; \
-	trivy fs frontend/package-lock.json --format template -o report.html --template "@config/trivy/html.tpl" || status=1; \
-	trivy fs frontend/package-lock.json --scanners vuln --severity HIGH,CRITICAL --exit-code 1 || status=1; \
-	(cd web; ./gradlew dependencies --write-locks -q) || status=1; \
-	trivy fs web/gradle.lockfile --format template -o reportJava.html --template "@config/trivy/html.tpl" || status=1; \
-	trivy fs web/gradle.lockfile --scanners vuln --severity HIGH,CRITICAL --exit-code 1 || status=1; \
+	@/bin/rm -f report.html reportJava.html; \
+	vulns=0; errors=0; \
+	check() { trivy fs "$$1" --scanners vuln --severity HIGH,CRITICAL --exit-code 2; rc=$$?; \
+	  if [ $$rc -eq 2 ]; then vulns=1; elif [ $$rc -ne 0 ]; then errors=1; fi; }; \
+	trivy fs frontend/package-lock.json --format template -o report.html --template "@config/trivy/html.tpl" || errors=1; \
+	check frontend/package-lock.json; \
+	(cd web; ./gradlew dependencies --write-locks -q > /dev/null) || errors=1; \
+	trivy fs web/gradle.lockfile --format template -o reportJava.html --template "@config/trivy/html.tpl" || errors=1; \
+	check web/gradle.lockfile; \
 	/bin/rm -f web/gradle.lockfile; \
-	if [ $$status -ne 0 ]; then echo "FAILED: HIGH or CRITICAL vulnerabilities found (or scan error) - see report.html / reportJava.html"; fi; \
-	exit $$status
+	if [ $$errors -ne 0 ]; then echo "FAILED: a scan could not run - see errors above"; fi; \
+	if [ $$vulns -ne 0 ]; then echo "FAILED: HIGH or CRITICAL vulnerabilities found - see report.html / reportJava.html"; fi; \
+	[ $$errors -eq 0 ] && [ $$vulns -eq 0 ]
 
 .PHONY: frontend
