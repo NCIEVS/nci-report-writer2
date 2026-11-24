@@ -3,11 +3,11 @@ plugins {
 }
 
 group = "gov.nih.nci.evs.reportwriter"
-version = "2.5.0.RELEASE"
+version = "2.6.0.RELEASE"
 
 node {
-  version = '22.14.0'
-  npmVersion = '10.9.2'
+  version = '22.23.5'
+  npmVersion = '10.9.9'
   download = true
   workDir = file("${project.buildDir}/node")
   nodeProjectDir = file("${project.projectDir}")

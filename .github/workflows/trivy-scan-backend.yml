@@ -8,6 +8,10 @@ on:
 
   workflow_dispatch:  # Allows manual runs from the GitHub UI
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   backend-trivy-scan:
     runs-on: ubuntu-latest
@@ -24,13 +28,14 @@ jobs:
         java-version: '25'
         distribution: 'temurin'
 
-    # Install Trivy if not cached
+    # Install Trivy
     - name: Install Trivy
       run: |
-        TRIVY_LATEST_VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | jq -r .tag_name)
-        wget https://github.com/aquasecurity/trivy/releases/download/${TRIVY_LATEST_VERSION}/trivy_${TRIVY_LATEST_VERSION#v}_Linux-64bit.deb
-        sudo dpkg -i trivy_${TRIVY_LATEST_VERSION#v}_Linux-64bit.deb
-
+        # Pinned: the aquasecurity org's IP allow list blocks api.github.com release lookups from runners.
+        TRIVY_VERSION=0.76.2
+        wget https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.deb
+        sudo dpkg -i trivy_${TRIVY_VERSION}_Linux-64bit.deb
+    
     # Run Gradle lockfile updates
     - name: Run Gradle dependencies
       run: |
@@ -64,5 +69,6 @@ jobs:
 
     # Clean up lockfile after scan
     - name: Clean up
+      if: always()
       run: |
         /bin/rm -rf web/gradle.lockfile

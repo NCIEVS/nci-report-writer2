@@ -47,7 +47,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '19' #set the project Angular version
+          node-version: '22' #set the project Angular version (Angular 20 + Jest 30 require Node 20+; matches frontend/build.gradle)
       - name: Install Dependencies
         run: npm install
       - name: Build Application

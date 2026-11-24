@@ -1,5 +1,5 @@
-import { definePreset, palette } from '@primeng/themes';
-import Lara from '@primeng/themes/lara';
+import { definePreset, palette } from '@primeuix/themes';
+import Lara from '@primeuix/themes/lara';
 
 const EvsTheme = definePreset(Lara, {
     semantic: {

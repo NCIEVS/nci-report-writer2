@@ -39,7 +39,7 @@ ext['tomcat.version'] = '11.0.25'
 ext['jackson-bom.version'] = '3.1.7'
 
 group = "gov.nih.nci.evs.reportwriter"
-version = "2.5.0.RELEASE"
+version = "2.6.0.RELEASE"
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
@@ -49,7 +49,6 @@ java {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
-
 
 springBoot {
     buildInfo()          // generate file META-INF/build-info.properties during the build
