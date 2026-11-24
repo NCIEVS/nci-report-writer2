@@ -86,19 +86,6 @@
             "tsConfig": "./tsconfig.spec.json"
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json",
-              "cypress/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
         "cypress-run": {
           "builder": "@cypress/schematic:cypress",
           "options": {
@@ -150,17 +137,6 @@
             }
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "e2e/cypress/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
         "cypress-run": {
           "builder": "@cypress/schematic:cypress",
           "options": {
@@ -181,9 +157,9 @@
             "configFile": "e2e/cypress.config.ts"
           }
         }
-    },
-    "cli": {
-      "analytics": "69ff2485-c455-42f4-af0a-5b46a4c19249"
+      },
+      "cli": {
+        "analytics": "69ff2485-c455-42f4-af0a-5b46a4c19249"
       }
     }
   },

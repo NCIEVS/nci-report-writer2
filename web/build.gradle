@@ -20,6 +20,7 @@ buildscript {
 ext {
     // software version
     mysqlConnectorVersion = "8.4.0"
+    tomcatVersion = "10.1.60"
 }
 
 apply plugin: 'java'
@@ -34,9 +35,15 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven-publish'
 
 group = "gov.nih.nci.evs.reportwriter"
-version = "2.5.0.RELEASE"
+version = "2.6.0.RELEASE"
 sourceCompatibility = 17
 
+// Override Boot BOM Spring Framework version to fix CVE-2026-41850 (spring-expression),
+// CVE-2026-41842 / CVE-2026-41845 (spring-webmvc) (HIGH)
+ext['spring-framework.version'] = '6.2.19'
+// Override vulnerable versions managed by the Spring Boot BOM without changing Spring Boot.
+ext['jackson-bom.version'] = '2.21.7'
+ext['tomcat.version'] = tomcatVersion
 
 springBoot {
     buildInfo()          // generate file META-INF/build-info.properties during the build
@@ -58,12 +65,22 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-actuator"
     implementation "org.springframework.boot:spring-boot-devtools"
     implementation "org.springframework.boot:spring-boot-properties-migrator"
+
+    // Security override: Spring Boot 3.5.14 resolves Spring HATEOAS 2.5.2,
+    // which Trivy flags for CVE-2026-41006 and CVE-2026-41007.
+    implementation "org.springframework.hateoas:spring-hateoas:2.5.3"
+
+    // Security override: Spring Data Commons 3.5.13
+    implementation "org.springframework.data:spring-data-commons:3.5.13"
+
+    // Security override: Spring Boot 3.5.14 resolves Spring Data REST Core 4.5.11,
+    // which Trivy flags for CVE-2026-41728 and CVE-2026-41729.
+    implementation "org.springframework.data:spring-data-rest-core:4.5.12"
+
     
     implementation "org.springframework.boot:spring-boot-starter-tomcat"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
 
-    // tomcat override - 10.1.55 fixes CVE-2026-41293/43512/43515 (CRITICAL) and CVE-2026-41284/42498/43513 (HIGH)
-    implementation "org.apache.tomcat.embed:tomcat-embed-core:10.1.55"
     implementation "com.mysql:mysql-connector-j:$mysqlConnectorVersion"
     
     // Apache POI for Excel processing
