@@ -88,7 +88,9 @@ tag: frontend
 	git tag -a "v`/bin/date +%Y-%m-%d`-${APP_VERSION}" -m "Release `/bin/date +%Y-%m-%d`"
 	git push origin "v`/bin/date +%Y-%m-%d`-${APP_VERSION}"
 
+# Match the CI "Angular Jest Tests" job: clean install from package-lock.json, then run jest.
 test:
+	cd frontend; npm ci
 	cd frontend; npm run test
 
 rmtag:
@@ -98,12 +100,17 @@ rmtag:
 version:
 	@echo $(APP_VERSION)
 
+# Scan frontend and backend dependencies. Full HTML reports are written to report.html (frontend)
+# and reportJava.html (backend); fails if either has HIGH or CRITICAL vulnerabilities (.trivyignore applies).
 scan:
-	trivy fs frontend/package-lock.json --format template -o report.html --template "@config/trivy/html.tpl"
-	grep CRITICAL report.html
-	cd web; ./gradlew dependencies --write-locks
-	trivy fs web/gradle.lockfile --format template -o reportJava.html --template "@config/trivy/html.tpl"
-	grep CRITICAL reportJava.html
-	/bin/rm -rf web/gradle.lockfile
+	@status=0; \
+	trivy fs frontend/package-lock.json --format template -o report.html --template "@config/trivy/html.tpl" || status=1; \
+	trivy fs frontend/package-lock.json --scanners vuln --severity HIGH,CRITICAL --exit-code 1 || status=1; \
+	(cd web; ./gradlew dependencies --write-locks -q) || status=1; \
+	trivy fs web/gradle.lockfile --format template -o reportJava.html --template "@config/trivy/html.tpl" || status=1; \
+	trivy fs web/gradle.lockfile --scanners vuln --severity HIGH,CRITICAL --exit-code 1 || status=1; \
+	/bin/rm -f web/gradle.lockfile; \
+	if [ $$status -ne 0 ]; then echo "FAILED: HIGH or CRITICAL vulnerabilities found (or scan error) - see report.html / reportJava.html"; fi; \
+	exit $$status
 
 .PHONY: frontend
