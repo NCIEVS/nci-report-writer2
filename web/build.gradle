@@ -114,7 +114,9 @@ test {
 // Archive zip file
 task zipFile(type: Zip) {
     // explicit override of ${project.name} which resolves to "web" due to subproject gradle setup
-    def zipFileRootDirectory = "ncireportwriter2-${project.version}"
+    // Resolve the version at configuration time; Task.project is deprecated at execution time.
+    def projectVersion = project.version
+    def zipFileRootDirectory = "ncireportwriter2-${projectVersion}"
 
     from('src/main/bin') {
         filePermissions { unix('755') }
@@ -124,7 +126,7 @@ task zipFile(type: Zip) {
         into "$zipFileRootDirectory/lib"
     }
     rename { String fileName ->
-        fileName.replace("-${project.version}", "")
+        fileName.replace("-${projectVersion}", "")
     }
 }
 

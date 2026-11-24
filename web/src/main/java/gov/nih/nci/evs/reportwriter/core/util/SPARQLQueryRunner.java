@@ -78,7 +78,6 @@ public class SPARQLQueryRunner {
     RestTemplate restTemplate =
         new RestTemplateBuilder()
             .requestFactory(() -> requestFactory) // Supply the configured factory
-            .rootUri(restURL)
             .basicAuthentication(username, password)
             .build();
     restTemplate

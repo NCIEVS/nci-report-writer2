@@ -19,10 +19,10 @@ DOCKER_IMAGE            ?= $(SERVICE):$(DOCKER_TAG)
 
 ifeq ($(OS),Windows_NT)
 DOCKER                  ?= docker.exe
-WEB_GRADLEW             ?= java -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain
+WEB_GRADLEW             ?= java --enable-native-access=ALL-UNNAMED -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain
 else
 DOCKER                  ?= docker
-WEB_GRADLEW             ?= java -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain
+WEB_GRADLEW             ?= java --enable-native-access=ALL-UNNAMED -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain
 endif
 
 .PHONY: build
