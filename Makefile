@@ -25,7 +25,7 @@ DOCKER                  ?= docker
 WEB_GRADLEW             ?= java -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain
 endif
 
-.PHONY: build docker dockerpush scandocker rundocker
+.PHONY: build
 
 # consider also "docker save..." and "docker load..." to avoid registry.
 clean:
@@ -45,15 +45,11 @@ frontend:
 run:
 	cd web; java -jar build/libs/ncireportwriter2-*war
 
-# Build the application and image in an isolated Linux/AMD64 Docker build environment.
+# Build a Linux deployment image of the web module (uses the committed frontend in web/src/main/resources/static).
 docker:
 
 	@$(DOCKER) image inspect "$(DOCKER_IMAGE)" > /dev/null 2>&1 && $(DOCKER) rmi -f "$(DOCKER_IMAGE)" || true
 	$(DOCKER) build --platform linux/amd64 --no-cache-filter=gradle-build --file web/Dockerfile --tag "$(DOCKER_IMAGE)" web
-
-# Build and push a Linux/AMD64 image. Override DOCKER_IMAGE with a registry-qualified image name.
-dockerpush:
-	$(DOCKER) push --platform linux/amd64 "$(DOCKER_IMAGE)"
 
 # Report all HIGH and CRITICAL image vulnerabilities with their installed and fixed versions.
 # The complete HTML report is written to report.html.
@@ -66,7 +62,6 @@ scandocker:
 # This runs in the foreground; add -d to run in the background.
 rundocker:
 	$(DOCKER) run --rm --name "$(SERVICE)" -p "8080:8080" \
-		-e RW_API_SERVER_PORT=8080 \
 		-e RW_API_DATASOURCE_URL="jdbc:mysql://host.docker.internal:3312/reportwriter?useSSL=false&allowPublicKeyRetrieval=true" \
 		-e RW_API_DATASOURCE_USERNAME="root" \
 		-e RW_API_DATASOURCE_PASSWORD="reportwriter234" \
