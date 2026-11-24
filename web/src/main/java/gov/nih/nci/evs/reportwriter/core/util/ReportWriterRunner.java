@@ -10,8 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsVersionInfo;
 import gov.nih.nci.evs.reportwriter.core.model.sparql.Bindings;
@@ -36,8 +37,11 @@ public class ReportWriterRunner {
     String query = queryBuilderService.constructVersionInfoQuery();
     String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     EvsVersionInfo evsVersionInfo = new EvsVersionInfo();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);

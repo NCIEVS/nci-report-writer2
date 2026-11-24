@@ -19,10 +19,10 @@ DOCKER_IMAGE            ?= $(SERVICE):$(DOCKER_TAG)
 
 ifeq ($(OS),Windows_NT)
 DOCKER                  ?= docker.exe
-WEB_GRADLEW             ?= java -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain
+WEB_GRADLEW             ?= java --enable-native-access=ALL-UNNAMED -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain
 else
 DOCKER                  ?= docker
-WEB_GRADLEW             ?= java -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain
+WEB_GRADLEW             ?= java --enable-native-access=ALL-UNNAMED -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain
 endif
 
 .PHONY: build
@@ -31,7 +31,7 @@ endif
 clean:
 	cd web; $(WEB_GRADLEW) clean
 
-# Build the library without tests
+# Package the backend, skipping default tests but retaining encoding checks
 build:
 	cd web; $(WEB_GRADLEW) clean build -x test
 
@@ -43,7 +43,7 @@ frontend:
 
 # Run the web application
 run:
-	cd web; java -jar build/libs/ncireportwriter2-*war
+	cd web; $(WEB_GRADLEW) runWar
 
 # Build a Linux deployment image of the web module (uses the committed frontend in web/src/main/resources/static).
 docker:
@@ -92,6 +92,12 @@ tag: frontend
 test:
 	cd frontend; npm ci
 	cd frontend; npm run test
+
+testjava:
+	cd web; $(WEB_GRADLEW) check
+
+integrationtest:
+	cd web; $(WEB_GRADLEW) integrationTest
 
 rmtag:
 	git tag -d "v`/bin/date +%Y-%m-%d`-${APP_VERSION}"

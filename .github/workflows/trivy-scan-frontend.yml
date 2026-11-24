@@ -49,7 +49,7 @@ jobs:
         # List the HIGH and CRITICAL vulnerabilities, if any
         if [ "$vuln_count" -gt 0 ]; then
           echo "Listing HIGH and CRITICAL vulnerabilities found in package-lock.json:"
-          jq '[.Results[]?.Vulnerabilities[]? | select(.Severity == "CRITICAL" or .Severity == "HIGH")] | .[] | {ID, Severity, Description, PackageName, InstalledVersion, FixedVersion}' reportFrontend.json
+          jq '[.Results[]?.Vulnerabilities[]? | select(.Severity == "CRITICAL" or .Severity == "HIGH")] | .[] | {ID: .VulnerabilityID, Severity, Description, PackageName: .PkgName, InstalledVersion, FixedVersion}' reportFrontend.json
           exit 1
         else
           echo "No HIGH or CRITICAL vulnerabilities found in package-lock.json."

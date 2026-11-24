@@ -10,6 +10,8 @@ package gov.nih.nci.evs.reportwriter.formatter;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.net.URI;
 import java.net.URL;
 
 import org.slf4j.Logger;
@@ -34,10 +36,10 @@ public class UrlAsciiToTextFormatter extends AsciiToTextFormatter implements For
   }
 
   protected BufferedReader getBufferReader(String fileUrl) throws Exception {
-    URL url = new URL(fileUrl);
+    URL url = URI.create(fileUrl).toURL();
     _logger.debug("fileUrl: " + fileUrl);
     InputStream is = url.openStream();
-    InputStreamReader isr = new InputStreamReader(is);
+    InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
     BufferedReader br = new BufferedReader(isr);
     return br;
   }

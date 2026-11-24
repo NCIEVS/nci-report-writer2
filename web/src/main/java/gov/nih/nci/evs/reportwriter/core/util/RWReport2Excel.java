@@ -32,8 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import gov.nih.nci.evs.reportwriter.core.model.report.Report;
 import gov.nih.nci.evs.reportwriter.core.model.report.ReportColumn;
@@ -172,7 +172,7 @@ public class RWReport2Excel {
      */
 
     Template reportTemplate = null;
-    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+    ObjectMapper mapper = YAMLMapper.builder().configureForJackson2().build();
     PrintWriter logFile = null;
     try {
       reportTemplate = mapper.readValue(new File(templateFile), Template.class);

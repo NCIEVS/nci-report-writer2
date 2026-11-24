@@ -9,8 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAssociation;
 import gov.nih.nci.evs.reportwriter.core.model.evs.EvsAxiom;
@@ -73,8 +74,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
     String query = queryBuilderService.constructNamedGraphQuery();
     String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     ArrayList<String> namedGraphs = new ArrayList<String>();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);
@@ -101,8 +105,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
     String query = queryBuilderService.constructPropertyQuery(conceptCode, namedGraph);
     String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     ArrayList<EvsProperty> evsProperties = new ArrayList<EvsProperty>();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);
@@ -147,8 +154,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
     String query = queryBuilderService.constructConceptQuery(conceptCode, namedGraph);
     String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     String conceptLabel = null;
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);
@@ -175,8 +185,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
     String query = queryBuilderService.constructAxiomQuery(conceptCode, namedGraph);
     String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     ArrayList<EvsAxiom> evsAxioms = new ArrayList<EvsAxiom>();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);
@@ -296,8 +309,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
     String res = restUtils.runSPARQL(queryPrefix + query, restURL);
     // System.out.println(queryPrefix + "\n" + query);
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     ArrayList<EvsConcept> evsSubclasses = new ArrayList<EvsConcept>();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);
@@ -328,8 +344,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
     String query = queryBuilderService.constructSuperclassQuery(conceptCode, namedGraph);
     String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     ArrayList<EvsConcept> evsSuperclasses = new ArrayList<EvsConcept>();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);
@@ -360,8 +379,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
     String query = queryBuilderService.constructConceptInSubsetQuery(conceptCode, namedGraph);
     String res = restUtils.runSPARQL(queryPrefix + query, restURL);
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     ArrayList<EvsConcept> evsConcepts = new ArrayList<EvsConcept>();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);
@@ -399,8 +421,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
             namedGraph, associationName, conceptCode, sourceOf);
     String res = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     ArrayList<EvsConcept> evsConcepts = new ArrayList<EvsConcept>();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);
@@ -480,8 +505,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
     String queryPrefix = queryBuilderService.contructPrefix();
     String query = queryBuilderService.constructVersionInfoQuery();
     String res = restUtils.runSPARQL(queryPrefix + query, restURL);
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     EvsVersionInfo evsVersionInfo = new EvsVersionInfo();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);
@@ -507,8 +535,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
         queryBuilderService.construct_get_associated_concepts(
             namedGraph, associationName, sourceOf);
     String res = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     ArrayList<EvsAssociation> evsAssociations = new ArrayList<EvsAssociation>();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);
@@ -535,8 +566,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
     String queryPrefix = queryBuilderService.contructPrefix();
     String query = queryBuilderService.constructSupportedAssociationQuery(namedGraph);
     String res = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     ArrayList<EvsSupportedAssociation> evsSupportedAssociations =
         new ArrayList<EvsSupportedAssociation>();
     try {
@@ -633,8 +667,11 @@ public class SparqlQueryManagerServiceImpl implements SparqlQueryManagerService 
     String queryPrefix = queryBuilderService.contructPrefix();
     String query = queryBuilderService.constructSupportedRoleQuery(namedGraph);
     String res = restUtils.runSPARQL(queryPrefix + "\n" + query, restURL);
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper mapper =
+        JsonMapper.builder()
+            .configureForJackson2()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
     ArrayList<EvsSupportedRole> evsSupportedRoles = new ArrayList<EvsSupportedRole>();
     try {
       Sparql sparqlResult = mapper.readValue(res, Sparql.class);

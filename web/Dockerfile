@@ -1,8 +1,9 @@
 ARG BUILDPLATFORM
 
-# Package the Spring Boot WAR. The Angular bundle is not built here; the WAR serves the
+# Package the Spring Boot WAR with Java 25 (matches the build.gradle toolchain and the
+# Gradle 9.3.0 wrapper). The Angular bundle is not built here; the WAR serves the
 # frontend assets already committed under src/main/resources/static (see `make frontend`).
-FROM --platform=$BUILDPLATFORM gradle:8.14.2-jdk17 AS gradle-build
+FROM --platform=$BUILDPLATFORM gradle:9.3.0-jdk25 AS gradle-build
 
 WORKDIR /workspace
 
@@ -12,7 +13,7 @@ COPY --chown=gradle:gradle src/main ./src/main
 RUN gradle --no-daemon bootWar -x test -x javadoc
 
 # Run the Linux deployment image as an unprivileged user.
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:25-jre-noble
 
 WORKDIR /app
 

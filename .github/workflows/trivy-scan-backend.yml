@@ -21,11 +21,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Set up Java 17 for the environment
-    - name: Set up JDK 17
+    # Match the application toolchain
+    - name: Set up JDK 25
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '25'
         distribution: 'temurin'
 
     # Install Trivy
@@ -57,7 +57,7 @@ jobs:
         # Get the count of HIGH and CRITICAL vulnerabilities
         vuln_count=$(jq '[.Results[]?.Vulnerabilities[]? | select(.Severity == "CRITICAL" or .Severity == "HIGH")] | length' reportJava.json)
         echo "Java HIGH and CRITICAL vulnerability count: $vuln_count"
-        
+
         # List the HIGH and CRITICAL vulnerabilities, if any
         if [ "$vuln_count" -gt 0 ]; then
           echo "Listing HIGH and CRITICAL vulnerabilities found in gradle.lockfile:"

@@ -11,7 +11,7 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -56,7 +56,6 @@ public class RESTUtils {
     RestTemplate restTemplate =
         new RestTemplateBuilder()
             .requestFactory(() -> requestFactory) // Supply the configured factory
-            .rootUri(restURL)
             .basicAuthentication(username, password)
             .build();
     restTemplate
